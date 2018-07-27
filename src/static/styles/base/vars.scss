@@ -1,0 +1,28 @@
+// base color vars
+$gray-color: #ccc;
+$red-color: #ff0000;
+$blue-color: #56ccf2;
+
+$gradient: linear-gradient(61deg, #f9a73d, #f0422a 61%, #ff0d97);
+
+// semantic color vars
+$text-color: #000;
+
+// grid vars
+$gutter-width: 0px;
+$total-width: 100%;
+
+// typography vars
+$base-font-size: 14px;
+$geometria: 'Geometria', 'Arial', 'Helvetica', sans-serif;
+
+// media queries vars
+$mq-breakpoints: (
+  mobile: 320px,
+  tablet: 640px,
+  desktop: 1024px,
+  wide: 1400px,
+
+  desktopAd: 810px,
+  mobileLandscape: 480px
+);

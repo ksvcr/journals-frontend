@@ -1,0 +1,61 @@
+html {
+  text-size-adjust: 100%;
+  font-size: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  background: $gray-color;
+}
+
+body {
+  font-family: $geometria;
+  line-height: 1.4;
+  font-weight: 400;
+  color: $text-color;
+  height: 100%;
+  font-size: 14px;
+  overflow-y: scroll;
+  min-width: 1150px;
+
+  &.ReactModal__Body--open,
+  &.t-popup {
+    overflow: hidden;
+  }
+
+  &.t-draggable {
+    user-select: none;
+    cursor: grab;
+  }
+}
+
+::selection {
+  background: #f9a73d;
+  text-shadow: none;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.sticky.sticky-fixed.is-sticky {
+  margin-top: 0;
+  margin-bottom: 0;
+  position: fixed;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.sticky.sticky-fixed.is-sticky:not([style*="margin-top"]) {
+  margin-top: 0 !important;
+}
+
+.sticky.sticky-fixed.is-sticky:not([style*="margin-bottom"]) {
+  margin-bottom: 0 !important;
+}
+
+.sticky.sticky-fixed.is-absolute {
+  position: absolute;
+}
