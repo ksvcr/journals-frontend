@@ -1,0 +1,13 @@
+.logo {
+  width: 319px;
+  height: 64px;
+
+  &__link {
+    display: block;
+  }
+
+  &__image {
+    display: block;
+    max-width: 100%;
+  }
+}

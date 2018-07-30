@@ -1,0 +1,15 @@
+.header-tools {
+  display: flex;
+  align-items: center;
+  flex: auto;
+  max-width: 1012px;
+
+  &__item {
+    margin-right: 80px;
+
+    &_right {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+}
