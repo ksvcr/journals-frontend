@@ -3,8 +3,6 @@ $gray-color: #ccc;
 $red-color: #ff0000;
 $blue-color: #56ccf2;
 
-$gradient: linear-gradient(61deg, #f9a73d, #f0422a 61%, #ff0d97);
-
 // semantic color vars
 $text-color: #000;
 
@@ -14,7 +12,8 @@ $total-width: 100%;
 
 // typography vars
 $base-font-size: 14px;
-$geometria: 'Geometria', 'Arial', 'Helvetica', sans-serif;
+$open-sans: 'Open Sans', 'Arial', 'Helvetica', sans-serif;
+$pragmatica: 'Pragmatica Slab', 'Arial', 'Helvetica', sans-serif;
 
 // media queries vars
 $mq-breakpoints: (

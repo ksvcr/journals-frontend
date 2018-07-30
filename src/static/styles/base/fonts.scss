@@ -1,6 +1,12 @@
 @import 'mixins';
 
-//@include font-face('geometria', 'geometria','../fonts/', 400, normal);
-//@include font-face('geometria', 'geometria-medium','../fonts/', 500, normal);
-//@include font-face('geometria', 'geometria-bold','../fonts/', 700, normal);
-//@include font-face('geometria', 'geometria-heavy','../fonts/', 900, normal);
+@include font-face('Open Sans', 'opensans-regular','../fonts/', 400, normal);
+@include font-face('Open Sans', 'opensans-semibold','../fonts/', 600, normal);
+@include font-face('Open Sans', 'opensans-bold','../fonts/', 700, normal);
+@include font-face('Open Sans', 'opensans-extrabold','../fonts/', 800, normal);
+
+@include font-face('Pragmatica Slab', 'PragmaticaSlab-Light','../fonts/', 300, normal);
+@include font-face('Pragmatica Slab', 'PragmaticaSlab-Book','../fonts/', 400, normal);
+@include font-face('Pragmatica Slab', 'PragmaticaSlab-Medium','../fonts/', 500, normal);
+@include font-face('Pragmatica Slab', 'PragmaticaSlab-Bold','../fonts/', 700, normal);
+@include font-face('Pragmatica Slab', 'PragmaticaSlab-ExtraBold','../fonts/', 800, normal);

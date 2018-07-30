@@ -3,10 +3,13 @@
 @mixin font-face($name, $filename, $path, $weight:normal, $style:normal) {
   @font-face {
     font-family: $name;
-    src: url($path + $filename + '.eot');
-    src: local('☺'), url($path + $filename + '.woff') format('woff'), url($path + $filename + '.ttf') format('truetype');
+    src: url($path + $filename + '.woff2') format('woff2'),
+    url($path + $filename + '.woff') format('woff'),
+    url($path + $filename + '.ttf') format('ttf'),
+    url($path + $filename + '.eot') format('eot');
     font-weight: $weight;
     font-style: $style;
+    font-display: swap;
   }
 }
 
