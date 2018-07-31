@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import logoImage from './logo.svg';
+import logoImage from './logo.png';
+import { Link } from 'react-router-dom';
 
 import './logo.scss';
 
@@ -7,9 +8,9 @@ class Logo extends Component {
   render() {
     return (
       <div className="logo">
-        <a href="/" className="logo__link">
+        <Link to="/" className="logo__link">
           <img src={ logoImage } alt="логотип МНИЖ" className="logo__image"/>
-        </a>
+        </Link>
       </div>
     );
   }

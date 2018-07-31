@@ -16,7 +16,7 @@ body {
   height: 100%;
   font-size: 14px;
   overflow-y: scroll;
-  min-width: 1150px;
+  min-width: 1024px;
 
   &.ReactModal__Body--open,
   &.t-popup {
@@ -27,6 +27,10 @@ body {
     user-select: none;
     cursor: grab;
   }
+}
+
+#root {
+  height: 100%;
 }
 
 ::selection {

@@ -1,16 +1,16 @@
 import React from 'react'
-import { Route, Switch } from 'react-router'
+import { Switch, Route } from 'react-router-dom'
 import { hot } from 'react-hot-loader';
 
-import Page from './containers/Page/Page';
-import Main from './containers/Main';
-import Second from './containers/Second';
+import Page from './containers/Page';
+import Articles from './containers/Articles';
+import ArticlePublish from './containers/ArticlePublish';
 
 const routes = () => (
   <Page>
     <Switch>
-      <Route exact path="/" component={ Main } />
-      <Route exact path="/second" component={ Second } />
+      <Route exact path="/" component={ Articles } />
+      <Route path="/publish" component={ ArticlePublish } />
     </Switch>
   </Page>
 );

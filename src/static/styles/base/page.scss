@@ -1,4 +1,8 @@
 .page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
   &__main {
     display: flex;
     justify-content: center;
@@ -11,11 +15,21 @@
     padding-right: 40px;
     display: flex;
     justify-content: center;
+
+    &:after {
+      @include mq($from: wide) {
+        content: '';
+        display: block;
+        flex: auto;
+        width: 300px;
+        max-width: 300px;
+      }
+    }
   }
 
   &__sidebar {
     flex: auto;
-    width: 18%;
+    width: 300px;
     max-width: 300px;
   }
 
@@ -25,5 +39,14 @@
     max-width: 1012px;
     width: 100%;
     flex: auto;
+    box-sizing: border-box;
+    padding: 40px 55px;
+  }
+
+  &__title {
+    color: $blue-color;
+    font-family: $pragmatica;
+    font-weight: 500;
+    margin: 0;
   }
 }

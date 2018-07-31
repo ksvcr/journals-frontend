@@ -3,7 +3,6 @@ import Header from '~/components/Header/Header';
 
 import 'normalize.css';
 import '~/static/styles/index.scss';
-import './page.scss';
 
 class Main extends Component {
   render() {

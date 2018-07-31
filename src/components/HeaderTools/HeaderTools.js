@@ -26,13 +26,13 @@ class HeaderTools extends Component {
     return (
       <div className="header-tools">
         <div className="header-tools__item">
-          <Menu items={ this.langLinks } />
+          <Menu items={ this.langLinks } type="horizontal" />
         </div>
         <div className="header-tools__item">
-          <Menu items={ this.journalLink } />
+          <Menu items={ this.journalLink } type="horizontal" />
         </div>
         <div className="header-tools__item header-tools__item_right">
-          <Button type="link">
+          <Button type="link" href="/publish">
             Опубликовать статью
           </Button>
         </div>

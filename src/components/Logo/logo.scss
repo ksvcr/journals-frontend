@@ -1,6 +1,9 @@
 .logo {
   width: 319px;
   height: 64px;
+  border-right: 1px solid $brown-color;
+  padding-right: 35px;
+  flex: none;
 
   &__link {
     display: block;

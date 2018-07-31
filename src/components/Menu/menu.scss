@@ -1,9 +1,14 @@
 .menu {
+  $root: &;
+
   &__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
+
+    #{$root}_horizontal & {
+      display: flex;
+    }
   }
 
   &__link {
@@ -21,7 +26,12 @@
 
   &__item {
     & + & {
-      margin-left: 25px;
+      margin-top: 35px;
+
+      #{$root}_horizontal & {
+        margin-top: 0;
+        margin-left: 25px;
+      }
     }
   }
 }
