@@ -5,7 +5,7 @@ class Articles extends Component {
   get menuItems() {
     return [
       {
-        title: 'Мои статью',
+        title: 'Мои статьи',
         href: '/'
       },
       {
