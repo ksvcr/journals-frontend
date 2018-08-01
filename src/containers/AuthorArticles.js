@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import Menu from '~/components/Menu/Menu';
 import Select from '~/components/Select/Select';
+import Radio from '~/components/Radio/Radio';
 
 class AuthorArticles extends Component {
   get menuItems() {
@@ -41,7 +42,17 @@ class AuthorArticles extends Component {
         </aside>
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <Select options={ this.journalsOptions } />
+          <div className="form">
+            <div className="form__field">
+              <label htmlFor="journals-list" className="form__label">Для журнала</label>
+              <Select id="journals-list" options={ this.journalsOptions } />
+            </div>
+            <div className="form__field">
+              <label htmlFor="journals-list" className="form__label">Поиск статьи</label>
+              <Radio name="search" label="Искать везде" />
+              <Radio name="search" label="Искать в заголовках" />
+            </div>
+          </div>
         </article>
       </Fragment>
     );

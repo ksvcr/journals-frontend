@@ -1,0 +1,41 @@
+.radio {
+  $root: &;
+
+  font-size: 16px;
+  margin: 0 0 15px;
+  display: inline-block;
+
+  & + & {
+    margin-left: 30px;
+  }
+
+  &__input {
+    @include visuallyhidden;
+  }
+
+  &__title {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover:before {
+      border-color: $orange-color;
+    }
+
+    &:before {
+      content: '';
+      width: 22px;
+      height: 22px;
+      border: 1px solid #dcdcdc;
+      background: #fcfcfa;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    #{$root}__input:checked ~ &:before,
+    #{$root}__input:checked ~ &:hover:before {
+      background: #dcdcdc;
+      border-color: #dcdcdc;
+    }
+  }
+}

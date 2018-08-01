@@ -1,0 +1,16 @@
+.form {
+  &__label {
+    margin-bottom: 20px;
+    font-size: 10px;
+    display: block;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  &__field {
+    & + & {
+      margin-top: 30px;
+    }
+  }
+}
