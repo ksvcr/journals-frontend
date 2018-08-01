@@ -1,0 +1,52 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  &__main {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__holder {
+    flex: auto;
+    max-width: 1532px;
+    padding-left: 40px;
+    padding-right: 40px;
+    display: flex;
+    justify-content: center;
+
+    &:after {
+      @include mq($from: wide) {
+        content: '';
+        display: block;
+        flex: auto;
+        width: 300px;
+        max-width: 300px;
+      }
+    }
+  }
+
+  &__sidebar {
+    flex: auto;
+    width: 300px;
+    max-width: 300px;
+  }
+
+  &__content {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+    background: #fff;
+    max-width: 1012px;
+    width: 100%;
+    flex: auto;
+    box-sizing: border-box;
+    padding: 40px 55px;
+  }
+
+  &__title {
+    color: $blue-color;
+    font-family: $pragmatica;
+    font-weight: 500;
+    margin: 0;
+  }
+}

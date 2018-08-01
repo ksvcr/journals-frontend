@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+
+import Logo from '../Logo/Logo';
+import HeaderTools from '../HeaderTools/HeaderTools';
+import UserPanel from '../UserPanel/UserPanel';
 
 import './header.scss';
 
@@ -7,8 +10,11 @@ class Header extends Component {
   render() {
     return (
       <header className="header">
-        <Link to="/">main</Link>
-        <Link to="/second">second</Link>
+        <div className="header__holder">
+          <Logo />
+          <HeaderTools />
+          <UserPanel />
+        </div>
       </header>
     );
   }

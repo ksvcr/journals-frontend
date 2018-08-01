@@ -9,8 +9,10 @@ class Main extends Component {
     return (
       <div className="page">
         <Header />
-        <main>
-          { this.props.children }
+        <main className="page__main">
+          <div className="page__holder">
+            { this.props.children }
+          </div>
         </main>
       </div>
     );

@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "indentation": 2,
+    "selector-list-comma-newline-after": "always",
+    "block-opening-brace-space-before": "always",
+    "declaration-colon-space-after": "always",
+    "declaration-colon-space-before": "never",
+    "block-closing-brace-newline-before": "always",
+    "rule-empty-line-before": [
+      "always", {
+        "except": ["first-nested"],
+        "ignore": ["after-comment"]
+      }
+    ],
+    "no-invalid-double-slash-comments": true,
+    "comment-empty-line-before": [
+      "always", {
+        "ignore": ["stylelint-commands"]
+      }
+    ],
+    "max-nesting-depth": [
+      3, {
+        "ignoreAtRules": ["include"]
+      }
+    ]
+  }
+}

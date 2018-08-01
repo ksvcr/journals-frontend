@@ -1,3 +1,12 @@
 .header {
-  background: #eee;
+  border-bottom: 1px solid $brown-color;
+  margin-bottom: 40px;
+
+  &__holder {
+    @include holder;
+    max-width: 1920px;
+    padding: 25px 40px;
+    display: flex;
+    align-items: center;
+  }
 }
