@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import Menu from '~/components/Menu/Menu';
+import Select from '~/components/Select/Select';
 
-class Articles extends Component {
+class AuthorArticles extends Component {
   get menuItems() {
     return [
       {
@@ -10,11 +11,24 @@ class Articles extends Component {
       },
       {
         title: 'Мои скидки',
-        href: '/'
+        href: '/second'
       },
       {
         title: 'Настройки',
         href: '/'
+      }
+    ];
+  }
+
+  get journalsOptions() {
+    return [
+      {
+        title: 'Международный научно-исследовательский',
+        value: '1'
+      },
+      {
+        title: 'Международный научно-исследовательский',
+        value: '2'
       }
     ];
   }
@@ -27,10 +41,11 @@ class Articles extends Component {
         </aside>
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
+          <Select options={ this.journalsOptions } />
         </article>
       </Fragment>
     );
   }
 }
 
-export default Articles;
+export default AuthorArticles;
