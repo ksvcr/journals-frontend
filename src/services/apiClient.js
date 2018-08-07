@@ -1,8 +1,12 @@
-const apiRequest = require('~/services/api-request');
+import fetchService from '~/utils/fetchService';
+
+const fetchInstance = new fetchService({
+  baseURL: '/api'
+});
 
 const apiClient = {
-  getSites: () => apiRequest(`/sites`),
-  getArticles: () => apiRequest(`/about`),
+  getSites: () => fetchInstance.request(`/sites`),
+  login: (siteId, data) => fetchInstance.request(`sites/${siteId}/users/auth/login/`, { method: 'post', data })
 };
 
-module.exports = apiClient;
+export default apiClient;

@@ -25,16 +25,12 @@
     border: 1px solid $brown-color;
     outline: none;
     display: block;
-    padding: 15px 30px 15px 12px;
+    padding: 18px 30px 18px 18px;
+    font-size: 16px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 6px;
     text-overflow: ellipsis;
-
-    @include mq($from: desktop) {
-      padding: 23px 30px 23px 15px;
-      font-size: 16px;
-    }
 
     &::-ms-expand {
       display: none;
@@ -42,6 +38,7 @@
 
     &:focus {
       outline: 0;
+      border-color: $orange-color;
     }
 
     #{$root}_error & {

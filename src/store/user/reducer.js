@@ -1,5 +1,8 @@
 const initialState = {
-  title: null,
+  isPending: false,
+  isFulfilled: false,
+  isRejected: false,
+  data: {}
 };
 
 function page(state = initialState, action) {

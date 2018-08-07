@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import page from './page/page';
+import page from './page/reducer';
+import sites from './sites/reducer';
 
 export default combineReducers({
-  page
+  page,
+  sites
 });

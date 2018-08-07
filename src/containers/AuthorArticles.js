@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import Menu from '~/components/Menu/Menu';
 import Select from '~/components/Select/Select';
 import Radio from '~/components/Radio/Radio';
+import SearchField from '~/components/SearchField/SearchField';
 
 class AuthorArticles extends Component {
   get menuItems() {
@@ -49,8 +50,9 @@ class AuthorArticles extends Component {
             </div>
             <div className="form__field">
               <label htmlFor="journals-list" className="form__label">Поиск статьи</label>
-              <Radio name="search" label="Искать везде" />
+              <Radio name="search" label="Искать везде" checked />
               <Radio name="search" label="Искать в заголовках" />
+              <SearchField />
             </div>
           </div>
         </article>

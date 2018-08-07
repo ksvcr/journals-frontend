@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+
 import Header from '~/components/Header/Header';
+import { fetchSites } from '~/store/sites/actions';
+import { login } from '~/store/user/actions';
 
 import 'normalize.css';
 import '~/static/styles/index.scss';
 
-class Main extends Component {
+class Page extends Component {
+  componentWillMount() {
+    const { fetchSites, login } = this.props;
+    fetchSites().then(() => {
+      login();
+    });
+  }
+  
   render() {
     return (
       <div className="page">
@@ -19,4 +30,18 @@ class Main extends Component {
   }
 }
 
-export default Main;
+function mapStateToProps(state) {
+  return {};
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchSites: () => dispatch(fetchSites()),
+    login: () => dispatch(login())
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Page);
