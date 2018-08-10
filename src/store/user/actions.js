@@ -1,5 +1,5 @@
 import apiClient from '~/services/apiClient';
-import { LOGIN } from '~/store/user/constants';
+import { LOGIN } from './constants';
 
 export function login() {
   return (dispatch, state) => {

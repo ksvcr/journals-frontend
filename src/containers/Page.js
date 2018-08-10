@@ -10,10 +10,10 @@ import '~/static/styles/index.scss';
 
 class Page extends Component {
   componentWillMount() {
-    const { fetchSites, login } = this.props;
-    fetchSites().then(() => {
-      login();
-    });
+    // const { fetchSites, login } = this.props;
+    // fetchSites().then(() => {
+    //   login();
+    // });
   }
   
   render() {

@@ -1,0 +1,75 @@
+@mixin prevArrow {
+  content: '';
+  display: block;
+  border-style: solid;
+  border-width: 4px 4px 4px 0;
+  border-color: transparent #007bff transparent transparent;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+@mixin nextArrow {
+  content: '';
+  display: block;
+  border-style: solid;
+  border-width: 4px 0 4px 4px;
+  border-color: transparent transparent transparent #007bff;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+.paginator {
+  display: flex;
+
+  &__button {
+    font-size: 0;
+    width: 16px;
+    height: 20px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    position: relative;
+
+    &_start {
+      &:before {
+        left: 4px;
+        @include prevArrow;
+      }
+
+      &:after {
+        left: 8px;
+        @include prevArrow;
+      }
+    }
+
+    &_prev {
+      &:after {
+        left: 50%;
+        margin-left: -2px;
+        @include prevArrow;
+      }
+    }
+
+    &_end {
+      &:before {
+        left: 4px;
+        @include nextArrow;
+      }
+
+      &:after {
+        left: 8px;
+        @include nextArrow;
+      }
+    }
+
+    &_next {
+      &:after {
+        left: 50%;
+        margin-left: -2px;
+        @include nextArrow;
+      }
+    }
+  }
+}

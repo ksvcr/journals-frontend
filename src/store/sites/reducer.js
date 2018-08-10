@@ -1,4 +1,4 @@
-import {FETCH_SITES} from '~/store/sites/constants';
+import {FETCH_SITES} from './constants';
 
 const initialState = {
   isPending: false,
@@ -7,7 +7,7 @@ const initialState = {
   data: {}
 };
 
-function page(state = initialState, action) {
+function sites(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_SITES}_PENDING`:
       return { ...state,
@@ -33,4 +33,4 @@ function page(state = initialState, action) {
   }
 }
 
-export default page;
+export default sites;

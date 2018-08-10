@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import List from '~/components/List/List';
-import Paginate from '~/components/Paginate/Paginate';
+import PaginateLine from '~/components/PaginateLine/PaginateLine';
 
 class AuthorArticleList extends Component {
   get articlesData() {
@@ -79,7 +79,7 @@ class AuthorArticleList extends Component {
           <List { ...this.listProps } />
         </div>
         <div className="author-article-list__paginate">
-          <Paginate size={ 15 } />
+          <PaginateLine total={ this.articlesData.length } />
         </div>
       </div>
     );

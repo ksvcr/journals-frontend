@@ -1,4 +1,4 @@
-import { FETCH_SITES } from '~/store/sites/constants';
+import { FETCH_SITES } from './constants';
 import apiClient from '~/services/apiClient';
 
 export function fetchSites() {
