@@ -1,9 +1,17 @@
 import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+
 import Menu from '~/components/Menu/Menu';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
 import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleFilter';
+import {fetchArticles} from '~/store/articles/actions';
 
 class AuthorArticles extends Component {
+  componentWillMount() {
+    const { fetchArticles } = this.props;
+    fetchArticles();
+  }
+
   get menuItems() {
     return [
       {
@@ -37,4 +45,17 @@ class AuthorArticles extends Component {
   }
 }
 
-export default AuthorArticles;
+function mapStateToProps(state) {
+  return {};
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchArticles: () => dispatch(fetchArticles())
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthorArticles);

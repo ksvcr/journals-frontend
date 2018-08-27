@@ -1,27 +1,30 @@
-import {FETCH_SITES} from './constants';
+import {FETCH_ARTICLES} from './constants';
+import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  data: {}
+  data: {},
+  ids: []
 };
 
-function user(state = initialState, action) {
+function articles(state = initialState, action) {
   switch (action.type) {
-    case `${FETCH_SITES}_PENDING`:
+    case `${FETCH_ARTICLES}_PENDING`:
       return { ...state,
         isPending: true
       };
 
-    case `${FETCH_SITES}_FULFILLED`:
+    case `${FETCH_ARTICLES}_FULFILLED`:
+      const entity = entityNormalize.toObject(action.payload.results);
       return { ...state,
         isPending: false,
         isFulfilled: true,
-        data: action.payload.results
+        ...entity
       };
 
-    case `${FETCH_SITES}_REJECTED`:
+    case `${FETCH_ARTICLES}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,
@@ -33,4 +36,4 @@ function user(state = initialState, action) {
   }
 }
 
-export default user;
+export default articles;

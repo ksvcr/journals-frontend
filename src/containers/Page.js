@@ -2,19 +2,25 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import Header from '~/components/Header/Header';
-import { fetchSites } from '~/store/sites/actions';
-import { login } from '~/store/user/actions';
+import {login, fetchCurrentUser} from '~/store/user/actions';
+import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
 import '~/static/styles/index.scss';
 
 class Page extends Component {
   componentWillMount() {
-    // const { fetchSites, login } = this.props;
-    // fetchSites().then(() => {
-    //   login();
-    // });
+    this.authUser();
   }
+
+  authUser = () => {
+    const { login, fetchCurrentUser } = this.props;
+    if (hasToken()) {
+      fetchCurrentUser();
+    } else {
+      login();
+    }
+  };
   
   render() {
     return (
@@ -36,7 +42,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchSites: () => dispatch(fetchSites()),
+    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
     login: () => dispatch(login())
   }
 };

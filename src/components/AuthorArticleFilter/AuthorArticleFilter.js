@@ -31,7 +31,7 @@ class AuthorArticleFilter extends Component {
           </div>
           <div className="form__field">
             <label htmlFor="journals-list" className="form__label">Поиск статьи</label>
-            <Radio name="search" label="Искать везде" checked />
+            <Radio name="search" label="Искать везде" />
             <Radio name="search" label="Искать в заголовках" />
             <SearchField />
           </div>

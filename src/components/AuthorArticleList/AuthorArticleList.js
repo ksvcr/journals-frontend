@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
+import { getArticlesArray } from '~/store/articles/selector';
 
 class AuthorArticleList extends Component {
   get articlesData() {
@@ -24,8 +25,9 @@ class AuthorArticleList extends Component {
   }
 
   get listProps() {
+    const { articlesArray } = this.props;
     return {
-      data: this.articlesData,
+      data: articlesArray,
       head: true,
       cells: [
         {
@@ -35,7 +37,7 @@ class AuthorArticleList extends Component {
           head: () => 'Имя',
           render: (data) =>
             <div>
-              { data.title }
+              { data.id }
             </div>
         },
         {
@@ -45,7 +47,7 @@ class AuthorArticleList extends Component {
           head: () => 'Создана',
           render: (data) =>
             <div>
-              { data.date }
+              { data.date_public }
             </div>
         },
         {
@@ -55,7 +57,7 @@ class AuthorArticleList extends Component {
           head: () => 'Этап',
           render: (data) =>
             <div>
-              { data.stage }
+              { data.id }
             </div>
         },
         {
@@ -65,7 +67,7 @@ class AuthorArticleList extends Component {
           head: () => 'Статус',
           render: (data) =>
             <div>
-              { data.status }
+              { data.id }
             </div>
         }
       ]
@@ -87,7 +89,9 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    articlesArray: getArticlesArray(state)
+  };
 }
 
 export default connect(

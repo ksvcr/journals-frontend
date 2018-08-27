@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
 import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 

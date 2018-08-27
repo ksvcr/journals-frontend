@@ -1,12 +1,14 @@
 import fetchService from '~/utils/fetchService';
 
 const fetchInstance = new fetchService({
-  baseURL: '/api'
+  baseURL: process.env.REACT_APP_API_URL
 });
 
 const apiClient = {
-  getSites: () => fetchInstance.request(`/sites`),
-  login: (siteId, data) => fetchInstance.request(`sites/${siteId}/users/auth/login/`, { method: 'post', data })
+  login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
+  getCurrentUser: () => fetchInstance.request(`/users/me/`),
+  getSites: () => fetchInstance.request(`/sites/`),
+  getArticles: () => fetchInstance.request(`/articles/`)
 };
 
 export default apiClient;
