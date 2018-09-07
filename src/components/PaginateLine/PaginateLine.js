@@ -1,20 +1,40 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
 import Paginator from '~/components/Paginator/Paginator';
-import {setCurrent} from '~/store/paginate/actions';
+import PageSizer from '~/components/PageSizer/PageSizer';
+
+import {setCurrent, setSize} from '~/store/paginate/actions';
+
+import './paginate-line.scss';
 
 class PaginateLine extends Component {
-  handleChange = (value) => {
-    const { dispatch } = this.props;
-    dispatch(setCurrent(value));
+  handlePageChange = (value) => {
+    const { setCurrent } = this.props;
+    setCurrent(value);
+  };
+  
+  handleSizeChange = (value) => {
+    const { setSize } = this.props;
+    setSize(value);
   };
 
+  get totalAmount() {
+    const { size, total } = this.props;
+    return Math.ceil(total/size);
+  }
+
   render() {
-    const { size, current, total } = this.props;
+    const { current } = this.props;
     return (
       <div className="paginate-line">
-        <Paginator current={ current } size={ size }
-                   total={ total } onChange={ this.handleChange } />
+        <div className="paginate-line__item">
+          <Paginator current={ current }
+                     total={ this.totalAmount } onChange={ this.handlePageChange } />
+        </div>
+        <div className="paginate-line__item">
+          <PageSizer onChange={ this.handleSizeChange } />
+        </div>
       </div>
     );
   }
@@ -28,6 +48,13 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrent: (value) => dispatch(setCurrent(value)),
+    setSize: (value) => dispatch(setSize(value))
+  }
+};
+
 export default connect(
-  mapStateToProps,
+  mapStateToProps, mapDispatchToProps
 )(PaginateLine);

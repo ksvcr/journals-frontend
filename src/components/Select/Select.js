@@ -1,26 +1,54 @@
-import React from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 import './select.scss';
 
-const Select = function (props) {
-  const { meta } = props;
-  const classes = classNames('select', props.className,
-    {'select_error': meta && meta.submitFailed && meta.error });
-  return (
-    <div className={ classes }>
-      <select id={ props.id } disabled={ props.disabled } required={ props.required }
-              { ...props.input } className="select__field">
-        {
-          props.options.map(option => (
-            <option value={ option.value }
-                    key={ option.value }>
-              { option.title }
-            </option>
-          ))
-        }
-      </select>
-    </div>
-  );
+class Select extends Component {
+  renderOptions = () => {
+    const { options } = this.props;
+
+    return options.map(option => {
+      let value, title;
+
+      if (typeof option === 'object') {
+        value = option.value;
+        title = option.title;
+      } else {
+        value = title = option;
+      }
+
+      return (
+        <option value={ value } key={ value }>
+          { title }
+        </option>
+      )
+    })
+  };
+
+  render() {
+    const { meta, input, id, disabled, required, className, onChange } = this.props;
+    const classes = classNames('select', className,
+      {'select_error': meta && meta.submitFailed && meta.error });
+
+    return (
+      <div className={ classes }>
+        <select id={ id } disabled={ disabled } required={ required }
+                onChange={ onChange } { ...input } className="select__field">
+          { this.renderOptions() }
+        </select>
+      </div>
+    );
+  }
+}
+
+Select.defaultProps = {
+  input: {}, // Props from redux-form field
+  meta: {}
+};
+
+Select.propTypes = {
+  options: PropTypes.array.isRequired
 };
 
 export default Select;

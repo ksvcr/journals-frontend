@@ -5,10 +5,13 @@ import './paginator.scss';
 
 class Paginator extends Component {
   handleChange = (event) => {
-    const { onChange } = this.props;
+    const { onChange, total } = this.props;
     let { value } = event.target;
     value = value ? parseInt(value, 10) : 1;
-    onChange(value);
+
+    if (value <= total) {
+      onChange(value);
+    }
   };
 
   handleStart = () => {
@@ -54,7 +57,7 @@ class Paginator extends Component {
         <div className="paginator__holder">
           <input type="text" className="paginator__input" value={ current }
                  pattern="\d*" onChange={ this.handleChange } />
-          <span className="paginator__total"> из { total } </span>
+          <span className="paginator__total">из { total }</span>
         </div>
 
         <button type="button" className="paginator__button paginator__button_next"
@@ -71,7 +74,9 @@ class Paginator extends Component {
 }
 
 Paginator.propTypes = {
-  size: PropTypes.number.isRequired
+  current: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  onChange: PropTypes.func
 };
 
 export default Paginator;

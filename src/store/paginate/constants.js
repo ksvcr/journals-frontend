@@ -1,3 +1,3 @@
-export const SET_SIZE = 'SET_SIZE';
-export const SET_CURRENT = 'SET_CURRENT';
+export const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 

@@ -22,6 +22,7 @@
 
 .paginator {
   display: flex;
+  align-items: center;
 
   &__button {
     font-size: 0;
@@ -34,8 +35,10 @@
     position: relative;
     transition: opacity .2s;
     opacity: .6;
+    outline: 0;
 
-    &:hover {
+    &:hover,
+    &:focus {
       opacity: 1;
     }
 
@@ -78,5 +81,27 @@
         @include nextArrow;
       }
     }
+  }
+
+  &__input {
+    text-align: center;
+    outline: 0;
+    background: #fcfcfa;
+    border: 1px solid #d8d1ca;
+    padding: 11px 17px;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    border-radius: 6px;
+    display: inline-block;
+    max-width: 68px;
+    margin: 0 14px;
+
+    &:focus {
+      border-color: $orange-color;
+    }
+  }
+
+  &__total {
+    margin-right: 14px;
   }
 }

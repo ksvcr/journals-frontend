@@ -1,15 +1,15 @@
-import { SET_SIZE, SET_CURRENT } from './constants';
+import { SET_PAGE_SIZE, SET_CURRENT_PAGE } from './constants';
 
 export function setSize(size) {
   return {
-    type: SET_SIZE,
+    type: SET_PAGE_SIZE,
     size
   }
 }
 
 export function setCurrent(current) {
   return {
-    type: SET_CURRENT,
+    type: SET_CURRENT_PAGE,
     current
   }
 }

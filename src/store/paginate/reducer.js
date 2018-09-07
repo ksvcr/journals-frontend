@@ -1,5 +1,5 @@
 import {
-  SET_SIZE, SET_CURRENT
+  SET_PAGE_SIZE, SET_CURRENT_PAGE
 } from './constants';
 
 const initialState = {
@@ -9,11 +9,11 @@ const initialState = {
 
 function paginate(state = initialState, action) {
   switch (action.type) {
-    case SET_SIZE:
+    case SET_PAGE_SIZE:
       return { ...state,
         size: action.size };
 
-    case SET_CURRENT:
+    case SET_CURRENT_PAGE:
       return { ...state,
         current: action.current };
 

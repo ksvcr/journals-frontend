@@ -25,7 +25,7 @@
     border: 1px solid $brown-color;
     outline: none;
     display: block;
-    padding: 18px 30px 18px 18px;
+    padding: 18px 40px 18px 18px;
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
@@ -43,6 +43,11 @@
 
     #{$root}_error & {
       border-color: $red-color;
+    }
+
+    #{$root}_small & {
+      padding: 11px 40px 11px 17px;
+      font-size: 14px;
     }
   }
 }

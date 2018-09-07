@@ -1,29 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
+
 import { getArticlesArray } from '~/store/articles/selector';
 
-class AuthorArticleList extends Component {
-  get articlesData() {
-    return [
-      {
-        id: 1,
-        title: 'Проблемы восприятия молодежью сакральных и уникальных природных мест Якутии',
-        date: '10.10.2017',
-        stage: 'Отправлена',
-        status: 'На рассмотрении'
-      },
-      {
-        id: 2,
-        title: 'Проблемы восприятия молодежью сакральных и уникальных природных мест Якутии',
-        date: '10.10.2017',
-        stage: 'Черновик',
-        status: 'Требует доработки'
-      }
-    ];
-  }
+import './author-article-list.scss';
 
+class AuthorArticleList extends Component {
   get listProps() {
     const { articlesArray } = this.props;
     return {
@@ -75,13 +60,14 @@ class AuthorArticleList extends Component {
   }
 
   render() {
+    const { articlesArray } = this.props;
     return (
       <div className="author-article-list">
         <div className="author-article-list__holder">
           <List { ...this.listProps } />
         </div>
         <div className="author-article-list__paginate">
-          <PaginateLine total={ this.articlesData.length } />
+          <PaginateLine total={ articlesArray.length } />
         </div>
       </div>
     );
