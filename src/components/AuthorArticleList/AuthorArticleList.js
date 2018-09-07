@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
@@ -29,7 +30,10 @@ class AuthorArticleList extends Component {
           style: {
             width: '15%'
           },
-          head: () => 'Создана',
+          head: () =>
+            <button type="button" data-for="createDate" data-tip data-event="click">
+              Создана
+            </button>,
           render: (data) =>
             <div>
               { data.date_public }
@@ -69,6 +73,10 @@ class AuthorArticleList extends Component {
         <div className="author-article-list__paginate">
           <PaginateLine total={ articlesArray.length } />
         </div>
+
+        <ReactTooltip id='createDate' globalEventOff="click" getContent={
+          () => 'test'
+        } />
       </div>
     );
   }
