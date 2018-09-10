@@ -1,0 +1,17 @@
+.tooltip {
+  cursor: pointer;
+}
+
+.tippy-popper {
+  max-width: none;
+
+  .tippy-tooltip.light-theme {
+    color: inherit;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+}

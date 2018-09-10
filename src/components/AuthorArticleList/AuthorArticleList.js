@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import ReactTooltip from 'react-tooltip';
 
 import List from '~/components/List/List';
+import ToolTip from '~/components/ToolTip/ToolTip';
+import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
+import FilterButton from '~/components/FilterButton/FilterButton';
 
 import { getArticlesArray } from '~/store/articles/selector';
 
@@ -31,9 +33,12 @@ class AuthorArticleList extends Component {
             width: '15%'
           },
           head: () =>
-            <button type="button" data-for="createDate" data-tip data-event="click">
-              Создана
-            </button>,
+            <ToolTip className="tooltip" position="bottom-start"
+                     html={ <DateFilter /> }>
+              <FilterButton>
+                Создана
+              </FilterButton>
+            </ToolTip>,
           render: (data) =>
             <div>
               { data.date_public }
@@ -73,10 +78,6 @@ class AuthorArticleList extends Component {
         <div className="author-article-list__paginate">
           <PaginateLine total={ articlesArray.length } />
         </div>
-
-        <ReactTooltip id='createDate' globalEventOff="click" getContent={
-          () => 'test'
-        } />
       </div>
     );
   }

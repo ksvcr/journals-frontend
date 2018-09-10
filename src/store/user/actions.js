@@ -4,8 +4,8 @@ import { LOGIN, FETCH_CURRENT_USER } from './constants';
 export function login() {
   return (dispatch) => {
     const payload = apiClient.login({
-      email: 'kuklin@jetstyle.ru',
-      password: 'q1w2e3r4'
+      email: 'test@test.ru',
+      password: 'qwer1234'
     });
     return dispatch({
       type: LOGIN,

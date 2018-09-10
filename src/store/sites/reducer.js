@@ -1,10 +1,12 @@
 import {FETCH_SITES} from './constants';
+import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  data: {}
+  data: {},
+  ids: []
 };
 
 function user(state = initialState, action) {
@@ -15,10 +17,12 @@ function user(state = initialState, action) {
       };
 
     case `${FETCH_SITES}_FULFILLED`:
+      const entity = entityNormalize.toObject(action.payload.results);
+
       return { ...state,
         isPending: false,
         isFulfilled: true,
-        data: action.payload.results
+        ...entity
       };
 
     case `${FETCH_SITES}_REJECTED`:

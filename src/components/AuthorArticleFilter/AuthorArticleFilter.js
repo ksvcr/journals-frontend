@@ -5,20 +5,16 @@ import Select from '~/components/Select/Select';
 import Radio from '~/components/Radio/Radio';
 import SearchField from '~/components/SearchField/SearchField';
 
+import {getSitesArray} from '~/store/sites/selector';
 import './author-article-filter.scss';
 
 class AuthorArticleFilter extends Component {
   get journalsOptions() {
-    return [
-      {
-        title: 'Международный научно-исследовательский',
-        value: '1'
-      },
-      {
-        title: 'Международный научно-исследовательский',
-        value: '2'
-      }
-    ];
+    const { sitesArray } = this.props;
+    return sitesArray.map(site => ({
+      title: site.name,
+      value: site.id
+    }));
   }
 
   render() {
@@ -42,7 +38,9 @@ class AuthorArticleFilter extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    sitesArray: getSitesArray(state)
+  };
 }
 
 export default connect(

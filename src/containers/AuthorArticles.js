@@ -5,11 +5,14 @@ import Menu from '~/components/Menu/Menu';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
 import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleFilter';
 import {fetchArticles} from '~/store/articles/actions';
+import {fetchSites} from '~/store/sites/actions';
 
 class AuthorArticles extends Component {
   componentWillMount() {
-    const { fetchArticles } = this.props;
-    fetchArticles();
+    const { fetchSites, fetchArticles } = this.props;
+    fetchSites().then(() => {
+      fetchArticles();
+    });
   }
 
   get menuItems() {
@@ -46,12 +49,15 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchArticles: () => dispatch(fetchArticles())
+    fetchArticles: () => dispatch(fetchArticles()),
+    fetchSites: () => dispatch(fetchSites())
   }
 };
 
