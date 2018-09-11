@@ -5,7 +5,7 @@ class DateFilter extends Component {
   render() {
     return (
       <div>
-        test
+        тут будет фильтр
       </div>
     );
   }
