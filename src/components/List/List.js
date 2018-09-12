@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import ToolTip from '~/components/ToolTip/ToolTip';
 import './list.scss';
 
 class List extends PureComponent {
@@ -32,11 +33,37 @@ class List extends PureComponent {
 
     return cells.map((cell, index) => {
       const render = isHead ? cell.head() : cell.render(data);
-      return (
-        <div className={ classes } key={index} style={ cell.style }>
-          { render }
-        </div>
-      );
+      if (isHead && cell.headToolTip) {
+        return (
+          <div className={ classes } key={ index } style={ cell.style }>
+            <ToolTip className="tooltip" position="bottom-start"
+                     html={ cell.headToolTip() }>
+              <button type="button" className="list__expand-button">
+                { render }
+              </button>
+            </ToolTip>
+            { cell.sortField &&
+              <button type="button" className="list__sort-button list__sort-button_with-expand">
+                Сортировать
+              </button>
+            }
+          </div>
+        );
+      } else if (isHead && cell.sortField) {
+        return (
+          <div className={ classes } key={ index } style={ cell.style }>
+            <button type="button" className="list__sort-button">
+              { render }
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <div className={ classes } key={ index } style={ cell.style }>
+            { render }
+          </div>
+        );
+      }
     });
   };
 

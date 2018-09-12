@@ -9,7 +9,7 @@ const initialState = {
   ids: []
 };
 
-function user(state = initialState, action) {
+function sites(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_SITES}_PENDING`:
       return { ...state,
@@ -37,4 +37,4 @@ function user(state = initialState, action) {
   }
 }
 
-export default user;
+export default sites;

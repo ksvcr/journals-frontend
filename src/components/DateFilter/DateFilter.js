@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 
 class DateFilter extends Component {
   render() {
@@ -10,7 +9,5 @@ class DateFilter extends Component {
     );
   }
 }
-
-DateFilter.propTypes = {};
 
 export default DateFilter;

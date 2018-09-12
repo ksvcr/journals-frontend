@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import List from '~/components/List/List';
-import ToolTip from '~/components/ToolTip/ToolTip';
 import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
-import FilterButton from '~/components/FilterButton/FilterButton';
+import StatusLabel from '~/components/StatusLabel/StatusLabel';
 
 import { getArticlesArray } from '~/store/articles/selector';
 
@@ -25,20 +24,18 @@ class AuthorArticleList extends Component {
           head: () => 'Имя',
           render: (data) =>
             <div>
-              { data.id }
+              { data.title }
             </div>
         },
         {
           style: {
             width: '15%'
           },
+          sortField: 'date_public',
           head: () =>
-            <ToolTip className="tooltip" position="bottom-start"
-                     html={ <DateFilter /> }>
-              <FilterButton>
-                Создана
-              </FilterButton>
-            </ToolTip>,
+            'Создана',
+          headToolTip: () =>
+            <DateFilter />,
           render: (data) =>
             <div>
               { data.date_public }
@@ -48,6 +45,7 @@ class AuthorArticleList extends Component {
           style: {
             width: '15%'
           },
+          sortField: 'date_step',
           head: () => 'Этап',
           render: (data) =>
             <div>
@@ -60,9 +58,7 @@ class AuthorArticleList extends Component {
           },
           head: () => 'Статус',
           render: (data) =>
-            <div>
-              { data.id }
-            </div>
+            <StatusLabel status={ data.state_article } />
         }
       ]
     };

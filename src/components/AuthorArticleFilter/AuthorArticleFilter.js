@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Select from '~/components/Select/Select';
 import Radio from '~/components/Radio/Radio';
 import SearchField from '~/components/SearchField/SearchField';
 
-import {getSitesArray} from '~/store/sites/selector';
 import './author-article-filter.scss';
 
 class AuthorArticleFilter extends Component {
@@ -17,18 +16,24 @@ class AuthorArticleFilter extends Component {
     }));
   }
 
+  handleSiteChange = (event) => {
+    const { value } = event.target;
+    const { onSiteChange } = this.props;
+    onSiteChange(value);
+  };
+
   render() {
     return (
       <div className="author-article-filter">
         <div className="form">
           <div className="form__field">
-            <label htmlFor="journals-list" className="form__label">Для журнала</label>
-            <Select id="journals-list" options={ this.journalsOptions } />
+            <label htmlFor="sites-list" className="form__label">Для журнала</label>
+            <Select id="sites-list" options={ this.journalsOptions } onChange={ this.handleSiteChange } />
           </div>
           <div className="form__field">
-            <label htmlFor="journals-list" className="form__label">Поиск статьи</label>
-            <Radio name="search" label="Искать везде" />
-            <Radio name="search" label="Искать в заголовках" />
+            <label className="form__label">Поиск статьи</label>
+            <Radio name="search-filter" label="Искать везде" />
+            <Radio name="search-filter" label="Искать в заголовках" />
             <SearchField />
           </div>
         </div>
@@ -37,12 +42,9 @@ class AuthorArticleFilter extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    sitesArray: getSitesArray(state)
-  };
-}
+AuthorArticleFilter.propTypes = {
+  sitesArray: PropTypes.array,
+  onSiteChange: PropTypes.func
+};
 
-export default connect(
-  mapStateToProps,
-)(AuthorArticleFilter);
+export default AuthorArticleFilter;
