@@ -5,13 +5,10 @@ import './paginator.scss';
 
 class Paginator extends Component {
   handleChange = (event) => {
-    const { onChange, total } = this.props;
+    const { onChange } = this.props;
     let { value } = event.target;
     value = value ? parseInt(value, 10) : 1;
-
-    if (value <= total) {
-      onChange(value);
-    }
+    onChange(value);
   };
 
   handleStart = () => {

@@ -1,0 +1,73 @@
+.point-menu-button {
+  $root: &;
+
+  border: 0;
+  padding: 0 0 0 5px;
+  background: transparent;
+  cursor: pointer;
+  outline: 0;
+
+  &__holder {
+    height: 19px;
+    width: 10px;
+    display: block;
+    position: relative;
+
+    @include mq($from: desktop) {
+      height: 17px;
+      width: 10px;
+    }
+  }
+
+  &__holder:before,
+  &__holder:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    display: block;
+    transform: translateX(-50%);
+  }
+
+  &__holder:before {
+    top: 0;
+  }
+
+  &__holder:after {
+    bottom: 0;
+  }
+
+  &__holder:hover,
+  &__holder:focus {
+    &:before,
+    &:after {
+      background: #000;
+    }
+
+    #{$root}__icon {
+      background: #000;
+    }
+  }
+
+  &__holder:before,
+  &__holder:after,
+  &__icon {
+    width: 4px;
+    height: 4px;
+    display: block;
+    border-radius: 50%;
+    background: $gray-color;
+    transition: background .2s;
+
+    @include mq($from: desktop) {
+      width: 3px;
+      height: 3px;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

@@ -8,7 +8,7 @@ class SearchField extends Component {
   render() {
     return (
       <div className="search-field">
-        <input type="text" className="search-field__input"/>
+        <input type="text" placeholder="Поиск" className="search-field__input"/>
         <button type="button" className="search-field__button">
           <Icon className="search-field__icon" name="search" />
           Поиск

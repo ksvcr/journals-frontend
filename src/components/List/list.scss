@@ -13,6 +13,16 @@
   }
 
   &__cell {
+    flex: auto;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: #020201;
+
+    &_main {
+      color: #000;
+      font-size: 14px;
+    }
+
     & + & {
       padding-left: 20px;
     }
@@ -82,4 +92,13 @@
       border-color: #000 transparent transparent;
     }
   }
+}
+
+.list-item-enter {
+  opacity: 0.01;
+}
+
+.list-item-enter.list-item-enter-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
 }

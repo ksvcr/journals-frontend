@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ToolTip from '~/components/ToolTip/ToolTip';
 import './list.scss';
@@ -29,13 +30,18 @@ class List extends PureComponent {
 
   renderCells = (data, isHead) => {
     const { cells } = this.props;
-    const classes = classNames('list__cell', { 'list__cell_head': isHead });
 
     return cells.map((cell, index) => {
-      const render = isHead ? cell.head() : cell.render(data);
+      const cellClasses = classNames('list__cell',
+        { 'list__cell_head': isHead,
+          'list__cell_main': cell.isMain
+      });
+
+      const headRender = cell.head ? cell.head() : null;
+      const render = isHead ? headRender : cell.render(data);
       if (isHead && cell.headToolTip) {
         return (
-          <div className={ classes } key={ index } style={ cell.style }>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             <ToolTip className="tooltip" position="bottom-start"
                      html={ cell.headToolTip() }>
               <button type="button" className="list__expand-button">
@@ -51,7 +57,7 @@ class List extends PureComponent {
         );
       } else if (isHead && cell.sortField) {
         return (
-          <div className={ classes } key={ index } style={ cell.style }>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             <button type="button" className="list__sort-button">
               { render }
             </button>
@@ -59,7 +65,7 @@ class List extends PureComponent {
         );
       } else {
         return (
-          <div className={ classes } key={ index } style={ cell.style }>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             { render }
           </div>
         );
@@ -73,7 +79,11 @@ class List extends PureComponent {
       <div className="list">
         <div className="list__holder">
           { head && this.renderHead() }
-          { this.renderRows() }
+          <ReactCSSTransitionGroup transitionName="list-item"
+                                   transitionEnterTimeout={ 500 }
+                                   transitionLeave={ false }>
+            { this.renderRows() }
+          </ReactCSSTransitionGroup>
         </div>
       </div>
     );

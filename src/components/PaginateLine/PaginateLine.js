@@ -4,19 +4,22 @@ import {connect} from 'react-redux';
 import Paginator from '~/components/Paginator/Paginator';
 import PageSizer from '~/components/PageSizer/PageSizer';
 
-import {setCurrent, setSize} from '~/store/paginate/actions';
+import * as paginateActions from '~/store/paginate/actions';
 
 import './paginate-line.scss';
 
 class PaginateLine extends Component {
-  handlePageChange = (value) => {
+  handlePageChange = (newCurrent) => {
     const { setCurrent } = this.props;
-    setCurrent(value);
+    setCurrent(newCurrent);
   };
   
-  handleSizeChange = (value) => {
-    const { setSize } = this.props;
-    setSize(value);
+  handleSizeChange = (newSize) => {
+    const { current, total, setSize, setCurrent } = this.props;
+    setSize(newSize);
+    if (current > total/newSize) {
+      setCurrent(total/newSize);
+    }
   };
 
   get totalAmount() {
@@ -48,11 +51,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setCurrent: (value) => dispatch(setCurrent(value)),
-    setSize: (value) => dispatch(setSize(value))
-  }
+const mapDispatchToProps = {
+  setCurrent: paginateActions.setCurrent,
+  setSize: paginateActions.setSize
 };
 
 export default connect(

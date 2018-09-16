@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import Header from '~/components/Header/Header';
-import {login, fetchCurrentUser} from '~/store/user/actions';
+import * as userActions from '~/store/user/actions';
 import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
@@ -40,11 +40,9 @@ function mapStateToProps(state) {
   return {};
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
-    login: () => dispatch(login())
-  }
+const mapDispatchToProps = {
+  fetchCurrentUser: userActions.fetchCurrentUser,
+  login: userActions.login
 };
 
 export default connect(

@@ -7,7 +7,8 @@ import './page-sizer.scss';
 
 class PageSizer extends Component {
   handleChange = (event) => {
-    const { value } = event.target;
+    let { value } = event.target;
+    value = parseInt(value, 10);
     const { onChange } = this.props;
     onChange(value);
   };

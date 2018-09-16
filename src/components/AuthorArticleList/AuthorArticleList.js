@@ -5,8 +5,10 @@ import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
+// import PointMenuButton from '~/components/PointMenuButton/PointMenuButton';
 
-import { getArticlesArray } from '~/store/articles/selector';
+import { getFilteredArticlesArray } from '~/store/articles/selector';
+import formatDate from '~/services/formatDate';
 
 import './author-article-list.scss';
 
@@ -19,8 +21,9 @@ class AuthorArticleList extends Component {
       cells: [
         {
           style: {
-            width: '55%'
+            width: '50%'
           },
+          isMain: true,
           head: () => 'Имя',
           render: (data) =>
             <div>
@@ -29,7 +32,7 @@ class AuthorArticleList extends Component {
         },
         {
           style: {
-            width: '15%'
+            width: '12%'
           },
           sortField: 'date_public',
           head: () =>
@@ -38,41 +41,45 @@ class AuthorArticleList extends Component {
             <DateFilter />,
           render: (data) =>
             <div>
-              { data.date_public }
+              { formatDate(data.date_public) }
             </div>
         },
         {
           style: {
-            width: '15%'
+            width: '13%'
           },
           sortField: 'date_step',
           head: () => 'Этап',
           render: (data) =>
             <div>
-              { data.id }
+              Черновик
             </div>
         },
         {
           style: {
-            width: '15%'
+            width: '20%'
           },
           head: () => 'Статус',
           render: (data) =>
             <StatusLabel status={ data.state_article } />
-        }
+        },
+        // {
+        //   render: (data) =>
+        //     <PointMenuButton />
+        // }
       ]
     };
   }
 
   render() {
-    const { articlesArray } = this.props;
+    const { total } = this.props;
     return (
       <div className="author-article-list">
         <div className="author-article-list__holder">
           <List { ...this.listProps } />
         </div>
         <div className="author-article-list__paginate">
-          <PaginateLine total={ articlesArray.length } />
+          <PaginateLine total={ total } />
         </div>
       </div>
     );
@@ -81,7 +88,8 @@ class AuthorArticleList extends Component {
 
 function mapStateToProps(state) {
   return {
-    articlesArray: getArticlesArray(state)
+    articlesArray: getFilteredArticlesArray(state),
+    total: state.articles.ids.length
   };
 }
 
