@@ -12,6 +12,6 @@ const Radio = (props) => {
       </span>
     </label>
   )
-}
+};
 
 export default Radio;

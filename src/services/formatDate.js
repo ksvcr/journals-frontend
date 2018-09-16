@@ -1,6 +1,12 @@
 import moment from 'moment';
 
-export default function formatDate(date) {
-  const parsedDate = moment(date, moment.HTML5_FMT.DATETIME_LOCAL_MS);
+const DEFAULT_FORMAT = moment.HTML5_FMT.DATETIME_LOCAL_MS;
+
+export function toString(date) {
+  const parsedDate = moment(date, DEFAULT_FORMAT);
   return parsedDate.format('DD.MM.YYYY');
+}
+
+export function toUnix(date) {
+  return moment(date, DEFAULT_FORMAT).unix();
 }

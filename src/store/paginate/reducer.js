@@ -1,10 +1,11 @@
 import {
-  SET_PAGE_SIZE, SET_CURRENT_PAGE
+  SET_PAGE_SIZE, SET_CURRENT_PAGE, SET_SORT
 } from './constants';
 
 const initialState = {
   size: 5,
-  current: 1
+  current: 1,
+  sort: null
 };
 
 function paginate(state = initialState, action) {
@@ -16,6 +17,10 @@ function paginate(state = initialState, action) {
     case SET_CURRENT_PAGE:
       return { ...state,
         current: action.current };
+
+    case SET_SORT:
+      return { ...state,
+        sort: action.sort };
 
     default:
       return state

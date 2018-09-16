@@ -1,4 +1,4 @@
-import { SET_PAGE_SIZE, SET_CURRENT_PAGE } from './constants';
+import { SET_PAGE_SIZE, SET_CURRENT_PAGE, SET_SORT } from './constants';
 
 export function setSize(size) {
   return {
@@ -11,5 +11,12 @@ export function setCurrent(current) {
   return {
     type: SET_CURRENT_PAGE,
     current
+  }
+}
+
+export function setSort(sort) {
+  return {
+    type: SET_SORT,
+    sort
   }
 }

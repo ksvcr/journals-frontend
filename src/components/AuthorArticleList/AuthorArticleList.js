@@ -8,15 +8,24 @@ import StatusLabel from '~/components/StatusLabel/StatusLabel';
 // import PointMenuButton from '~/components/PointMenuButton/PointMenuButton';
 
 import { getFilteredArticlesArray } from '~/store/articles/selector';
-import formatDate from '~/services/formatDate';
+import * as paginateActions from '~/store/paginate/actions';
+
+import * as formatDate from '~/services/formatDate';
+import getArticleStatusTitle from '~/services/getArticleStatusTitle';
 
 import './author-article-list.scss';
 
 class AuthorArticleList extends Component {
+  handleSortChange = (sort) => {
+    const { setSort } = this.props;
+    setSort(sort);
+  };
+
   get listProps() {
     const { articlesArray } = this.props;
     return {
       data: articlesArray,
+      onSortChange: this.handleSortChange,
       head: true,
       cells: [
         {
@@ -26,34 +35,34 @@ class AuthorArticleList extends Component {
           isMain: true,
           head: () => 'Имя',
           render: (data) =>
-            <div>
-              { data.title }
-            </div>
+            data.title
         },
         {
           style: {
             width: '12%'
           },
-          sortField: 'date_public',
+          sort: {
+            field: 'date_public',
+            type: 'date'
+          },
           head: () =>
             'Создана',
           headToolTip: () =>
             <DateFilter />,
           render: (data) =>
-            <div>
-              { formatDate(data.date_public) }
-            </div>
+            formatDate.toString(data.date_public)
         },
         {
           style: {
             width: '13%'
           },
-          sortField: 'date_step',
+          sort: {
+            field: 'stage_article',
+            type: 'status'
+          },
           head: () => 'Этап',
           render: (data) =>
-            <div>
-              Черновик
-            </div>
+            getArticleStatusTitle(data.stage_article)
         },
         {
           style: {
@@ -93,6 +102,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  setSort: paginateActions.setSort,
+};
+
 export default connect(
-  mapStateToProps,
+  mapStateToProps, mapDispatchToProps
 )(AuthorArticleList);

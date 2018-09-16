@@ -4,9 +4,30 @@ import classNames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ToolTip from '~/components/ToolTip/ToolTip';
+import SortChecker from '~/components/SortChecker/SortChecker';
+
 import './list.scss';
 
 class List extends PureComponent {
+  state = {
+    sort: {}
+  };
+
+  handleSort = (event) => {
+    const { onSortChange } = this.props;
+    const { name, checked, dataset } = event.target;
+    const { fieldType } = dataset;
+
+    this.setState({ sort: { [name]: checked } });
+    const sortParams = { field: name, order: checked ? 'asc' : 'desc' };
+
+    if (fieldType) {
+      sortParams.type = fieldType;
+    }
+
+    onSortChange(sortParams);
+  };
+
   renderRows = () => {
     const { data } = this.props;
     return data.map(this.renderRow);
@@ -30,6 +51,7 @@ class List extends PureComponent {
 
   renderCells = (data, isHead) => {
     const { cells } = this.props;
+    const { sort } = this.state;
 
     return cells.map((cell, index) => {
       const cellClasses = classNames('list__cell',
@@ -39,6 +61,11 @@ class List extends PureComponent {
 
       const headRender = cell.head ? cell.head() : null;
       const render = isHead ? headRender : cell.render(data);
+
+      const sortField = typeof cell.sort === 'object' ? cell.sort.field : cell.sort;
+      const sortValue = Boolean(sort[sortField]);
+      const isActiveSort = sort.hasOwnProperty(sortField);
+
       if (isHead && cell.headToolTip) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
@@ -48,19 +75,19 @@ class List extends PureComponent {
                 { render }
               </button>
             </ToolTip>
-            { cell.sortField &&
-              <button type="button" className="list__sort-button list__sort-button_with-expand">
-                Сортировать
-              </button>
+            { cell.sort &&
+              <SortChecker name={ sortField } checked={ sortValue } data-field-type={ cell.sort.type }
+                           isActive={ isActiveSort } onChange={ this.handleSort } />
             }
           </div>
         );
-      } else if (isHead && cell.sortField) {
+      } else if (isHead && cell.sort) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            <button type="button" className="list__sort-button">
+            <SortChecker name={ sortField } checked={ sortValue } data-field-type={ cell.sort.type }
+                         isActive={ isActiveSort } onChange={ this.handleSort } >
               { render }
-            </button>
+            </SortChecker>
           </div>
         );
       } else {
@@ -96,6 +123,15 @@ List.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
+  sort: PropTypes.oneOfType(
+    [
+      PropTypes.string,
+      PropTypes.shape({
+        field: PropTypes.string,
+        type: PropTypes.string
+      })
+    ]
+  ),
   cells: PropTypes.arrayOf(
     PropTypes.shape({
       style: PropTypes.object,
