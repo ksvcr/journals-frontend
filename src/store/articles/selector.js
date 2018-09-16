@@ -18,11 +18,6 @@ export const getFilteredArticlesArray = createSelector(
 
     dataArray = formatDataArray.slice(dataArray, current, size);
 
-    console.log({
-      current,
-      size,
-      array: dataArray,
-    });
     return dataArray;
   }
 );

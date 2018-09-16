@@ -1,7 +1,14 @@
-.search-field {
+.search {
   $root: &;
 
-  position: relative;
+
+  &__field {
+    position: relative;
+  }
+
+  &__params {
+    margin-bottom: 15px;
+  }
 
   &__input {
     background: #fcfcfa;

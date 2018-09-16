@@ -3,12 +3,12 @@ import React from 'react';
 import './radio.scss';
 
 const Radio = (props) => {
-  const { name, label, checked } = props;
+  const { children, ...rest } = props;
   return (
     <label className="radio">
-      <input type="radio" name={ name } checked={ checked } className="radio__input"/>
+      <input type="radio" className="radio__input" { ...rest } />
       <span className="radio__title">
-        { label }
+        { children }
       </span>
     </label>
   )

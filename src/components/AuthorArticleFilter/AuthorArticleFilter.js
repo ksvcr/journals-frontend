@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import Select from '~/components/Select/Select';
-import Radio from '~/components/Radio/Radio';
-import SearchField from '~/components/SearchField/SearchField';
+import Search from '~/components/Search/Search';
 
 import './author-article-filter.scss';
 
@@ -21,6 +20,18 @@ class AuthorArticleFilter extends Component {
     const { onSiteChange } = this.props;
     onSiteChange(value);
   };
+  
+  handleSearchChange = (data) => {
+    console.log(data);
+  };
+
+  get searchParams() {
+    return [
+      { value: 'title',
+        title: 'Искать в заголовках'
+      }
+    ];
+  }
 
   render() {
     return (
@@ -32,9 +43,7 @@ class AuthorArticleFilter extends Component {
           </div>
           <div className="form__field">
             <label className="form__label">Поиск статьи</label>
-            <Radio name="search-filter" label="Искать везде" />
-            <Radio name="search-filter" label="Искать в заголовках" />
-            <SearchField />
+            <Search params={ this.searchParams } onChange={ this.handleSearchChange } />
           </div>
         </div>
       </div>
