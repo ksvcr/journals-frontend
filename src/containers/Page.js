@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import Header from '~/components/Header/Header';
+import Footer from '~/components/Footer/Footer';
+
 import * as userActions from '~/store/user/actions';
 import hasToken from '~/services/hasToken';
 
@@ -31,6 +33,7 @@ class Page extends Component {
             { this.props.children }
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
