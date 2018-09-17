@@ -17,8 +17,9 @@ class PaginateLine extends Component {
   handleSizeChange = (newSize) => {
     const { current, total, setSize, setCurrent } = this.props;
     setSize(newSize);
-    if (current > total/newSize) {
-      setCurrent(total/newSize);
+    const newCurrent = Math.ceil(total/newSize);
+    if (current > newCurrent) {
+      setCurrent(newCurrent);
     }
   };
 

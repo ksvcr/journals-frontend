@@ -17,7 +17,7 @@ class AuthorArticles extends Component {
 
   componentDidUpdate() {
     const { sitesArray, isNeedArticles, fetchArticles } = this.props;
-    const siteId = sitesArray[0] ? sitesArray[0].id : null;
+    const siteId = 1;
     if (isNeedArticles && siteId) {
       fetchArticles(siteId);
     }

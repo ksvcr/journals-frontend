@@ -5,7 +5,7 @@ import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
-// import PointMenuButton from '~/components/PointMenuButton/PointMenuButton';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 
 import { getFilteredArticlesArray } from '~/store/articles/selector';
 import * as paginateActions from '~/store/paginate/actions';
@@ -21,12 +21,32 @@ class AuthorArticleList extends Component {
     setSort(sort);
   };
 
+  get toolsMenuItems() {
+    return [
+      {
+        title: 'Редактировать'
+      },
+      {
+        title: 'Отозвать'
+      },
+      {
+        title: 'Оплатить'
+      },
+      {
+        title: 'Просмотр',
+        type: 'preview',
+        icon: 'preview'
+      }
+    ];
+  };
+
   get listProps() {
     const { articlesArray } = this.props;
     return {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
       cells: [
         {
           style: {
@@ -71,11 +91,7 @@ class AuthorArticleList extends Component {
           head: () => 'Статус',
           render: (data) =>
             <StatusLabel status={ data.state_article } />
-        },
-        // {
-        //   render: (data) =>
-        //     <PointMenuButton />
-        // }
+        }
       ]
     };
   }

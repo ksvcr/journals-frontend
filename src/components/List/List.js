@@ -5,6 +5,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ToolTip from '~/components/ToolTip/ToolTip';
 import SortChecker from '~/components/SortChecker/SortChecker';
+import PointMenuButton from '~/components/PointMenuButton/PointMenuButton';
 
 import './list.scss';
 
@@ -50,10 +51,10 @@ class List extends PureComponent {
   };
 
   renderCells = (data, isHead) => {
-    const { cells } = this.props;
+    const { cells, menuTooltip } = this.props;
     const { sort } = this.state;
 
-    return cells.map((cell, index) => {
+    const cellItems = cells.map((cell, index) => {
       const cellClasses = classNames('list__cell',
         { 'list__cell_head': isHead,
           'list__cell_main': cell.isMain
@@ -98,6 +99,19 @@ class List extends PureComponent {
         );
       }
     });
+
+    if (!isHead && menuTooltip) {
+      cellItems.push((
+        <div className="list__menu-button" key="menu-cell">
+          <ToolTip className="tooltip" position="right-start"
+                   offset={ -5 } html={ menuTooltip(data) }>
+            <PointMenuButton />
+          </ToolTip>
+        </div>
+      ));
+    }
+
+    return cellItems;
   };
 
   render() {
