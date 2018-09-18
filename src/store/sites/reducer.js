@@ -1,10 +1,11 @@
-import {FETCH_SITES} from './constants';
+import {FETCH_SITES, SET_CURRENT_SITE} from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
+  current: null,
   data: {},
   ids: []
 };
@@ -19,6 +20,10 @@ function sites(state = initialState, action) {
     case `${FETCH_SITES}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
 
+      if (!state.current) {
+        entity.current = action.payload.results[0].id
+      }
+
       return { ...state,
         isPending: false,
         isFulfilled: true,
@@ -30,6 +35,11 @@ function sites(state = initialState, action) {
         isRejected: true,
         isPending: false,
         error: action.payload
+      };
+
+    case SET_CURRENT_SITE:
+      return { ...state,
+        current: action.current
       };
 
     default:

@@ -8,7 +8,7 @@ import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
 
-import { getFilteredArticlesArray } from '~/store/articles/selector';
+import { getArticlesArray } from '~/store/articles/selector';
 import * as paginateActions from '~/store/paginate/actions';
 
 import * as formatDate from '~/services/formatDate';
@@ -124,14 +124,14 @@ class AuthorArticleList extends Component {
   };
 
   render() {
-    const { total } = this.props;
+    const { total, onPaginateChange } = this.props;
     return (
       <div className="author-article-list">
         <div className="author-article-list__holder">
           <List { ...this.listProps } />
         </div>
         <div className="author-article-list__paginate">
-          <PaginateLine total={ total } />
+          <PaginateLine total={ total } onChange={ onPaginateChange } />
         </div>
       </div>
     );
@@ -140,8 +140,8 @@ class AuthorArticleList extends Component {
 
 function mapStateToProps(state) {
   return {
-    articlesArray: getFilteredArticlesArray(state),
-    total: state.articles.ids.length
+    articlesArray: getArticlesArray(state),
+    total: state.articles.total
   };
 }
 

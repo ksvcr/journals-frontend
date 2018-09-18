@@ -1,3 +1,3 @@
-export const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
-export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+export const SET_PAGE_LIMIT = 'SET_PAGE_LIMIT';
+export const SET_PAGE_OFFSET = 'SET_PAGE_OFFSET';
 export const SET_SORT = 'SET_SORT';

@@ -1,12 +1,21 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
 import Select from '~/components/Select/Select';
 import Search from '~/components/Search/Search';
 
+import * as sitesActions from '~/store/sites/actions';
+import {getSitesArray} from '~/store/sites/selector';
+
 import './author-article-filter.scss';
 
 class AuthorArticleFilter extends Component {
+  componentDidMount() {
+    const { fetchSites } = this.props;
+    fetchSites();
+  }
+
   get journalsOptions() {
     const { sitesArray } = this.props;
     return sitesArray.map(site => ({
@@ -17,8 +26,9 @@ class AuthorArticleFilter extends Component {
 
   handleSiteChange = (event) => {
     const { value } = event.target;
-    const { onSiteChange } = this.props;
-    onSiteChange(value);
+    const { onFilterChange, setCurrentSite } = this.props;
+    setCurrentSite(value);
+    onFilterChange(value);
   };
   
   handleSearchChange = (data) => {
@@ -52,8 +62,18 @@ class AuthorArticleFilter extends Component {
 }
 
 AuthorArticleFilter.propTypes = {
-  sitesArray: PropTypes.array,
-  onSiteChange: PropTypes.func
+  onFilterChange: PropTypes.func
 };
 
-export default AuthorArticleFilter;
+function mapStateToProps(state) {
+  return {
+    sitesArray: getSitesArray(state)
+  };
+}
+
+const mapDispatchToProps = {
+  fetchSites: sitesActions.fetchSites,
+  setCurrentSite: sitesActions.setCurrent
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorArticleFilter);

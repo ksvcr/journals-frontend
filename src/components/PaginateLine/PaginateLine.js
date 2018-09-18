@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Paginator from '~/components/Paginator/Paginator';
 import PageSizer from '~/components/PageSizer/PageSizer';
@@ -10,51 +11,62 @@ import './paginate-line.scss';
 
 class PaginateLine extends Component {
   handlePageChange = (newCurrent) => {
-    const { setCurrent } = this.props;
-    setCurrent(newCurrent);
+    const { setCurrent, limit, onChange } = this.props;
+    const offset = (newCurrent-1)*limit;
+    setCurrent(offset);
+    onChange();
   };
   
-  handleSizeChange = (newSize) => {
-    const { current, total, setSize, setCurrent } = this.props;
-    setSize(newSize);
-    const newCurrent = Math.ceil(total/newSize);
-    if (current > newCurrent) {
-      setCurrent(newCurrent);
+  handleLimitChange = (newLimit) => {
+    const { total, limit, setLimit, setCurrent, onChange } = this.props;
+    const totalPageAmount = Math.ceil(total/newLimit);
+    setLimit(newLimit);
+    // Сброс offset в случае если он больше чем кол-во страниц
+    if (this.current > totalPageAmount) {
+      const offset = (totalPageAmount-1)*limit;
+      setCurrent(offset);
     }
+    onChange();
   };
 
-  get totalAmount() {
-    const { size, total } = this.props;
-    return Math.ceil(total/size);
+  get current() {
+    const { offset, limit } = this.props;
+    return Math.ceil((offset+1)/limit)
   }
 
   render() {
-    const { current } = this.props;
+    const { limit, total } = this.props;
+    const totalPageAmount = Math.ceil(total/limit);
     return (
       <div className="paginate-line">
         <div className="paginate-line__item">
-          <Paginator current={ current }
-                     total={ this.totalAmount } onChange={ this.handlePageChange } />
+          <Paginator current={ this.current }
+                     total={ totalPageAmount } onChange={ this.handlePageChange } />
         </div>
         <div className="paginate-line__item">
-          <PageSizer onChange={ this.handleSizeChange } />
+          <PageSizer onChange={ this.handleLimitChange } />
         </div>
       </div>
     );
   }
 }
 
+PaginateLine.propTypes = {
+  total: PropTypes.number.isRequired,
+  onChange: PropTypes.func
+};
+
 function mapStateToProps(state) {
-  const { size, current } = state.paginate;
+  const { limit, offset } = state.paginate;
   return {
-    size,
-    current
+    limit,
+    offset
   };
 }
 
 const mapDispatchToProps = {
-  setCurrent: paginateActions.setCurrent,
-  setSize: paginateActions.setSize
+  setCurrent: paginateActions.setOffset,
+  setLimit: paginateActions.setLimit,
 };
 
 export default connect(

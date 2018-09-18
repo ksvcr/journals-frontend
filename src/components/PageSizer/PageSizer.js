@@ -29,7 +29,7 @@ class PageSizer extends Component {
 }
 
 PageSizer.defaultProps = {
-  sizes: [5, 10, 50]
+  sizes: [1, 2, 50]
 };
 
 PageSizer.propTypes = {

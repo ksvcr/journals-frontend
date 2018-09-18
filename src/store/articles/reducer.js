@@ -5,6 +5,7 @@ const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
+  total: 0,
   data: {},
   ids: []
 };
@@ -21,6 +22,7 @@ function articles(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        total: action.payload.count,
         ...entity
       };
 

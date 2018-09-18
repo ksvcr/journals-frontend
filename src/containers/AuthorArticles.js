@@ -7,26 +7,14 @@ import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleF
 
 import * as articlesActions from '~/store/articles/actions';
 import * as sitesActions from '~/store/sites/actions';
-import {getSitesArray} from '~/store/sites/selector';
 
 class AuthorArticles extends Component {
-  componentDidMount() {
-    const { fetchSites } = this.props;
-    fetchSites();
-  }
-
   componentDidUpdate() {
-    const { sitesArray, isNeedArticles, fetchArticles } = this.props;
-    const siteId = sitesArray[0] ? sitesArray[0].id : null;
-    if (isNeedArticles && siteId) {
-      fetchArticles(siteId);
+    const { isNeedArticles, fetchArticles } = this.props;
+    if (isNeedArticles) {
+      fetchArticles();
     }
   }
-
-  handleSiteChange = (siteId) => {
-    const { fetchArticles } = this.props;
-    fetchArticles(siteId);
-  };
 
   get menuItems() {
     return [
@@ -46,7 +34,7 @@ class AuthorArticles extends Component {
   }
 
   render() {
-    const { sitesArray } = this.props;
+    const { fetchArticles } = this.props;
     return (
       <Fragment>
         <aside className="page__sidebar">
@@ -54,8 +42,8 @@ class AuthorArticles extends Component {
         </aside>
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <AuthorArticleFilter sitesArray={ sitesArray } onSiteChange={ this.handleSiteChange } />
-          <AuthorArticleList />
+          <AuthorArticleFilter onFilterChange={ fetchArticles } />
+          <AuthorArticleList onPaginateChange={ fetchArticles } />
         </article>
       </Fragment>
     );
@@ -63,16 +51,15 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
-  const { articles } = state;
+  const { articles, sites } = state;
   return {
-    sitesArray: getSitesArray(state),
-    isNeedArticles: !articles.isPending && !articles.isFulfilled
+    isNeedArticles: !articles.isPending && !articles.isFulfilled && sites.isFulfilled
   };
 }
 
 const mapDispatchToProps = {
   fetchArticles: articlesActions.fetchArticles,
-  fetchSites: sitesActions.fetchSites
+  setCurrentSite: sitesActions.setCurrent
 };
 
 export default connect(

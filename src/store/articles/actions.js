@@ -5,10 +5,12 @@ import apiClient from '~/services/apiClient';
 // const fetchInstance = new fetchService();
 // fetchInstance.request(`https://next.json-generator.com/api/json/get/NkgYgGD_S`);
 
-export function fetchArticles(siteId) {
-  return (dispatch) => {
+export function fetchArticles() {
+  return (dispatch, state) => {
     // const payload = fetchInstance.request(`https://next.json-generator.com/api/json/get/NkgYgGD_S`);
-    const payload = apiClient.getArticles(siteId);
+    const { paginate, sites } = state();
+    const siteId = sites.current;
+    const payload = apiClient.getArticles(siteId, paginate);
     return dispatch({
       type: FETCH_ARTICLES,
       payload

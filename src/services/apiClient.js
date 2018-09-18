@@ -8,9 +8,9 @@ const apiClient = {
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
   getSites: () => fetchInstance.request(`/sites/`),
-  getArticles: (siteId) => {
+  getArticles: (siteId, params) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';
-    return fetchInstance.request(`${sitePrefix}/articles/`)
+    return fetchInstance.request(`${sitePrefix}/articles/`, { params });
   }
 };
 

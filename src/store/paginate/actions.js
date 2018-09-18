@@ -1,16 +1,16 @@
-import { SET_PAGE_SIZE, SET_CURRENT_PAGE, SET_SORT } from './constants';
+import { SET_PAGE_LIMIT, SET_PAGE_OFFSET, SET_SORT } from './constants';
 
-export function setSize(size) {
+export function setLimit(limit) {
   return {
-    type: SET_PAGE_SIZE,
-    size
+    type: SET_PAGE_LIMIT,
+    limit
   }
 }
 
-export function setCurrent(current) {
+export function setOffset(offset) {
   return {
-    type: SET_CURRENT_PAGE,
-    current
+    type: SET_PAGE_OFFSET,
+    offset
   }
 }
 

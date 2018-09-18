@@ -6,6 +6,13 @@ import * as formatDataArray from '~/services/formatDataArray';
 const articlesSelector = state => state.articles;
 const paginateSelector = state => state.paginate;
 
+export const getArticlesArray = createSelector(
+  articlesSelector,
+  articles => {
+    return entityNormalize.toArray(articles.data, articles.ids);
+  }
+);
+
 export const getFilteredArticlesArray = createSelector(
   articlesSelector, paginateSelector,
   (articles, paginate) => {

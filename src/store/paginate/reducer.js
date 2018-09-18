@@ -1,22 +1,22 @@
 import {
-  SET_PAGE_SIZE, SET_CURRENT_PAGE, SET_SORT
+  SET_PAGE_LIMIT, SET_PAGE_OFFSET, SET_SORT
 } from './constants';
 
 const initialState = {
-  size: 5,
-  current: 1,
+  limit: 1,
+  offset: 0,
   sort: null
 };
 
 function paginate(state = initialState, action) {
   switch (action.type) {
-    case SET_PAGE_SIZE:
+    case SET_PAGE_LIMIT:
       return { ...state,
-        size: action.size };
+        limit: action.limit };
 
-    case SET_CURRENT_PAGE:
+    case SET_PAGE_OFFSET:
       return { ...state,
-        current: action.current };
+        offset: action.offset };
 
     case SET_SORT:
       return { ...state,
