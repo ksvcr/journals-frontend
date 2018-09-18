@@ -6,6 +6,7 @@ import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
+import Payment from '~/components/Payment/Payment';
 
 import { getFilteredArticlesArray } from '~/store/articles/selector';
 import * as paginateActions from '~/store/paginate/actions';
@@ -16,9 +17,8 @@ import getArticleStatusTitle from '~/services/getArticleStatusTitle';
 import './author-article-list.scss';
 
 class AuthorArticleList extends Component {
-  handleSortChange = (sort) => {
-    const { setSort } = this.props;
-    setSort(sort);
+  state = {
+    box: null
   };
 
   get toolsMenuItems() {
@@ -30,7 +30,8 @@ class AuthorArticleList extends Component {
         title: 'Отозвать'
       },
       {
-        title: 'Оплатить'
+        title: 'Оплатить',
+        handler: this.handlePaymentShow
       },
       {
         title: 'Просмотр',
@@ -40,6 +41,21 @@ class AuthorArticleList extends Component {
     ];
   };
 
+  handleSortChange = (sort) => {
+    const { setSort } = this.props;
+    setSort(sort);
+  };
+
+  handlePaymentShow = (id) => {
+    this.setState({
+      box: { id,  type: 'payment' }
+    });
+  };
+
+  handlePaymentClose = () => {
+    this.setState({ box: null });
+  };
+
   get listProps() {
     const { articlesArray } = this.props;
     return {
@@ -47,6 +63,7 @@ class AuthorArticleList extends Component {
       onSortChange: this.handleSortChange,
       head: true,
       menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      box: this.renderBox,
       cells: [
         {
           style: {
@@ -65,8 +82,7 @@ class AuthorArticleList extends Component {
             field: 'date_public',
             type: 'date'
           },
-          head: () =>
-            'Создана',
+          head: () => 'Создана',
           headToolTip: () =>
             <DateFilter />,
           render: (data) =>
@@ -95,6 +111,17 @@ class AuthorArticleList extends Component {
       ]
     };
   }
+
+  renderBox = (data) => {
+    const { box } = this.state;
+    if (box && box.id === data.id) {
+      if (box.type === 'payment') {
+        return <Payment onClose={ this.handlePaymentClose } />;
+      }
+    } else {
+      return null;
+    }
+  };
 
   render() {
     const { total } = this.props;

@@ -1,5 +1,6 @@
 .footer {
-  margin-top: 135px;
+  margin-top: auto;
+  padding-top: 135px;
 
   &__holder {
     @include holder;

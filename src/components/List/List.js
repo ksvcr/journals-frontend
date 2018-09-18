@@ -29,14 +29,28 @@ class List extends PureComponent {
     onSortChange(sortParams);
   };
 
-  renderRows = () => {
+  renderItems = () => {
     const { data } = this.props;
-    return data.map(this.renderRow);
+    return data.map(this.renderItem);
+  };
+
+  renderItem = (data) => {
+    const { box } = this.props;
+    return (
+      <div className="list__item" key={ data.id }>
+        { this.renderRow(data) }
+        { box &&
+          <div className="list__box">
+            { box(data) }
+          </div>
+        }
+      </div>
+    );
   };
 
   renderRow = (data) => {
     return (
-      <div className="list__row" key={ data.id }>
+      <div className="list__row">
         { this.renderCells(data) }
       </div>
     );
@@ -44,8 +58,10 @@ class List extends PureComponent {
 
   renderHead = () => {
     return (
-      <div className="list__row list__row_head" key={ 'list-head' }>
-        { this.renderCells(null, true) }
+      <div className="list__item list__item_head" key={ 'list-head' }>
+        <div className="list__row">
+          { this.renderCells(null, true) }
+        </div>
       </div>
     );
   };
@@ -123,7 +139,7 @@ class List extends PureComponent {
           <ReactCSSTransitionGroup transitionName="list-item"
                                    transitionEnterTimeout={ 500 }
                                    transitionLeave={ false }>
-            { this.renderRows() }
+            { this.renderItems() }
           </ReactCSSTransitionGroup>
         </div>
       </div>
