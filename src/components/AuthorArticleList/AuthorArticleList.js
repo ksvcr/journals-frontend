@@ -130,9 +130,11 @@ class AuthorArticleList extends Component {
         <div className="author-article-list__holder">
           <List { ...this.listProps } />
         </div>
-        <div className="author-article-list__paginate">
-          <PaginateLine total={ total } onChange={ onPaginateChange } />
-        </div>
+        { total > 0 &&
+          <div className="author-article-list__paginate">
+            <PaginateLine total={ total } onChange={ onPaginateChange } />
+          </div>
+        }
       </div>
     );
   }

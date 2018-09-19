@@ -1,32 +1,21 @@
 .text-field {
-  border: 0;
+  background: #fcfcfa;
+  border: 1px solid $brown-color;
   outline: 0;
-  font-size: 22px;
-  font-weight: 500;
-  text-align: center;
   display: block;
+  padding: 18px 30px 18px 18px;
+  font-size: 16px;
   width: 100%;
-  background: transparent;
-  position: relative;
-  min-height: 27px;
-  resize: none;
-  overflow: auto;
-  padding: 0;
+  box-sizing: border-box;
+  border-radius: 6px;
+  text-overflow: ellipsis;
 
-  &::placeholder {
-    color: #999;
-    font-size: 22px;
-    font-weight: 500;
+  &_small {
+    padding: 11px 40px 11px 17px;
+    font-size: 14px;
   }
 
-  &_empty {
-    height: 1px;
-    min-height: 0;
-    transition: height .2s;
-
-    &:focus,
-    &[placeholder] {
-      height: 27px;
-    }
+  &:focus {
+    border-color: $orange-color;
   }
 }

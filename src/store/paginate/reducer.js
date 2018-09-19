@@ -3,7 +3,7 @@ import {
 } from './constants';
 
 const initialState = {
-  limit: 1,
+  limit: 5,
   offset: 0,
   sort: null
 };

@@ -37,7 +37,8 @@ class AuthorArticleFilter extends Component {
 
   get searchParams() {
     return [
-      { value: 'title',
+      {
+        value: 'title',
         title: 'Искать в заголовках'
       }
     ];
@@ -46,7 +47,7 @@ class AuthorArticleFilter extends Component {
   render() {
     return (
       <div className="author-article-filter">
-        <div className="form">
+        <form className="form">
           <div className="form__field">
             <label htmlFor="sites-list" className="form__label">Для журнала</label>
             <Select id="sites-list" options={ this.journalsOptions } onChange={ this.handleSiteChange } />
@@ -55,7 +56,7 @@ class AuthorArticleFilter extends Component {
             <label className="form__label">Поиск статьи</label>
             <Search params={ this.searchParams } onChange={ this.handleSearchChange } />
           </div>
-        </div>
+        </form>
       </div>
     );
   }

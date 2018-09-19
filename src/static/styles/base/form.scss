@@ -6,6 +6,10 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .04em;
+
+    &_small {
+      margin-bottom: 15px;
+    }
   }
 
   &__field {
