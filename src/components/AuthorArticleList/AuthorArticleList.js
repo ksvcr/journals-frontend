@@ -65,8 +65,9 @@ class AuthorArticleList extends Component {
     this.setState({ box: null });
   };
 
-  handleFieldChange = (field) => {
+  handleDateFilterChange = (field, date) => {
     this.setState({ dateField: field });
+    console.log(field, date);
   };
 
   get listProps() {
@@ -99,7 +100,8 @@ class AuthorArticleList extends Component {
           },
           head: () => this.dateTitle[dateField],
           headToolTip: () =>
-            <DateFilter onChangeField={ this.handleFieldChange } />,
+            <DateFilter field={ dateField }
+                        onChange={ this.handleDateFilterChange } />,
           render: (data) =>
             formatDate.toString(data.date_public)
         },

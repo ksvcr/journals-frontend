@@ -45,6 +45,7 @@ class AuthorArticleFilter extends Component {
   }
 
   render() {
+    const { currentSite } = this.props;
     return (
       <div className="author-article-filter">
         <form className="form">
@@ -54,7 +55,7 @@ class AuthorArticleFilter extends Component {
           </div>
           <div className="form__field">
             <label className="form__label">Поиск статьи</label>
-            <Search params={ this.searchParams } onChange={ this.handleSearchChange } />
+            <Search value={ currentSite } params={ this.searchParams } onChange={ this.handleSearchChange } />
           </div>
         </form>
       </div>
@@ -68,6 +69,7 @@ AuthorArticleFilter.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    currentSite: state.sites.current,
     sitesArray: getSitesArray(state)
   };
 }
