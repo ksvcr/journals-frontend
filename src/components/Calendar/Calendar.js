@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 import 'moment/locale/ru';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,28 +8,28 @@ import './calendar.scss';
 import TextField from '~/components/TextField/TextField'
 
 class Calendar extends Component {
-  state = {
-    startDate: moment()
-  };
-
   handleChange = (date) => {
-    this.setState({
-      startDate: date
-    });
+    const { datepicker } = this.refs;
+    const { onChange } = this.props;
+    onChange(date);
+    setTimeout(() => {
+      datepicker.setOpen(false);
+    }, 0)
   };
 
   render() {
+    const { onChange, ...restProps } = this.props;
     return (
       <div className="calendar">
         <DatePicker
+          ref="datepicker"
           dropdownMode="scroll"
           locale="ru"
-          // shouldCloseOnSelect={ false }
-          selected={this.state.startDate}
+          shouldCloseOnSelect={ false }
           onChange={ this.handleChange }
-          customInput={ <TextField /> }
+          customInput={ <TextField icon="calendar" /> }
           calendarClassName="calendar__box"
-          { ...this.props }
+          { ...restProps }
         />
       </div>
 

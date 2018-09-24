@@ -13,6 +13,12 @@ class DateFilter extends Component {
     endDate: moment()
   };
 
+  handleFieldChange = (event) => {
+    const { value } = event.target;
+    const { onChangeField } = this.props;
+    onChangeField(value);
+  };
+
   handleChangeStart = (date) => {
     this.setState({
       startDate: date
@@ -26,14 +32,20 @@ class DateFilter extends Component {
   };
 
   get filterOptions() {
-    return [{
-      title: 'Дата создания',
-      value: 'date_public'
-    },
-    {
-      title: 'Последнее изменение',
-      value: 'last_change'
-    }];
+    return [
+      {
+        title: 'Дата создания',
+        value: 'date_create'
+      },
+      {
+        title: 'Дата публикации',
+        value: 'date_public'
+      },
+      {
+        title: 'Последнее изменение',
+        value: 'last_change'
+      }
+    ];
   }
 
   render() {
@@ -41,22 +53,28 @@ class DateFilter extends Component {
       <div className="date-filter">
         <form className="form">
           <div className="form__field">
-            <Select options={ this.filterOptions } onChange={ this.handleChange } className="select_small" />
+            <Select options={ this.filterOptions } onChange={ this.handleFieldChange } className="select_small" />
           </div>
           <div className="form__field">
             <label className="form__label form__label_small">Задать период</label>
-            <Calendar className="text-field_small"
-                      selected={this.state.startDate}
-                      selectsStart
-                      startDate={this.state.startDate}
-                      endDate={this.state.endDate}
-                      onChange={this.handleChangeStart}/>
-            <Calendar className="text-field_small"
-                      selected={this.state.endDate}
-                      selectsEnd
-                      startDate={this.state.startDate}
-                      endDate={this.state.endDate}
-                      onChange={this.handleChangeEnd}/>
+            <div className="form__row form__row_small">
+              <div className="form__col form__col_small">
+                <Calendar className="text-field_calendar text-field_small"
+                          selected={ this.state.startDate }
+                          selectsStart
+                          startDate={ this.state.startDate }
+                          endDate={ this.state.endDate }
+                          onChange={ this.handleChangeStart }/>
+              </div>
+              <div className="form__col form__col_small">
+                <Calendar className="text-field_calendar text-field_small"
+                          selected={ this.state.endDate }
+                          selectsEnd
+                          startDate={ this.state.startDate }
+                          endDate={ this.state.endDate }
+                          onChange={ this.handleChangeEnd } />
+              </div>
+            </div>
           </div>
         </form>
       </div>

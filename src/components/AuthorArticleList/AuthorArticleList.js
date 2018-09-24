@@ -18,7 +18,8 @@ import './author-article-list.scss';
 
 class AuthorArticleList extends Component {
   state = {
-    box: null
+    box: null,
+    dateField: 'date_create'
   };
 
   get toolsMenuItems() {
@@ -41,6 +42,14 @@ class AuthorArticleList extends Component {
     ];
   };
 
+  get dateTitle() {
+    return {
+      'date_create': 'Создана',
+      'date_public': 'Опубликована',
+      'last_change': 'Изменена'
+    };
+  };
+
   handleSortChange = (sort) => {
     const { setSort } = this.props;
     setSort(sort);
@@ -56,8 +65,14 @@ class AuthorArticleList extends Component {
     this.setState({ box: null });
   };
 
+  handleFieldChange = (field) => {
+    this.setState({ dateField: field });
+  };
+
   get listProps() {
     const { articlesArray } = this.props;
+    const { dateField } = this.state;
+
     return {
       data: articlesArray,
       onSortChange: this.handleSortChange,
@@ -82,9 +97,9 @@ class AuthorArticleList extends Component {
             field: 'date_public',
             type: 'date'
           },
-          head: () => 'Создана',
+          head: () => this.dateTitle[dateField],
           headToolTip: () =>
-            <DateFilter />,
+            <DateFilter onChangeField={ this.handleFieldChange } />,
           render: (data) =>
             formatDate.toString(data.date_public)
         },
