@@ -165,9 +165,7 @@ function mapStateToProps(state) {
   const { total, paginate, filter } = state.articles;
   return {
     articlesArray: getArticlesArray(state),
-    total,
-    paginate,
-    filter
+    total, paginate, filter
   };
 }
 
