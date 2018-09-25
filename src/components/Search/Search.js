@@ -9,7 +9,7 @@ import './assets/search.svg';
 
 class Search extends Component {
   state = {
-    param: 'all'
+    target: 'all'
   };
 
   handleParamsChange = (event) => {
@@ -17,38 +17,42 @@ class Search extends Component {
     const { onChange } = this.props;
 
     this.setState({
-      param: value
+      target: value
     });
 
-    if (this.search) {
+    if (this.query) {
       onChange({
-        search: this.search,
-        param: value
+        search: this.query,
+        target: value
       });
     }
   };
 
   handleSearchChange = (event) => {
-    const { param } = this.state;
+    const { target } = this.state;
     const { onChange } = this.props;
     const { value } = event.target;
-    this.search = value;
+    this.query = value;
+    const searchData = {
+      search_query: value
+    };
 
-    onChange({
-      search: value,
-      param
-    });
+    if (target !== 'all') {
+      searchData.search_target = target;
+    }
+
+    onChange(searchData);
   };
   
-  get params() {
-    const { params } = this.props;
-    return params ? [{ value: 'all', title: 'Искать везде' }, ...params ] : [];
+  get targets() {
+    const { targets } = this.props;
+    return targets ? [{ value: 'all', title: 'Искать везде' }, ...targets ] : [];
   }
 
   renderParams = () => {
-    const { param } = this.state;
-    return this.params.map(item => (
-      <Radio name="search-filter" key={ item.value } checked={ param === item.value }
+    const { target } = this.state;
+    return this.targets.map(item => (
+      <Radio name="search-filter" key={ item.value } checked={ target === item.value }
              value={ item.value } onChange={ this.handleParamsChange } >
         { item.title }
       </Radio>

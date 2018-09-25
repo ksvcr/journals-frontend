@@ -16,22 +16,17 @@ class List extends PureComponent {
 
   handleSort = (event) => {
     const { onSortChange } = this.props;
-    const { name, checked, dataset } = event.target;
-    const { fieldType } = dataset;
+    const { name:field, checked } = event.target;
 
-    this.setState({ sort: { [name]: checked } });
-    const sortParams = { field: name, order: checked ? 'asc' : 'desc' };
-
-    if (fieldType) {
-      sortParams.type = fieldType;
-    }
-
-    onSortChange(sortParams);
+    this.setState({ sort: { [field]: checked } });
+    const sortOrder = checked ? '' : '-';
+    const sortParam = `${sortOrder}${field}`;
+    onSortChange(sortParam);
   };
 
   renderItems = () => {
     const { data } = this.props;
-    return data.map(this.renderItem);
+    return data.length ? data.map(this.renderItem) : this.renderPlaceholder();
   };
 
   renderItem = (data) => {
@@ -45,6 +40,12 @@ class List extends PureComponent {
           </div>
         }
       </div>
+    );
+  };
+
+  renderPlaceholder = () => {
+    return (
+      <div className="list__placeholder"> Нет записей </div>
     );
   };
 
@@ -79,7 +80,7 @@ class List extends PureComponent {
       const headRender = cell.head ? cell.head() : null;
       const render = isHead ? headRender : cell.render(data);
 
-      const sortField = typeof cell.sort === 'object' ? cell.sort.field : cell.sort;
+      const sortField = cell.sort;
       const sortValue = Boolean(sort[sortField]);
       const isActiveSort = sort.hasOwnProperty(sortField);
 
@@ -93,7 +94,7 @@ class List extends PureComponent {
               </button>
             </ToolTip>
             { cell.sort &&
-              <SortChecker name={ sortField } checked={ sortValue } data-field-type={ cell.sort.type }
+              <SortChecker name={ sortField } checked={ sortValue }
                            isActive={ isActiveSort } onChange={ this.handleSort } />
             }
           </div>
@@ -101,7 +102,7 @@ class List extends PureComponent {
       } else if (isHead && cell.sort) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            <SortChecker name={ sortField } checked={ sortValue } data-field-type={ cell.sort.type }
+            <SortChecker name={ sortField } checked={ sortValue }
                          isActive={ isActiveSort } onChange={ this.handleSort } >
               { render }
             </SortChecker>
@@ -153,15 +154,7 @@ List.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
-  sort: PropTypes.oneOfType(
-    [
-      PropTypes.string,
-      PropTypes.shape({
-        field: PropTypes.string,
-        type: PropTypes.string
-      })
-    ]
-  ),
+  sort: PropTypes.string,
   cells: PropTypes.arrayOf(
     PropTypes.shape({
       style: PropTypes.object,

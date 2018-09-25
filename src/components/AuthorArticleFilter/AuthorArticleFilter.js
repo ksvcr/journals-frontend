@@ -25,17 +25,18 @@ class AuthorArticleFilter extends Component {
   }
 
   handleSiteChange = (event) => {
-    const { value } = event.target;
+    const { value:siteId } = event.target;
     const { onFilterChange, setCurrentSite } = this.props;
-    setCurrentSite(value);
+    setCurrentSite(siteId);
     onFilterChange();
   };
   
   handleSearchChange = (data) => {
-    console.log(data);
+    const { onFilterChange } = this.props;
+    onFilterChange({ search: data });
   };
 
-  get searchParams() {
+  get searchTargets() {
     return [
       {
         value: 'title',
@@ -55,7 +56,7 @@ class AuthorArticleFilter extends Component {
           </div>
           <div className="form__field">
             <label className="form__label">Поиск статьи</label>
-            <Search value={ currentSite } params={ this.searchParams } onChange={ this.handleSearchChange } />
+            <Search value={ currentSite } targets={ this.searchTargets } onChange={ this.handleSearchChange } />
           </div>
         </form>
       </div>

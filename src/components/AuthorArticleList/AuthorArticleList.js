@@ -49,8 +49,9 @@ class AuthorArticleList extends Component {
     };
   };
 
-  handleSortChange = (sort) => {
-    console.log(sort);
+  handleSortChange = (ordering) => {
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ ordering });
   };
 
   handlePaymentShow = (id) => {
@@ -64,14 +65,14 @@ class AuthorArticleList extends Component {
   };
 
   handleDateFilterChange = (field, range) => {
-    const { paginate, onUpdateRequest } = this.props;
+    const { onUpdateRequest } = this.props;
     this.setState({ dateField: field });
-    onUpdateRequest({ filter: range, paginate });
+    onUpdateRequest({ filter: range });
   };
 
   handlePaginateChange = (paginate) => {
-    const { filter, onUpdateRequest } = this.props;
-    onUpdateRequest({ filter, paginate });
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ paginate });
   };
 
   get listProps() {
@@ -98,10 +99,7 @@ class AuthorArticleList extends Component {
           style: {
             width: '12%'
           },
-          sort: {
-            field: dateField,
-            type: 'date'
-          },
+          sort: dateField,
           head: () => this.dateTitle[dateField],
           headToolTip: () =>
             <DateFilter field={ dateField }
@@ -113,13 +111,10 @@ class AuthorArticleList extends Component {
           style: {
             width: '13%'
           },
-          sort: {
-            field: 'stage_article',
-            type: 'status'
-          },
+          sort: 'stage_article',
           head: () => 'Этап',
           render: (data) =>
-            getArticleStatusTitle(data.stage_article)
+            getArticleStatusTitle(data.stage)
         },
         {
           style: {
@@ -151,6 +146,7 @@ class AuthorArticleList extends Component {
         <div className="author-article-list__holder">
           <List { ...this.listProps } />
         </div>
+
         { total > 0 &&
           <div className="author-article-list__paginate">
             <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
@@ -162,10 +158,10 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { total, paginate, filter } = state.articles;
+  const { total, paginate } = state.articles;
   return {
     articlesArray: getArticlesArray(state),
-    total, paginate, filter
+    total, paginate
   };
 }
 

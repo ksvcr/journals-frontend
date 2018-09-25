@@ -7,14 +7,21 @@ import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleF
 
 import * as articlesActions from '~/store/articles/actions';
 import * as sitesActions from '~/store/sites/actions';
+import { getArticlesParams } from '~/store/articles/selector';
+
 
 class AuthorArticles extends Component {
   componentDidUpdate() {
-    const { isNeedArticles, fetchArticles } = this.props;
-    if (isNeedArticles) {
-      fetchArticles();
+    const { needArticles } = this.props;
+    if (needArticles) {
+      this.handleArticlesRequest();
     }
   }
+
+  handleArticlesRequest = (params={}) => {
+    const { articlesParams, fetchArticles } = this.props;
+    fetchArticles({ ...articlesParams, ...params });
+  };
 
   get menuItems() {
     return [
@@ -34,7 +41,6 @@ class AuthorArticles extends Component {
   }
 
   render() {
-    const { fetchArticles } = this.props;
     return (
       <Fragment>
         <aside className="page__sidebar">
@@ -42,8 +48,8 @@ class AuthorArticles extends Component {
         </aside>
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <AuthorArticleFilter onFilterChange={ fetchArticles } />
-          <AuthorArticleList onUpdateRequest={ fetchArticles } />
+          <AuthorArticleFilter onFilterChange={ this.handleArticlesRequest } />
+          <AuthorArticleList onUpdateRequest={ this.handleArticlesRequest } />
         </article>
       </Fragment>
     );
@@ -53,7 +59,8 @@ class AuthorArticles extends Component {
 function mapStateToProps(state) {
   const { articles, sites } = state;
   return {
-    isNeedArticles: !articles.isPending && !articles.isFulfilled && sites.isFulfilled
+    needArticles: !articles.isPending && !articles.isFulfilled && sites.isFulfilled,
+    articlesParams: getArticlesParams(state)
   };
 }
 
