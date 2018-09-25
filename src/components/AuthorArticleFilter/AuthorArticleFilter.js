@@ -28,7 +28,7 @@ class AuthorArticleFilter extends Component {
     const { value } = event.target;
     const { onFilterChange, setCurrentSite } = this.props;
     setCurrentSite(value);
-    onFilterChange(value);
+    onFilterChange();
   };
   
   handleSearchChange = (data) => {

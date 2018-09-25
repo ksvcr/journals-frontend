@@ -5,7 +5,6 @@ import Select from '~/components/Select/Select';
 import Calendar from '~/components/Calendar/Calendar';
 
 import './date-filter.scss';
-import moment from 'moment';
 
 class DateFilter extends Component {
   state = {
@@ -14,9 +13,9 @@ class DateFilter extends Component {
   };
 
   handleFieldChange = (event) => {
-    const { value } = event.target;
+    const { value:field } = event.target;
     const { onChange } = this.props;
-    onChange(value, this.formatedDate);
+    onChange(field, this.getFormattedDate(field));
   };
 
   handleChange = (type, date) => {
@@ -25,12 +24,11 @@ class DateFilter extends Component {
     this.setState({
       [type]: date
     }, () => {
-      onChange(field, this.formatedDate);
+      onChange(field, this.getFormattedDate(field));
     });
   };
 
-  get formatedDate() {
-    const { field } = this.props;
+  getFormattedDate(field) {
     const { startDate, endDate } = this.state;
     const data = {};
     if (startDate) {
@@ -49,8 +47,8 @@ class DateFilter extends Component {
         value: 'date_create'
       },
       {
-        title: 'Дата публикации',
-        value: 'date_public'
+        title: 'Дата отправки',
+        value: 'date_send_to_review'
       },
       {
         title: 'Последнее изменение',

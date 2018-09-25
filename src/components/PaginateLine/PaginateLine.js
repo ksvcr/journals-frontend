@@ -1,32 +1,27 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Paginator from '~/components/Paginator/Paginator';
 import PageSizer from '~/components/PageSizer/PageSizer';
 
-import * as paginateActions from '~/store/paginate/actions';
-
 import './paginate-line.scss';
 
 class PaginateLine extends Component {
   handlePageChange = (newCurrent) => {
-    const { setCurrent, limit, onChange } = this.props;
+    const { limit, onChange } = this.props;
     const offset = (newCurrent-1)*limit;
-    setCurrent(offset);
-    onChange();
+    onChange({ limit, offset });
   };
   
   handleLimitChange = (newLimit) => {
-    const { total, limit, setLimit, setCurrent, onChange } = this.props;
+    const { total, limit, offset, onChange } = this.props;
     const totalPageAmount = Math.ceil(total/newLimit);
-    setLimit(newLimit);
+    const data = { limit: newLimit, offset };
     // Сброс offset в случае если он больше чем кол-во страниц
     if (this.current > totalPageAmount) {
-      const offset = (totalPageAmount-1)*limit;
-      setCurrent(offset);
+      data.offset = (totalPageAmount-1)*limit;
     }
-    onChange();
+    onChange(data);
   };
 
   get current() {
@@ -53,22 +48,9 @@ class PaginateLine extends Component {
 
 PaginateLine.propTypes = {
   total: PropTypes.number.isRequired,
+  limit: PropTypes.number,
+  offset: PropTypes.number,
   onChange: PropTypes.func
 };
 
-function mapStateToProps(state) {
-  const { limit, offset } = state.paginate;
-  return {
-    limit,
-    offset
-  };
-}
-
-const mapDispatchToProps = {
-  setCurrent: paginateActions.setOffset,
-  setLimit: paginateActions.setLimit,
-};
-
-export default connect(
-  mapStateToProps, mapDispatchToProps
-)(PaginateLine);
+export default PaginateLine;

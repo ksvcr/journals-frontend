@@ -5,16 +5,21 @@ const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  total: 0,
   data: {},
-  ids: []
+  ids: [],
+  total: 0,
+  paginate: {
+    limit: 5,
+    offset: 0,
+  }
 };
 
 function articles(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_ARTICLES}_PENDING`:
       return { ...state,
-        isPending: true
+        isPending: true,
+        ...action.meta
       };
 
     case `${FETCH_ARTICLES}_FULFILLED`:

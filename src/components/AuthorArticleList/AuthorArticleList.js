@@ -9,7 +9,6 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
 
 import { getArticlesArray } from '~/store/articles/selector';
-import * as paginateActions from '~/store/paginate/actions';
 
 import * as formatDate from '~/services/formatDate';
 import getArticleStatusTitle from '~/services/getArticleStatusTitle';
@@ -45,14 +44,13 @@ class AuthorArticleList extends Component {
   get dateTitle() {
     return {
       'date_create': 'Создана',
-      'date_public': 'Опубликована',
+      'date_send_to_review': 'Отправлена',
       'last_change': 'Изменена'
     };
   };
 
   handleSortChange = (sort) => {
-    const { setSort } = this.props;
-    setSort(sort);
+    console.log(sort);
   };
 
   handlePaymentShow = (id) => {
@@ -65,9 +63,15 @@ class AuthorArticleList extends Component {
     this.setState({ box: null });
   };
 
-  handleDateFilterChange = (field, date) => {
+  handleDateFilterChange = (field, range) => {
+    const { paginate, onUpdateRequest } = this.props;
     this.setState({ dateField: field });
-    console.log(field, date);
+    onUpdateRequest({ filter: range, paginate });
+  };
+
+  handlePaginateChange = (paginate) => {
+    const { filter, onUpdateRequest } = this.props;
+    onUpdateRequest({ filter, paginate });
   };
 
   get listProps() {
@@ -95,7 +99,7 @@ class AuthorArticleList extends Component {
             width: '12%'
           },
           sort: {
-            field: 'date_public',
+            field: dateField,
             type: 'date'
           },
           head: () => this.dateTitle[dateField],
@@ -103,7 +107,7 @@ class AuthorArticleList extends Component {
             <DateFilter field={ dateField }
                         onChange={ this.handleDateFilterChange } />,
           render: (data) =>
-            formatDate.toString(data.date_public)
+            formatDate.toString(data[dateField])
         },
         {
           style: {
@@ -141,7 +145,7 @@ class AuthorArticleList extends Component {
   };
 
   render() {
-    const { total, onPaginateChange } = this.props;
+    const { total, paginate } = this.props;
     return (
       <div className="author-article-list">
         <div className="author-article-list__holder">
@@ -149,7 +153,7 @@ class AuthorArticleList extends Component {
         </div>
         { total > 0 &&
           <div className="author-article-list__paginate">
-            <PaginateLine total={ total } onChange={ onPaginateChange } />
+            <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
           </div>
         }
       </div>
@@ -158,16 +162,15 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
+  const { total, paginate, filter } = state.articles;
   return {
     articlesArray: getArticlesArray(state),
-    total: state.articles.total
+    total,
+    paginate,
+    filter
   };
 }
 
-const mapDispatchToProps = {
-  setSort: paginateActions.setSort,
-};
-
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps
 )(AuthorArticleList);

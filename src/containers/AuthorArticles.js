@@ -43,7 +43,7 @@ class AuthorArticles extends Component {
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
           <AuthorArticleFilter onFilterChange={ fetchArticles } />
-          <AuthorArticleList onPaginateChange={ fetchArticles } />
+          <AuthorArticleList onUpdateRequest={ fetchArticles } />
         </article>
       </Fragment>
     );
