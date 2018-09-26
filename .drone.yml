@@ -1,0 +1,46 @@
+clone:
+  git:
+    image: plugins/git
+    depth: 1
+
+pipeline:
+  deploy-dev:
+    image: appleboy/drone-ssh
+    host: journals
+    username: ubuntu
+    secrets: [ssh_key]
+    command_timeout: 300
+    when:
+      branch: dev
+      status: success
+    script:
+      - cd frontend
+      - git checkout dev
+      - git pull origin dev
+      - export NVM_DIR="$HOME/.nvm"
+      - source $NVM_DIR/nvm.sh
+      - nvm use stable
+      - npm i
+      - npm run build
+      - pm2 restart journals-frontend --update-env
+
+  deploy-master:
+    image: appleboy/drone-ssh
+    host: journals
+    port: 22
+    username: ubuntu
+    secrets: [ssh_key]
+    command_timeout: 300
+    when:
+      branch: master
+      status: success
+    script:
+      - cd frontend
+      - git checkout master
+      - git pull origin master
+      - export NVM_DIR="$HOME/.nvm"
+      - source $NVM_DIR/nvm.sh
+      - nvm use stable
+      - npm i
+      - npm run build
+      - pm2 restart journals-frontend --update-env
