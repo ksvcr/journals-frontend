@@ -1,19 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 import Select from '~/components/Select/Select';
 import Search from '~/components/Search/Search';
 
-import * as sitesActions from '~/store/sites/actions';
-import {getSitesArray} from '~/store/sites/selector';
-
 import './author-article-filter.scss';
 
 class AuthorArticleFilter extends Component {
-  componentDidMount() {
-    const { fetchSites } = this.props;
-    fetchSites();
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentSite: this.props.defaultSite
+    }
   }
 
   get journalsOptions() {
@@ -25,15 +23,16 @@ class AuthorArticleFilter extends Component {
   }
 
   handleSiteChange = (event) => {
-    const { value:siteId } = event.target;
-    const { onFilterChange, setCurrentSite } = this.props;
-    setCurrentSite(siteId);
-    onFilterChange();
+    const { value:currentSite } = event.target;
+    const { onFilterChange } = this.props;
+    this.setState({ currentSite });
+    onFilterChange(currentSite);
   };
   
   handleSearchChange = (data) => {
     const { onFilterChange } = this.props;
-    onFilterChange({ search: data });
+    const { currentSite } = this.state;
+    onFilterChange(currentSite, { search: data });
   };
 
   get searchTargets() {
@@ -46,7 +45,7 @@ class AuthorArticleFilter extends Component {
   }
 
   render() {
-    const { currentSite } = this.props;
+    const { currentSite } = this.state;
     return (
       <div className="author-article-filter">
         <form className="form">
@@ -65,19 +64,8 @@ class AuthorArticleFilter extends Component {
 }
 
 AuthorArticleFilter.propTypes = {
+  sitesArray: PropTypes.array,
   onFilterChange: PropTypes.func
 };
 
-function mapStateToProps(state) {
-  return {
-    currentSite: state.sites.current,
-    sitesArray: getSitesArray(state)
-  };
-}
-
-const mapDispatchToProps = {
-  fetchSites: sitesActions.fetchSites,
-  setCurrentSite: sitesActions.setCurrent
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthorArticleFilter);
+export default AuthorArticleFilter;

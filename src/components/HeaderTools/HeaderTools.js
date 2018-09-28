@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Menu from '../Menu/Menu';
 import Button from '../Button/Button';
 

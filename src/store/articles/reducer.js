@@ -1,4 +1,4 @@
-import {FETCH_ARTICLES} from './constants';
+import { FETCH_ARTICLES } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {

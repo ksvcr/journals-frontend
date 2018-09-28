@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import SupportContact from '~/components/SupportContact/SupportContact';
 

@@ -1,34 +1,38 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import './button.scss';
 
-const Button = function (props) {
-  const { type, href } = props;
-  const classes = classNames('button', props.className);
+class Button extends Component {
+  handleClick = (event) => {
+    const { onClick } = this.props;
 
-  function handleClick(event) {
-    if (props.onClick) {
-      props.onClick(event);
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  render() {
+    const { type, href, className, children } = this.props;
+    const buttonClasses = classNames('button', className);
+
+    if (type === 'link') {
+      return (
+        <Link to={ href } className={ buttonClasses }>
+          { children }
+        </Link>
+      );
+    } else {
+      return (
+        <button type={ type } className={ buttonClasses } onClick={ this.handleClick }>
+          { children }
+        </button>
+      );
     }
   }
-
-  if (type === 'link') {
-    return (
-      <Link to={ href } className={ classes }>
-        { props.children }
-      </Link>
-    );
-  } else {
-    return (
-      <button type={ type } className={ classes } onClick={ handleClick }>
-        { props.children }
-      </button>
-    );
-  }
-};
+}
 
 Button.defaultProps = {
   type: 'button',

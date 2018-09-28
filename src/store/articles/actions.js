@@ -1,13 +1,10 @@
-import {FETCH_ARTICLES} from './constants';
+import { FETCH_ARTICLES } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
-export function fetchArticles(params={}) {
-  return (dispatch, state) => {
-    const { sites } = state();
-    const siteId = sites.current;
+export function fetchArticles(siteId, params={}) {
+  return (dispatch) => {
     const flatParams = getFlatParams(params);
-
     const payload = apiClient.getArticles(siteId, flatParams);
     return dispatch({
       type: FETCH_ARTICLES,

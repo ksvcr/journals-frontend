@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import './point-menu-button.scss';
 
-const PointMenuButton = function (props) {
-  const buttonClasses = classNames('point-menu-button', props.className);
-
-  function handleClick() {
-    if (props.onClick) {
-      props.onClick(props.index);
+class PointMenuButton extends Component {
+  handleClick = () => {
+    const { onClick, index } = this.props;
+    if (onClick) {
+      onClick(index);
     }
-  }
+  };
 
-  return (
-    <button type="button" className={ buttonClasses } onClick={ handleClick } >
+  render() {
+    const buttonClasses = classNames('point-menu-button', this.props.className);
+
+    return (
+      <button type="button" className={ buttonClasses } onClick={ this.handleClick } >
       <span className="point-menu-button__holder">
         <i className="point-menu-button__icon" />
       </span>
-    </button>
-  );
-};
+      </button>
+    );
+  }
+}
 
 export default PointMenuButton;

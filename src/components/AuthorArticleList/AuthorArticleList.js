@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';

@@ -5,22 +5,28 @@ import Header from '~/components/Header/Header';
 import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
+import * as sitesActions from '~/store/sites/actions';
 import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
 import '~/static/styles/index.scss';
 
 class Page extends Component {
-  componentWillMount() {
-    this.authUser();
+  componentDidMount() {
+    const { fetchSites } = this.props;
+    this.authUser().then(() => {
+      return fetchSites();
+    });
   }
 
   authUser = () => {
     const { login, fetchCurrentUser } = this.props;
     if (hasToken()) {
-      fetchCurrentUser();
+      return fetchCurrentUser();
     } else {
-      login();
+      return login().then(() => {
+        return fetchCurrentUser();
+      });
     }
   };
   
@@ -44,6 +50,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+  fetchSites: sitesActions.fetchSites,
   fetchCurrentUser: userActions.fetchCurrentUser,
   login: userActions.login
 };
