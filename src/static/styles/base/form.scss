@@ -12,20 +12,10 @@
     }
   }
 
-  &__field {
-    & + & {
-      margin-top: 30px;
-    }
-  }
-
   &__row {
     display: flex;
     margin-left: -15px;
     margin-right: -15px;
-
-    & + & {
-      margin-top: 30px;
-    }
 
     &_small {
       margin-left: -9px;
@@ -35,9 +25,18 @@
 
   &__col {
     padding: 0 15px;
+    width: 50%;
+    flex-basis: 50%;
 
     &_small {
       padding: 0 9px;
     }
+  }
+
+  &__row + &__row,
+  &__field + &__field,
+  &__field + &__row,
+  &__row + &__field {
+    margin-top: 30px;
   }
 }

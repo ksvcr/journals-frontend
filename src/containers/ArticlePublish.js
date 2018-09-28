@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
-import ArticleForm from '~/components/ArticleForm/ArticleForm';
+import ArticlePublishForm from '~/components/ArticlePublishForm/ArticlePublishForm';
+
+import * as languageActions from '~/store/languages/actions';
 
 class ArticlePublish extends Component {
+  componentDidMount() {
+    const { fetchLanguages } = this.props;
+    fetchLanguages();
+  }
+
   get menuItems() {
     return [
       {
@@ -31,11 +39,22 @@ class ArticlePublish extends Component {
         <article className="page__content">
           <ArticleTopTools />
           <h1 className="page__title">Опубликовать статью</h1>
-          <ArticleForm />
+          <ArticlePublishForm />
         </article>
       </React.Fragment>
     );
   }
 }
 
-export default ArticlePublish;
+function mapStateToProps() {
+  return {};
+}
+
+const mapDispatchToProps = {
+  fetchLanguages: languageActions.fetchLanguages
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArticlePublish);

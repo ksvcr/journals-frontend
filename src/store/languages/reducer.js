@@ -1,28 +1,23 @@
-import { FETCH_SITES, SET_CURRENT_SITE } from './constants';
+import { FETCH_LANGUAGES } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  current: null,
   data: {},
   ids: []
 };
 
-function sites(state = initialState, action) {
+function languages(state = initialState, action) {
   switch (action.type) {
-    case `${FETCH_SITES}_PENDING`:
+    case `${FETCH_LANGUAGES}_PENDING`:
       return { ...state,
         isPending: true
       };
 
-    case `${FETCH_SITES}_FULFILLED`:
+    case `${FETCH_LANGUAGES}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
-
-      if (!state.current && action.payload.results[0]) {
-        entity.current = action.payload.results[0].id
-      }
 
       return { ...state,
         isPending: false,
@@ -30,16 +25,11 @@ function sites(state = initialState, action) {
         ...entity
       };
 
-    case `${FETCH_SITES}_REJECTED`:
+    case `${FETCH_LANGUAGES}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
-      };
-
-    case SET_CURRENT_SITE:
-      return { ...state,
-        current: action.current
       };
 
     default:
@@ -47,4 +37,4 @@ function sites(state = initialState, action) {
   }
 }
 
-export default sites;
+export default languages;

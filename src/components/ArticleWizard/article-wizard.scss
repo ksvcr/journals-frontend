@@ -1,0 +1,40 @@
+.article-wizard {
+  &__tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray-color;
+  }
+
+  &__tab {
+    margin: 0;
+    font-size: 16px;
+    font-family: $pragmatica;
+    cursor: pointer;
+    padding: 19px 0;
+    color: $blue-color;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      display: block;
+      height: 2px;
+      background: transparent;
+      transition: background .2s;
+    }
+
+    &_selected {
+      color: $orange-color;
+
+      &:after {
+        background: $orange-color;
+      }
+    }
+  }
+}

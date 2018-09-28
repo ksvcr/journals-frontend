@@ -6,27 +6,28 @@ import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList'
 import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleFilter';
 
 import * as articlesActions from '~/store/articles/actions';
-import * as sitesActions from '~/store/sites/actions';
 import { getArticlesParams } from '~/store/articles/selector';
-import { getSitesArray } from '~/store/sites/selector';
 
 class AuthorArticles extends Component {
-  componentDidUpdate() {
-    const { needArticles } = this.props;
-    if (needArticles && this.defaultSite) {
-      this.handleArticlesRequest(this.defaultSite);
-    }
+  componentDidMount() {
+    this.handleArticlesInitialRequest();
   }
 
-  handleArticlesRequest = (siteId, params={}) => {
-    const { articlesParams, fetchArticles } = this.props;
-    fetchArticles(siteId, { ...articlesParams, ...params });
+  componentDidUpdate() {
+    this.handleArticlesInitialRequest();
+  }
+
+  handleArticlesInitialRequest = () => {
+    const { needArticles } = this.props;
+    if (needArticles) {
+      this.handleArticlesRequest();
+    }
   };
 
-  get defaultSite() {
-    const { sitesArray } = this.props;
-    return sitesArray[0] ? sitesArray[0].id : null;
-  }
+  handleArticlesRequest = (params={}) => {
+    const { articlesParams, fetchArticles } = this.props;
+    fetchArticles({ ...articlesParams, ...params });
+  };
 
   get menuItems() {
     return [
@@ -46,8 +47,6 @@ class AuthorArticles extends Component {
   }
 
   render() {
-    const { sitesArray } = this.props;
-
     return (
       <Fragment>
         <aside className="page__sidebar">
@@ -55,8 +54,7 @@ class AuthorArticles extends Component {
         </aside>
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <AuthorArticleFilter defaultSite={ this.defaultSite } sitesArray={ sitesArray }
-                               onFilterChange={ this.handleArticlesRequest } />
+          <AuthorArticleFilter onFilterChange={ this.handleArticlesRequest } />
           <AuthorArticleList onUpdateRequest={ this.handleArticlesRequest } />
         </article>
       </Fragment>
@@ -68,14 +66,12 @@ function mapStateToProps(state) {
   const { articles, sites } = state;
   return {
     needArticles: !articles.isPending && !articles.isFulfilled && sites.isFulfilled,
-    sitesArray: getSitesArray(state),
     articlesParams: getArticlesParams(state)
   };
 }
 
 const mapDispatchToProps = {
-  fetchArticles: articlesActions.fetchArticles,
-  setCurrentSite: sitesActions.setCurrent
+  fetchArticles: articlesActions.fetchArticles
 };
 
 export default connect(

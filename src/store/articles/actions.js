@@ -2,8 +2,9 @@ import { FETCH_ARTICLES } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
-export function fetchArticles(siteId, params={}) {
-  return (dispatch) => {
+export function fetchArticles(params={}) {
+  return (dispatch, state) => {
+    const { current:siteId } = state().sites;
     const flatParams = getFlatParams(params);
     const payload = apiClient.getArticles(siteId, flatParams);
     return dispatch({
