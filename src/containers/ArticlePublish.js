@@ -5,8 +5,10 @@ import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import ArticlePublishForm from '~/components/ArticlePublishForm/ArticlePublishForm';
 
-import * as languageActions from '~/store/languages/actions';
+import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
+import * as categoriesActions from '~/store/categories/actions';
+
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 
 class ArticlePublish extends Component {
@@ -23,9 +25,10 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { fetchRubrics } = this.props;
+    const { fetchRubrics, fetchCategories } = this.props;
     return Promise.all([
-      fetchRubrics()
+      fetchRubrics(),
+      fetchCategories()
     ]);
   };
 
@@ -61,7 +64,7 @@ class ArticlePublish extends Component {
             <form className="form">
               <div className="form__field">
                 <label htmlFor="sites-list" className="form__label">Для журнала</label>
-                <SiteSelect id="sites-list" onChange={ this.handleArticlesRequest } />
+                <SiteSelect id="sites-list" onChange={ this.handleRequest } />
               </div>
             </form>
           </div>
@@ -78,8 +81,9 @@ function mapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchLanguages: languageActions.fetchLanguages,
-  fetchRubrics: rubricsActions.fetchRubrics
+  fetchLanguages: languagesActions.fetchLanguages,
+  fetchRubrics: rubricsActions.fetchRubrics,
+  fetchCategories: categoriesActions.fetchCategories
 };
 
 export default connect(

@@ -9,6 +9,7 @@ const apiClient = {
   getSites: () => fetchInstance.request(`/sites/`),
   getLanguages: () => fetchInstance.request(`/languages/`),
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
+  getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
   getArticles: (siteId, params) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';

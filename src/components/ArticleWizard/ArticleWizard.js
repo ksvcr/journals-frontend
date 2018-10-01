@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import './article-wizard.scss';
@@ -18,7 +18,9 @@ class ArticleWizard extends Component {
     const { steps } = this.props;
     return steps.map((item, index) => (
       <TabPanel key={ index }>
-        { item.component }
+        <div className="article-wizard__content">
+          { item.component }
+        </div>
       </TabPanel>
     ));
   };

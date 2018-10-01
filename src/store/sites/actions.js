@@ -6,7 +6,7 @@ export function fetchSites() {
     const payload = apiClient.getSites();
     return dispatch({
       type: FETCH_SITES,
-      payload: payload
+      payload
     }).catch((error) => console.log(error));
   }
 }

@@ -5,10 +5,6 @@ import { reduxForm } from 'redux-form';
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommon from '~/components/ArticleCommon/ArticleCommon';
 
-import { getSitesArray } from '~/store/sites/selector';
-
-import * as sitesActions from '~/store/sites/actions';
-
 class ArticlePublishForm extends Component {
   get wizardSteps() {
     return [
@@ -47,18 +43,8 @@ class ArticlePublishForm extends Component {
 }
 
 ArticlePublishForm = reduxForm({
-  form: 'article-publish'
+  form: 'article-publish',
+  enableReinitialize: true
 })(ArticlePublishForm);
 
-function mapStateToProps(state) {
-  return {
-    currentSite: state.sites.current,
-    sitesArray: getSitesArray(state)
-  };
-}
-
-const mapDispatchToProps = {
-  setCurrentSite: sitesActions.setCurrent
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticlePublishForm);
+export default connect()(ArticlePublishForm);
