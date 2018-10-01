@@ -1,0 +1,1 @@
+export const FETCH_RUBRICS = 'FETCH_RUBRICS';

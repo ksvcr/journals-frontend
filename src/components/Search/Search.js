@@ -21,10 +21,12 @@ class Search extends Component {
     });
 
     if (this.query) {
-      onChange({
+      const data = {
         search: this.query,
         target: value
-      });
+      };
+
+      onChange({ search: data });
     }
   };
 

@@ -4,11 +4,20 @@ import { connect } from 'react-redux';
 
 import Select from '~/components/Select/Select';
 import { getLanguagesArray } from '~/store/languages/selector';
+import { getRubricsArray } from '~/store/rubrics/selector';
 
 class ArticleCommon extends Component {
   get languagesOptions() {
     const { languagesArray } = this.props;
     return languagesArray.map(item => ({
+      title: item.name,
+      value: item.id
+    }));
+  }
+
+  get rubricsOptions() {
+    const { rubricsArray } = this.props;
+    return rubricsArray.map(item => ({
       title: item.name,
       value: item.id
     }));
@@ -29,9 +38,14 @@ class ArticleCommon extends Component {
             </div>
           </div>
         </div>
+
         <div className="form__row">
           <div className="form__col">
-            Нужен перевод сопроводительной информации на русский
+            <div className="form__field">
+              <label htmlFor="language" className="form__label">Язык статьи</label>
+              <Field name="rubric" id="rubric"
+                     component={ props => <Select options={ this.rubricsOptions } { ...props } /> } />
+            </div>
           </div>
         </div>
       </div>
@@ -41,7 +55,8 @@ class ArticleCommon extends Component {
 
 function mapStateToProps(state) {
   return {
-    languagesArray: getLanguagesArray(state)
+    languagesArray: getLanguagesArray(state),
+    rubricsArray: getRubricsArray(state)
   };
 }
 

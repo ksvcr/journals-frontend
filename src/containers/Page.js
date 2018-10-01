@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Header from '~/components/Header/Header';
 import Footer from '~/components/Footer/Footer';
@@ -31,13 +31,16 @@ class Page extends Component {
   };
   
   render() {
+    const { isFulfilled } = this.props;
     return (
       <div className="page">
         <Header />
         <main className="page__main">
-          <div className="page__holder">
-            { this.props.children }
-          </div>
+          { isFulfilled &&
+            <div className="page__holder">
+              { this.props.children }
+            </div>
+          }
         </main>
         <Footer />
       </div>
@@ -46,7 +49,9 @@ class Page extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    isFulfilled: state.sites.isFulfilled
+  };
 }
 
 const mapDispatchToProps = {
