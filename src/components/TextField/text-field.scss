@@ -12,6 +12,7 @@
     box-sizing: border-box;
     border-radius: 6px;
     text-overflow: ellipsis;
+    resize: none;
 
     #{$root}_small & {
       padding: 11px 40px 11px 17px;

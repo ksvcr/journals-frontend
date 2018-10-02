@@ -1,0 +1,25 @@
+.article-top-tools {
+  margin-bottom: 15px;
+
+  &__icon {
+    display: inline-block;
+    vertical-align: baseline;
+    margin-right: 12px;
+
+    &_cancel {
+      width: 11px;
+      height: 11px;
+      fill: $orange-color;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    transition: color .2s;
+
+    &:hover {
+      color: #000;
+    }
+  }
+}

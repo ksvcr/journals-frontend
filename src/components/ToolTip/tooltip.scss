@@ -5,14 +5,53 @@
 .tippy-popper {
   max-width: none;
 
-  .tippy-tooltip.light-theme {
-    color: inherit;
-    background: #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    padding: 0;
-    text-align: left;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #d4d4d4;
+  .tippy-tooltip {
+    &.light-theme {
+      color: inherit;
+      background: #fff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      padding: 0;
+      text-align: left;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #d4d4d4;
+    }
+
+    &.hint-theme {
+      background: #fffbdb;
+      text-align: left;
+      color: inherit;
+      border: 1px solid #ffe9b2;
+      padding: 0;
+
+      [x-arrow]:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+  }
+}
+
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.hint-theme [x-arrow] {
+  border-bottom: 7px solid #ffe9b2;
+
+  &:after {
+    top: 1px;
+    border-bottom: 7px solid #fffbdb;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+  }
+}
+
+.tippy-popper[x-placement^=top] .tippy-tooltip.hint-theme [x-arrow] {
+  border-top: 7px solid #ffe9b2;
+
+  &:after {
+    top: -8px;
+    border-top: 7px solid #fffbdb;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
   }
 }

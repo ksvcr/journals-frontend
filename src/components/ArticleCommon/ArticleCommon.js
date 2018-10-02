@@ -5,6 +5,10 @@ import { formValueSelector } from 'redux-form'
 
 import Select from '~/components/Select/Select';
 import Checkbox from '~/components/Checkbox/Checkbox';
+import TextField from '~/components/TextField/TextField';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import ReqMark from '~/components/ReqMark/ReqMark';
+import Switcher from '~/components/Switcher/Switcher';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
@@ -69,6 +73,11 @@ class ArticleCommon extends Component {
                      component={ Checkbox } >
                 Нужен перевод сопроводительной информации на русский
               </Field>
+              <FieldHint position={ 'top-end' } text={
+                `Наши переводчики быстро и грамотно переведут на русский язык
+                всю сопроводительную информацию для вашей статьи.
+                Иначе вам придется делать это самостоятельно`
+              } />
             </div>
           </div>
         </div>
@@ -97,6 +106,62 @@ class ArticleCommon extends Component {
               </div>
             </div>
           }
+        </div>
+
+        <div className="form__field form__field_inline">
+          <Field name="agris_unload" id="agris_unload" component={ Checkbox } >
+            Статья AGRIS
+          </Field>
+          <FieldHint text={ 'Подсказка про AGRIS' } />
+        </div>
+
+        <div className="form__field form__field_inline">
+          <Field name="georef_unload" id="georef_unload" component={ Checkbox } >
+            Статья GEOREF
+          </Field>
+          <FieldHint text={ 'Подсказка про GEOREF' } />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="title" className="form__label">
+            Название статьи <ReqMark />
+          </label>
+          <Field name="title" id="title" textarea component={ TextField } required />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="thanks_text" className="form__label">
+            Благодарности <ReqMark />
+            <FieldHint text={ 'Подсказка про Благодарности' } />
+          </label>
+          <Field name="thanks_text" id="thanks_text" component={ TextField } />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="text_to_keywords" className="form__label">
+            Ключевые слова (через запятую) <ReqMark />
+            <FieldHint text={ 'Подсказка про Ключевые слова' } />
+          </label>
+          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="text_to_description" className="form__label">
+            Аннотация <ReqMark />
+          </label>
+          <Field name="text_to_description" id="text_to_description" textarea component={ TextField } required />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="thanks_text" className="form__label">
+            Конфликт интересов <ReqMark />
+            <FieldHint text={ 'Подсказка про Конфликт интересов' } />
+          </label>
+          <div className="form__switcher">
+            <Switcher />
+          </div>
+          <Field name="thanks_text" id="thanks_text" component={ TextField }
+                 placeholder="Перечислите конфликты интересов" />
         </div>
       </div>
     );

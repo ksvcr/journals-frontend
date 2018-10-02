@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
+import Icon from '~/components/Icon/Icon';
+
+import './assets/arrow.svg'
 import './article-wizard.scss';
 
 class ArticleWizard extends Component {
+  state = {
+    stepIndex: 0
+  };
+
   renderTabs = () => {
     const { steps } = this.props;
     return steps.map((item, index) => (
@@ -25,16 +32,52 @@ class ArticleWizard extends Component {
     ));
   };
 
+  handleStepChange = (stepIndex) => {
+    this.setState({ stepIndex });
+  };
+
+  handleStepPrev = () => {
+    this.setState((prevState) => ({
+      stepIndex: prevState.stepIndex-1
+    }));
+  };
+
+  handleStepNext = () => {
+    this.setState((prevState) => ({
+      stepIndex: prevState.stepIndex+1
+    }));
+  };
+
   render() {
+    const { stepIndex } = this.state;
+    const { steps } = this.props;
+
     return (
       <div className="article-wizard">
-        <Tabs>
+        <Tabs selectedIndex={ stepIndex } onSelect={ this.handleStepChange }>
           <TabList className="article-wizard__tab-list">
             { this.renderTabs() }
           </TabList>
 
           { this.renderPanels() }
         </Tabs>
+
+        <div className="article-wizard__tools">
+          { stepIndex > 0 &&
+            <button className="article-wizard__nav article-wizard__nav_prev" type="button"
+                    onClick={ this.handleStepPrev }>
+              <Icon className="article-wizard__arrow article-wizard__arrow_prev" name="arrow" />
+              Назад
+            </button>
+          }
+          { stepIndex <  steps.length-1 &&
+            <button className="article-wizard__nav article-wizard__nav_next" type="button"
+                    onClick={ this.handleStepNext }>
+              Далее
+              <Icon className="article-wizard__arrow article-wizard__arrow_next" name="arrow" />
+            </button>
+          }
+        </div>
       </div>
     );
   }

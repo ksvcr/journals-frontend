@@ -44,6 +44,7 @@ class ArticlePublishForm extends Component {
 
 ArticlePublishForm = reduxForm({
   form: 'article-publish',
+  destroyOnUnmount: false,
   enableReinitialize: true
 })(ArticlePublishForm);
 

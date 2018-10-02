@@ -44,6 +44,21 @@
   &__field + &__field,
   &__field + &__row,
   &__row + &__field {
-    margin-top: 30px;
+    margin-top: 40px;
+  }
+
+  &__field {
+    &_inline {
+      display: inline-block;
+      vertical-align: middle;
+
+      & + & {
+        margin-left: 30px;
+      }
+    }
+  }
+
+  &__switcher {
+    margin-bottom: 25px;
   }
 }

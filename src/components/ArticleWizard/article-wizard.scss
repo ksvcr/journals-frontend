@@ -1,4 +1,6 @@
 .article-wizard {
+  $root: &;
+
   &__tab-list {
     list-style: none;
     padding: 0;
@@ -40,5 +42,52 @@
 
   &__content {
     padding: 35px 0;
+  }
+
+  &__tools {
+    display: flex;
+  }
+
+  &__nav {
+    color: $blue-color;
+    font-weight: 700;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 14px;
+    outline: 0;
+    transition: color .2s;
+
+    &_next {
+      margin-left: auto;
+    }
+  }
+
+  &__arrow {
+    width: 8px;
+    height: 13px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -2px;
+    fill: $blue-color;
+    transition: fill .2s;
+
+    &_prev {
+      margin-right: 15px;
+    }
+
+    &_next {
+      transform: rotate(180deg);
+      margin-left: 15px;
+    }
+  }
+
+  &__nav:focus {
+    color: $orange-color;
+
+    #{$root}__arrow {
+      fill: $orange-color;
+    }
   }
 }
