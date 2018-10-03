@@ -22,6 +22,10 @@
     border-radius: 6px;
     text-overflow: ellipsis;
 
+    &:hover {
+      border-color: #676767;
+    }
+
     &:focus {
       border-color: $orange-color;
     }

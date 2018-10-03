@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Field } from 'redux-form';
+import { Field, FieldArray, arrayPush } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form'
 
@@ -9,12 +9,21 @@ import TextField from '~/components/TextField/TextField';
 import FieldHint from '~/components/FieldHint/FieldHint';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import Switcher from '~/components/Switcher/Switcher';
+import FinancingSources from '~/components/FinancingSources/FinancingSources';
+import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
 
 class ArticleCommon extends Component {
+  state = {
+    visibleFields: {
+      conflicts: true,
+      financing: true
+    }
+  };
+
   get languagesOptions() {
     const { languagesArray } = this.props;
     return languagesArray.map(item => ({
@@ -57,7 +66,20 @@ class ArticleCommon extends Component {
       }));
   }
 
+  handleFieldAdd = (name) => {
+    const { dispatch } = this.props;
+    dispatch(arrayPush('article-publish', name));
+  };
+
+  handleFieldToggle = (event) => {
+    const { checked, name } = event.target;
+    this.setState(prevState => (
+      { visibleFields: { ...prevState.visibleFields, [name]: checked } }
+    ));
+  };
+
   render() {
+    const { visibleFields } = this.state;
     return (
       <div className="article-common">
         <h2 className="page__title">Общие сведения</h2>
@@ -142,7 +164,7 @@ class ArticleCommon extends Component {
             Ключевые слова (через запятую) <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
-          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } />
+          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } required />
         </div>
 
         <div className="form__field">
@@ -153,16 +175,36 @@ class ArticleCommon extends Component {
         </div>
 
         <div className="form__field">
-          <label htmlFor="thanks_text" className="form__label">
+          <label className="form__label">
             Конфликт интересов <ReqMark />
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
-            <Switcher />
+            <Switcher checked={ Boolean(visibleFields.conflicts) } name="conflicts" onChange={ this.handleFieldToggle } />
           </div>
-          <Field name="thanks_text" id="thanks_text" component={ TextField }
-                 placeholder="Перечислите конфликты интересов" />
+
+          { visibleFields.conflicts &&
+            <Field name="conflict_interest" id="conflict_interest" component={ TextField }
+                   placeholder="Перечислите конфликты интересов" required />
+          }
         </div>
+
+        <div className="form__field">
+          <label className="form__label">
+            Финансирование
+          </label>
+          <div className="form__switcher">
+            <Switcher checked={ Boolean(visibleFields.financing) } name="financing" onChange={ this.handleFieldToggle } />
+          </div>
+
+          { visibleFields.financing &&
+            <FieldArray name="financing_sources" rerenderOnEveryChange={ true } component={ FinancingSources }/>
+          }
+          <FieldAddButton field="financing_sources" onAdd={ this.handleFieldAdd }>
+            Добавить
+          </FieldAddButton>
+        </div>
+
       </div>
     );
   }

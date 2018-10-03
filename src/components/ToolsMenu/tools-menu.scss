@@ -12,10 +12,6 @@
   &__item {
     & + & {
       border-top: 1px solid #dcdcdc;
-
-      &_preview {
-        border-width: 2px 0 0 0;
-      }
     }
   }
 
@@ -29,15 +25,16 @@
     width: 100%;
     text-align: left;
     cursor: pointer;
-    transition: background .2s;
-
-    &:hover {
-      background: #eee;
-    }
+    transition: color .2s;
 
     #{$root}__item_preview & {
       color: $blue-color;
       font-weight: 600;
+    }
+
+    &:hover,
+    #{$root}__item_preview &:hover {
+      color: $orange-color
     }
   }
 

@@ -45,7 +45,10 @@ class ArticlePublishForm extends Component {
 ArticlePublishForm = reduxForm({
   form: 'article-publish',
   destroyOnUnmount: false,
-  enableReinitialize: true
+  enableReinitialize: true,
+  initialValues: {
+    financing_sources: [{}]
+  }
 })(ArticlePublishForm);
 
 export default connect()(ArticlePublishForm);

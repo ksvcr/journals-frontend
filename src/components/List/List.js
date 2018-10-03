@@ -137,8 +137,8 @@ class List extends PureComponent {
       <div className="list">
         <div className="list__holder">
           { head && this.renderHead() }
-          <ReactCSSTransitionGroup transitionName="list-item"
-                                   transitionEnterTimeout={ 500 }
+          <ReactCSSTransitionGroup transitionName="fade"
+                                   transitionEnterTimeout={ 400 }
                                    transitionLeave={ false }>
             { this.renderItems() }
           </ReactCSSTransitionGroup>

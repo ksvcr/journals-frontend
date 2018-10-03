@@ -1,3 +1,70 @@
 .switcher {
+  $root: &;
 
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+
+  &__input {
+    @include visuallyhidden;
+  }
+
+  &__icon {
+    display: block;
+    width: 40px;
+    height: 20px;
+    position: relative;
+    margin: 0 15px;
+
+    &:before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 12px;
+      border-radius: 20px;
+      background: #dcdcdc;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(100%, -50%);
+      width: 20px;
+      height: 20px;
+      background: $orange-color;
+      border-radius: 50%;
+      transition: transform .2s;
+
+      #{$root}__input:checked ~ & {
+        transform: translate(0, -50%);
+      }
+    }
+  }
+
+  &__label {
+    transition: color .2s;
+    font-weight: 600;
+    line-height: 1;
+
+    &_true {
+      color: #979796;
+
+      #{$root}__input:checked ~ & {
+        color: inherit;
+      }
+    }
+
+    &_false {
+      #{$root}__input:checked ~ & {
+        color: #979796;
+      }
+    }
+  }
 }

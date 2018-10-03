@@ -1,17 +1,20 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import './switcher.scss';
+
 class Switcher extends PureComponent {
   render() {
     const { trueLabel, falseLabel, input, ...rest } = this.props;
 
     return (
       <label className="switcher">
-        <span className="switcher__label">
+        <input type="checkbox" className="switcher__input" { ...input } { ...rest } />
+        <span className="switcher__label switcher__label_true">
           { trueLabel }
         </span>
-        <input type="checkbox" className="switcher__input" { ...input } { ...rest } />
-        <span className="switcher__label">
+        <i className="switcher__icon" />
+        <span className="switcher__label switcher__label_false">
           { falseLabel }
         </span>
       </label>

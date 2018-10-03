@@ -72,12 +72,3 @@
     top: 16px;
   }
 }
-
-.list-item-enter {
-  opacity: 0.01;
-}
-
-.list-item-enter.list-item-enter-active {
-  opacity: 1;
-  transition: opacity .5s ease-in;
-}
