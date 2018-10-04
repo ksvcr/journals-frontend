@@ -61,23 +61,4 @@
   &__switcher {
     margin-bottom: 25px;
   }
-
-  &__set {
-    border-radius: 6px;
-    background: #f7f7f7;
-    border: 1px solid #dcdcdc;
-    margin: 0 -35px;
-    padding: 30px 35px 40px 35px;
-    min-width: 0;
-  }
-
-  &__legend {
-    color: #fff;
-    background: $orange-color;
-    border-radius: 6px;
-    font-weight: 600;
-    line-height: 1;
-    padding: 10px 15px;
-    display: table;
-  }
 }

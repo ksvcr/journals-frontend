@@ -198,11 +198,14 @@ class ArticleCommon extends Component {
           </div>
 
           { visibleFields.financing &&
-            <FieldArray name="financing_sources" rerenderOnEveryChange={ true } component={ FinancingSources }/>
+            <React.Fragment>
+              <FieldArray name="financing_sources" rerenderOnEveryChange={ true } component={ FinancingSources }/>
+              <FieldAddButton field="financing_sources" onAdd={ this.handleFieldAdd }>
+                Добавить
+              </FieldAddButton>
+            </React.Fragment>
           }
-          <FieldAddButton field="financing_sources" onAdd={ this.handleFieldAdd }>
-            Добавить
-          </FieldAddButton>
+
         </div>
 
       </div>

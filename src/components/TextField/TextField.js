@@ -13,7 +13,6 @@ class TextField extends Component {
       {
         'text-field_error': meta && meta.submitFailed && meta.error
       });
-
     const iconClasses = classNames('text-field__icon', { [`text-field__icon_${icon}`] : icon });
 
     return (
