@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Field, FieldArray, arrayPush } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form'
 
@@ -9,12 +9,12 @@ import TextField from '~/components/TextField/TextField';
 import FieldHint from '~/components/FieldHint/FieldHint';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import Switcher from '~/components/Switcher/Switcher';
-import FinancingSources from '~/components/FinancingSources/FinancingSources';
-import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
+import FieldSetList from '~/components/FieldSetList/FieldSetList';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
+import FieldSet from '~/components/FieldSet/FieldSet';
 
 class ArticleCommon extends Component {
   state = {
@@ -66,17 +66,23 @@ class ArticleCommon extends Component {
       }));
   }
 
-  handleFieldAdd = (name) => {
-    const { dispatch } = this.props;
-    dispatch(arrayPush('article-publish', name));
-  };
-
   handleFieldToggle = (event) => {
     const { checked, name } = event.target;
     this.setState(prevState => (
       { visibleFields: { ...prevState.visibleFields, [name]: checked } }
     ));
   };
+
+  renderFinancingSources = (field) => (
+    <div className="form__row">
+      <div className="form__col form__col_4">
+        <div className="form__field">
+          <label htmlFor={ `${field}.organization` } className="form__label">Название организации</label>
+          <Field name={ `${field}.organization` } id={ `${field}.organization` } component={ TextField } />
+        </div>
+      </div>
+    </div>
+  );
 
   render() {
     const { visibleFields } = this.state;
@@ -93,7 +99,7 @@ class ArticleCommon extends Component {
             <div className="form__col form__col_8">
               <Field name="need_translation" id="need_translation"
                      component={ Checkbox } >
-                Нужен перевод сопроводительной информации на русский
+                Нужен перевод сопроводительноSourcesй информации на русский
               </Field>
               <FieldHint position={ 'top-end' } text={
                 `Наши переводчики быстро и грамотно переведут на русский язык
@@ -182,7 +188,6 @@ class ArticleCommon extends Component {
           <div className="form__switcher">
             <Switcher checked={ Boolean(visibleFields.conflicts) } name="conflicts" onChange={ this.handleFieldToggle } />
           </div>
-
           { visibleFields.conflicts &&
             <Field name="conflict_interest" id="conflict_interest" component={ TextField }
                    placeholder="Перечислите конфликты интересов" required />
@@ -198,12 +203,10 @@ class ArticleCommon extends Component {
           </div>
 
           { visibleFields.financing &&
-            <React.Fragment>
-              <FieldArray name="financing_sources" rerenderOnEveryChange={ true } component={ FinancingSources }/>
-              <FieldAddButton field="financing_sources" onAdd={ this.handleFieldAdd }>
-                Добавить
-              </FieldAddButton>
-            </React.Fragment>
+            <FieldArray name="financing_sources" rerenderOnEveryChange={ true }
+                        component={ (props) =>
+                          <FieldSetList { ...props }>{ this.renderFinancingSources }</FieldSetList>
+                        } />
           }
 
         </div>

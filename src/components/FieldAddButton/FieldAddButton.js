@@ -1,17 +1,19 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Icon from '~/components/Icon/Icon';
+
+import './assets/plus.svg';
+import './field-add-button.scss';
 
 class FieldAddButton extends Component {
-  handleAdd = () => {
-    const { field, onAdd } = this.props;
-    onAdd(field);
-  };
-
   render() {
-    const { children } = this.props;
+    const { children, onAdd } = this.props;
     return (
-      <button type="button" className="field-add-button" onClick={ this.handleAdd }>
+      <button type="button" className="field-add-button" onClick={ onAdd }>
+        <span className="field-add-button__circle">
+          <Icon name="plus" className="field-add-button__icon" />
+        </span>
         { children }
       </button>
     );
@@ -19,7 +21,6 @@ class FieldAddButton extends Component {
 }
 
 FieldAddButton.propTypes = {
-  field: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

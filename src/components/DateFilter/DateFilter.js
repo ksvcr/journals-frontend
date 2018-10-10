@@ -66,10 +66,12 @@ class DateFilter extends Component {
             <Select type={ field } options={ this.filterOptions } onChange={ this.handleFieldChange } className="select_small" />
           </div>
           <div className="form__field">
-            <label className="form__label form__label_small">Задать период</label>
+            <label htmlFor="date-start" className="form__label form__label_small">Задать период</label>
             <div className="form__row form__row_small">
               <div className="form__col form__col_small">
-                <Calendar className="text-field_calendar text-field_small"
+                <Calendar
+                          id="date-start"
+                          className="text-field_calendar text-field_small"
                           selected={ this.state.startDate }
                           selectsStart
                           startDate={ this.state.startDate }

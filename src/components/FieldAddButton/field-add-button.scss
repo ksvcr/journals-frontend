@@ -1,0 +1,35 @@
+.field-add-button {
+  color: #2e73fb;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color .2s;
+  outline: 0;
+
+  &:hover,
+  &:focus {
+    color: $blue-color;
+  }
+
+  &__circle {
+    width: 15px;
+    height: 15px;
+    border: solid 1px currentColor;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 9px;
+  }
+
+  &__icon {
+    width: 7px;
+    height: 7px;
+    fill: currentColor;
+  }
+}

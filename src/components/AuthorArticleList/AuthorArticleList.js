@@ -134,9 +134,9 @@ class AuthorArticleList extends Component {
       if (box.type === 'payment') {
         return <Payment onClose={ this.handlePaymentClose } />;
       }
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   render() {
