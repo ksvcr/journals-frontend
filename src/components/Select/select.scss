@@ -33,9 +33,14 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    transition: border-color .2s;
 
     &::-ms-expand {
       display: none;
+    }
+
+    &:hover {
+      border-color: #676767;
     }
 
     &:focus {
@@ -52,6 +57,9 @@
       font-size: 14px;
     }
 
+    #{$root}_white & {
+      background: #fff;
+    }
 
     option {
       width: 100px;

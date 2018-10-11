@@ -1,26 +1,30 @@
-import React, {Component} from 'react';
-import { Field, FieldArray } from 'redux-form';
+import React, { Component } from 'react';
+import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form'
 
 import Select from '~/components/Select/Select';
 import Checkbox from '~/components/Checkbox/Checkbox';
+import Radio from '~/components/Radio/Radio';
 import TextField from '~/components/TextField/TextField';
 import FieldHint from '~/components/FieldHint/FieldHint';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import Switcher from '~/components/Switcher/Switcher';
 import FieldSetList from '~/components/FieldSetList/FieldSetList';
+import FinancingSourceForm from '~/components/FinancingSourceForm/FinancingSourceForm';
+import AddressForm from '~/components/AddressForm/AddressForm';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
-import FieldSet from '~/components/FieldSet/FieldSet';
 
-class ArticleCommon extends Component {
+class ArticleCommonForm extends Component {
   state = {
     visibleFields: {
       conflicts: true,
-      financing: true
+      financing: true,
+      addressRadio: false,
+      addressList: false
     }
   };
 
@@ -73,21 +77,38 @@ class ArticleCommon extends Component {
     ));
   };
 
-  renderFinancingSources = (field) => (
-    <div className="form__row">
-      <div className="form__col form__col_4">
-        <div className="form__field">
-          <label htmlFor={ `${field}.organization` } className="form__label">Название организации</label>
-          <Field name={ `${field}.organization` } id={ `${field}.organization` } component={ TextField } />
-        </div>
-      </div>
-    </div>
-  );
+  handleAddressToggle = (event) => {
+    const { value } = event.target;
+    const isChecked = value === 'custom-address';
+    this.setState(prevState => (
+      { visibleFields: { ...prevState.visibleFields, addressList: isChecked } }
+    ));
+  };
+
+  renderFinancingSourcesList = (props) =>
+    <FieldSetList legend="Грант" addText="Добавить грант" { ...props }>
+      { field => <FinancingSourceForm field={ field } /> }
+    </FieldSetList>;
+
+  renderAddressList = (props) => {
+    const initialValues = {
+      count: 1
+    };
+
+    return (
+      <FieldSetList legend="Адрес" addText="Добавить адрес"
+                    initialValues={ initialValues } { ...props }>
+        { field => <AddressForm field={ field } /> }
+      </FieldSetList>
+    );
+
+  };
 
   render() {
     const { visibleFields } = this.state;
+    const { handleSubmit } = this.props;
     return (
-      <div className="article-common">
+      <form className="article-common" onSubmit={ handleSubmit }>
         <h2 className="page__title">Общие сведения</h2>
         <div className="form__field">
           <label htmlFor="language" className="form__label">Язык статьи</label>
@@ -99,7 +120,7 @@ class ArticleCommon extends Component {
             <div className="form__col form__col_8">
               <Field name="need_translation" id="need_translation"
                      component={ Checkbox } >
-                Нужен перевод сопроводительноSourcesй информации на русский
+                Нужен перевод сопроводительной информации на русский
               </Field>
               <FieldHint position={ 'top-end' } text={
                 `Наши переводчики быстро и грамотно переведут на русский язык
@@ -154,7 +175,8 @@ class ArticleCommon extends Component {
           <label htmlFor="title" className="form__label">
             Название статьи <ReqMark />
           </label>
-          <Field name="title" id="title" textarea component={ TextField } required />
+          <Field name="title" id="title" textarea component={ TextField } required
+                 placeholder="Введите название" />
         </div>
 
         <div className="form__field">
@@ -162,7 +184,8 @@ class ArticleCommon extends Component {
             Благодарности <ReqMark />
             <FieldHint text={ 'Подсказка про Благодарности' } />
           </label>
-          <Field name="thanks_text" id="thanks_text" component={ TextField } />
+          <Field name="thanks_text" id="thanks_text" component={ TextField }
+                 placeholder="Введите благодарности" />
         </div>
 
         <div className="form__field">
@@ -170,14 +193,16 @@ class ArticleCommon extends Component {
             Ключевые слова (через запятую) <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
-          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } required />
+          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } required
+                 placeholder="Перечислите ключевые слова" />
         </div>
 
         <div className="form__field">
           <label htmlFor="text_to_description" className="form__label">
             Аннотация <ReqMark />
           </label>
-          <Field name="text_to_description" id="text_to_description" textarea component={ TextField } required />
+          <Field name="text_to_description" id="text_to_description" textarea component={ TextField } required
+                 placeholder="Введите аннотацию" />
         </div>
 
         <div className="form__field">
@@ -204,17 +229,53 @@ class ArticleCommon extends Component {
 
           { visibleFields.financing &&
             <FieldArray name="financing_sources" rerenderOnEveryChange={ true }
-                        component={ (props) =>
-                          <FieldSetList { ...props }>{ this.renderFinancingSources }</FieldSetList>
-                        } />
+                        component={ this.renderFinancingSourcesList } />
           }
-
         </div>
 
-      </div>
+        <div className="form__field">
+          <label className="form__label">
+            Нужна печатная копия
+          </label>
+          <div className="form__switcher">
+            <Switcher checked={ Boolean(visibleFields.addressRadio) } name="addressRadio" onChange={ this.handleFieldToggle } />
+          </div>
+
+          { visibleFields.addressRadio &&
+            <div className="form__switcher">
+              <Radio name="addressList" value="profile-address" checked={ !Boolean(visibleFields.addressList) }
+                     onChange={ this.handleAddressToggle }>
+                Адрес, указанный в профиле
+              </Radio>
+              <Radio name="addressList" value="custom-address" checked={ Boolean(visibleFields.addressList) }
+                     onChange={ this.handleAddressToggle }>
+                Другой адрес
+              </Radio>
+            </div>
+          }
+
+          { visibleFields.addressList &&
+            <FieldArray name="addresses" rerenderOnEveryChange={ true }
+                        component={ this.renderAddressList } />
+          }
+        </div>
+      </form>
     );
   }
 }
+
+ArticleCommonForm = reduxForm({
+  form: 'article-publish',
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  forceUnregisterOnUnmount: true,
+  initialValues: {
+    financing_sources: [{}],
+    addresses: [{
+      count: 1
+    }]
+  }
+})(ArticleCommonForm);
 
 const formSelector = formValueSelector('article-publish');
 
@@ -230,4 +291,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ArticleCommon);
+export default connect(mapStateToProps)(ArticleCommonForm);

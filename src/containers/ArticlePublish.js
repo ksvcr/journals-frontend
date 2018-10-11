@@ -32,6 +32,10 @@ class ArticlePublish extends Component {
     ]);
   };
 
+  handleSubmit = (formData) => {
+    console.log(formData);
+  };
+
   get menuItems() {
     return [
       {
@@ -69,15 +73,11 @@ class ArticlePublish extends Component {
             </form>
           </div>
 
-          <ArticlePublishForm />
+          <ArticlePublishForm onSubmit={ this.handleSubmit } />
         </article>
       </React.Fragment>
     );
   }
-}
-
-function mapStateToProps() {
-  return {};
 }
 
 const mapDispatchToProps = {
@@ -87,6 +87,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(ArticlePublish);

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { connect } from 'react-redux'
+import { submit } from 'redux-form'
 
 import Icon from '~/components/Icon/Icon';
 
@@ -9,6 +11,11 @@ import './article-wizard.scss';
 class ArticleWizard extends Component {
   state = {
     stepIndex: 0
+  };
+
+  handleSubmit = () => {
+    const { name, submit } = this.props;
+    submit(name);
   };
 
   renderTabs = () => {
@@ -70,6 +77,9 @@ class ArticleWizard extends Component {
               Назад
             </button>
           }
+
+          <button type="button" onClick={ this.handleSubmit }> Save </button>
+
           { stepIndex <  steps.length-1 &&
             <button className="article-wizard__nav article-wizard__nav_next" type="button"
                     onClick={ this.handleStepNext }>
@@ -83,4 +93,8 @@ class ArticleWizard extends Component {
   }
 }
 
-export default ArticleWizard;
+const mapDispatchToProps = {
+  submit
+};
+
+export default connect(null, mapDispatchToProps)(ArticleWizard);

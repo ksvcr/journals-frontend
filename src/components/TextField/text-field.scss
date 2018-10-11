@@ -39,6 +39,14 @@
     &:required {
       box-shadow: none;
     }
+
+    &::placeholder {
+      color: #979796;
+    }
+
+    #{$root}_white & {
+      background: #fff;
+    }
   }
 
   &__icon {

@@ -8,22 +8,22 @@ import './field-set-list.scss';
 
 class FieldSetList extends PureComponent {
   handleAdd = () => {
-    const { fields, name } = this.props;
-    fields.push(name)
+    const { fields, initialValues }  = this.props;
+    fields.push(initialValues);
   };
 
   handleMove = ({ from, to }) => {
     const { fields } = this.props;
-    fields.move(from, to)
+    fields.move(from, to);
   };
 
   handleRemove = (index) => {
     const { fields } = this.props;
-    fields.remove(index)
+    fields.remove(index);
   };
 
   render() {
-    const { fields, children } = this.props;
+    const { fields, legend, addText, children } = this.props;
 
     return (
       <div className="field-set-list">
@@ -33,7 +33,7 @@ class FieldSetList extends PureComponent {
           {
             fields.map((field, index) => (
               <FieldSet key={ index } isLast={ index === fields.length - 1 } index={ index }
-                        legend={`Грант №${index + 1}`} onRemove={ this.handleRemove } onMove={ this.handleMove } >
+                        legend={`${legend} №${index + 1}`} onRemove={ this.handleRemove } onMove={ this.handleMove } >
                 { children(field, index) }
               </FieldSet>
             ))
@@ -42,7 +42,7 @@ class FieldSetList extends PureComponent {
 
         <div className="field-set-list__button">
           <FieldAddButton onAdd={ this.handleAdd }>
-            Добавить грант
+            { addText }
           </FieldAddButton>
         </div>
       </div>

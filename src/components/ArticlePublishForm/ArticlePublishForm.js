@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
-import ArticleCommon from '~/components/ArticleCommon/ArticleCommon';
+import ArticleCommon from '~/components/ArticleCommonForm/ArticleCommonForm';
 
 class ArticlePublishForm extends Component {
   get wizardSteps() {
+    const { onSubmit } = this.props;
     return [
       {
         title: 'Общие сведения',
-        component: <ArticleCommon />
+        component: <ArticleCommon onSubmit={ onSubmit } />
       },
       {
         title: 'Авторы',
@@ -33,22 +32,13 @@ class ArticlePublishForm extends Component {
 
   render() {
     return (
-      <form className="article-publish-form form">
+      <div className="article-publish-form form">
         <div className="article-publish-form__wizard">
-          <ArticleWizard steps={ this.wizardSteps } />
+          <ArticleWizard name="article-publish" steps={ this.wizardSteps } />
         </div>
-      </form>
+      </div>
     );
   }
 }
 
-ArticlePublishForm = reduxForm({
-  form: 'article-publish',
-  destroyOnUnmount: false,
-  enableReinitialize: true,
-  initialValues: {
-    financing_sources: [{}]
-  }
-})(ArticlePublishForm);
-
-export default connect()(ArticlePublishForm);
+export default ArticlePublishForm;

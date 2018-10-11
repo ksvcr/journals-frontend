@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import Icon from '~/components/Icon/Icon';
-
-import './assets/plus.svg';
 import './field-add-button.scss';
 
 class FieldAddButton extends Component {
@@ -11,9 +7,7 @@ class FieldAddButton extends Component {
     const { children, onAdd } = this.props;
     return (
       <button type="button" className="field-add-button" onClick={ onAdd }>
-        <span className="field-add-button__circle">
-          <Icon name="plus" className="field-add-button__icon" />
-        </span>
+        <span className="field-add-button__circle" />
         { children }
       </button>
     );
