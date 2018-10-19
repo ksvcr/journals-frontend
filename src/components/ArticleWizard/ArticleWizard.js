@@ -31,7 +31,7 @@ class ArticleWizard extends Component {
   renderPanels = () => {
     const { steps } = this.props;
     return steps.map((item, index) => (
-      <TabPanel key={ index }>
+      <TabPanel key={ index } className="article-wizard__panel">
         <div className="article-wizard__content">
           { item.component }
         </div>
@@ -61,11 +61,11 @@ class ArticleWizard extends Component {
 
     return (
       <div className="article-wizard">
-        <Tabs selectedIndex={ stepIndex } onSelect={ this.handleStepChange }>
+        <Tabs selectedIndex={ stepIndex } onSelect={ this.handleStepChange }
+              selectedTabPanelClassName="article-wizard__panel_selected">
           <TabList className="article-wizard__tab-list">
             { this.renderTabs() }
           </TabList>
-
           { this.renderPanels() }
         </Tabs>
 

@@ -91,4 +91,22 @@
       fill: $orange-color;
     }
   }
+
+  &__panel {
+    &_selected {
+      animation-name: panelFadeIn;
+      animation-duration: 300ms;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

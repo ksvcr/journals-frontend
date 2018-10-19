@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
-import ArticleCommon from '~/components/ArticleCommonForm/ArticleCommonForm';
+import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
+import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
 
 class ArticlePublishForm extends Component {
   get wizardSteps() {
@@ -9,11 +10,11 @@ class ArticlePublishForm extends Component {
     return [
       {
         title: 'Общие сведения',
-        component: <ArticleCommon onSubmit={ onSubmit } />
+        component: <ArticleCommonForm onSubmit={ onSubmit } />
       },
       {
         title: 'Авторы',
-        component: <div>2</div>
+        component: <ArticleAuthorsForm onSubmit={ onSubmit } />
       },
       {
         title: 'Текст статьи',

@@ -177,8 +177,8 @@ class ArticleCommonForm extends Component {
           <label htmlFor="title" className="form__label">
             Название статьи <ReqMark />
           </label>
-          <Field name="title" id="title" textarea component={ TextField } required
-                 placeholder="Введите название" validate={[validate.required]} />
+          <Field name="title" id="title" textarea component={ TextField }
+                 placeholder="Введите название" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -187,7 +187,7 @@ class ArticleCommonForm extends Component {
             <FieldHint text={ 'Подсказка про Благодарности' } />
           </label>
           <Field name="thanks_text" id="thanks_text" component={ TextField }
-                 placeholder="Введите благодарности" />
+                 placeholder="Введите благодарности" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -195,16 +195,16 @@ class ArticleCommonForm extends Component {
             Ключевые слова (через запятую) <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
-          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField } required
-                 placeholder="Перечислите ключевые слова" />
+          <Field name="text_to_keywords" id="text_to_keywords" component={ TextField }
+                 placeholder="Перечислите ключевые слова" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
           <label htmlFor="text_to_description" className="form__label">
             Аннотация <ReqMark />
           </label>
-          <Field name="text_to_description" id="text_to_description" textarea component={ TextField } required
-                 placeholder="Введите аннотацию" />
+          <Field name="text_to_description" id="text_to_description" textarea component={ TextField }
+                 placeholder="Введите аннотацию" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -213,11 +213,12 @@ class ArticleCommonForm extends Component {
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.conflicts) } name="conflicts" onChange={ this.handleFieldToggle } />
+            <Switcher checked={ Boolean(visibleFields.conflicts) }
+                      name="conflicts" onChange={ this.handleFieldToggle } />
           </div>
           { visibleFields.conflicts &&
             <Field name="conflict_interest" id="conflict_interest" component={ TextField }
-                   placeholder="Перечислите конфликты интересов" required />
+                   placeholder="Перечислите конфликты интересов" validate={ [validate.required] } />
           }
         </div>
 
@@ -226,7 +227,8 @@ class ArticleCommonForm extends Component {
             Финансирование
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.financing) } name="financing" onChange={ this.handleFieldToggle } />
+            <Switcher checked={ Boolean(visibleFields.financing) } name="financing"
+                      onChange={ this.handleFieldToggle } />
           </div>
 
           { visibleFields.financing &&
@@ -269,8 +271,6 @@ class ArticleCommonForm extends Component {
 ArticleCommonForm = reduxForm({
   form: 'article-publish',
   destroyOnUnmount: false,
-  enableReinitialize: true,
-  forceUnregisterOnUnmount: true,
   initialValues: {
     financing_sources: [{}],
     addresses: [{
