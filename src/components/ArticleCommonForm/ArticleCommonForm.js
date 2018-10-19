@@ -18,6 +18,8 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
 
+import * as validate from '~/utils/validate';
+
 class ArticleCommonForm extends Component {
   state = {
     visibleFields: {
@@ -176,7 +178,7 @@ class ArticleCommonForm extends Component {
             Название статьи <ReqMark />
           </label>
           <Field name="title" id="title" textarea component={ TextField } required
-                 placeholder="Введите название" />
+                 placeholder="Введите название" validate={[validate.required]} />
         </div>
 
         <div className="form__field">
