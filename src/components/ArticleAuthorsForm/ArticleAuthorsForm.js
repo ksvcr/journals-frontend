@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Field, reduxForm} from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import TextField from '~/components/TextField/TextField';
 
 class ArticleAuthorsForm extends Component {
@@ -23,7 +23,9 @@ class ArticleAuthorsForm extends Component {
 
 ArticleAuthorsForm = reduxForm({
   form: 'article-publish',
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true
 })(ArticleAuthorsForm);
 
 export default ArticleAuthorsForm;

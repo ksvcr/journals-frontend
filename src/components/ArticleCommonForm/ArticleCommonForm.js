@@ -18,6 +18,8 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
 
+import getFinancingIds from '~/services/getFinancingIds';
+
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
@@ -271,12 +273,8 @@ class ArticleCommonForm extends Component {
 ArticleCommonForm = reduxForm({
   form: 'article-publish',
   destroyOnUnmount: false,
-  initialValues: {
-    financing_sources: [{}],
-    addresses: [{
-      count: 1
-    }]
-  }
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true
 })(ArticleCommonForm);
 
 const formSelector = formValueSelector('article-publish');
@@ -284,12 +282,31 @@ const formSelector = formValueSelector('article-publish');
 function mapStateToProps(state) {
   let rootCategory = formSelector(state, 'root_category');
   rootCategory = rootCategory && parseInt(rootCategory, 10);
+
+  const rootCategoriesArray = getRootCategoriesArray(state);
+  const categoriesArray = getCategoriesArray(state);
+  const rubricsArray = getRubricsArray(state);
+  const languagesArray = getLanguagesArray(state);
+  const financingIds = getFinancingIds();
+
   return {
     rootCategory,
+    rootCategoriesArray,
+    categoriesArray,
+    rubricsArray,
     languagesArray: getLanguagesArray(state),
-    rubricsArray: getRubricsArray(state),
-    rootCategoriesArray: getRootCategoriesArray(state),
-    categoriesArray: getCategoriesArray(state)
+    initialValues: {
+      language: languagesArray.length ? languagesArray[0].id : null,
+      rubric: rubricsArray.length ? rubricsArray[0].id : null,
+      root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
+      category: categoriesArray.length ? categoriesArray[0].id : null,
+      financing_sources: [{
+        type: financingIds[0]
+      }],
+      addresses: [{
+        count: 1
+      }]
+    }
   };
 }
 
