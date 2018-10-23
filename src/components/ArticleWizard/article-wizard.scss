@@ -44,8 +44,12 @@
     padding: 35px 0;
   }
 
-  &__tools {
+  &__bottom {
     display: flex;
+  }
+
+  &__tools {
+    margin: auto;
   }
 
   &__nav {
@@ -57,11 +61,13 @@
     cursor: pointer;
     font-size: 14px;
     outline: 0;
-    transition: color .2s;
+    transition: all .2s;
     background: transparent;
 
-    &_next {
-      margin-left: auto;
+    &:disabled {
+      opacity: 0;
+      pointer-events: 0;
+      cursor: default;
     }
   }
 

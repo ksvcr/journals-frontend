@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { connect } from 'react-redux'
-import { submit } from 'redux-form'
 
 import Icon from '~/components/Icon/Icon';
 
@@ -11,11 +9,6 @@ import './article-wizard.scss';
 class ArticleWizard extends Component {
   state = {
     stepIndex: 0
-  };
-
-  handleSubmit = () => {
-    const { name, submit } = this.props;
-    submit(name);
   };
 
   renderTabs = () => {
@@ -57,7 +50,7 @@ class ArticleWizard extends Component {
 
   render() {
     const { stepIndex } = this.state;
-    const { steps } = this.props;
+    const { steps, tools } = this.props;
 
     return (
       <div className="article-wizard">
@@ -69,32 +62,28 @@ class ArticleWizard extends Component {
           { this.renderPanels() }
         </Tabs>
 
-        <div className="article-wizard__tools">
-          { stepIndex > 0 &&
-            <button className="article-wizard__nav article-wizard__nav_prev" type="button"
-                    onClick={ this.handleStepPrev }>
-              <Icon className="article-wizard__arrow article-wizard__arrow_prev" name="arrow" />
-              Назад
-            </button>
+        <div className="article-wizard__bottom">
+          <button className="article-wizard__nav article-wizard__nav_prev" type="button"
+                  disabled={ stepIndex <= 0 } onClick={ this.handleStepPrev }>
+            <Icon className="article-wizard__arrow article-wizard__arrow_prev" name="arrow" />
+            Назад
+          </button>
+
+          { tools &&
+            <div className="article-wizard__tools">
+              { tools() }
+            </div>
           }
 
-          <button type="button" onClick={ this.handleSubmit }> Save </button>
-
-          { stepIndex <  steps.length-1 &&
-            <button className="article-wizard__nav article-wizard__nav_next" type="button"
-                    onClick={ this.handleStepNext }>
-              Далее
-              <Icon className="article-wizard__arrow article-wizard__arrow_next" name="arrow" />
-            </button>
-          }
+          <button className="article-wizard__nav article-wizard__nav_next" type="button"
+                  disabled={ stepIndex >= steps.length-1 } onClick={ this.handleStepNext }>
+            Далее
+            <Icon className="article-wizard__arrow article-wizard__arrow_next" name="arrow" />
+          </button>
         </div>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = {
-  submit
-};
-
-export default connect(null, mapDispatchToProps)(ArticleWizard);
+export default ArticleWizard;

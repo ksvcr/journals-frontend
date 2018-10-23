@@ -7,7 +7,7 @@ import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList'
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
-import Search from '~/components/Search/Search';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
 
 class AuthorArticles extends Component {
   componentDidMount() {
@@ -63,7 +63,7 @@ class AuthorArticles extends Component {
               </div>
               <div className="form__field">
                 <label className="form__label">Поиск статьи</label>
-                <Search targets={ this.searchTargets } onChange={ this.handleRequest } />
+                <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
               </div>
             </form>
           </div>

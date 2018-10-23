@@ -10,6 +10,7 @@
   border: 1px solid $gray-color;
   transition: all .2s;
   display: block;
+  cursor: pointer;
 
   &:hover,
   &:focus {
@@ -19,5 +20,9 @@
   &:active,
   &_active {
     background: $orange-color;
+  }
+
+  &_small {
+    padding: 14px 20px;
   }
 }

@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import Icon from '~/components/Icon/Icon';
 
 import './assets/calendar.svg';
+import './assets/search.svg';
+
 import './text-field.scss';
 
 class TextField extends Component {

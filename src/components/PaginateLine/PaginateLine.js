@@ -39,7 +39,7 @@ class PaginateLine extends Component {
                      total={ totalPageAmount } onChange={ this.handlePageChange } />
         </div>
         <div className="paginate-line__item">
-          <PageSizer onChange={ this.handleLimitChange } />
+          <PageSizer value={ limit } onChange={ this.handleLimitChange } />
         </div>
       </div>
     );

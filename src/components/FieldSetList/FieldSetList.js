@@ -24,7 +24,6 @@ class FieldSetList extends PureComponent {
 
   render() {
     const { fields, legend, addText, children } = this.props;
-
     return (
       <div className="field-set-list">
         <ReactCSSTransitionGroup transitionName="fade"
@@ -48,6 +47,10 @@ class FieldSetList extends PureComponent {
       </div>
     );
   }
-}
+};
+
+FieldSetList.defaultProps = {
+  initialValues: {}
+};
 
 export default FieldSetList;

@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import { submit } from 'redux-form';
+import { connect } from 'react-redux';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
 import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
+import Button from '~/components/Button/Button';
+import Icon from '~/components/Icon/Icon';
+
+import './article-publish-form.scss';
+import './assets/save.svg';
+
+const FORM_NAME = 'article-publish';
 
 class ArticlePublishForm extends Component {
   get wizardSteps() {
@@ -10,11 +19,11 @@ class ArticlePublishForm extends Component {
     return [
       {
         title: 'Общие сведения',
-        component: <ArticleCommonForm onSubmit={ onSubmit } />
+        component: <ArticleCommonForm formName={ FORM_NAME } onSubmit={ onSubmit } />
       },
       {
         title: 'Авторы',
-        component: <ArticleAuthorsForm onSubmit={ onSubmit } />
+        component: <ArticleAuthorsForm formName={ FORM_NAME } onSubmit={ onSubmit } />
       },
       {
         title: 'Текст статьи',
@@ -31,15 +40,35 @@ class ArticlePublishForm extends Component {
     ];
   }
 
+  handleSubmit = () => {
+    const { submit } = this.props;
+    submit(FORM_NAME);
+  };
+
+  renderTools = () => {
+    return (
+      <React.Fragment>
+        <Button onClick={ this.handleSubmit }>
+          <Icon name="save" className="article-publish-form__save-icon" />
+          Сохранить как черновик
+        </Button>
+      </React.Fragment>
+    );
+  };
+
   render() {
     return (
       <div className="article-publish-form form">
         <div className="article-publish-form__wizard">
-          <ArticleWizard name="article-publish" steps={ this.wizardSteps } />
+          <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
         </div>
       </div>
     );
   }
 }
 
-export default ArticlePublishForm;
+const mapDispatchToProps = {
+  submit
+};
+
+export default connect(null, mapDispatchToProps)(ArticlePublishForm);

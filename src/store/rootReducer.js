@@ -8,6 +8,7 @@ import categories from './categories/reducer';
 import sites from './sites/reducer';
 import articles from './articles/reducer';
 import user from './user/reducer';
+import users from './users/reducer';
 
 export default combineReducers({
   form: formReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   page,
   sites,
   articles,
-  user
+  user,
+  users
 });

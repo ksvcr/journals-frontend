@@ -14,14 +14,14 @@ class PageSizer extends Component {
   };
 
   render() {
-    const { sizes } = this.props;
+    const { sizes, value } = this.props;
     return (
       <div className="page-sizer">
         <div className="page-sizer__text">
           Показывать по
         </div>
         <div className="page-sizer__holder">
-          <Select options={ sizes } onChange={ this.handleChange } className="select_small" />
+          <Select options={ sizes } value={ value } onChange={ this.handleChange } className="select_small" />
         </div>
       </div>
     );

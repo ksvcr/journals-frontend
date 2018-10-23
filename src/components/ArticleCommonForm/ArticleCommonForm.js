@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray, reduxForm, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form'
 
@@ -32,6 +32,23 @@ class ArticleCommonForm extends Component {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    this.setInitialCategory(prevProps.rootCategory);
+  }
+
+  get childCategories() {
+    const { rootCategoriesArray, categoriesArray, rootCategory } = this.props;
+    let rootId;
+    if (rootCategory !== undefined) {
+      rootId = rootCategory;
+    } else if(rootCategoriesArray[0]) {
+      rootId = rootCategoriesArray[0].id;
+    }
+
+    return categoriesArray
+      .filter(item => item.parent === rootId);
+  }
+
   get languagesOptions() {
     const { languagesArray } = this.props;
     return languagesArray.map(item => ({
@@ -58,21 +75,23 @@ class ArticleCommonForm extends Component {
   }
 
   get childCategoriesOptions() {
-    const { rootCategoriesArray, categoriesArray, rootCategory } = this.props;
-    let rootId;
-    if (rootCategory !== undefined) {
-      rootId = rootCategory;
-    } else if(rootCategoriesArray[0]) {
-      rootId = rootCategoriesArray[0].id;
-    }
-
-    return categoriesArray
-      .filter(item => item.parent === rootId)
+    return this.childCategories
       .map(item => ({
         title: item.translations['ru'].name,
         value: item.id
       }));
   }
+
+  setInitialCategory = (prevRootCategory) => {
+    const { rootCategory, change } = this.props;
+    if (rootCategory !== prevRootCategory) {
+      if (this.childCategories.length) {
+        change('category', this.childCategories[0].id);
+      } else {
+        change('category', null);
+      }
+    }
+  };
 
   handleFieldToggle = (event) => {
     const { checked, name } = event.target;
@@ -105,14 +124,13 @@ class ArticleCommonForm extends Component {
         { field => <AddressForm field={ field } /> }
       </FieldSetList>
     );
-
   };
 
   render() {
     const { visibleFields } = this.state;
     const { handleSubmit } = this.props;
     return (
-      <form className="article-common" onSubmit={ handleSubmit }>
+      <form className="article-common-form form" onSubmit={ handleSubmit }>
         <h2 className="page__title">Общие сведения</h2>
         <div className="form__field">
           <label htmlFor="language" className="form__label">Язык статьи</label>
@@ -122,7 +140,7 @@ class ArticleCommonForm extends Component {
                      component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
             </div>
             <div className="form__col form__col_8">
-              <Field name="need_translation" id="need_translation"
+              <Field name="need_translation" id="need_translation" type="checkbox"
                      component={ Checkbox } >
                 Нужен перевод сопроводительной информации на русский
               </Field>
@@ -162,14 +180,16 @@ class ArticleCommonForm extends Component {
         </div>
 
         <div className="form__field form__field_inline">
-          <Field name="agris_unload" id="agris_unload" component={ Checkbox } >
+          <Field name="agris_unload" id="agris_unload" type="checkbox"
+                 component={ Checkbox } >
             Статья AGRIS
           </Field>
           <FieldHint text={ 'Подсказка про AGRIS' } />
         </div>
 
         <div className="form__field form__field_inline">
-          <Field name="georef_unload" id="georef_unload" component={ Checkbox } >
+          <Field name="georef_unload" id="georef_unload" type="checkbox"
+                 component={ Checkbox } >
             Статья GEOREF
           </Field>
           <FieldHint text={ 'Подсказка про GEOREF' } />
@@ -271,17 +291,20 @@ class ArticleCommonForm extends Component {
 }
 
 ArticleCommonForm = reduxForm({
-  form: 'article-publish',
   destroyOnUnmount: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true
 })(ArticleCommonForm);
 
-const formSelector = formValueSelector('article-publish');
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const { formName } = props;
+  const formSelector = formValueSelector(formName);
+
   let rootCategory = formSelector(state, 'root_category');
   rootCategory = rootCategory && parseInt(rootCategory, 10);
+  let category = formSelector(state, 'category');
+  category = category && parseInt(category, 10);
 
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
@@ -290,16 +313,17 @@ function mapStateToProps(state) {
   const financingIds = getFinancingIds();
 
   return {
+    form: formName,
     rootCategory,
+    category,
     rootCategoriesArray,
     categoriesArray,
     rubricsArray,
-    languagesArray: getLanguagesArray(state),
+    languagesArray,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
-      category: categoriesArray.length ? categoriesArray[0].id : null,
       financing_sources: [{
         type: financingIds[0]
       }],
@@ -310,4 +334,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ArticleCommonForm);
+const mapDispatchToProps = {
+  change
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleCommonForm);

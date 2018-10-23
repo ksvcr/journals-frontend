@@ -11,10 +11,11 @@ const apiClient = {
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
+  getUsers: (params) => fetchInstance.request(`/users/`, { params }),
   getArticles: (siteId, params) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';
     return fetchInstance.request(`${sitePrefix}/articles/`, { params });
-  },
+  }
 };
 
 export default apiClient;

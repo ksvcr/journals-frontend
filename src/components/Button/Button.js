@@ -6,27 +6,19 @@ import PropTypes from 'prop-types';
 import './button.scss';
 
 class Button extends Component {
-  handleClick = (event) => {
-    const { onClick } = this.props;
-
-    if (onClick) {
-      onClick(event);
-    }
-  };
-
   render() {
-    const { type, href, className, children } = this.props;
+    const { type, href, className, children, ...rest } = this.props;
     const buttonClasses = classNames('button', className);
 
     if (type === 'link') {
       return (
-        <Link to={ href } className={ buttonClasses }>
+        <Link to={ href } className={ buttonClasses } { ...rest }>
           { children }
         </Link>
       );
     } else {
       return (
-        <button type={ type } className={ buttonClasses } onClick={ this.handleClick }>
+        <button type={ type } className={ buttonClasses } { ...rest }>
           { children }
         </button>
       );
