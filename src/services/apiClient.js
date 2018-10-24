@@ -15,6 +15,10 @@ const apiClient = {
   getArticles: (siteId, params) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';
     return fetchInstance.request(`${sitePrefix}/articles/`, { params });
+  },
+  createArticle: (siteId, data) => {
+    const sitePrefix = siteId ? `sites/${siteId}` : '';
+    return fetchInstance.request(`${sitePrefix}/articles/`, { method: 'post', data });
   }
 };
 

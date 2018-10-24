@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FieldArray, getFormInitialValues, reduxForm } from 'redux-form';
+import { FieldArray, formValueSelector, reduxForm } from 'redux-form';
+import nanoid from 'nanoid';
 
 import FieldSetList from '~/components/FieldSetList/FieldSetList';
 import AuthorAdd from '~/components/AuthorAdd/AuthorAdd';
 
+
 class ArticleAuthorsForm extends Component {
   renderAuthorList = (props) => {
     const { formName } = this.props;
+
     const initialValues = {
-      source: 'search'
+      source: 'search',
+      hash: nanoid()
     };
 
     return (
@@ -24,13 +28,14 @@ class ArticleAuthorsForm extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form className="article-common" onSubmit={ handleSubmit }>
+      <div className="article-authors">
+        <form className="article-authors__form" onSubmit={ handleSubmit } />
         <h2 className="page__title">Авторы</h2>
         <div className="form__field">
           <FieldArray name="authors" rerenderOnEveryChange={ true }
                       component={ this.renderAuthorList } />
         </div>
-      </form>
+      </div>
     );
   }
 }
@@ -44,16 +49,11 @@ ArticleAuthorsForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-  const formInitialValuesSelector = getFormInitialValues(formName);
+  const formSelector = formValueSelector(formName);
+
   return {
     form: formName,
-    initialValues: {
-      ...formInitialValuesSelector(state),
-      authors: [{
-        type: 'current',
-        source: 'search'
-      }]
-    }
+    authors: formSelector(state, 'authors') || []
   };
 }
 

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import FieldSet from '~/components/FieldSet/FieldSet';
-
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
 

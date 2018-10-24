@@ -18,8 +18,6 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
 
-import getFinancingIds from '~/services/getFinancingIds';
-
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
@@ -108,10 +106,13 @@ class ArticleCommonForm extends Component {
     ));
   };
 
-  renderFinancingSourcesList = (props) =>
-    <FieldSetList legend="Грант" addText="Добавить грант" { ...props }>
-      { field => <FinancingSourceForm field={ field } /> }
-    </FieldSetList>;
+  renderFinancingSourcesList = (props) => {
+    return (
+      <FieldSetList legend="Грант" addText="Добавить грант" { ...props }>
+        { field => <FinancingSourceForm field={ field } /> }
+      </FieldSetList>
+    );
+  };
 
   renderAddressList = (props) => {
     const initialValues = {
@@ -310,7 +311,6 @@ function mapStateToProps(state, props) {
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
-  const financingIds = getFinancingIds();
 
   return {
     form: formName,
@@ -319,18 +319,7 @@ function mapStateToProps(state, props) {
     rootCategoriesArray,
     categoriesArray,
     rubricsArray,
-    languagesArray,
-    initialValues: {
-      language: languagesArray.length ? languagesArray[0].id : null,
-      rubric: rubricsArray.length ? rubricsArray[0].id : null,
-      root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
-      financing_sources: [{
-        type: financingIds[0]
-      }],
-      addresses: [{
-        count: 1
-      }]
-    }
+    languagesArray
   };
 }
 

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import './author-chooser.scss';
 import Button from '~/components/Button/Button';
 import getNoun from '~/utils/getNoun';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import './author-chooser.scss';
 
 class AuthorChooser extends Component {
   handleClick = (event) => {
@@ -17,8 +19,8 @@ class AuthorChooser extends Component {
     return data.map(item => (
       <div className="author-chooser__item" key={ item.id }>
         <div className="author-chooser__box">
-          <div className="author-chooser__title">
-            { `${item.middle_name} ${item.first_name} ${item.last_name}` }
+          <div className="author-chooser__name">
+            { `${item.last_name} ${item.first_name} ${item.middle_name}` }
           </div>
           <div className="author-chooser__info">
             НИИ УХИМВАДЕ, Екатеринбург, Россия
@@ -37,11 +39,17 @@ class AuthorChooser extends Component {
     const { data } = this.props;
     return (
       <div className="author-chooser">
-        <div className="author-chooser__count">
-          Найдено { data.length } { getNoun(data.length, 'автор', 'автора', 'авторов') }
-        </div>
+        { data.length > 0 &&
+          <div className="author-chooser__count">
+            Найдено { data.length } { getNoun(data.length, 'автор', 'автора', 'авторов') }
+          </div>
+        }
         <div className="author-chooser__list">
-          { this.renderItems() }
+          <ReactCSSTransitionGroup transitionName="fade"
+                                   transitionEnterTimeout={ 400 }
+                                   transitionLeaveTimeout={ 200 } >
+            { this.renderItems() }
+          </ReactCSSTransitionGroup>
         </div>
       </div>
     );

@@ -4,12 +4,15 @@ import { connect } from 'react-redux';
 import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import ArticlePublishForm from '~/components/ArticlePublishForm/ArticlePublishForm';
+import SiteSelect from '~/components/SiteSelect/SiteSelect';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
+import * as usersActions from '~/store/users/actions';
+import * as articlesActions from '~/store/articles/actions';
 
-import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import { serializeArticleData } from '~/services/article';
 
 class ArticlePublish extends Component {
   componentDidMount() {
@@ -17,9 +20,10 @@ class ArticlePublish extends Component {
   }
 
   handleInitialRequest = () => {
-    const { fetchLanguages } = this.props;
+    const { fetchLanguages, fetchUsers } = this.props;
     return Promise.all([
       fetchLanguages(),
+      fetchUsers(),
       this.handleRequest()
     ]);
   };
@@ -33,7 +37,9 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData) => {
-    console.log(formData);
+    const { createArticle } = this.props;
+    const data = serializeArticleData(formData);
+    createArticle(data);
   };
 
   get menuItems() {
@@ -83,7 +89,9 @@ class ArticlePublish extends Component {
 const mapDispatchToProps = {
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
-  fetchCategories: categoriesActions.fetchCategories
+  fetchCategories: categoriesActions.fetchCategories,
+  fetchUsers: usersActions.fetchUsers,
+  createArticle: articlesActions.createArticle
 };
 
 export default connect(

@@ -3,19 +3,22 @@ import apiClient from '~/services/apiClient';
 
 export function fetchUsers() {
   return (dispatch, state) => {
-    const { current:siteId } = state().sites;
-    const payload = apiClient.getUsers(siteId);
-    return dispatch({
-      type: FETCH_USERS,
-      payload
-    }).catch((error) => console.log(error));
+    const { ids } = state().users;
+    if (ids.length) {
+      return Promise.resolve();
+    } else {
+      const payload = apiClient.getUsers();
+      return dispatch({
+        type: FETCH_USERS,
+        payload
+      }).catch((error) => console.log(error));
+    }
   }
 }
 
 export function searchUsers(key, params={}) {
-  return (dispatch, state) => {
-    const { current:siteId } = state().sites;
-    const payload = apiClient.getUsers(siteId, params);
+  return (dispatch) => {
+    const payload = apiClient.getUsers(params);
     return dispatch({
       type: SEARCH_USERS,
       meta: { key },

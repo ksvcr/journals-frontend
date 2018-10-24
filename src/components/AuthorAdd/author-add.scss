@@ -9,4 +9,19 @@
   &__list {
     margin-top: 25px;
   }
+
+  &__name {
+    font-size: 16px;
+    color: #192a3e;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  &__info {
+    color: #c1c4bf;
+  }
+
+  &__person {
+    margin-bottom: 20px;
+  }
 }

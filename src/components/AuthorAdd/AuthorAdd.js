@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { change, Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 
@@ -10,6 +10,8 @@ import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
 import { searchUsers } from '~/store/users/actions';
 
 import './author-add.scss';
+import Checkbox from '~/components/Checkbox/Checkbox';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 class AuthorAdd extends Component {
   get sources() {
@@ -20,17 +22,28 @@ class AuthorAdd extends Component {
   }
 
   handleSearchChange = (event) => {
-    const { field, searchUsers } = this.props;
+    const { hash, searchUsers } = this.props;
     const { value } = event.target;
 
     const searchQuery = {
       search_query: value
     };
-    searchUsers(field, searchQuery);
+    searchUsers(hash, searchQuery);
   };
 
   handleAuthorChoose = (id) => {
-    console.log(id);
+    const { field, formName, change } = this.props;
+    change(formName, `${field}.id`, id);
+  };
+
+  handleCorrespondingAuthor = (event) => {
+    const { authorData, change, formName } = this.props;
+    const { checked } = event.target;
+    if (checked) {
+      change(formName, 'corresponding_author', authorData.id);
+    } else {
+      change(formName, 'corresponding_author', null);
+    }
   };
 
   renderSources = () => {
@@ -45,31 +58,56 @@ class AuthorAdd extends Component {
   };
 
   render() {
-    const { field, source, authorsArray } = this.props;
+    const { field, authorData, isCurrent, hash,
+            correspondingAuthor, source, authorsArray } = this.props;
     return (
       <div className="author-add">
-        <h3 className="author-add__title">Добавить автора</h3>
-        <Field name={ `${field}.id` } type="hidden" component={ TextField } />
-        <div className="form__field">
-          { this.renderSources() }
-        </div>
+        { authorData !== undefined ?
+          <div className="author-add__current">
+            <div className="author-add__person">
+              <div className="author-add__name">
+                { `${authorData.last_name} ${authorData.first_name} ${authorData.middle_name}` }
+              </div>
+              <div className="author-add__info">
+                НИИ УХИМВАДЕ, Екатеринбург, Россия
+              </div>
+            </div>
+            <div className="form__field form__field_inline">
+              <Checkbox name="isCorrespondingAuthor" checked={ authorData.id ===  correspondingAuthor }
+                        onChange={ this.handleCorrespondingAuthor }>
+                { isCurrent ? 'Я являюсь автором-корреспондентом' : 'Автор-корреспондент' }
+              </Checkbox>
+              <FieldHint text={ 'Подсказка про корреспонденту' } />
+            </div>
+          </div> :
+          <div className="author-add__form">
+            <h3 className="author-add__title">Добавить автора</h3>
+            <Field name={ `${field}.id` } type="hidden" component={ TextField } />
 
-        { source === 'search' &&
-          <React.Fragment>
             <div className="form__field">
-              <Field name={ `${field}.search` } id="search" icon="search" component={ TextField }
-                     placeholder="Поиск" className="text-field_white text-field_search"
-                     onChange={ this.handleSearchChange } />
+              { this.renderSources() }
             </div>
-            <div className="author-add__list">
-              <AuthorChooser data={ authorsArray } onChoose={ this.handleAuthorChoose } />
-            </div>
-          </React.Fragment>
-        }
 
-        { source === 'create' &&
-          <div className="form__field">
-            <AuthorCreateForm formName={ `${field}.author-create` }/>
+            { source === 'search' &&
+              <React.Fragment>
+                <div className="form__field">
+                  <Field name={ `${field}.search` } id="search" icon="search" component={ TextField }
+                         placeholder="Поиск" className="text-field_white text-field_search"
+                         onChange={ this.handleSearchChange } />
+                </div>
+
+                <div className="author-add__list">
+                  <AuthorChooser data={ authorsArray } onChoose={ this.handleAuthorChoose } />
+                </div>
+              </React.Fragment>
+            }
+
+            { source === 'create' &&
+              <div className="form__field">
+                <AuthorCreateForm formName={ `author-create[${hash}]` }
+                                  onSubmit={ (data) => { console.log(data); } }/>
+              </div>
+            }
           </div>
         }
       </div>
@@ -87,10 +125,18 @@ function mapStateToProps(state, props) {
 
   const formSelector = formValueSelector(formName);
   const source = formSelector(state, `${field}.source`);
+  const hash = formSelector(state, `${field}.hash`);
+  const id = formSelector(state, `${field}.id`);
+  const isCurrent = formSelector(state, `${field}.isCurrent`);
+  const correspondingAuthor = formSelector(state, 'corresponding_author');
 
   return {
     source,
-    authorsArray: users.searchData[field]
+    hash,
+    isCurrent,
+    correspondingAuthor,
+    authorData: users.data[id],
+    authorsArray: users.searchData[hash]
   };
 }
 

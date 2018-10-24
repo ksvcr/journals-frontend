@@ -6,8 +6,8 @@ const initialState = {
   isFulfilled: false,
   isRejected: false,
   data: {},
-  searchData: {},
-  ids: []
+  ids: [],
+  searchData: {}
 };
 
 function users(state = initialState, action) {
