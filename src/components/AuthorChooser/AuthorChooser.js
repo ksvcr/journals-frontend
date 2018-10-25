@@ -9,8 +9,9 @@ import './author-chooser.scss';
 
 class AuthorChooser extends Component {
   handleClick = (event) => {
-    const { id } = event.currentTarget.dataset;
     const { onChoose } = this.props;
+    let { id } = event.currentTarget.dataset;
+    id = parseInt(id, 10);
     onChoose(id);
   };
 
