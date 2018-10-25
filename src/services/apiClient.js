@@ -12,6 +12,7 @@ const apiClient = {
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
   getUsers: (params) => fetchInstance.request(`/users/`, { params }),
+  createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
   getArticles: (siteId, params) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';
     return fetchInstance.request(`${sitePrefix}/articles/`, { params });

@@ -7,7 +7,7 @@ import Radio from '~/components/Radio/Radio';
 import AuthorChooser from '~/components/AuthorChooser/AuthorChooser';
 import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
 
-import { searchUsers } from '~/store/users/actions';
+import { searchUsers, createUser } from '~/store/users/actions';
 
 import './author-add.scss';
 import Checkbox from '~/components/Checkbox/Checkbox';
@@ -44,6 +44,11 @@ class AuthorAdd extends Component {
     } else {
       change(formName, 'corresponding_author', null);
     }
+  };
+
+  handleAuthorCreate = (data) => {
+    const { createUser } = this.props;
+    createUser(data);
   };
 
   renderSources = () => {
@@ -105,7 +110,7 @@ class AuthorAdd extends Component {
             { source === 'create' &&
               <div className="form__field">
                 <AuthorCreateForm formName={ `author-create[${hash}]` }
-                                  onSubmit={ (data) => { console.log(data); } }/>
+                                  onSubmit={ this.handleAuthorCreate }/>
               </div>
             }
           </div>
@@ -142,7 +147,8 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   change,
-  searchUsers
+  searchUsers,
+  createUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorAdd);

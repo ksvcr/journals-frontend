@@ -1,4 +1,4 @@
-import { FETCH_USERS, SEARCH_USERS } from './constants';
+import { FETCH_USERS, SEARCH_USERS, CREATE_USER } from './constants';
 import apiClient from '~/services/apiClient';
 
 export function fetchUsers() {
@@ -22,6 +22,16 @@ export function searchUsers(key, params={}) {
     return dispatch({
       type: SEARCH_USERS,
       meta: { key },
+      payload
+    }).catch((error) => console.log(error));
+  }
+}
+
+export function createUser(data) {
+  return (dispatch) => {
+    const payload = apiClient.createUser(data);
+    return dispatch({
+      type: CREATE_USER,
       payload
     }).catch((error) => console.log(error));
   }

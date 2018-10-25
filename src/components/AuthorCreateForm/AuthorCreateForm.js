@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import { connect } from 'react-redux';
 
 import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Button from '~/components/Button/Button';
+import Icon from '~/components/Icon/Icon';
+
+import './author-create-form.scss';
+import './assets/cancel.svg';
 
 class AuthorCreateForm extends Component {
+  handleReset = () => {
+    const { reset, formName } = this.props;
+    reset(formName);
+  };
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -92,7 +101,29 @@ class AuthorCreateForm extends Component {
           </div>
         </div>
         <div className="form__field">
-          <Button type="submit"> Сохранить автора </Button>
+          <div className="form__row">
+            <div className="form__col form__col_6">
+              <label htmlFor="code_orcid" className="form__label">
+                E-mail
+              </label>
+              <Field name="email" id="email" className="text-field_white"
+                     component={ TextField } placeholder="Введите e-mail" />
+            </div>
+            <div className="form__col form__col_6">
+              <label htmlFor="last_name" className="form__label">
+                Researcher ID
+              </label>
+              <Field name="code_researcher" id="code_researcher" className="text-field_white"
+                     component={ TextField } placeholder="Введите Researcher ID" />
+            </div>
+          </div>
+        </div>
+        <div className="form__field">
+          <Button type="submit" className="button_orange"> Сохранить автора </Button>
+          <Button type="button" className="button_transparent" onClick={ this.handleReset } >
+            <Icon name="cancel" className="author-create-form__cancel-icon" />
+            Очистить поля
+          </Button>
         </div>
       </form>
     );
@@ -116,5 +147,9 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(AuthorCreateForm);
+const mapDispatchToProps = {
+  reset
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorCreateForm);
 
