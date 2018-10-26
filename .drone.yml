@@ -1,7 +1,6 @@
 clone:
   git:
     image: plugins/git
-    depth: 1
 
 pipeline:
   deploy-dev:
@@ -15,6 +14,7 @@ pipeline:
       status: success
     script:
       - cd frontend
+      - git checkout -- package-lock.json
       - git checkout dev
       - git pull origin dev
       - export NVM_DIR="$HOME/.nvm"
