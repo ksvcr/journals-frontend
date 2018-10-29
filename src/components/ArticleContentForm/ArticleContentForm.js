@@ -6,8 +6,8 @@ class ArticleContentForm extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form className="article-authors-form" onSubmit={ handleSubmit }>
-        <h2 className="page__title">Авторы</h2>
+      <form className="article-content-form" onSubmit={ handleSubmit }>
+        <h2 className="page__title">Текст статьи</h2>
 
       </form>
     );
@@ -22,6 +22,10 @@ ArticleContentForm = reduxForm({
 
 
 function mapStateToProps(state, props) {
+  const { formName } = props;
+  return {
+    form: formName
+  };
 }
 
 export default connect(mapStateToProps)(ArticleContentForm);

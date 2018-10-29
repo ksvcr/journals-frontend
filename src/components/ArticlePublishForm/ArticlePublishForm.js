@@ -6,6 +6,7 @@ import nanoid from 'nanoid';
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
 import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
+import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 
@@ -42,7 +43,7 @@ class ArticlePublishForm extends Component {
       },
       {
         title: 'Текст статьи',
-        component: <div>3</div>
+        component: <ArticleContentForm { ...this.formProps } />
       },
       {
         title: 'Файлы к статье',
