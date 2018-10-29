@@ -1,0 +1,15 @@
+.support-contact {
+  font-size: 12px;
+  display: inline-block;
+
+  &__label,
+  &__link {
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  &__link {
+    color: inherit;
+    text-decoration: none;
+  }
+}

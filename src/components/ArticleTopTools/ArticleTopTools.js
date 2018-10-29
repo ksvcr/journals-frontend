@@ -6,7 +6,7 @@ class ArticleTopTools extends Component {
     return (
       <div className="article-top-tools">
         <div className="article-top-tools__item">
-          <Link class="article-top-tools__link" to="/">
+          <Link className="article-top-tools__link" to="/">
             Отмена
           </Link>
         </div>

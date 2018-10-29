@@ -1,0 +1,53 @@
+.select {
+  $root: &;
+
+  position: relative;
+  color: inherit;
+
+  &:after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    display: block;
+    border: solid #292929;
+    border-width: 0 2px 2px 0;
+    position: absolute;
+    right: 19px;
+    top: 50%;
+    margin-top: -6px;
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  &__field {
+    appearance: none;
+    background: #fcfcfa;
+    border: 1px solid $brown-color;
+    outline: none;
+    display: block;
+    padding: 18px 40px 18px 18px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
+    text-overflow: ellipsis;
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: $orange-color;
+    }
+
+    #{$root}_error & {
+      border-color: $red-color;
+    }
+
+    #{$root}_small & {
+      padding: 11px 40px 11px 17px;
+      font-size: 14px;
+    }
+  }
+}

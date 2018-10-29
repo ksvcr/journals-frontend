@@ -1,0 +1,107 @@
+@mixin prevArrow {
+  content: '';
+  display: block;
+  border-style: solid;
+  border-width: 4px 4px 4px 0;
+  border-color: transparent #000 transparent transparent;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+@mixin nextArrow {
+  content: '';
+  display: block;
+  border-style: solid;
+  border-width: 4px 0 4px 4px;
+  border-color: transparent transparent transparent #000;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+.paginator {
+  display: flex;
+  align-items: center;
+
+  &__button {
+    font-size: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 20px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    position: relative;
+    transition: opacity .2s;
+    opacity: .6;
+    outline: 0;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+    }
+
+    &_start {
+      &:before {
+        left: 4px;
+        @include prevArrow;
+      }
+
+      &:after {
+        left: 8px;
+        @include prevArrow;
+      }
+    }
+
+    &_prev {
+      &:after {
+        left: 50%;
+        margin-left: -2px;
+        @include prevArrow;
+      }
+    }
+
+    &_end {
+      &:before {
+        left: 4px;
+        @include nextArrow;
+      }
+
+      &:after {
+        left: 8px;
+        @include nextArrow;
+      }
+    }
+
+    &_next {
+      &:after {
+        left: 50%;
+        margin-left: -2px;
+        @include nextArrow;
+      }
+    }
+  }
+
+  &__input {
+    text-align: center;
+    outline: 0;
+    background: #fcfcfa;
+    border: 1px solid #d8d1ca;
+    padding: 11px 17px;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    border-radius: 6px;
+    display: inline-block;
+    max-width: 68px;
+    margin: 0 14px;
+
+    &:focus {
+      border-color: $orange-color;
+    }
+  }
+
+  &__total {
+    margin-right: 14px;
+  }
+}

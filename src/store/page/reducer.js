@@ -1,5 +1,5 @@
 const initialState = {
-  title: null,
+  title: '',
 };
 
 function page(state = initialState, action) {

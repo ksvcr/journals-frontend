@@ -39,7 +39,7 @@ module.exports = {
     // Include an alternative client for WebpackDevServer. A client's job is to
     // connect to WebpackDevServer by a socket and get notified about changes.
     // When you save a file, the client will either apply hot updates (in case
-    // of CSS changes), or refresh the page (in case of JS changes). When you
+    // of CSS changes), or refresh the index (in case of JS changes). When you
     // make a syntax error, this client will display a syntax error overlay.
     // Note: instead of the default WebpackDevServer client, we use a custom one
     // to bring better experience for Create React App users. You can replace
@@ -200,6 +200,13 @@ module.exports = {
               }
             ],
           },
+          {
+            test: /\.svg$/,
+            use: [
+              require.resolve('svg-sprite-loader'),
+              require.resolve('svgo-loader')
+            ]
+          },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
@@ -215,7 +222,7 @@ module.exports = {
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
-          },
+          }
         ],
       },
       // ** STOP ** Are you adding a new loader?

@@ -1,10 +1,29 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+
 import Header from '~/components/Header/Header';
+import Footer from '~/components/Footer/Footer';
+
+import * as userActions from '~/store/user/actions';
+import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
 import '~/static/styles/index.scss';
 
-class Main extends Component {
+class Page extends Component {
+  componentWillMount() {
+    this.authUser();
+  }
+
+  authUser = () => {
+    const { login, fetchCurrentUser } = this.props;
+    if (hasToken()) {
+      fetchCurrentUser();
+    } else {
+      login();
+    }
+  };
+  
   render() {
     return (
       <div className="page">
@@ -14,9 +33,22 @@ class Main extends Component {
             { this.props.children }
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 }
 
-export default Main;
+function mapStateToProps(state) {
+  return {};
+}
+
+const mapDispatchToProps = {
+  fetchCurrentUser: userActions.fetchCurrentUser,
+  login: userActions.login
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Page);

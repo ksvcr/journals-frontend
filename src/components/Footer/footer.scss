@@ -1,0 +1,11 @@
+.footer {
+  margin-top: auto;
+  padding-top: 135px;
+
+  &__holder {
+    @include holder;
+    padding: 35px 40px;
+    max-width: 1012px;
+    text-align: center;
+  }
+}

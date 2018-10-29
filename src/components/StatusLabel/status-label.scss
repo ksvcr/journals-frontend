@@ -1,0 +1,22 @@
+.status-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-size: 10px;
+  position: relative;
+  padding-left: 15px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    background: currentColor;
+    border-radius: 50%;
+    margin-top: 3px;
+    margin-right: 12px;
+    width: 8px;
+    height: 8px;
+  }
+}
