@@ -1,0 +1,5 @@
+.content-block-list {
+  .form__field + & {
+    margin-top: 40px;
+  }
+}

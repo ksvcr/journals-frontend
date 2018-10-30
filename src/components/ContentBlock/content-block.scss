@@ -1,0 +1,83 @@
+.content-block {
+  $root: &;
+
+  &__label {
+    display: flex;
+  }
+
+  &__title {
+    outline: 0;
+    display: inline-block;
+    vertical-align: middle;
+    min-width: 5px;
+  }
+
+  &__add {
+    margin-top: 35px;
+  }
+
+  &__remove {
+    margin-left: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #b8b6b0;
+    background: #ecefea;
+    padding: 0;
+    font-size: 0;
+    cursor: pointer;
+    position: relative;
+    outline: 0;
+    transition: all .2s;
+
+    &:hover,
+    &:focus {
+      background: #fff;
+      border-color: #a0a0a0;
+    }
+  }
+
+  &__remove-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7px;
+    height: 7px;
+    fill: #b8b6b0;
+    transition: fill .2s;
+
+    #{$root}__remove:hover &,
+    #{$root}__remove:focus & {
+      fill: #a0a0a0;
+    }
+  }
+
+  &__edit {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    font-size: 0;
+    cursor: pointer;
+  }
+
+  &__edit-icon {
+    width: 12px;
+    height: 11px;
+    fill: #b8b6b0;
+    transition: fill .2s;
+
+    #{$root}__edit:hover &,
+    #{$root}__edit:focus & {
+      fill: #a0a0a0;
+    }
+
+    #{$root}__edit_active &,
+    #{$root}__edit_active:hover &,
+    #{$root}__edit_active:focus & {
+      fill: #000;
+    }
+  }
+}

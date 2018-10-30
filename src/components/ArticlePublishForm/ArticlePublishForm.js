@@ -108,7 +108,29 @@ function mapStateToProps(state) {
         isCurrent: true,
         source: 'search',
         hash: initialAuthorHash
-      }]
+      }],
+      article_type: 0,
+      blocks: [
+        {
+          title: 'Введение',
+          hint: 'Подсказка про Введение',
+          static: true
+        },
+        {
+          title: 'Методы и принципы исследования'
+        },
+        {
+          title: 'Основные результаты'
+        },
+        {
+          title: 'Обсуждение'
+        },
+        {
+          title: 'Заключение',
+          hint: 'Подсказка про Заключение',
+          static: true
+        },
+      ]
     }
   };
 }
