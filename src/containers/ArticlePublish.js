@@ -39,7 +39,8 @@ class ArticlePublish extends Component {
   handleSubmit = (formData) => {
     const { createArticle } = this.props;
     const data = serializeArticleData(formData);
-    createArticle(data);
+    // createArticle(data);
+    console.log(data);
   };
 
   get menuItems() {

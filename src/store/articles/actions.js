@@ -1,4 +1,4 @@
-import {CREATE_ARTICLES, FETCH_ARTICLES} from './constants';
+import { CREATE_ARTICLES, FETCH_ARTICLES } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 

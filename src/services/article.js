@@ -11,12 +11,12 @@ export function serializeArticleData(data) {
   const author = authors.find(author => author.id !== undefined);
 
   if (author) {
-    serializedData.author = author.id;
+    serializedData.author = { user: author.id };
   }
 
   const collaborators = authors
                         .filter(author => author.id !== undefined && author.id !== serializedData.author)
-                        .map(author => author.id);
+                        .map(author => ({ user: author.id }));
 
   if (collaborators.length) {
     serializedData.collaborators = collaborators;

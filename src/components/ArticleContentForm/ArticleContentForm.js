@@ -12,7 +12,7 @@ class ArticleContentForm extends Component {
     return getArticleTypes().map((item, index) => ({ value: index, title: item }))
   }
 
-  renderContentBLockList = (props) => {
+  renderContentBlockList = (props) => {
     const { formName } = this.props;
     return <ContentBlockList formName={ formName } { ...props } />
   };
@@ -29,7 +29,7 @@ class ArticleContentForm extends Component {
         </div>
 
         <FieldArray name="blocks" rerenderOnEveryChange={ true }
-                    component={ this.renderContentBLockList } />
+                    component={ this.renderContentBlockList } />
       </form>
     );
   }

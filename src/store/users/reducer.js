@@ -18,7 +18,6 @@ function users(state = initialState, action) {
         isPending: true
       };
 
-
     case `${FETCH_USERS}_REJECTED`:
     case `${SEARCH_USERS}_REJECTED`:
       return { ...state,
