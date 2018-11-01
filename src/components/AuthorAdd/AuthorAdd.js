@@ -47,8 +47,12 @@ class AuthorAdd extends Component {
   };
 
   handleAuthorCreate = (data) => {
-    const { createUser } = this.props;
-    createUser(data);
+    const { createUser, field, formName } = this.props;
+    createUser(data).then(response => {
+      if (response.id !== undefined) {
+        change(formName, `${field}.id`, response.id);
+      }
+    });
   };
 
   renderSources = () => {

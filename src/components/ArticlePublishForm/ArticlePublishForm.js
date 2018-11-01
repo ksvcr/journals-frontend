@@ -27,7 +27,7 @@ class ArticlePublishForm extends Component {
     return {
       formName: FORM_NAME,
       initialValues,
-      onSubmit
+      onSubmit,
     };
   }
 

@@ -1,4 +1,4 @@
-import { FETCH_USERS, SEARCH_USERS } from './constants';
+import { FETCH_USERS, SEARCH_USERS, CREATE_USER } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -14,12 +14,14 @@ function users(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_USERS}_PENDING`:
     case `${SEARCH_USERS}_PENDING`:
+    case `${CREATE_USER}_PENDING`:
       return { ...state,
         isPending: true
       };
 
     case `${FETCH_USERS}_REJECTED`:
     case `${SEARCH_USERS}_REJECTED`:
+    case `${CREATE_USER}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,
@@ -44,6 +46,17 @@ function users(state = initialState, action) {
           ...state.searchData,
           [ key ]: action.payload.results
         }
+      };
+
+    case `${CREATE_USER}_FULFILLED`:
+      return { ...state,
+        isPending: false,
+        isFulfilled: true,
+        data: {
+          ...state.data,
+          [ action.payload.id ]: action.payload
+        },
+        ids: [ ...state.ids, action.payload.id ]
       };
 
     default:

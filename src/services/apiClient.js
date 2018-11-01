@@ -20,6 +20,9 @@ const apiClient = {
   createArticle: (siteId, data) => {
     const sitePrefix = siteId ? `sites/${siteId}` : '';
     return fetchInstance.request(`${sitePrefix}/articles/`, { method: 'post', data });
+  },
+  createBlockGroup: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/block-group/`, { method: 'post', data });
   }
 };
 

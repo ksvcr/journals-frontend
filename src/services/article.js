@@ -22,5 +22,14 @@ export function serializeArticleData(data) {
     serializedData.collaborators = collaborators;
   }
 
+  serializedData.blocks = serializedData.blocks.map((item, index) => ({
+    title: item.title,
+    ordered: index,
+    content_blocks: [{
+      content: item.content,
+      ordered: 0
+    }]
+  }));
+
   return serializedData;
 }
