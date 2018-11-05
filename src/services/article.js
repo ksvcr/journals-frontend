@@ -1,8 +1,9 @@
-export function serializeArticleData(data) {
-  const { authors, ...rest } = data;
+export function serializeArticleData(data={}) {
+  const { authors=[], ...rest } = data;
 
   const serializedData = {
     ...rest,
+    text_to_title: data.title,
     article_type: 1,
     slug: `slug-${new Date().getTime()}`
   };
@@ -31,4 +32,10 @@ export function serializeArticleData(data) {
   }));
 
   return serializedData;
+}
+
+
+export function deserializeArticleData(data={}) {
+  const deserializedData = data;
+  return deserializedData;
 }

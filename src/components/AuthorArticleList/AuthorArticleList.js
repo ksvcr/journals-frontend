@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -24,7 +25,8 @@ class AuthorArticleList extends Component {
   get toolsMenuItems() {
     return [
       {
-        title: 'Редактировать'
+        title: 'Редактировать',
+        handler: this.handleEdit
       },
       {
         title: 'Отозвать'
@@ -58,6 +60,14 @@ class AuthorArticleList extends Component {
     this.setState({
       box: { id,  type: 'payment' }
     });
+  };
+
+  handleEdit = (id) => {
+    const { push } = this.props;
+
+    setTimeout(() => {
+      push(`/edit/${id}`);
+    }, 0);
   };
 
   handlePaymentClose = () => {
@@ -165,6 +175,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  push
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(AuthorArticleList);

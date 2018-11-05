@@ -1,4 +1,4 @@
-import { FETCH_ARTICLES } from './constants';
+import { FETCH_ARTICLES, FETCH_ARTICLE } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -17,9 +17,18 @@ const initialState = {
 function articles(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_ARTICLES}_PENDING`:
+    case `${FETCH_ARTICLE}_PENDING`:
       return { ...state,
         isPending: true,
         ...action.meta
+      };
+
+    case `${FETCH_ARTICLES}_REJECTED`:
+    case `${FETCH_ARTICLE}_REJECTED`:
+      return { ...state,
+        isRejected: true,
+        isPending: false,
+        error: action.payload
       };
 
     case `${FETCH_ARTICLES}_FULFILLED`:
@@ -31,11 +40,14 @@ function articles(state = initialState, action) {
         ...entity
       };
 
-    case `${FETCH_ARTICLES}_REJECTED`:
+    case `${FETCH_ARTICLE}_FULFILLED`:
       return { ...state,
-        isRejected: true,
         isPending: false,
-        error: action.payload
+        isFulfilled: true,
+        data: { ...state.data,
+          [ action.payload.id ]: action.payload
+        },
+        ids: [ ...state.ids, action.payload.id ]
       };
 
     default:
