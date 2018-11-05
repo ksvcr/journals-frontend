@@ -20,7 +20,7 @@ describe('Render Button', () => {
       <MemoryRouter>
         <Button { ...props }>Кнопка</Button>
       </MemoryRouter>);
-    console.log(ButtonComponent);
+
     expect(ButtonComponent.exists('a')).toEqual(
       true
     );
