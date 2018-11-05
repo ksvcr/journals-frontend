@@ -21,7 +21,7 @@ pipeline:
       - source $NVM_DIR/nvm.sh
       - nvm use stable
       - npm i
-      - npm test
+      - CI=true node scripts/test.js --env=jsdom
       - npm run build
       - pm2 restart journals-frontend --update-env
 
