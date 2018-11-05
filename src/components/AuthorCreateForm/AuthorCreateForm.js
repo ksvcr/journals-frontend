@@ -131,9 +131,7 @@ class AuthorCreateForm extends Component {
 }
 
 AuthorCreateForm = reduxForm({
-  destroyOnUnmount: false,
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
+  destroyOnUnmount: false
 })(AuthorCreateForm);
 
 function mapStateToProps(state, props) {

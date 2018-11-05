@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { submit } from 'redux-form';
+import { reduxForm, isInvalid, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import nanoid from 'nanoid';
 
@@ -23,11 +23,8 @@ const FORM_NAME = 'article-publish';
 
 class ArticlePublishForm extends Component {
   get formProps() {
-    const { onSubmit, initialValues } = this.props;
     return {
-      formName: FORM_NAME,
-      initialValues,
-      onSubmit,
+      formName: FORM_NAME
     };
   }
 
@@ -56,25 +53,31 @@ class ArticlePublishForm extends Component {
     ];
   }
 
-  handleSubmit = () => {
-    const { submit } = this.props;
-    submit(FORM_NAME);
+  handleDraftSubmit = () => {
+    const { formValues, onDraftSubmit } = this.props;
+    onDraftSubmit(formValues);
   };
 
   renderTools = () => {
+    const { handleSubmit, isInvalidForm } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={ this.handleSubmit }>
+        <Button onClick={ this.handleDraftSubmit }>
           <Icon name="save" className="article-publish-form__save-icon" />
           Сохранить как черновик
+        </Button>
+        <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
+          Отправить статью
         </Button>
       </React.Fragment>
     );
   };
 
   render() {
+    const { handleSubmit } = this.props;
     return (
-      <div className="article-publish-form form">
+      <div className="article-publish-form">
+        <form onSubmit={ handleSubmit } />
         <div className="article-publish-form__wizard">
           <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
         </div>
@@ -82,6 +85,11 @@ class ArticlePublishForm extends Component {
     );
   }
 }
+
+ArticlePublishForm = reduxForm({
+  form: FORM_NAME,
+  destroyOnUnmount: false
+})(ArticlePublishForm);
 
 const initialAuthorHash = nanoid();
 
@@ -91,8 +99,12 @@ function mapStateToProps(state) {
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
+  const isInvalidForm = isInvalid(FORM_NAME)(state);
+  const formValues = getFormValues(FORM_NAME)(state);
 
   return {
+    formValues,
+    isInvalidForm,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
@@ -135,8 +147,4 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  submit
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticlePublishForm);
+export default connect(mapStateToProps)(ArticlePublishForm);

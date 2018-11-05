@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, FieldArray, reduxForm, change } from 'redux-form';
+import { Field, FieldArray, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form'
 
@@ -129,9 +129,8 @@ class ArticleCommonForm extends Component {
 
   render() {
     const { visibleFields } = this.state;
-    const { handleSubmit } = this.props;
     return (
-      <form className="article-common-form form" onSubmit={ handleSubmit }>
+      <div className="article-common-form">
         <h2 className="page__title">Общие сведения</h2>
         <div className="form__field">
           <label htmlFor="language" className="form__label">Язык статьи</label>
@@ -286,17 +285,10 @@ class ArticleCommonForm extends Component {
                         component={ this.renderAddressList } />
           }
         </div>
-      </form>
+      </div>
     );
   }
 }
-
-ArticleCommonForm = reduxForm({
-  destroyOnUnmount: false,
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(ArticleCommonForm);
-
 
 function mapStateToProps(state, props) {
   const { formName } = props;
@@ -313,7 +305,6 @@ function mapStateToProps(state, props) {
   const languagesArray = getLanguagesArray(state);
 
   return {
-    form: formName,
     rootCategory,
     category,
     rootCategoriesArray,

@@ -99,7 +99,10 @@
   }
 
   &__panel {
+    display: none;
+
     &_selected {
+      display: block;
       animation-name: panelFadeIn;
       animation-duration: 300ms;
       animation-timing-function: linear;

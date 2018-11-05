@@ -31,6 +31,13 @@
     padding: 14px 20px;
   }
 
+
+  &:disabled {
+    background: #e2e2e2;
+    border-color: #e2e2e2;
+    color: #fff;
+  }
+
   &_orange {
     background: $orange-color;
     border-color: $orange-color;
@@ -45,6 +52,12 @@
     &:active,
     &_active {
       background: #ff9a00;
+    }
+
+
+    &:disabled {
+      background: #e2e2e2;
+      border-color: #e2e2e2;
     }
   }
 

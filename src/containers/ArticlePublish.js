@@ -38,7 +38,13 @@ class ArticlePublish extends Component {
 
   handleSubmit = (formData) => {
     const { createArticle } = this.props;
-    const data = serializeArticleData(formData);
+    const data = serializeArticleData({ ...formData, state_article: 'SENT' });
+    createArticle(data);
+  };
+
+  handleDraftSubmit = (formData) => {
+    const { createArticle } = this.props;
+    const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
     createArticle(data);
   };
 
@@ -79,7 +85,7 @@ class ArticlePublish extends Component {
             </form>
           </div>
 
-          <ArticlePublishForm onSubmit={ this.handleSubmit } />
+          <ArticlePublishForm onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
         </article>
       </React.Fragment>
     );

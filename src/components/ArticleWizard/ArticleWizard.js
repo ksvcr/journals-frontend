@@ -24,7 +24,7 @@ class ArticleWizard extends Component {
   renderPanels = () => {
     const { steps } = this.props;
     return steps.map((item, index) => (
-      <TabPanel key={ index } className="article-wizard__panel">
+      <TabPanel key={ index } forceRender={ true } className="article-wizard__panel">
         <div className="article-wizard__content">
           { item.component }
         </div>

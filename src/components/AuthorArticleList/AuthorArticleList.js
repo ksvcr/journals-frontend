@@ -91,9 +91,9 @@ class AuthorArticleList extends Component {
             width: '50%'
           },
           isMain: true,
-          head: () => 'Имя',
+          head: () => 'Название',
           render: (data) =>
-            data.title
+            data.title || 'Название статьи не указано'
         },
         {
           style: {

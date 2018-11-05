@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 
 import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
@@ -18,9 +18,8 @@ class ArticleContentForm extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
     return (
-      <form className="article-content-form" onSubmit={ handleSubmit }>
+      <div className="article-content-form">
         <h2 className="page__title">Текст статьи</h2>
         <div className="form__field">
           <label htmlFor="article_type" className="form__label">Тип статьи</label>
@@ -30,24 +29,9 @@ class ArticleContentForm extends Component {
 
         <FieldArray name="blocks" rerenderOnEveryChange={ true }
                     component={ this.renderContentBlockList } />
-      </form>
+      </div>
     );
   }
 }
 
-ArticleContentForm = reduxForm({
-  destroyOnUnmount: false,
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
-})(ArticleContentForm);
-
-
-function mapStateToProps(state, props) {
-  const { formName } = props;
-
-  return {
-    form: formName
-  };
-}
-
-export default connect(mapStateToProps)(ArticleContentForm);
+export default connect()(ArticleContentForm);
