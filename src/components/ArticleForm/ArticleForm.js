@@ -47,11 +47,11 @@ class ArticleForm extends Component {
       },
       {
         title: 'Файлы к статье',
-        component: <div>4</div>
+        component: <div>Раздел в разработке</div>
       },
       {
         title: 'Список литературы',
-        component: <div>5</div>
+        component: <div>Раздел в разработке</div>
       }
     ];
   }
