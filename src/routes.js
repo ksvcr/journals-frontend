@@ -5,6 +5,7 @@ import { hot } from 'react-hot-loader';
 import Page from '~/containers/Page';
 import AuthorArticles from '~/containers/AuthorArticles';
 import ArticlePublish from '~/containers/ArticlePublish';
+import Editor from '~/containers/Editor';
 
 const routes = () => (
   <Page>
@@ -12,6 +13,7 @@ const routes = () => (
       <Route exact path="/" component={ AuthorArticles } />
       <Route path="/publish" component={ ArticlePublish } />
       <Route path="/edit/:articleId" component={ ArticlePublish } />
+      <Route path="/editor" component={ Editor } />
       <Route component={ AuthorArticles } />
     </Switch>
   </Page>

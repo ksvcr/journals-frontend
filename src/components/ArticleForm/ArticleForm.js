@@ -77,10 +77,8 @@ class ArticleForm extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
     return (
       <div className="article-publish-form">
-        <form onSubmit={ handleSubmit } />
         <div className="article-publish-form__wizard">
           <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
         </div>
