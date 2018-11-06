@@ -1,0 +1,121 @@
+.article-wizard {
+  $root: &;
+
+  &__tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray-color;
+  }
+
+  &__tab {
+    margin: 0;
+    font-size: 16px;
+    font-family: $pragmatica;
+    cursor: pointer;
+    padding: 19px 0;
+    color: $blue-color;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      display: block;
+      height: 2px;
+      background: transparent;
+      transition: background .2s;
+    }
+
+    &_selected {
+      color: $orange-color;
+
+      &:after {
+        background: $orange-color;
+      }
+    }
+  }
+
+  &__content {
+    padding: 35px 0;
+  }
+
+  &__bottom {
+    display: flex;
+  }
+
+  &__tools {
+    margin: auto;
+  }
+
+  &__nav {
+    color: $blue-color;
+    font-weight: 700;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 14px;
+    outline: 0;
+    transition: all .2s;
+    background: transparent;
+
+    &:disabled {
+      opacity: 0;
+      pointer-events: 0;
+      cursor: default;
+    }
+  }
+
+  &__arrow {
+    width: 8px;
+    height: 13px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -2px;
+    fill: $blue-color;
+    transition: fill .2s;
+
+    &_prev {
+      margin-right: 15px;
+    }
+
+    &_next {
+      transform: rotate(180deg);
+      margin-left: 15px;
+    }
+  }
+
+  &__nav:focus {
+    color: $orange-color;
+
+    #{$root}__arrow {
+      fill: $orange-color;
+    }
+  }
+
+  &__panel {
+    display: none;
+
+    &_selected {
+      display: block;
+      animation-name: panelFadeIn;
+      animation-duration: 300ms;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

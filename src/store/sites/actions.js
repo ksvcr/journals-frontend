@@ -1,4 +1,4 @@
-import {FETCH_SITES, SET_CURRENT_SITE} from './constants';
+import { FETCH_SITES, SET_CURRENT_SITE } from './constants';
 import apiClient from '~/services/apiClient';
 
 export function fetchSites() {
@@ -6,7 +6,7 @@ export function fetchSites() {
     const payload = apiClient.getSites();
     return dispatch({
       type: FETCH_SITES,
-      payload: payload
+      payload
     }).catch((error) => console.log(error));
   }
 }

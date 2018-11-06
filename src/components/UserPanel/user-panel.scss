@@ -1,4 +1,9 @@
 .user-panel {
   padding-left: 40px;
   margin-left: auto;
+  font-weight: 700;
+  color: $blue-color;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

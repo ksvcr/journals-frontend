@@ -1,0 +1,88 @@
+.field-set {
+  border-radius: 6px;
+  background: #f7f7f7;
+  border: 1px solid #dcdcdc;
+  margin: 0 -35px;
+  padding: 30px 35px 40px 35px;
+  min-width: 0;
+  position: relative;
+
+  & + & {
+    margin-top: 36px;
+  }
+
+  &__legend {
+    color: #fff;
+    background: $orange-color;
+    border-radius: 6px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 10px 15px;
+    display: table;
+  }
+
+  &__tools {
+    position: absolute;
+    top: 0;
+    right: 36px;
+  }
+
+  &__tool {
+    font-size: 0;
+    display: inline-block;
+    vertical-align: middle;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff9a00;
+    cursor: pointer;
+    background: #fff;
+    transition: background .2s;
+
+    &:hover,
+    &:focus {
+      background: #ffecce;
+    }
+
+    &_up:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 5px 6px 5px;
+      border-color: transparent transparent #ff9a00 transparent;
+    }
+
+    &_down:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 6px 5px 0 5px;
+      border-color: #ff9a00 transparent transparent transparent;
+    }
+
+    &_remove {
+      background: $orange-color;
+
+      &:hover,
+      &:focus {
+        background: #ff9a00;
+      }
+    }
+
+    & + & {
+      margin-left: 20px;
+    }
+  }
+
+  &__icon {
+    &_remove {
+      width: 10px;
+      height: 10px;
+      fill: #fff;
+    }
+  }
+}

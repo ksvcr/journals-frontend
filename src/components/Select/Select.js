@@ -29,7 +29,7 @@ class Select extends Component {
   render() {
     const { meta, value, input, id, disabled, required, className, onChange } = this.props;
     const classes = classNames('select', className,
-      {'select_error': meta && meta.submitFailed && meta.error });
+      { 'select_error': meta && meta.submitFailed && meta.error });
 
     if (value) {
       input.value = value;

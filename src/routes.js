@@ -11,6 +11,8 @@ const routes = () => (
     <Switch>
       <Route exact path="/" component={ AuthorArticles } />
       <Route path="/publish" component={ ArticlePublish } />
+      <Route path="/edit/:articleId" component={ ArticlePublish } />
+      <Route component={ AuthorArticles } />
     </Switch>
   </Page>
 );

@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Icon from '~/components/Icon/Icon';
 import Radio from '~/components/Radio/Radio';
 
-import './search.scss';
+import './search-panel.scss';
 import './assets/search.svg';
+import TextField from '~/components/TextField/TextField';
 
-class Search extends Component {
+class SearchPanel extends Component {
   state = {
     target: 'all'
   };
@@ -21,10 +21,12 @@ class Search extends Component {
     });
 
     if (this.query) {
-      onChange({
+      const data = {
         search: this.query,
         target: value
-      });
+      };
+
+      onChange({ search: data });
     }
   };
 
@@ -61,25 +63,22 @@ class Search extends Component {
 
   render() {
     return (
-      <div className="search">
-         <div className="search__params">
+      <div className="search-panel">
+         <div className="search-panel__params">
            { this.renderParams() }
          </div>
-        <div className="search__field">
-          <input type="text" placeholder="Поиск" className="search__input" onChange={ this.handleSearchChange }/>
-          <button type="button" className="search__button">
-            <Icon className="search__icon" name="search" />
-            Поиск
-          </button>
+        <div className="search-panel__field">
+          <TextField placeholder="Поиск" className="text-field_search" icon="search"
+                     onChange={ this.handleSearchChange } />
         </div>
       </div>
     );
   }
 }
 
-Search.propTypes = {
+SearchPanel.propTypes = {
   params: PropTypes.array,
   onChange: PropTypes.func
 };
 
-export default Search;
+export default SearchPanel;

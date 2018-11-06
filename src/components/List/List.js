@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -137,8 +137,8 @@ class List extends PureComponent {
       <div className="list">
         <div className="list__holder">
           { head && this.renderHead() }
-          <ReactCSSTransitionGroup transitionName="list-item"
-                                   transitionEnterTimeout={ 500 }
+          <ReactCSSTransitionGroup transitionName="fade"
+                                   transitionEnterTimeout={ 400 }
                                    transitionLeave={ false }>
             { this.renderItems() }
           </ReactCSSTransitionGroup>

@@ -9,7 +9,13 @@
   line-height: 16px;
   border: 1px solid $gray-color;
   transition: all .2s;
-  display: block;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+
+  & + & {
+    margin-left: 20px;
+  }
 
   &:hover,
   &:focus {
@@ -19,5 +25,56 @@
   &:active,
   &_active {
     background: $orange-color;
+  }
+
+  &_small {
+    padding: 14px 20px;
+  }
+
+
+  &:disabled {
+    background: #e2e2e2;
+    border-color: #e2e2e2;
+    color: #fff;
+  }
+
+  &_orange {
+    background: $orange-color;
+    border-color: $orange-color;
+    color: #fff;
+
+
+    &:hover,
+    &:focus {
+      background: #fdc639;
+    }
+
+    &:active,
+    &_active {
+      background: #ff9a00;
+    }
+
+
+    &:disabled {
+      background: #e2e2e2;
+      border-color: #e2e2e2;
+    }
+  }
+
+  &_transparent {
+    background: transparent;
+    border: 0;
+
+    &:hover,
+    &:focus {
+      background: transparent;
+      color: $orange-color;
+    }
+
+    &:active,
+    &_active {
+      background: transparent;
+      color: $orange-color;
+    }
   }
 }

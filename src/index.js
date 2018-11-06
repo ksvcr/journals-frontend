@@ -4,13 +4,14 @@ import { Provider } from 'react-redux'
 import { createBrowserHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router'
 
+
 import store from './store/index';
 import Routes from './routes';
 
 const history = createBrowserHistory();
 
 render(
-  <Provider store={ store }>
+  <Provider store={ store(history) }>
     <ConnectedRouter history={ history }>
       <Routes />
     </ConnectedRouter>

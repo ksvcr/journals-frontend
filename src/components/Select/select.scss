@@ -22,18 +22,25 @@
   &__field {
     appearance: none;
     background: #fcfcfa;
-    border: 1px solid $brown-color;
+    border: 1px solid #dcdcdc;
     outline: none;
     display: block;
-    padding: 18px 40px 18px 18px;
+    padding: 18px 45px 18px 18px;
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 6px;
     text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: border-color .2s;
 
     &::-ms-expand {
       display: none;
+    }
+
+    &:hover {
+      border-color: #676767;
     }
 
     &:focus {
@@ -46,8 +53,18 @@
     }
 
     #{$root}_small & {
-      padding: 11px 40px 11px 17px;
+      padding: 11px 45px 11px 17px;
       font-size: 14px;
+    }
+
+    #{$root}_white & {
+      background: #fff;
+    }
+
+    option {
+      width: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }

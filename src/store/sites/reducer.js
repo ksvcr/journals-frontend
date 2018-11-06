@@ -1,4 +1,4 @@
-import {FETCH_SITES, SET_CURRENT_SITE} from './constants';
+import { FETCH_SITES, SET_CURRENT_SITE } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -20,7 +20,7 @@ function sites(state = initialState, action) {
     case `${FETCH_SITES}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
 
-      if (!state.current) {
+      if (!state.current && action.payload.results[0]) {
         entity.current = action.payload.results[0].id
       }
 

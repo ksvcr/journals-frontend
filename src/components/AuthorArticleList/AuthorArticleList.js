@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -24,7 +25,8 @@ class AuthorArticleList extends Component {
   get toolsMenuItems() {
     return [
       {
-        title: 'Редактировать'
+        title: 'Редактировать',
+        handler: this.handleEdit
       },
       {
         title: 'Отозвать'
@@ -60,6 +62,14 @@ class AuthorArticleList extends Component {
     });
   };
 
+  handleEdit = (id) => {
+    const { push } = this.props;
+
+    setTimeout(() => {
+      push(`/edit/${id}`);
+    }, 0);
+  };
+
   handlePaymentClose = () => {
     this.setState({ box: null });
   };
@@ -91,9 +101,9 @@ class AuthorArticleList extends Component {
             width: '50%'
           },
           isMain: true,
-          head: () => 'Имя',
+          head: () => 'Название',
           render: (data) =>
-            data.title
+            data.title || 'Название статьи не указано'
         },
         {
           style: {
@@ -134,9 +144,9 @@ class AuthorArticleList extends Component {
       if (box.type === 'payment') {
         return <Payment onClose={ this.handlePaymentClose } />;
       }
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   render() {
@@ -165,6 +175,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  push
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(AuthorArticleList);

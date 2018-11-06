@@ -9,29 +9,29 @@ import './paginate-line.scss';
 class PaginateLine extends Component {
   handlePageChange = (newCurrent) => {
     const { limit, onChange } = this.props;
-    const offset = (newCurrent-1)*limit;
+    const offset = (newCurrent - 1) * limit;
     onChange({ limit, offset });
   };
   
   handleLimitChange = (newLimit) => {
     const { total, limit, offset, onChange } = this.props;
-    const totalPageAmount = Math.ceil(total/newLimit);
+    const totalPageAmount = Math.ceil(total / newLimit);
     const data = { limit: newLimit, offset };
     // Сброс offset в случае если он больше чем кол-во страниц
     if (this.current > totalPageAmount) {
-      data.offset = (totalPageAmount-1)*limit;
+      data.offset = (totalPageAmount - 1) * limit;
     }
     onChange(data);
   };
 
   get current() {
     const { offset, limit } = this.props;
-    return Math.ceil((offset+1)/limit)
+    return Math.ceil((offset + 1) / limit)
   }
 
   render() {
     const { limit, total } = this.props;
-    const totalPageAmount = Math.ceil(total/limit);
+    const totalPageAmount = Math.ceil(total / limit);
     return (
       <div className="paginate-line">
         <div className="paginate-line__item">
@@ -39,7 +39,7 @@ class PaginateLine extends Component {
                      total={ totalPageAmount } onChange={ this.handlePageChange } />
         </div>
         <div className="paginate-line__item">
-          <PageSizer onChange={ this.handleLimitChange } />
+          <PageSizer value={ limit } onChange={ this.handleLimitChange } />
         </div>
       </div>
     );

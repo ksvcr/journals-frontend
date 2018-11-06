@@ -1,27 +1,32 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
-import AuthorArticleFilter from '~/components/AuthorArticleFilter/AuthorArticleFilter';
 
 import * as articlesActions from '~/store/articles/actions';
-import * as sitesActions from '~/store/sites/actions';
 import { getArticlesParams } from '~/store/articles/selector';
-
+import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
 
 class AuthorArticles extends Component {
-  componentDidUpdate() {
-    const { needArticles } = this.props;
-    if (needArticles) {
-      this.handleArticlesRequest();
-    }
+  componentDidMount() {
+    this.handleRequest();
   }
 
-  handleArticlesRequest = (params={}) => {
+  handleRequest = (params={}) => {
     const { articlesParams, fetchArticles } = this.props;
-    fetchArticles({ ...articlesParams, ...params });
+    return fetchArticles({ ...articlesParams, ...params });
   };
+
+  get searchTargets() {
+    return [
+      {
+        value: 'title',
+        title: 'Искать в заголовках'
+      }
+    ];
+  }
 
   get menuItems() {
     return [
@@ -42,31 +47,42 @@ class AuthorArticles extends Component {
 
   render() {
     return (
-      <Fragment>
+      <React.Fragment>
         <aside className="page__sidebar">
           <Menu items={ this.menuItems } />
         </aside>
+
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <AuthorArticleFilter onFilterChange={ this.handleArticlesRequest } />
-          <AuthorArticleList onUpdateRequest={ this.handleArticlesRequest } />
+
+          <div className="page__tools">
+            <form className="form">
+              <div className="form__field">
+                <label htmlFor="sites-list" className="form__label">Для журнала</label>
+                <SiteSelect id="sites-list" onChange={ this.handleRequest } />
+              </div>
+              <div className="form__field">
+                <label className="form__label">Поиск статьи</label>
+                <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
+              </div>
+            </form>
+          </div>
+
+          <AuthorArticleList onUpdateRequest={ this.handleRequest } />
         </article>
-      </Fragment>
+      </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { articles, sites } = state;
   return {
-    needArticles: !articles.isPending && !articles.isFulfilled && sites.isFulfilled,
     articlesParams: getArticlesParams(state)
   };
 }
 
 const mapDispatchToProps = {
-  fetchArticles: articlesActions.fetchArticles,
-  setCurrentSite: sitesActions.setCurrent
+  fetchArticles: articlesActions.fetchArticles
 };
 
 export default connect(
