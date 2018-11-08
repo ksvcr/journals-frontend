@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import createLinkPlugin from 'draft-js-anchor-plugin';
 import createUndoPlugin from 'draft-js-undo-plugin';
 
-import {
-  ItalicButton,
-  BoldButton,
-  UnderlineButton
-} from 'draft-js-buttons';
+import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
+import EditorButton from '~/components/EditorButton/EditorButton';
+import styleMap from '~/services/editorStyleMap';
 
-import HeadlinesSelect from '~/components/HeadlinesSelect/HeadlinesSelect'
+import './content-editor.scss';
 
-import 'draft-js-static-toolbar-plugin/lib/plugin.css';
-import 'draft-js-anchor-plugin/lib/plugin.css';
-
-const linkPlugin = createLinkPlugin();
-const { LinkButton } = linkPlugin;
 const undoPlugin = createUndoPlugin();
 const { UndoButton, RedoButton } = undoPlugin;
-const toolbarPlugin = createToolbarPlugin();
-const { Toolbar } = toolbarPlugin;
+const toolbarPlugin = createToolbarPlugin({
+  theme: {
+    toolbarStyles : { toolbar: 'editor-toolbar' },
+    buttonStyles: {
+      buttonWrapper: 'editor-toolbar__button',
+      button: 'editor-button',
+      active: 'editor-button_active'
+    }
+  }
+});
 
-const plugins = [toolbarPlugin, linkPlugin, undoPlugin];
+const { Toolbar } = toolbarPlugin;
+const EditorToolbar = editorWithStyles(Toolbar);
+
+const plugins = [toolbarPlugin, undoPlugin];
 const text = 'In this editor a toolbar shows up once you select part of the text 1…';
 
 class ContentEditor extends Component {
@@ -41,27 +44,30 @@ class ContentEditor extends Component {
     }));
   };
 
+  renderStyleSection = (externalProps) => {
+    const buttons = [
+      { type: 'style', value: 'BOLD', icon: 'bold' },
+      { type: 'style', value: 'ITALIC', icon: 'italic' },
+      { type: 'style', value: 'UNDERLINE', icon: 'underline' },
+      { type: 'style', value: 'STRIKETHROUGH', icon: 'strikethrough' }
+    ];
+    return buttons
+      .map(button => EditorButton(button))
+      .map((Button, index) => <Button key={ index } { ...externalProps } />)
+  };
+
   renderButtons = (externalProps) => {
-    console.log(externalProps);
     return (
       <React.Fragment>
-        <HeadlinesSelect {...externalProps} />
-        <Separator />
-        <BoldButton {...externalProps} />
-        <ItalicButton {...externalProps} />
-        <UnderlineButton {...externalProps} />
-        <Separator />
+        { this.renderStyleSection(externalProps) }
+        <Separator className="editor-toolbar__separator" />
         <button type="button" onClick={ this.handleExpand }>+</button>
-
         { this.state.isExpanded &&
           <React.Fragment>
-            <LinkButton {...externalProps} />
-            <Separator />
             <UndoButton />
             <RedoButton />
           </React.Fragment>
         }
-
       </React.Fragment>
     )
   };
@@ -73,16 +79,17 @@ class ContentEditor extends Component {
 
   render() {
     return (
-      <div onClick={this.focus}>
+      <div className="content-editor" onClick={ this.focus }>
         <Editor
-          editorState={this.state.editorState}
-          onChange={this.handleChange}
+          editorState={ this.state.editorState }
+          customStyleMap={ styleMap }
+          onChange={ this.handleChange }
           plugins={ plugins }
-          ref={(element) => { this.editor = element; }}
+          ref={ (element) => { this.editor = element; } }
         />
-        <Toolbar>
+        <EditorToolbar>
           { this.renderButtons }
-        </Toolbar>
+        </EditorToolbar>
       </div>
     );
   }

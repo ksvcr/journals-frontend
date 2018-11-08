@@ -44,7 +44,7 @@ class HeadlinesSelect extends Component {
 
   renderOptions = () => {
     return this.headlinesData.map(item => (
-      <option value={ item.value }>{ item.label }</option>
+      <option key={ item.value } value={ item.value }>{ item.label }</option>
     ));
   };
 
