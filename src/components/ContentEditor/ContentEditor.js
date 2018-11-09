@@ -38,6 +38,20 @@ class ContentEditor extends Component {
     this.editor.focus();
   };
 
+  getBlockStyle = (block) => {
+    console.log(block.getType());
+    switch (block.getType()) {
+      case 'left':
+        return 'align-left';
+      case 'center':
+        return 'align-center';
+      case 'right':
+        return 'align-right';
+      default:
+        return null;
+    }
+  };
+
   handleExpand = () => {
     this.setState(({ isExpanded }) => ({
       isExpanded: !isExpanded
@@ -62,9 +76,9 @@ class ContentEditor extends Component {
 
   renderAligmentSection = (externalProps) => {
     const buttons = [
-      { type: 'alignment', value: 'left', icon: 'left' },
-      { type: 'alignment', value: 'center', icon: 'center' },
-      { type: 'alignment', value: 'right', icon: 'right' }
+      { type: 'blockType', value: 'left', icon: 'align-left' },
+      { type: 'blockType', value: 'center', icon: 'align-center' },
+      { type: 'blockType', value: 'right', icon: 'align-right' }
     ];
     return buttons
       .map(button => EditorButton(button))
@@ -101,6 +115,7 @@ class ContentEditor extends Component {
           editorState={ editorState }
           customStyleMap={ styleMap }
           onChange={ this.handleChange }
+          blockStyleFn={ this.getBlockStyle }
           plugins={ plugins }
           ref={ (element) => { this.editor = element; } }
         />

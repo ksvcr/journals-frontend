@@ -5,21 +5,15 @@
   overflow: hidden;
   border: 1px solid #efeeea;
 
-  .DraftEditor-alignLeft {
-    .public-DraftStyleDefault-block {
-      text-align: left;
-    }
+  .align-right div {
+    text-align: right;
   }
 
-  .DraftEditor-alignCenter {
-    .public-DraftStyleDefault-block {
-      text-align: center;
-    }
+  .align-center div {
+    text-align: center;
   }
 
-  .DraftEditor-alignRight {
-    .public-DraftStyleDefault-block {
-      text-align: right;
-    }
+  .align-left div {
+    text-align: left;
   }
 }
