@@ -4,4 +4,22 @@
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #efeeea;
+
+  .DraftEditor-alignLeft {
+    .public-DraftStyleDefault-block {
+      text-align: left;
+    }
+  }
+
+  .DraftEditor-alignCenter {
+    .public-DraftStyleDefault-block {
+      text-align: center;
+    }
+  }
+
+  .DraftEditor-alignRight {
+    .public-DraftStyleDefault-block {
+      text-align: right;
+    }
+  }
 }

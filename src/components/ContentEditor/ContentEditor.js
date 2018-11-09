@@ -44,6 +44,10 @@ class ContentEditor extends Component {
     }));
   };
 
+  handleAligmentSet = (aligment) => {
+    console.log(aligment);
+  };
+
   renderStyleSection = (externalProps) => {
     const buttons = [
       { type: 'style', value: 'BOLD', icon: 'bold' },
@@ -56,11 +60,23 @@ class ContentEditor extends Component {
       .map((Button, index) => <Button key={ index } { ...externalProps } />)
   };
 
+  renderAligmentSection = (externalProps) => {
+    const buttons = [
+      { type: 'alignment', value: 'left', icon: 'left' },
+      { type: 'alignment', value: 'center', icon: 'center' },
+      { type: 'alignment', value: 'right', icon: 'right' }
+    ];
+    return buttons
+      .map(button => EditorButton(button))
+      .map((Button, index) => <Button key={ index } { ...externalProps } setAlignment={ this.handleAligmentSet } />)
+  };
+
   renderButtons = (externalProps) => {
     return (
       <React.Fragment>
         { this.renderStyleSection(externalProps) }
         <Separator className="editor-toolbar__separator" />
+        { this.renderAligmentSection(externalProps) }
         <button type="button" onClick={ this.handleExpand }>+</button>
         { this.state.isExpanded &&
           <React.Fragment>
@@ -78,10 +94,11 @@ class ContentEditor extends Component {
   };
 
   render() {
+    const { editorState } = this.state;
     return (
       <div className="content-editor" onClick={ this.focus }>
         <Editor
-          editorState={ this.state.editorState }
+          editorState={ editorState }
           customStyleMap={ styleMap }
           onChange={ this.handleChange }
           plugins={ plugins }

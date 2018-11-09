@@ -15,7 +15,10 @@ import {
   createInlineStyleButton
 } from 'draft-js-buttons';
 
+import createBlockAlignmentButton from 'draft-js-buttons/lib/utils/createBlockAlignmentButton';
+
 const createFn = {
+  alignment: createBlockAlignmentButton,
   style: createInlineStyleButton,
   blockType: createBlockStyleButton
 };
