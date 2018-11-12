@@ -39,7 +39,6 @@ class ContentEditor extends Component {
   };
 
   getBlockStyle = (block) => {
-    console.log(block.getType());
     switch (block.getType()) {
       case 'left':
         return 'align-left';
@@ -47,6 +46,8 @@ class ContentEditor extends Component {
         return 'align-center';
       case 'right':
         return 'align-right';
+      case 'justify':
+        return 'align-justify';
       default:
         return null;
     }
@@ -78,7 +79,8 @@ class ContentEditor extends Component {
     const buttons = [
       { type: 'blockType', value: 'left', icon: 'align-left' },
       { type: 'blockType', value: 'center', icon: 'align-center' },
-      { type: 'blockType', value: 'right', icon: 'align-right' }
+      { type: 'blockType', value: 'right', icon: 'align-right' },
+      { type: 'blockType', value: 'justify', icon: 'align-justify' }
     ];
     return buttons
       .map(button => EditorButton(button))

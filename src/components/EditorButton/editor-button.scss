@@ -22,6 +22,7 @@
     width: 15px;
     height: 15px;
     transition: fill .2s;
+    fill: #192a3e;
 
     #{$root}_active & {
       fill: #fff;
@@ -40,6 +41,19 @@
     &_underline {
       width: 12px;
       height: 14px;
+    }
+
+    &_align-left,
+    &_align-center,
+    &_align-right,
+    &_align-justify {
+      width: 16px;
+      height: 18px;
+      stroke: #192a3e;
+
+      #{$root}_active & {
+        stroke: #fff;
+      }
     }
   }
 }

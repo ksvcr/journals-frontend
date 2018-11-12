@@ -9,6 +9,10 @@ import './assets/bold.svg';
 import './assets/italic.svg';
 import './assets/underline.svg';
 import './assets/strikethrough.svg';
+import './assets/align-left.svg';
+import './assets/align-center.svg';
+import './assets/align-right.svg';
+import './assets/align-justify.svg';
 
 import {
   createBlockStyleButton,
