@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import { convertToRaw } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import createUndoPlugin from 'draft-js-undo-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import EditorButton from '~/components/EditorButton/EditorButton';
+import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
+
 import styleMap from '~/services/editorStyleMap';
+
+import { HeadlineOneButton } from 'draft-js-buttons';
 
 import './content-editor.scss';
 
-const undoPlugin = createUndoPlugin();
-const { UndoButton, RedoButton } = undoPlugin;
 const toolbarPlugin = createToolbarPlugin({
   theme: {
     toolbarStyles : { toolbar: 'editor-toolbar' },
@@ -59,10 +61,6 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleAligmentSet = (aligment) => {
-    console.log(aligment);
-  };
-
   renderStyleSection = (externalProps) => {
     const buttons = [
       { type: 'style', value: 'BOLD', icon: 'bold' },
@@ -84,28 +82,39 @@ class ContentEditor extends Component {
     ];
     return buttons
       .map(button => EditorButton(button))
-      .map((Button, index) => <Button key={ index } { ...externalProps } setAlignment={ this.handleAligmentSet } />)
+      .map((Button, index) => <Button key={ index } { ...externalProps } />)
+  };
+
+  renderCaseSection = (externalProps) => {
+    const buttons = [
+      { type: 'style', value: 'CAPITALIZE', icon: 'capitalize' },
+      { type: 'style', value: 'UPPERCASE', icon: 'uppercase' },
+      { type: 'style', value: 'SUBSCRIPT', icon: 'sub' },
+      { type: 'style', value: 'SUPERSCRIPT', icon: 'sup' }
+    ];
+    return buttons
+      .map(button => EditorButton(button))
+      .map((Button, index) => <Button key={ index } { ...externalProps } />)
   };
 
   renderButtons = (externalProps) => {
+    const { isExpanded } = this.state;
     return (
       <React.Fragment>
         { this.renderStyleSection(externalProps) }
         <Separator className="editor-toolbar__separator" />
         { this.renderAligmentSection(externalProps) }
+        <ToolbarUndoSection />
         <button type="button" onClick={ this.handleExpand }>+</button>
-        { this.state.isExpanded &&
-          <React.Fragment>
-            <UndoButton />
-            <RedoButton />
-          </React.Fragment>
-        }
+        { isExpanded &&
+          this.renderCaseSection(externalProps) }
       </React.Fragment>
     )
   };
 
   handleChange = (editorState) => {
-    // console.log('editorState ==>', editorState.toJS());
+    const contentState = editorState.getCurrentContent();
+    console.log(convertToRaw(contentState));
     this.setState({ editorState })
   };
 

@@ -13,6 +13,12 @@ import './assets/align-left.svg';
 import './assets/align-center.svg';
 import './assets/align-right.svg';
 import './assets/align-justify.svg';
+import './assets/sup.svg';
+import './assets/sub.svg';
+import './assets/undo.svg';
+import './assets/redo.svg';
+import './assets/uppercase.svg';
+import './assets/capitalize.svg';
 
 import {
   createBlockStyleButton,

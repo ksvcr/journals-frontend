@@ -55,5 +55,37 @@
         stroke: #fff;
       }
     }
+
+    &_sub {
+      width: 12px;
+      height: 11px;
+      top: 2px;
+      position: relative;
+    }
+
+    &_sup {
+      width: 12px;
+      height: 10px;
+    }
+
+    &_undo,
+    &_redo {
+      width: 14px;
+      height: 12px;
+
+      #{$root}:disabled & {
+        fill: #c4c7c8;
+      }
+    }
+
+    &_uppercase {
+      width: 15px;
+      height: 11px;
+    }
+
+    &_capitalize {
+      width: 17px;
+      height: 11px;
+    }
   }
 }
