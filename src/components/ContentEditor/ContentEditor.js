@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
-import createStyles from 'draft-js-custom-styles';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import EditorButton from '~/components/EditorButton/EditorButton';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
-import ColorPicker from '~/components/ColorPicker/ColorPicker';
+import HighlightTool from '~/components/HighlightTool/HighlightTool';
 
+import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
 
 import './content-editor.scss';
-
-const { styles, customStyleFn, exporter } = createStyles(['background'], 'CUSTOM_');
 
 const toolbarPlugin = createToolbarPlugin({
   theme: {
@@ -63,9 +61,6 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleColorSet = (color) => {
-    this.handleChange(styles.background.add(this.state.editorState, color));
-  };
 
   renderStyleSection = (externalProps) => {
     const buttons = [
@@ -110,8 +105,8 @@ class ContentEditor extends Component {
         { this.renderStyleSection(externalProps) }
         <Separator className="editor-toolbar__separator" />
         { this.renderAligmentSection(externalProps) }
-        <ColorPicker onChange={ this.handleColorSet } />
         <ToolbarUndoSection />
+        <HighlightTool { ...externalProps } />
         <button type="button" onClick={ this.handleExpand }>+</button>
         { isExpanded &&
           this.renderCaseSection(externalProps) }
