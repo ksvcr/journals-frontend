@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
+import { convertToRaw, convertFromRaw, EditorState, AtomicBlockUtils } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 
@@ -7,6 +7,7 @@ import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import EditorButton from '~/components/EditorButton/EditorButton';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
+import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
@@ -55,12 +56,48 @@ class ContentEditor extends Component {
     }
   };
 
+  mediaBlockRenderer = (block) => {
+    if (block.getType() === 'atomic') {
+      return {
+        component: AtomicBlock,
+        editable: false,
+      };
+    }
+
+    return null;
+  };
+
   handleExpand = () => {
     this.setState(({ isExpanded }) => ({
       isExpanded: !isExpanded
     }));
   };
 
+  handleImageBlockAdd = (event) => {
+    event.stopPropagation();
+
+    const { editorState } = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'image-list',
+      'MUTABLE',
+      { title: 'test' }
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(
+      editorState,
+      { currentContent: contentStateWithEntity }
+    );
+    
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        ' '
+      )
+    });
+  };
 
   renderStyleSection = (externalProps) => {
     const buttons = [
@@ -107,6 +144,7 @@ class ContentEditor extends Component {
         { this.renderAligmentSection(externalProps) }
         <ToolbarUndoSection />
         <HighlightTool { ...externalProps } />
+        <button type="button" onClick={ this.handleImageBlockAdd }>Загрузить фото</button>
         <button type="button" onClick={ this.handleExpand }>+</button>
         { isExpanded &&
           this.renderCaseSection(externalProps) }
@@ -128,6 +166,7 @@ class ContentEditor extends Component {
     return (
       <div className="content-editor" onClick={ this.focus }>
         <Editor
+          blockRendererFn={ this.mediaBlockRenderer }
           editorState={ editorState }
           customStyleMap={ styleMap }
           onChange={ this.handleChange }
