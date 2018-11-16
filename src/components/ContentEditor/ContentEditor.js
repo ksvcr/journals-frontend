@@ -60,7 +60,7 @@ class ContentEditor extends Component {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
-        editable: false,
+        editable: false
       };
     }
 
@@ -164,7 +164,7 @@ class ContentEditor extends Component {
   render() {
     const { editorState } = this.state;
     return (
-      <div className="content-editor" onClick={ this.focus }>
+      <div className="content-editor">
         <Editor
           blockRendererFn={ this.mediaBlockRenderer }
           editorState={ editorState }

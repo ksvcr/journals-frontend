@@ -1,5 +1,5 @@
 import React from 'react';
-import ImageList from '~/components/ImageList/ImageList';
+import ImageMedia from '~/components/ImageMedia/ImageMedia';
 
 const AtomicBlock = (props) => {
   const entity = props.contentState.getEntity(
@@ -10,7 +10,7 @@ const AtomicBlock = (props) => {
 
   switch(type){
     case 'image-list':
-      return <ImageList data={ data }/>;
+      return <ImageMedia data={ data }/>;
 
     default:
       return null;
