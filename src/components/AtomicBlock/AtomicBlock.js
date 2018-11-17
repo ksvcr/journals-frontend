@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ImageMedia from '~/components/ImageMedia/ImageMedia';
 
-const AtomicBlock = (props) => {
-  const entity = props.contentState.getEntity(
-    props.block.getEntityAt(0)
-  );
-  const data = entity.getData();
-  const type = entity.getType();
+class AtomicBlock extends Component {
+  handleChange = (files) => {
+    const { contentState, block, blockProps } = this.props;
+    blockProps.onInteractChange(false);
+    console.log(files);
+    const newContentState = contentState.replaceEntityData(
+      block.getEntityAt(0),
+      { title: files[0].name }
+    );
+  }
 
-  switch(type){
-    case 'image-list':
-      return <ImageMedia data={ data }/>;
+  get entity() {
+    const { contentState, block } = this.props;
+    return contentState.getEntity(
+      block.getEntityAt(0)
+    );
+  }
 
-    default:
-      return null;
+  render() {
+    const data = this.entity.getData();
+    const type = this.entity.getType();
+   
+    switch(type){
+      case 'image-list':
+        return <ImageMedia data={ data } onChange={ this.handleChange } />;
+  
+      default:
+        return null;
+    }
   }
 };
 

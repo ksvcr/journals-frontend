@@ -1,3 +1,8 @@
 .image-media {
   border-bottom: 1px solid $orange-color;
+
+  &__dropzone {
+    padding: 20px;
+    border: 1px dashed $orange-color;
+  }
 }

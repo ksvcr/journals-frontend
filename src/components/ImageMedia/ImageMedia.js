@@ -6,7 +6,8 @@ import './image-media.scss';
 
 class ImageMedia extends Component {
   handleDropFile = files => {
-    console.log(files);
+    const { onChange } = this.props;
+    onChange(files);
   };
   
   render() {
@@ -18,7 +19,6 @@ class ImageMedia extends Component {
           accept="image/*"
           multiple={ true }
           onDrop={ this.handleDropFile }
-          onDragEnter={ () => { console.log(11); } }
         >
           Перетащите сюда изображения
         </Dropzone>

@@ -34,7 +34,8 @@ const text = 'In this editor a toolbar shows up once you select part of the text
 class ContentEditor extends Component {
   state = {
     editorState: createEditorStateWithText(text),
-    isExpanded: false
+    isExpanded: false,
+    isReadOnly: true
   };
 
   focus = () => {
@@ -57,15 +58,29 @@ class ContentEditor extends Component {
   };
 
   mediaBlockRenderer = (block) => {
+    
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
-        editable: false
+        editable: false,
+        props: {
+          onInteractChange: this.toggleReadOnly
+        }
       };
     }
 
     return null;
   };
+
+  toggleReadOnly = (isReadOnly) => {
+    const { editorState } = this.state;   
+    const selection = editorState.getSelection();
+    
+    this.setState({ 
+      isReadOnly,
+      editorState: EditorState.forceSelection(editorState, selection)
+     });
+  }
 
   handleExpand = () => {
     this.setState(({ isExpanded }) => ({
@@ -89,14 +104,14 @@ class ContentEditor extends Component {
       editorState,
       { currentContent: contentStateWithEntity }
     );
-    
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
+
+    this.handleChange(
+      AtomicBlockUtils.insertAtomicBlock(
         newEditorState,
         entityKey,
         ' '
       )
-    });
+    );
   };
 
   renderStyleSection = (externalProps) => {
@@ -155,6 +170,7 @@ class ContentEditor extends Component {
   handleChange = (editorState) => {
     // const contentState = editorState.getCurrentContent();
     // const raw = convertToRaw(contentState);
+    // console.log(raw);
     // const contentFromRaw = convertFromRaw(raw);
     // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
     // console.log(inlineStyles);
@@ -162,7 +178,7 @@ class ContentEditor extends Component {
   };
 
   render() {
-    const { editorState } = this.state;
+    const { editorState, isReadOnly } = this.state;
     return (
       <div className="content-editor">
         <Editor
@@ -173,6 +189,7 @@ class ContentEditor extends Component {
           customStyleFn={ customStyleFn }
           blockStyleFn={ this.getBlockStyle }
           plugins={ plugins }
+          readOnly={ isReadOnly }
           ref={ (element) => { this.editor = element; } }
         />
         <EditorToolbar>
