@@ -11,18 +11,21 @@ class ImageMedia extends Component {
   };
   
   render() {
-    const { data } = this.props;
+    const { data, onInteract } = this.props;
     return (
       <div className="image-media">
         <Dropzone
           className="image-media__dropzone"
           accept="image/*"
           multiple={ true }
+          onClick={ onInteract }
           onDrop={ this.handleDropFile }
         >
           Перетащите сюда изображения
         </Dropzone>
-        { data.title }
+        { data.images.map(item => (
+          <div>{ item }</div>
+        )) }
       </div>
     );
   }

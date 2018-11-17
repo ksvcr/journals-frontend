@@ -35,7 +35,7 @@ class ContentEditor extends Component {
   state = {
     editorState: createEditorStateWithText(text),
     isExpanded: false,
-    isReadOnly: true
+    isReadOnly: false
   };
 
   focus = () => {
@@ -96,7 +96,7 @@ class ContentEditor extends Component {
     const contentStateWithEntity = contentState.createEntity(
       'image-list',
       'MUTABLE',
-      { title: 'test' }
+      { images: [] }
     );
 
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
