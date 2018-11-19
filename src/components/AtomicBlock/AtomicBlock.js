@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
+
 import ImageMedia from '~/components/ImageMedia/ImageMedia';
 
 class AtomicBlock extends Component {
-  handleChange = (files) => {
+  handleChange = (data) => {
     const { contentState, block, blockProps } = this.props;
-    const data = this.entity.getData();
-
     blockProps.onInteractChange(false);
-    console.log(files);
 
-    const images = [...data.images, ...files.map(item => item.name)];
-
-    const newContentState = contentState.replaceEntityData(
+    contentState.replaceEntityData(
       block.getEntityAt(0),
-      { images }
+      data
     );
-  }
+  };
 
   handleInteract = () => {
-    const { contentState, block, blockProps } = this.props;    
+    const { blockProps } = this.props;
     blockProps.onInteractChange(true);
-  }
+  };
+
+  handleInteractCancel = () => {
+    const { blockProps } = this.props;
+    blockProps.onInteractChange(false);
+  };
 
   get entity() {
     const { contentState, block } = this.props;
@@ -32,10 +33,11 @@ class AtomicBlock extends Component {
   render() {
     const data = this.entity.getData();
     const type = this.entity.getType();
-   
+    console.log(data);
     switch(type){
       case 'image-list':
-        return <ImageMedia data={ data } onChange={ this.handleChange } onInteract={ this.handleInteract } />;
+        return <ImageMedia data={ data } onChange={ this.handleChange }
+                           onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
   
       default:
         return null;

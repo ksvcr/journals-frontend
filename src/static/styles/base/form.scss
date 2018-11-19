@@ -47,6 +47,10 @@
     margin-top: 40px;
   }
 
+  &__field_small + &__field_small {
+    margin-top: 20px;
+  }
+
   &__field {
     &_inline {
       display: inline-block;
