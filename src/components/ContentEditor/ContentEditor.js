@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, EditorState, AtomicBlockUtils } from 'draft-js';
+import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 
@@ -7,7 +7,9 @@ import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import EditorButton from '~/components/EditorButton/EditorButton';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
+import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
+
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
@@ -88,32 +90,6 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleImageBlockAdd = (event) => {
-    event.stopPropagation();
-
-    const { editorState } = this.state;
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity(
-      'image-list',
-      'MUTABLE',
-      { images: [] }
-    );
-
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(
-      editorState,
-      { currentContent: contentStateWithEntity }
-    );
-
-    this.handleChange(
-      AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        ' '
-      )
-    );
-  };
-
   renderStyleSection = (externalProps) => {
     const buttons = [
       { type: 'style', value: 'BOLD', icon: 'bold' },
@@ -152,6 +128,7 @@ class ContentEditor extends Component {
 
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
+    console.log(externalProps);
     return (
       <React.Fragment>
         { this.renderStyleSection(externalProps) }
@@ -159,10 +136,13 @@ class ContentEditor extends Component {
         { this.renderAligmentSection(externalProps) }
         <ToolbarUndoSection />
         <HighlightTool { ...externalProps } />
-        <button type="button" onClick={ this.handleImageBlockAdd }>Загрузить фото</button>
         <button type="button" onClick={ this.handleExpand }>+</button>
         { isExpanded &&
-          this.renderCaseSection(externalProps) }
+          <React.Fragment>
+            <ImageMediaTool { ...externalProps } />
+            { this.renderCaseSection(externalProps) }
+          </React.Fragment>
+        }
       </React.Fragment>
     )
   };
