@@ -1,20 +1,29 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
+import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
+import { Map, merge } from 'immutable';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
-import EditorButton from '~/components/EditorButton/EditorButton';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
+import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';
+import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
+import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
+
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
-
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
 
 import './content-editor.scss';
+
+const blockRenderMap = Map({
+  atomic: {
+    element: 'div'
+  },
+});
 
 const toolbarPlugin = createToolbarPlugin({
   theme: {
@@ -32,6 +41,8 @@ const EditorToolbar = editorWithStyles(Toolbar);
 
 const plugins = [toolbarPlugin, undoPlugin];
 const text = 'In this editor a toolbar shows up once you select part of the text 1…';
+
+let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
 
 class ContentEditor extends Component {
   state = {
@@ -82,7 +93,7 @@ class ContentEditor extends Component {
       isReadOnly,
       editorState: EditorState.forceSelection(editorState, selection)
      });
-  }
+  };
 
   handleExpand = () => {
     this.setState(({ isExpanded }) => ({
@@ -90,57 +101,29 @@ class ContentEditor extends Component {
     }));
   };
 
-  renderStyleSection = (externalProps) => {
-    const buttons = [
-      { type: 'style', value: 'BOLD', icon: 'bold' },
-      { type: 'style', value: 'ITALIC', icon: 'italic' },
-      { type: 'style', value: 'UNDERLINE', icon: 'underline' },
-      { type: 'style', value: 'STRIKETHROUGH', icon: 'strikethrough' }
-    ];
-    return buttons
-      .map(button => EditorButton(button))
-      .map((Button, index) => <Button key={ index } { ...externalProps } />)
-  };
-
-  renderAligmentSection = (externalProps) => {
-    const buttons = [
-      { type: 'blockType', value: 'left', icon: 'align-left' },
-      { type: 'blockType', value: 'center', icon: 'align-center' },
-      { type: 'blockType', value: 'right', icon: 'align-right' },
-      { type: 'blockType', value: 'justify', icon: 'align-justify' }
-    ];
-    return buttons
-      .map(button => EditorButton(button))
-      .map((Button, index) => <Button key={ index } { ...externalProps } />)
-  };
-
-  renderCaseSection = (externalProps) => {
-    const buttons = [
-      { type: 'style', value: 'CAPITALIZE', icon: 'capitalize' },
-      { type: 'style', value: 'UPPERCASE', icon: 'uppercase' },
-      { type: 'style', value: 'SUBSCRIPT', icon: 'sub' },
-      { type: 'style', value: 'SUPERSCRIPT', icon: 'sup' }
-    ];
-    return buttons
-      .map(button => EditorButton(button))
-      .map((Button, index) => <Button key={ index } { ...externalProps } />)
+  handleAddTable = () => {
+    const { editorState } = this.state;
+    console.log('insertTable');
   };
 
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
-    console.log(externalProps);
     return (
       <React.Fragment>
-        { this.renderStyleSection(externalProps) }
+        <ToolbarStyleSection { ...externalProps } />
         <Separator className="editor-toolbar__separator" />
-        { this.renderAligmentSection(externalProps) }
+        <ToolbarAligmentSection { ...externalProps } />
         <ToolbarUndoSection />
         <HighlightTool { ...externalProps } />
+        <button type="button" onClick={ this.handleAddTable }>Вставить таблицу</button>
+
         <button type="button" onClick={ this.handleExpand }>+</button>
+
         { isExpanded &&
           <React.Fragment>
             <ImageMediaTool { ...externalProps } />
-            { this.renderCaseSection(externalProps) }
+            <Separator className="editor-toolbar__separator" />
+            <ToolbarCaseSection { ...externalProps } />
           </React.Fragment>
         }
       </React.Fragment>
@@ -163,6 +146,7 @@ class ContentEditor extends Component {
       <div className="content-editor">
         <Editor
           blockRendererFn={ this.mediaBlockRenderer }
+          blockRenderMap={ extendedBlockRenderMap }
           editorState={ editorState }
           customStyleMap={ styleMap }
           onChange={ this.handleChange }
