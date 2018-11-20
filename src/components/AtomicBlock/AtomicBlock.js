@@ -33,7 +33,6 @@ class AtomicBlock extends Component {
   render() {
     const data = this.entity.getData();
     const type = this.entity.getType();
-    console.log(data);
     switch(type){
       case 'image-list':
         return <ImageMedia data={ data } onChange={ this.handleChange }

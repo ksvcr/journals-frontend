@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
-import { Map, merge } from 'immutable';
-import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
+import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, SelectionState } from 'draft-js';
+import { Map, merge, List, Repeat } from 'immutable';
+import Editor, { createEditorStateWithText, composeDecorators } from 'draft-js-plugins-editor';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import createTablePlugin, { tableCreator, tableStyles } from 'draft-js-table-plugin';
+import addBlock from 'draft-js-drag-n-drop-plugin/lib/modifiers/addBlock';
+import removeBlock from 'draft-js-drag-n-drop-plugin/lib/modifiers/removeBlock';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
@@ -17,12 +20,16 @@ import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
 
+import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
 
 const blockRenderMap = Map({
-  atomic: {
+  'atomic': {
     element: 'div'
   },
+  'block-table': {
+    element: 'div',
+  }
 });
 
 const toolbarPlugin = createToolbarPlugin({
@@ -35,6 +42,11 @@ const toolbarPlugin = createToolbarPlugin({
     }
   }
 });
+
+// const table = tableCreator({ theme: tableStyles, Editor });
+// console.log(table);
+
+// const tablePlugin = createTablePlugin({ component: table, Editor });
 
 const { Toolbar } = toolbarPlugin;
 const EditorToolbar = editorWithStyles(Toolbar);
@@ -71,7 +83,6 @@ class ContentEditor extends Component {
   };
 
   mediaBlockRenderer = (block) => {
-    
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
@@ -102,8 +113,28 @@ class ContentEditor extends Component {
   };
 
   handleAddTable = () => {
+    const blockKey = 'block-table';
     const { editorState } = this.state;
-    console.log('insertTable');
+    const selection = editorState.getSelection();
+
+    const contentStateAfterInsert = addBlock(
+      editorState,
+      selection,
+      blockKey,
+      {},
+      'block-table'
+    );
+    
+    console.log(contentStateAfterInsert);
+
+    const newSelection = new SelectionState({
+      anchorKey: blockKey,
+      anchorOffset: 0,
+      focusKey: blockKey,
+      focusOffset: 0,
+    });
+    const newState = EditorState.push(editorState, contentStateAfterInsert, 'move-block');
+    this.handleChange(EditorState.forceSelection(newState, newSelection));
   };
 
   renderButtons = (externalProps) => {
@@ -131,9 +162,9 @@ class ContentEditor extends Component {
   };
 
   handleChange = (editorState) => {
-    // const contentState = editorState.getCurrentContent();
-    // const raw = convertToRaw(contentState);
-    // console.log(raw);
+    const contentState = editorState.getCurrentContent();
+    const raw = convertToRaw(contentState);
+    console.log(raw);
     // const contentFromRaw = convertFromRaw(raw);
     // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
     // console.log(inlineStyles);
