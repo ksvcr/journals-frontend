@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, SelectionState } from 'draft-js';
+import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, SelectionState,
+  genKey, ContentBlock, CharacterMetadata } from 'draft-js';
 import { Map, merge, List, Repeat } from 'immutable';
-import Editor, { createEditorStateWithText, composeDecorators } from 'draft-js-plugins-editor';
-import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
+import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createTablePlugin, { tableCreator, tableStyles } from 'draft-js-table-plugin';
-import addBlock from 'draft-js-drag-n-drop-plugin/lib/modifiers/addBlock';
-import removeBlock from 'draft-js-drag-n-drop-plugin/lib/modifiers/removeBlock';
+import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
+import createFocusPlugin, { FocusDecorator } from 'draft-js-focus-plugin';
+
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
@@ -32,7 +34,7 @@ const blockRenderMap = Map({
   }
 });
 
-const toolbarPlugin = createToolbarPlugin({
+const toolbarPlugin = createStaticToolbarPlugin({
   theme: {
     toolbarStyles : { toolbar: 'editor-toolbar' },
     buttonStyles: {
@@ -43,22 +45,124 @@ const toolbarPlugin = createToolbarPlugin({
   }
 });
 
-// const table = tableCreator({ theme: tableStyles, Editor });
-// console.log(table);
+const table = FocusDecorator(
+  tableCreator({ theme: tableStyles, Editor })
+);
 
-// const tablePlugin = createTablePlugin({ component: table, Editor });
+const tablePlugin = createTablePlugin({ component: table, Editor });
 
 const { Toolbar } = toolbarPlugin;
 const EditorToolbar = editorWithStyles(Toolbar);
 
-const plugins = [toolbarPlugin, undoPlugin];
+const plugins = [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin ];
+const json = {
+  "entityMap": {
+    "0": {
+      "type": "block-table",
+      "mutability": "IMMUTABLE",
+      "data": {
+        "rows": [
+          [
+            {
+              "entityMap": {},
+              "blocks": [
+                {
+                  "key": "b86ot",
+                  "text": "3",
+                  "type": "unstyled",
+                  "depth": 0,
+                  "inlineStyleRanges": [],
+                  "entityRanges": []
+                }
+              ]
+            },
+            {
+              "entityMap": {},
+              "blocks": [
+                {
+                  "key": "94ikh",
+                  "text": "Insert text ...11",
+                  "type": "unstyled",
+                  "depth": 0,
+                  "inlineStyleRanges": [],
+                  "entityRanges": []
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "entityMap": {},
+              "blocks": [
+                {
+                  "key": "4vbf6",
+                  "text": "22",
+                  "type": "unstyled",
+                  "depth": 0,
+                  "inlineStyleRanges": [],
+                  "entityRanges": []
+                }
+              ]
+            },
+            {
+              "entityMap": {},
+              "blocks": [
+                {
+                  "key": "bjqak",
+                  "text": "Insert text ...11",
+                  "type": "unstyled",
+                  "depth": 0,
+                  "inlineStyleRanges": [],
+                  "entityRanges": []
+                }
+              ]
+            }
+          ]
+        ],
+        "numberOfColumns": 2
+      }
+    }
+  },
+  "blocks": [
+    {
+      "key": "8vp0c",
+      "text": "gfgfgfg",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": []
+    },
+    {
+      "key": "dhinf",
+      "text": " ",
+      "type": "block-table",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": [
+        {
+          "offset": 0,
+          "length": 1,
+          "key": 0
+        }
+      ]
+    },
+    {
+      "key": "2mlfh",
+      "text": "",
+      "type": "unstyled",
+      "depth": 0,
+      "inlineStyleRanges": [],
+      "entityRanges": []
+    }
+  ]
+};
 const text = 'In this editor a toolbar shows up once you select part of the text 1…';
 
 let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
 
 class ContentEditor extends Component {
   state = {
-    editorState: createEditorStateWithText(text),
+    editorState: EditorState.push(EditorState.createEmpty(), convertFromRaw(json)),
     isExpanded: false,
     isReadOnly: false
   };
@@ -114,27 +218,12 @@ class ContentEditor extends Component {
 
   handleAddTable = () => {
     const blockKey = 'block-table';
-    const { editorState } = this.state;
-    const selection = editorState.getSelection();
-
-    const contentStateAfterInsert = addBlock(
-      editorState,
-      selection,
-      blockKey,
-      {},
-      'block-table'
-    );
-    
-    console.log(contentStateAfterInsert);
-
-    const newSelection = new SelectionState({
-      anchorKey: blockKey,
-      anchorOffset: 0,
-      focusKey: blockKey,
-      focusOffset: 0,
-    });
-    const newState = EditorState.push(editorState, contentStateAfterInsert, 'move-block');
-    this.handleChange(EditorState.forceSelection(newState, newSelection));
+    const selection = this.state.editorState.getSelection();
+    this.handleChange(addNewBlockAt(
+      this.state.editorState,
+      selection.getAnchorKey(),
+      blockKey
+    ))
   };
 
   renderButtons = (externalProps) => {
@@ -196,3 +285,61 @@ class ContentEditor extends Component {
 }
 
 export default ContentEditor;
+
+
+
+const addNewBlockAt = (
+  editorState,
+  pivotBlockKey,
+  newBlockType = 'unstyled',
+  initialData = new Map({})
+) => {
+  const content = editorState.getCurrentContent();
+  const blockMap = content.getBlockMap();
+  const block = blockMap.get(pivotBlockKey);
+
+  if (!block) {
+    throw new Error(`The pivot key - ${ pivotBlockKey } is not present in blockMap.`);
+  }
+
+  const blocksBefore = blockMap.toSeq().takeUntil((v) => (v === block));
+  const blocksAfter = blockMap.toSeq().skipUntil((v) => (v === block)).rest();
+  const newBlockKey = genKey();
+
+  const contentStateWithEntity = content.createEntity(
+    newBlockType, 'IMMUTABLE'
+  );
+
+  const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+  const charData = CharacterMetadata.create({ entity: entityKey });
+
+  const newBlock = new ContentBlock({
+    key: newBlockKey,
+    type: newBlockType,
+    text: ' ',
+    characterList: List(Repeat(charData, 1)),
+    depth: 0,
+    data: initialData,
+  });
+
+  const newBlockMap = blocksBefore.concat(
+    [[pivotBlockKey, block], [newBlockKey, newBlock]],
+    blocksAfter
+  ).toOrderedMap();
+
+  const selection = editorState.getSelection();
+
+  const newContent = content.merge({
+    blockMap: newBlockMap,
+    selectionBefore: selection,
+    selectionAfter: selection.merge({
+      anchorKey: newBlockKey,
+      anchorOffset: 0,
+      focusKey: newBlockKey,
+      focusOffset: 0,
+      isBackward: false,
+    }),
+  });
+
+  return EditorState.push(editorState, newContent, 'split-block');
+};
