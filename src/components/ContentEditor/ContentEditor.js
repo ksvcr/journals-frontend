@@ -4,10 +4,9 @@ import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, 
 import { Map, merge, List, Repeat } from 'immutable';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import createTablePlugin, { tableCreator, tableStyles } from 'draft-js-table-plugin';
+import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
-import createFocusPlugin, { FocusDecorator } from 'draft-js-focus-plugin';
-
+import createFocusPlugin from 'draft-js-focus-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
@@ -18,6 +17,7 @@ import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSecti
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
+import TableEditor from '~/components/TableEditor/TableEditor';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import styleMap from '~/services/editorStyleMap';
@@ -45,124 +45,18 @@ const toolbarPlugin = createStaticToolbarPlugin({
   }
 });
 
-const table = FocusDecorator(
-  tableCreator({ theme: tableStyles, Editor })
-);
-
-const tablePlugin = createTablePlugin({ component: table, Editor });
+const tablePlugin = createTablePlugin({ component: TableEditor, Editor });
 
 const { Toolbar } = toolbarPlugin;
 const EditorToolbar = editorWithStyles(Toolbar);
 
 const plugins = [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin ];
-const json = {
-  "entityMap": {
-    "0": {
-      "type": "block-table",
-      "mutability": "IMMUTABLE",
-      "data": {
-        "rows": [
-          [
-            {
-              "entityMap": {},
-              "blocks": [
-                {
-                  "key": "b86ot",
-                  "text": "3",
-                  "type": "unstyled",
-                  "depth": 0,
-                  "inlineStyleRanges": [],
-                  "entityRanges": []
-                }
-              ]
-            },
-            {
-              "entityMap": {},
-              "blocks": [
-                {
-                  "key": "94ikh",
-                  "text": "Insert text ...11",
-                  "type": "unstyled",
-                  "depth": 0,
-                  "inlineStyleRanges": [],
-                  "entityRanges": []
-                }
-              ]
-            }
-          ],
-          [
-            {
-              "entityMap": {},
-              "blocks": [
-                {
-                  "key": "4vbf6",
-                  "text": "22",
-                  "type": "unstyled",
-                  "depth": 0,
-                  "inlineStyleRanges": [],
-                  "entityRanges": []
-                }
-              ]
-            },
-            {
-              "entityMap": {},
-              "blocks": [
-                {
-                  "key": "bjqak",
-                  "text": "Insert text ...11",
-                  "type": "unstyled",
-                  "depth": 0,
-                  "inlineStyleRanges": [],
-                  "entityRanges": []
-                }
-              ]
-            }
-          ]
-        ],
-        "numberOfColumns": 2
-      }
-    }
-  },
-  "blocks": [
-    {
-      "key": "8vp0c",
-      "text": "gfgfgfg",
-      "type": "unstyled",
-      "depth": 0,
-      "inlineStyleRanges": [],
-      "entityRanges": []
-    },
-    {
-      "key": "dhinf",
-      "text": " ",
-      "type": "block-table",
-      "depth": 0,
-      "inlineStyleRanges": [],
-      "entityRanges": [
-        {
-          "offset": 0,
-          "length": 1,
-          "key": 0
-        }
-      ]
-    },
-    {
-      "key": "2mlfh",
-      "text": "",
-      "type": "unstyled",
-      "depth": 0,
-      "inlineStyleRanges": [],
-      "entityRanges": []
-    }
-  ]
-};
-const text = 'In this editor a toolbar shows up once you select part of the text 1…';
 
 let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
 
 class ContentEditor extends Component {
   state = {
-    editorState: EditorState.push(EditorState.createEmpty(), convertFromRaw(json)),
+    editorState: EditorState.createEmpty(),
     isExpanded: false,
     isReadOnly: false
   };
@@ -251,9 +145,9 @@ class ContentEditor extends Component {
   };
 
   handleChange = (editorState) => {
-    const contentState = editorState.getCurrentContent();
-    const raw = convertToRaw(contentState);
-    console.log(raw);
+    // const contentState = editorState.getCurrentContent();
+    // const raw = convertToRaw(contentState);
+    // console.log(raw);
     // const contentFromRaw = convertFromRaw(raw);
     // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
     // console.log(inlineStyles);
@@ -306,8 +200,42 @@ const addNewBlockAt = (
   const blocksAfter = blockMap.toSeq().skipUntil((v) => (v === block)).rest();
   const newBlockKey = genKey();
 
+  const data =  {
+    rows: [
+      [
+        {
+          entityMap: {},
+          blocks: [
+            {
+              key: genKey(),
+              text: ' ',
+              type: 'unstyled',
+              depth: 0,
+              inlineStyleRanges: [],
+              entityRanges: []
+            }
+          ]
+        },
+        {
+          entityMap: {},
+          blocks: [
+            {
+              key: genKey(),
+              text: ' ',
+              type: 'unstyled',
+              depth: 0,
+              inlineStyleRanges: [],
+              entityRanges: []
+            }
+          ]
+        }
+      ]
+    ],
+    numberOfColumns: 2
+  };
+
   const contentStateWithEntity = content.createEntity(
-    newBlockType, 'IMMUTABLE'
+    newBlockType, 'IMMUTABLE', data
   );
 
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
