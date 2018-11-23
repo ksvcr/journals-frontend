@@ -5,7 +5,7 @@ import nanoid from 'nanoid';
 
 import Icon from '~/components/Icon/Icon';
 import ToolTip from '~/components/ToolTip/ToolTip';
-import ImageMediaForm from '~/components/ImageMediaForm/ImageMediaForm';
+import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
 import ImageDropPlaceholder from '~/components/ImageDropPlaceholder/ImageDropPlaceholder';
 
 import formatBytes from '~/utils/formatBytes';
@@ -53,9 +53,11 @@ class ImageMedia extends Component {
       <div className="image-media__item"  key={ item.id }>
         <ToolTip className="tooltip" position="right-start" useContext={ true }
                  onShow={ onInteract } onRequestClose={ onCancelInteract }
-                 html={ <ImageMediaForm id={ item.id }
-                                        onChange={ this.handleSubmit }
-                                        initialValues={ item } /> }>
+                 html={ <div className="image-media__popover">
+                         <MetaInfoForm id={ item.id }
+                                       onChange={ this.handleSubmit }
+                                       initialValues={ item } />
+                        </div> }>
           <button type="button" className="image-media__button" >
             <div className="image-media__view">
               <img className="image-media__image" src={ item.preview } alt=""/>

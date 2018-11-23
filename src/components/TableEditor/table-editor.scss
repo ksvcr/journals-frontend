@@ -1,0 +1,51 @@
+.table-editor {
+  padding: 20px;
+
+  &__holder {
+    border-radius: 6px;
+    background: #f7f7f7;
+    padding: 20px;
+  }
+
+  &__toolbar {
+    margin-bottom: 20px;
+  }
+
+  &__box {
+    width: 100%;
+    border: 1px solid #dcdcdc;
+    background: #fff;
+
+    td {
+      padding: 18px;
+      border-left: 1px solid #dcdcdc;
+      border-top: 1px solid #dcdcdc;
+
+      &:first-child {
+        border-left: 0;
+      }
+    }
+
+    tr:first-child td {
+      border-top: 0;
+    }
+  }
+
+  &__button {
+    color: $blue-color;
+    background: transparent;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: 600;
+    cursor: pointer;
+
+    & + & {
+      margin-left: 20px;
+    }
+  }
+
+  &__meta {
+    margin-bottom: 30px;
+  }
+}

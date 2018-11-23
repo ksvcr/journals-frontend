@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, SelectionState,
   genKey, ContentBlock, CharacterMetadata } from 'draft-js';
 import { Map, merge, List, Repeat } from 'immutable';
-import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
+import Editor from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
@@ -13,6 +13,7 @@ import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/
 import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';
 import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
 import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
+import TableTool from '~/components/TableTool/TableTool';
 
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
@@ -110,16 +111,6 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleAddTable = () => {
-    const blockKey = 'block-table';
-    const selection = this.state.editorState.getSelection();
-    this.handleChange(addNewBlockAt(
-      this.state.editorState,
-      selection.getAnchorKey(),
-      blockKey
-    ))
-  };
-
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
     return (
@@ -128,16 +119,16 @@ class ContentEditor extends Component {
         <Separator className="editor-toolbar__separator" />
         <ToolbarAligmentSection { ...externalProps } />
         <ToolbarUndoSection />
-        <HighlightTool { ...externalProps } />
-        <button type="button" onClick={ this.handleAddTable }>Вставить таблицу</button>
 
         <button type="button" onClick={ this.handleExpand }>+</button>
 
         { isExpanded &&
           <React.Fragment>
-            <ImageMediaTool { ...externalProps } />
-            <Separator className="editor-toolbar__separator" />
+            <HighlightTool { ...externalProps } />
             <ToolbarCaseSection { ...externalProps } />
+            <Separator className="editor-toolbar__separator" />
+            <TableTool { ...externalProps } />
+            <ImageMediaTool { ...externalProps } />
           </React.Fragment>
         }
       </React.Fragment>
@@ -145,9 +136,9 @@ class ContentEditor extends Component {
   };
 
   handleChange = (editorState) => {
-    // const contentState = editorState.getCurrentContent();
-    // const raw = convertToRaw(contentState);
-    // console.log(raw);
+    const contentState = editorState.getCurrentContent();
+    const raw = convertToRaw(contentState);
+    console.log(raw);
     // const contentFromRaw = convertFromRaw(raw);
     // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
     // console.log(inlineStyles);
@@ -179,95 +170,3 @@ class ContentEditor extends Component {
 }
 
 export default ContentEditor;
-
-
-
-const addNewBlockAt = (
-  editorState,
-  pivotBlockKey,
-  newBlockType = 'unstyled',
-  initialData = new Map({})
-) => {
-  const content = editorState.getCurrentContent();
-  const blockMap = content.getBlockMap();
-  const block = blockMap.get(pivotBlockKey);
-
-  if (!block) {
-    throw new Error(`The pivot key - ${ pivotBlockKey } is not present in blockMap.`);
-  }
-
-  const blocksBefore = blockMap.toSeq().takeUntil((v) => (v === block));
-  const blocksAfter = blockMap.toSeq().skipUntil((v) => (v === block)).rest();
-  const newBlockKey = genKey();
-
-  const data =  {
-    rows: [
-      [
-        {
-          entityMap: {},
-          blocks: [
-            {
-              key: genKey(),
-              text: ' ',
-              type: 'unstyled',
-              depth: 0,
-              inlineStyleRanges: [],
-              entityRanges: []
-            }
-          ]
-        },
-        {
-          entityMap: {},
-          blocks: [
-            {
-              key: genKey(),
-              text: ' ',
-              type: 'unstyled',
-              depth: 0,
-              inlineStyleRanges: [],
-              entityRanges: []
-            }
-          ]
-        }
-      ]
-    ],
-    numberOfColumns: 2
-  };
-
-  const contentStateWithEntity = content.createEntity(
-    newBlockType, 'IMMUTABLE', data
-  );
-
-  const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-  const charData = CharacterMetadata.create({ entity: entityKey });
-
-  const newBlock = new ContentBlock({
-    key: newBlockKey,
-    type: newBlockType,
-    text: ' ',
-    characterList: List(Repeat(charData, 1)),
-    depth: 0,
-    data: initialData,
-  });
-
-  const newBlockMap = blocksBefore.concat(
-    [[pivotBlockKey, block], [newBlockKey, newBlock]],
-    blocksAfter
-  ).toOrderedMap();
-
-  const selection = editorState.getSelection();
-
-  const newContent = content.merge({
-    blockMap: newBlockMap,
-    selectionBefore: selection,
-    selectionAfter: selection.merge({
-      anchorKey: newBlockKey,
-      anchorOffset: 0,
-      focusKey: newBlockKey,
-      focusOffset: 0,
-      isBackward: false,
-    }),
-  });
-
-  return EditorState.push(editorState, newContent, 'split-block');
-};

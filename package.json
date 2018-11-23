@@ -15,6 +15,7 @@
     "draft-js-entity-props-plugin": "^2.0.0-beta1",
     "draft-js-focus-plugin": "^1.0.12",
     "draft-js-plugins-editor": "^2.1.1",
+    "draft-js-plugins-utils": "^2.0.3",
     "draft-js-static-toolbar-plugin": "^3.0.0",
     "draft-js-table-plugin": "^1.0.4",
     "draft-js-undo-plugin": "^2.0.2",
