@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { FocusDecorator } from 'draft-js-focus-plugin';
 import { tableCreator } from 'draft-js-table-plugin';
 import Editor from 'draft-js-plugins-editor';
-import { genKey } from 'draft-js';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { EditorState, genKey } from 'draft-js';
 import draftPluginsUtils from 'draft-js-plugins-utils';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
 import nanoid from 'nanoid';
@@ -37,6 +37,7 @@ class TableEditor extends Component {
     const { entityData } = blockProps;
     this.formId = nanoid();
     this.state = {
+      meta: {},
       showTable: true,
       numberOfColumns: entityData.numberOfColumns || 1,
       rows: entityData.rows || [{}]
@@ -92,13 +93,24 @@ class TableEditor extends Component {
   };
 
   handleMetaChange = (id, formData) => {
-    const { contentState } = this.props;
-    const data = { ...this.entity.getData(), ...formData };
+    this.meta = formData;
+  };
+
+  handleMetaClose = () => {
+    const { contentState, blockProps } = this.props;
+    const { pluginEditor } = blockProps;
+    const { getEditorState, setEditorState } = pluginEditor;
+    const editorState = getEditorState();
+    const selection = editorState.getSelection();
+
+    const data = { ...this.entity.getData(), ...this.meta };
 
     contentState.replaceEntityData(
       this.entityKey,
       data
     );
+
+    setEditorState(EditorState.forceSelection(editorState, selection));
   };
 
   get initialMeta() {
@@ -137,7 +149,7 @@ class TableEditor extends Component {
               Добавить колонку
             </button>
             <ToolTip className="tooltip" position="right-start" useContext={ true }
-                     onShow={ blockProps.setFocus } onRequestClose={ blockProps.unsetFocus }
+                     onRequestClose={ this.handleMetaClose }
                      html={
                        <MetaInfoForm id={ this.formId }
                                      onChange={ this.handleMetaChange }

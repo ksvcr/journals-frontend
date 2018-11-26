@@ -1,0 +1,13 @@
+.link-prompt {
+  padding: 10px;
+  display: flex;
+  width: 400px;
+
+  &__input {
+    width: 100%;
+  }
+
+  &__button {
+    margin-left: 10px;
+  }
+}

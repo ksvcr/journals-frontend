@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
-import { Map, merge } from 'immutable';
+import { merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createTablePlugin from 'draft-js-table-plugin';
@@ -13,6 +13,8 @@ import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSe
 import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
 import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
 import TableTool from '~/components/TableTool/TableTool';
+import AddLinkTool, { linkDecorator } from '~/components/AddLinkTool/AddLinkTool';
+import RemoveLinkTool from '~/components/RemoveLinkTool/RemoveLinkTool';
 
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ColorTool from '~/components/ColorTool/ColorTool';
@@ -21,29 +23,13 @@ import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
-import styleMap from '~/services/editorStyleMap';
+import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle } from '~/services/customDraftUtils';
 
 import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
 
-const blockRenderMap = Map({
-  'atomic': {
-    element: 'div'
-  },
-  'block-table': {
-    element: 'div',
-  }
-});
-
 const toolbarPlugin = createStaticToolbarPlugin({
-  theme: {
-    toolbarStyles : { toolbar: 'editor-toolbar' },
-    buttonStyles: {
-      buttonWrapper: 'editor-toolbar__button',
-      button: 'editor-button',
-      active: 'editor-button_active'
-    }
-  }
+  theme: toolbarClasses
 });
 
 const tablePlugin = createTablePlugin({ component: TableEditor, Editor });
@@ -52,6 +38,7 @@ const { Toolbar } = toolbarPlugin;
 const EditorToolbar = editorWithStyles(Toolbar);
 
 const plugins = [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin ];
+const decorators = [linkDecorator];
 
 let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
 
@@ -64,21 +51,6 @@ class ContentEditor extends Component {
 
   focus = () => {
     this.editor.focus();
-  };
-
-  getBlockStyle = (block) => {
-    switch (block.getType()) {
-      case 'left':
-        return 'align-left';
-      case 'center':
-        return 'align-center';
-      case 'right':
-        return 'align-right';
-      case 'justify':
-        return 'align-justify';
-      default:
-        return null;
-    }
   };
 
   mediaBlockRenderer = (block) => {
@@ -99,7 +71,7 @@ class ContentEditor extends Component {
     const { editorState } = this.state;   
     const selection = editorState.getSelection();
     
-    this.setState({ 
+    this.setState({
       isReadOnly,
       editorState: EditorState.forceSelection(editorState, selection)
      });
@@ -114,7 +86,7 @@ class ContentEditor extends Component {
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
     return (
-      <div>
+      <React.Fragment>
         <div className="editor-toolbar__row">
           <ToolbarStyleSection { ...externalProps } />
           <Separator className="editor-toolbar__separator" />
@@ -123,12 +95,12 @@ class ContentEditor extends Component {
           <button type="button" onClick={ this.handleExpand }>+</button>
         </div>
 
-
-
         { isExpanded &&
           <div className="editor-toolbar__row">
             <ColorTool { ...externalProps } />
             <HighlightTool { ...externalProps } />
+            <AddLinkTool  { ...externalProps } />
+            <RemoveLinkTool { ...externalProps } />
             <Separator className="editor-toolbar__separator" />
             <ToolbarCaseSection { ...externalProps } />
             <Separator className="editor-toolbar__separator" />
@@ -136,7 +108,7 @@ class ContentEditor extends Component {
             <ImageMediaTool { ...externalProps } />
           </div>
         }
-      </div>
+      </React.Fragment>
     )
   };
 
@@ -155,13 +127,14 @@ class ContentEditor extends Component {
     return (
       <div className="content-editor">
         <Editor
+          decorators={ decorators }
           blockRendererFn={ this.mediaBlockRenderer }
           blockRenderMap={ extendedBlockRenderMap }
           editorState={ editorState }
           customStyleMap={ styleMap }
           onChange={ this.handleChange }
           customStyleFn={ customStyleFn }
-          blockStyleFn={ this.getBlockStyle }
+          blockStyleFn={ getBlockStyle }
           plugins={ plugins }
           readOnly={ isReadOnly }
           ref={ (element) => { this.editor = element; } }
