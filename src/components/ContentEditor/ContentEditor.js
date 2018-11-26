@@ -128,15 +128,15 @@ class ContentEditor extends Component {
       <div className="content-editor">
         <Editor
           decorators={ decorators }
-          blockRendererFn={ this.mediaBlockRenderer }
           blockRenderMap={ extendedBlockRenderMap }
-          editorState={ editorState }
-          customStyleMap={ styleMap }
-          onChange={ this.handleChange }
           customStyleFn={ customStyleFn }
-          blockStyleFn={ getBlockStyle }
+          customStyleMap={ styleMap }
           plugins={ plugins }
+          editorState={ editorState }
           readOnly={ isReadOnly }
+          onChange={ this.handleChange }
+          blockStyleFn={ getBlockStyle }
+          blockRendererFn={ this.mediaBlockRenderer }
           ref={ (element) => { this.editor = element; } }
         />
         <EditorToolbar>
