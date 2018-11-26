@@ -5,9 +5,12 @@ import Editor from 'draft-js-plugins-editor';
 import { genKey } from 'draft-js';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import draftPluginsUtils from 'draft-js-plugins-utils';
-import './table-editor.scss';
+
 import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
 import nanoid from 'nanoid';
+import ToolTip from '~/components/ToolTip/ToolTip';
+
+import './table-editor.scss';
 
 const Table = FocusDecorator(
   tableCreator({ theme: { table: 'table-editor__box', even: 'table-editor__even' }, Editor })
@@ -101,7 +104,7 @@ class TableEditor extends Component {
   get initialMeta() {
     const { blockProps } = this.props;
     const { entityData } = blockProps;
-    const { title, additional, keywords } = entityData;
+    const { title='Заголовок таблицы', additional, keywords } = entityData;
     return { title, additional, keywords };
   }
 
@@ -117,15 +120,14 @@ class TableEditor extends Component {
   }
 
   render() {
+    const { blockProps } = this.props;
+    const { entityData } = blockProps;
     return (
       <div className="table-editor" contentEditable={ false } readOnly>
         <div className="table-editor__holder" >
-          <div className="table-editor__meta">
-            <MetaInfoForm id={ this.formId }
-                          onChange={ this.handleMetaChange }
-                          initialValues={ this.initialMeta }
-                          whiteFields={ true } />
-          </div>
+          <h3 className="table-editor__title">
+            { entityData.title ? entityData.title : 'Заголовок таблицы' }
+          </h3>
 
           <div className="table-editor__toolbar" >
             <button className="table-editor__button" type="button" onClick={ this.addRow }>
@@ -134,6 +136,16 @@ class TableEditor extends Component {
             <button className="table-editor__button" type="button" onClick={ this.addColumn }>
               Добавить колонку
             </button>
+            <ToolTip className="tooltip" position="right-start" useContext={ true }
+                     onShow={ blockProps.setFocus } onRequestClose={ blockProps.unsetFocus }
+                     html={
+                       <MetaInfoForm id={ this.formId }
+                                     onChange={ this.handleMetaChange }
+                                     initialValues={ this.initialMeta } /> } >
+              <button className="table-editor__button" type="button">
+                Редактировать мета-данные
+              </button>
+            </ToolTip>
           </div>
           <ReactCSSTransitionGroup transitionName="fade"
                                    transitionEnterTimeout={ 300 }

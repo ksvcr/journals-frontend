@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState, SelectionState,
-  genKey, ContentBlock, CharacterMetadata } from 'draft-js';
-import { Map, merge, List, Repeat } from 'immutable';
+import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
+import { Map, merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createTablePlugin from 'draft-js-table-plugin';
@@ -16,6 +15,7 @@ import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSecti
 import TableTool from '~/components/TableTool/TableTool';
 
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
+import ColorTool from '~/components/ColorTool/ColorTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
@@ -114,24 +114,29 @@ class ContentEditor extends Component {
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
     return (
-      <React.Fragment>
-        <ToolbarStyleSection { ...externalProps } />
-        <Separator className="editor-toolbar__separator" />
-        <ToolbarAligmentSection { ...externalProps } />
-        <ToolbarUndoSection />
+      <div>
+        <div className="editor-toolbar__row">
+          <ToolbarStyleSection { ...externalProps } />
+          <Separator className="editor-toolbar__separator" />
+          <ToolbarAligmentSection { ...externalProps } />
+          <ToolbarUndoSection />
+          <button type="button" onClick={ this.handleExpand }>+</button>
+        </div>
 
-        <button type="button" onClick={ this.handleExpand }>+</button>
+
 
         { isExpanded &&
-          <React.Fragment>
+          <div className="editor-toolbar__row">
+            <ColorTool { ...externalProps } />
             <HighlightTool { ...externalProps } />
+            <Separator className="editor-toolbar__separator" />
             <ToolbarCaseSection { ...externalProps } />
             <Separator className="editor-toolbar__separator" />
             <TableTool { ...externalProps } />
             <ImageMediaTool { ...externalProps } />
-          </React.Fragment>
+          </div>
         }
-      </React.Fragment>
+      </div>
     )
   };
 

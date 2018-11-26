@@ -5,23 +5,23 @@ import Icon from '~/components/Icon/Icon';
 
 import { styles } from '~/services/editorCustomStyler';
 
-import './highlight-tool.scss';
+import './color-tool.scss';
 import './assets/letter.svg';
 
-class HighlightTool extends Component {
+class ColorTool extends Component {
   state = {
     showColorPicker: false
   };
 
   get currentColor() {
     const { getEditorState } = this.props;
-    return styles.background.current(getEditorState());
+    return styles.color.current(getEditorState());
   }
 
   handleChange = ({ r, g, b, a }) => {
     const { getEditorState, setEditorState } = this.props;
     const color = `rgba(${r},${g},${b},${a})`;
-    const newState = styles.background.add(getEditorState(), color);
+    const newState = styles.color.add(getEditorState(), color);
     setEditorState(newState);
   };
 
@@ -36,13 +36,12 @@ class HighlightTool extends Component {
   render() {
     const { showColorPicker } = this.state;
     return (
-      <div className="highlight-tool">
-        <button className="highlight-tool__button" type="button"
+      <div className="color-tool">
+        <button className="color-tool__button" type="button"
                 onClick={ this.handlePickerShow }>
-          <div className="highlight-tool__box" style={ { background: this.currentColor } }>
-            <Icon name="letter" className="highlight-tool__icon" />
-            Выбрать цвет фона
-          </div>
+            <Icon name="letter" className="color-tool__icon" />
+            Выбрать цвет текста
+          <div className="color-tool__box" style={ { background: this.currentColor } } />
         </button>
 
         { showColorPicker &&
@@ -56,4 +55,4 @@ class HighlightTool extends Component {
   }
 }
 
-export default HighlightTool;
+export default ColorTool;

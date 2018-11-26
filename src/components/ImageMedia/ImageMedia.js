@@ -53,11 +53,9 @@ class ImageMedia extends Component {
       <div className="image-media__item"  key={ item.id }>
         <ToolTip className="tooltip" position="right-start" useContext={ true }
                  onShow={ onInteract } onRequestClose={ onCancelInteract }
-                 html={ <div className="image-media__popover">
-                         <MetaInfoForm id={ item.id }
-                                       onChange={ this.handleSubmit }
-                                       initialValues={ item } />
-                        </div> }>
+                 html={ <MetaInfoForm id={ item.id }
+                                      onChange={ this.handleSubmit }
+                                      initialValues={ item } /> }>
           <button type="button" className="image-media__button" >
             <div className="image-media__view">
               <img className="image-media__image" src={ item.preview } alt=""/>

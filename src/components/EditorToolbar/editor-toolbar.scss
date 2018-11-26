@@ -1,9 +1,16 @@
 .editor-toolbar {
   order: -1;
-  display: flex;
-  align-items: center;
   background: #efeeea;
   padding: 20px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+
+    & + & {
+      margin-top: 10px;
+    }
+  }
 
   &__separator {
     display: inline-block;
