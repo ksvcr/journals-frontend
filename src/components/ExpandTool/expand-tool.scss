@@ -1,0 +1,39 @@
+.expand-tool {
+  $root: &;
+
+  font-size: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__icon {
+    width: 12px;
+    height: 12px;
+    display: block;
+    position: relative;
+
+    &:after,
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: #192a3e;
+      transform: translate(-50%, -50%);
+    }
+
+    &:after {
+      width: 12px;
+      height: 2px;
+    }
+
+    &:before {
+      width: 2px;
+      height: 12px;
+
+      #{$root}_active & {
+        opacity: 0;
+      }
+    }
+  }
+}

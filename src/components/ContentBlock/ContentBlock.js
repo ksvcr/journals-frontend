@@ -9,6 +9,7 @@ import FieldHint from '~/components/FieldHint/FieldHint';
 import TextField from '~/components/TextField/TextField';
 import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
 import Icon from '~/components/Icon/Icon';
+import ContentEditor from '~/components/ContentEditor/ContentEditor';
 
 import * as validate from '~/utils/validate';
 
@@ -78,7 +79,7 @@ class ContentBlock extends Component {
           </div>
         }
         <Field name={`${field}.title`} type="hidden" component="input" validate={ [validate.required] } />
-        <Field name={`${field}.content`} id={ `block-${index}` } textarea component={ TextField }
+        <Field name={`${field}.content`} id={ `block-${index}` } component={ ContentEditor }
                validate={ [validate.required] } />
 
         <div className="content-block__add">

@@ -15,10 +15,10 @@ import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSecti
 import TableTool from '~/components/TableTool/TableTool';
 import AddLinkTool, { linkDecorator } from '~/components/AddLinkTool/AddLinkTool';
 import RemoveLinkTool from '~/components/RemoveLinkTool/RemoveLinkTool';
-
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ColorTool from '~/components/ColorTool/ColorTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
+import ExpandTool from '~/components/ExpandTool/ExpandTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
 
@@ -43,17 +43,30 @@ const decorators = [linkDecorator];
 let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
 
 class ContentEditor extends Component {
-  state = {
-    editorState: EditorState.createEmpty(),
-    isExpanded: false,
-    isReadOnly: false
+  constructor(props) {
+    super(props);
+    const editorState = this.initEditorState();
+    this.state = {
+      editorState: editorState,
+      isExpanded: false,
+      isReadOnly: false
+    };
+
+    this.changeValue(editorState);
+  }
+
+  initEditorState = () => {
+    const { input } = this.props;
+    const value = input && input.value;
+    if (value) {
+      const contentFromRaw = convertFromRaw(value);
+      return EditorState.createWithContent(contentFromRaw);
+    } else {
+      return EditorState.createEmpty();
+    }
   };
 
-  focus = () => {
-    this.editor.focus();
-  };
-
-  mediaBlockRenderer = (block) => {
+   mediaBlockRenderer = (block) => {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
@@ -83,8 +96,25 @@ class ContentEditor extends Component {
     }));
   };
 
+  handleChange = (editorState) => {
+    // const contentFromRaw = convertFromRaw(raw);
+    // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
+    // console.log(inlineStyles);
+    this.setState({ editorState });
+    this.changeValue(editorState);
+  };
+
+  changeValue(editorState) {
+    const { input } = this.props;
+    const onChange = input ? input.onChange : this.props.onChange;
+    const contentState = editorState.getCurrentContent();
+    const value = convertToRaw(contentState);
+    onChange(value);
+  }
+
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
+
     return (
       <React.Fragment>
         <div className="editor-toolbar__row">
@@ -92,7 +122,7 @@ class ContentEditor extends Component {
           <Separator className="editor-toolbar__separator" />
           <ToolbarAligmentSection { ...externalProps } />
           <ToolbarUndoSection />
-          <button type="button" onClick={ this.handleExpand }>+</button>
+          <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand }/>
         </div>
 
         { isExpanded &&
@@ -110,16 +140,6 @@ class ContentEditor extends Component {
         }
       </React.Fragment>
     )
-  };
-
-  handleChange = (editorState) => {
-    const contentState = editorState.getCurrentContent();
-    const raw = convertToRaw(contentState);
-    console.log(raw);
-    // const contentFromRaw = convertFromRaw(raw);
-    // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
-    // console.log(inlineStyles);
-    this.setState({ editorState })
   };
 
   render() {
