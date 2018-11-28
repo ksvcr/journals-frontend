@@ -34,14 +34,14 @@ const FinancingSourceForm = ({ field }) => {
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.grant` } className="form__label">Название гранта</label>
-            <Field className="text-field_white" name={ `${field}.grant` } id={ `${field}.grant` }
+            <Field className="text-field_white" name={ `${field}.grant_name` } id={ `${field}.grant` }
                    component={ TextField } placeholder="Введите название гранта" />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.grantId` } className="form__label">Номер гранта</label>
-            <Field className="text-field_white" name={ `${field}.grantId` } id={ `${field}.grantId` }
+            <Field className="text-field_white" name={ `${field}.grantId` } id={ `${field}.grant_number` }
                    component={ TextField } placeholder="Введите номер гранта" />
           </div>
         </div>

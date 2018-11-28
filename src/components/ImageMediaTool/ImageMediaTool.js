@@ -29,7 +29,7 @@ class ImageMediaTool extends Component {
       AtomicBlockUtils.insertAtomicBlock(
         newEditorState,
         entityKey,
-        ' '
+        'image-list'
       )
     );
   };

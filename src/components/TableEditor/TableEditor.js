@@ -3,7 +3,6 @@ import { FocusDecorator } from 'draft-js-focus-plugin';
 import { tableCreator } from 'draft-js-table-plugin';
 import Editor from 'draft-js-plugins-editor';
 import { EditorState, genKey } from 'draft-js';
-import draftPluginsUtils from 'draft-js-plugins-utils';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
@@ -45,11 +44,8 @@ class TableEditor extends Component {
   }
 
   componentDidMount() {
-    const { blockProps, contentState } = this.props;
-    const { pluginEditor } = blockProps;
-    const { getEditorState } = pluginEditor;
-    const editorState = getEditorState();
-    this.entityKey = draftPluginsUtils.getCurrentEntityKey(editorState);
+    const { contentState, block } = this.props;
+    this.entityKey = block.getEntityAt(0);
     if (this.entityKey) {
       this.entity = contentState.getEntity(this.entityKey);
     }
