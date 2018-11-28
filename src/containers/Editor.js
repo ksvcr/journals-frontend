@@ -6,6 +6,7 @@ class Editor extends Component {
     return (
       <article className="page__content">
         <ContentEditor onChange={ raw => { console.log(raw); } }/>
+        <ContentEditor onChange={ raw => { console.log(raw); } }/>
       </article>
     );
   }

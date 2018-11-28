@@ -1,5 +1,7 @@
 import { List, Map, Repeat } from 'immutable';
 import { CharacterMetadata, ContentBlock, EditorState, genKey } from 'draft-js';
+import Icon from '~/components/Icon/Icon';
+import React from 'react';
 
 export const styleMap = {
   STRIKETHROUGH: {
@@ -36,6 +38,15 @@ export const toolbarClasses = {
     buttonWrapper: 'editor-toolbar__button',
     button: 'editor-button',
     active: 'editor-button_active'
+  }
+};
+
+export const undoParams = {
+  undoContent: <Icon className="editor-button__icon editor-button__icon_undo" name="undo" />,
+  redoContent: <Icon className="editor-button__icon editor-button__icon_redo" name="redo" />,
+  theme: {
+    undo: 'editor-button',
+    redo: 'editor-button'
   }
 };
 

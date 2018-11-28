@@ -7,42 +7,42 @@ import { addNewBlockAt } from '~/services/customDraftUtils';
 import './table-tool.scss';
 import './assets/table.svg';
 
-const entityData =  {
-  rows: [
-    [
-      {
-        entityMap: {},
-        blocks: [
-          {
-            key: genKey(),
-            text: ' ',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: []
-          }
-        ]
-      },
-      {
-        entityMap: {},
-        blocks: [
-          {
-            key: genKey(),
-            text: ' ',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: []
-          }
-        ]
-      }
-    ]
-  ],
-  numberOfColumns: 2
-};
-
 class TableTool extends Component {
   handleBlockAdd = () => {
+    const entityData =  {
+      rows: [
+        [
+          {
+            entityMap: {},
+            blocks: [
+              {
+                key: genKey(),
+                text: ' ',
+                type: 'unstyled',
+                depth: 0,
+                inlineStyleRanges: [],
+                entityRanges: []
+              }
+            ]
+          },
+          {
+            entityMap: {},
+            blocks: [
+              {
+                key: genKey(),
+                text: ' ',
+                type: 'unstyled',
+                depth: 0,
+                inlineStyleRanges: [],
+                entityRanges: []
+              }
+            ]
+          }
+        ]
+      ],
+      numberOfColumns: 2
+    };
+
     const { getEditorState, setEditorState } = this.props;
     const editorState = getEditorState();
     const blockKey = 'block-table';

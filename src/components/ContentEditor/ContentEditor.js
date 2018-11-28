@@ -6,9 +6,9 @@ import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-pl
 import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
+import createUndoPlugin from 'draft-js-undo-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
-import ToolbarUndoSection, { undoPlugin } from '~/components/ToolbarUndoSection/ToolbarUndoSection';
 import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';
 import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
 import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
@@ -23,21 +23,11 @@ import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
-import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle } from '~/services/customDraftUtils';
+import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
 
 import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
 
-const toolbarPlugin = createStaticToolbarPlugin({
-  theme: toolbarClasses
-});
-
-const tablePlugin = createTablePlugin({ component: TableEditor, Editor });
-
-const { Toolbar } = toolbarPlugin;
-const EditorToolbar = editorWithStyles(Toolbar);
-
-const plugins = [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin ];
 const decorators = [linkDecorator];
 
 let extendedBlockRenderMap = merge(DefaultDraftBlockRenderMap, blockRenderMap);
@@ -51,9 +41,30 @@ class ContentEditor extends Component {
       isExpanded: false,
       isReadOnly: false
     };
-
+    this.plugins = this.createPlugins();
     this.changeValue(editorState);
   }
+
+  createPlugins = () => {
+    const tablePlugin = createTablePlugin({ component: TableEditor, Editor });
+    const toolbarPlugin = createStaticToolbarPlugin({
+      theme: toolbarClasses
+    });
+
+    const undoPlugin = createUndoPlugin(undoParams);
+    const { UndoButton, RedoButton } = undoPlugin;
+
+    this.undoSection = () => (
+      <React.Fragment>
+        <UndoButton />
+        <RedoButton />
+      </React.Fragment>
+    );
+
+    const { Toolbar } = toolbarPlugin;
+    this.toolbar = editorWithStyles(Toolbar);
+    return [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin];
+  };
 
   initEditorState = () => {
     const { input } = this.props;
@@ -114,6 +125,7 @@ class ContentEditor extends Component {
 
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
+    const ToolbarUndoSection = this.undoSection;
 
     return (
       <React.Fragment>
@@ -144,6 +156,8 @@ class ContentEditor extends Component {
 
   render() {
     const { editorState, isReadOnly } = this.state;
+    const EditorToolbar = this.toolbar;
+
     return (
       <div className="content-editor">
         <Editor
@@ -151,7 +165,7 @@ class ContentEditor extends Component {
           blockRenderMap={ extendedBlockRenderMap }
           customStyleFn={ customStyleFn }
           customStyleMap={ styleMap }
-          plugins={ plugins }
+          plugins={ this.plugins }
           editorState={ editorState }
           readOnly={ isReadOnly }
           onChange={ this.handleChange }
