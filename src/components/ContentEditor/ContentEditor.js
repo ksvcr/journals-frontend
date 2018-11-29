@@ -7,6 +7,7 @@ import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
 import createUndoPlugin from 'draft-js-undo-plugin';
+import createCounterPlugin from 'draft-js-counter-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';
@@ -21,6 +22,7 @@ import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import ExpandTool from '~/components/ExpandTool/ExpandTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
+import ContentCounter from '~/components/ContentCounter/ContentCounter';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
@@ -108,9 +110,6 @@ class ContentEditor extends Component {
   };
 
   handleChange = (editorState) => {
-    // const contentFromRaw = convertFromRaw(raw);
-    // const inlineStyles = exporter(EditorState.createWithContent(contentFromRaw));
-    // console.log(inlineStyles);
     this.setState({ editorState });
     this.changeValue(editorState);
   };
@@ -126,7 +125,6 @@ class ContentEditor extends Component {
   renderButtons = (externalProps) => {
     const { isExpanded } = this.state;
     const ToolbarUndoSection = this.undoSection;
-
     return (
       <React.Fragment>
         <div className="editor-toolbar__row">
@@ -173,6 +171,7 @@ class ContentEditor extends Component {
           blockRendererFn={ this.mediaBlockRenderer }
           ref={ (element) => { this.editor = element; } }
         />
+        <ContentCounter editorState={ editorState } />
         <EditorToolbar>
           { this.renderButtons }
         </EditorToolbar>
