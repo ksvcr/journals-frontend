@@ -16,6 +16,12 @@ class ArticleTopTools extends Component {
             Отмена
           </Link>
         </div>
+
+        <div className="article-top-tools__item">
+          <Link className="article-top-tools__link" to="/article/new">
+            Предпросмотр
+          </Link>
+        </div>
       </div>
     );
   }
