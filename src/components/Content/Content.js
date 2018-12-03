@@ -17,7 +17,6 @@ class Content extends Component {
 
   render() {
     const { data } = this.props;
-    console.log(data);
     const { blocks=[] } = data;
     return (
       <div className="content">
