@@ -34,10 +34,15 @@ export function fetchArticle(id) {
 export function createArticle(data) {
   return (dispatch, state) => {
     const { current:siteId } = state().sites;
+
     const payload = apiClient.createArticle(siteId, data).then((response) => {
-      const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(response.id, item));
-      return Promise.all(blockGroupPromises);
+      const articleId = response.id;
+      return apiClient.lockArticle(articleId).then(() => {
+        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(response.id, item));
+        return Promise.all(blockGroupPromises);
+      });
     });
+
     return dispatch({
       type: CREATE_ARTICLES,
       payload

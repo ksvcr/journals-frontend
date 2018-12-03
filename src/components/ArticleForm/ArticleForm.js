@@ -77,10 +77,8 @@ class ArticleForm extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
     return (
       <div className="article-publish-form">
-        <form onSubmit={ handleSubmit } />
         <div className="article-publish-form__wizard">
           <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
         </div>
@@ -120,6 +118,7 @@ function getInitialValues(state, props) {
 
   return {
     language: languagesArray.length ? languagesArray[0].id : null,
+    has_financing: true,
     rubric: rubricsArray.length ? rubricsArray[0].id : null,
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
     financing_sources: [{
@@ -139,7 +138,8 @@ function getInitialValues(state, props) {
       {
         title: 'Введение',
         hint: 'Подсказка про Введение',
-        static: true
+        static: true,
+        content: {"blocks":[{"key":"525dr","text":"sdfsdf sdfsdf dsfsdf sdsf sdfsdfsdf","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":6,"style":"CUSTOM_COLOR_rgba(22,107,28,1)"},{"offset":7,"length":6,"style":"CUSTOM_BACKGROUND_rgba(255,0,0,1)"},{"offset":26,"length":9,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"37bso","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"ag5ji","text":" ","type":"block-table","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}}],"entityMap":{"0":{"type":"block-table","mutability":"IMMUTABLE","data":{"rows":[[{"blocks":[{"key":"dskf2","text":"колонка1","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},{"blocks":[{"key":"53nat","text":"колонка12","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}]],"numberOfColumns":2,"title":"Заголовок таблицы1","additional":"1","keywords":"2"}}}}
       },
       {
         title: 'Методы и принципы исследования'

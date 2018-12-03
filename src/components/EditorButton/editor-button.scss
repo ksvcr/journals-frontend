@@ -1,0 +1,93 @@
+.editor-button {
+  $root: &;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  transition: background .2s;
+
+  &:hover,
+  &:focus {
+    background: #e4e3dd;
+  }
+
+  &_active,
+  &_active:hover {
+    background: #c1c0bc;
+  }
+
+  &__icon {
+    width: 15px;
+    height: 15px;
+    transition: fill .2s;
+    fill: #192a3e;
+
+    #{$root}_active & {
+      fill: #fff;
+    }
+
+    &_bold {
+      width: 10px;
+      height: 11px;
+    }
+
+    &_italic {
+      width: 4.5px;
+      height: 11px;
+    }
+
+    &_underline {
+      width: 12px;
+      height: 14px;
+    }
+
+    &_align-left,
+    &_align-center,
+    &_align-right,
+    &_align-justify {
+      width: 16px;
+      height: 18px;
+      stroke: #192a3e;
+
+      #{$root}_active & {
+        stroke: #fff;
+      }
+    }
+
+    &_sub {
+      width: 12px;
+      height: 11px;
+      top: 2px;
+      position: relative;
+    }
+
+    &_sup {
+      width: 12px;
+      height: 10px;
+    }
+
+    &_undo,
+    &_redo {
+      width: 14px;
+      height: 12px;
+
+      #{$root}:disabled & {
+        fill: #c4c7c8;
+      }
+    }
+
+    &_uppercase {
+      width: 15px;
+      height: 11px;
+    }
+
+    &_capitalize {
+      width: 17px;
+      height: 11px;
+    }
+  }
+}

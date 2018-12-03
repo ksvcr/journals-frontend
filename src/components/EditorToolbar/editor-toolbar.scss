@@ -1,0 +1,21 @@
+.editor-toolbar {
+  order: -1;
+  background: #efeeea;
+  padding: 20px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+
+    & + & {
+      margin-top: 10px;
+    }
+  }
+
+  &__separator {
+    display: inline-block;
+    border-right: 1px solid #d9d5c7;;
+    height: 40px;
+    margin: 0 .8em;
+  }
+}

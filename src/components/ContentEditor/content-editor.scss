@@ -1,0 +1,37 @@
+.content-editor {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #efeeea;
+
+  &__counters {
+    display: flex;
+  }
+
+  &__counter {
+    & + & {
+      margin-left: 10px;
+    }
+  }
+
+  > .DraftEditor-root {
+    padding: 15px 20px;
+  }
+
+  .align-right > div {
+    text-align: right;
+  }
+
+  .align-center > div {
+    text-align: center;
+  }
+
+  .align-left > div {
+    text-align: left;
+  }
+
+  .align-justify > div {
+    text-align: justify;
+  }
+}

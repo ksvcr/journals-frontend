@@ -1,0 +1,43 @@
+.color-tool {
+  padding: 0 10px;
+
+  &__button {
+    font-size: 0;
+    display: block;
+    border: 0;
+    background: transparent;
+    padding: 0 18px 0 0;
+    position: relative;
+    cursor: pointer;
+
+    &:after {
+      content: '';
+      position: absolute;
+      border-style: solid;
+      border-width: 4px 4px 0 4px;
+      border-color: #787775 transparent transparent transparent;
+      display: block;
+      top: 50%;
+      right: 0;
+    }
+
+    &:hover:after {
+      border-color: #000 transparent transparent transparent;
+    }
+  }
+
+  &__box {
+    background: #000;
+    width: 16px;
+    height: 4px;
+    display: flex;
+    margin-top: 6px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 9px;
+    height: 10px;
+  }
+}

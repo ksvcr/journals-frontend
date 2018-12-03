@@ -27,6 +27,9 @@ const apiClient = {
   editArticle: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
+  lockArticle: (articleId) => {
+    return fetchInstance.request(`/articles/${articleId}/lock`);
+  },
   createBlockGroup: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/block-group/`, { method: 'post', data });
   }

@@ -1,5 +1,5 @@
 export function serializeArticleData(data={}) {
-  const { authors=[], ...rest } = data;
+  const { authors=[], has_financing, financing_sources, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -7,6 +7,10 @@ export function serializeArticleData(data={}) {
     article_type: 1,
     slug: `slug-${new Date().getTime()}`
   };
+  
+  if (has_financing) {
+    serializedData.financing_sources = financing_sources;
+  }
 
   const author = authors.find(author => author.id !== undefined);
 

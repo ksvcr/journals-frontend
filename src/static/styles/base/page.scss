@@ -82,4 +82,12 @@
   }
 }
 
+.show-enter {
+  opacity: 0.01;
+
+  &.fade-enter-active {
+    opacity: 1;
+  }
+}
+
 

@@ -129,6 +129,8 @@ class ArticleCommonForm extends Component {
 
   render() {
     const { visibleFields } = this.state;
+    const { hasFinancing } = this.props;
+
     return (
       <div className="article-common-form">
         <h2 className="page__title">Общие сведения</h2>
@@ -249,11 +251,10 @@ class ArticleCommonForm extends Component {
             Финансирование
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.financing) } name="financing"
-                      onChange={ this.handleFieldToggle } />
+            <Field name="has_financing" id="has_financing" type="checkbox" component={ Switcher } />
           </div>
 
-          { visibleFields.financing &&
+          { hasFinancing &&
             <FieldArray name="financing_sources" rerenderOnEveryChange={ true }
                         component={ this.renderFinancingSourcesList } />
           }
@@ -299,12 +300,15 @@ function mapStateToProps(state, props) {
   let category = formSelector(state, 'category');
   category = category && parseInt(category, 10);
 
+  const hasFinancing = formSelector(state, 'has_financing');
+
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
 
   return {
+    hasFinancing,
     rootCategory,
     category,
     rootCategoriesArray,
