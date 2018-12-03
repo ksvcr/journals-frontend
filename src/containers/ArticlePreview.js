@@ -7,10 +7,15 @@ import Menu from '~/components/Menu/Menu';
 import Content from '~/components/Content/Content';
 
 import * as articlesActions from '~/store/articles/actions';
+import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
+import CancelLink from '~/components/CancelLink/CancelLink';
 
 class ArticlePreview extends Component {
   componentDidMount() {
-    this.handleRequest();
+    const { articleId } = this.props;
+    if (articleId !== 'new') {
+      this.handleRequest();
+    }
   }
 
   handleRequest = (params={}) => {
@@ -19,8 +24,10 @@ class ArticlePreview extends Component {
   };
 
   componentDidUpdate() {
-    const { isFulfilled, articleData, push } = this.props;
-    if (isFulfilled && !articleData) {
+    const { articleId, articleData, push, isFulfilled } = this.props;
+    const hasDataForPreview = articleId === 'new' && !articleData;
+    const hasDataForArticle = articleId !== 'new' && !articleData;
+    if (hasDataForPreview || (isFulfilled && hasDataForArticle)) {
       push('/');
     }
   }
@@ -43,21 +50,31 @@ class ArticlePreview extends Component {
   }
 
   render() {
-    const { isFulfilled, articleData } = this.props;
-    return isFulfilled && (
+    const { articleId, articleData } = this.props;
+    return articleData ? (
       <React.Fragment>
         <aside className="page__sidebar">
           <Menu items={ this.menuItems } />
         </aside>
 
         <article className="page__content">
-          <h1 className="page__title">Просмотр</h1>
-          { articleData && articleData.blocks &&
-            <Content blocks={ articleData.blocks } />
+          { articleId &&
+            <ArticleTopTools>
+              <CancelLink href="/publish"/>
+            </ArticleTopTools>
+          }
+
+          { articleData &&
+            <React.Fragment>
+              <h1 className="page__title">
+                { articleData.title }
+              </h1>
+              <Content data={ articleData } />
+            </React.Fragment>
           }
         </article>
       </React.Fragment>
-    );
+    ) : null;
   }
 }
 
@@ -75,6 +92,7 @@ function mapStateToProps(state, props) {
     articleData = articles.data[articleId]
   }
   return {
+    articleId,
     isFulfilled: articles.isFulfilled,
     articleData
   };

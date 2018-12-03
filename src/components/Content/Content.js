@@ -4,9 +4,7 @@ import Renderer from '~/components/Renderer/Renderer';
 import './content.scss';
 
 class Content extends Component {
-  renderBlocks = () => {
-    const { blocks } = this.props;
-
+  renderBlocks = (blocks) => {
     return blocks.map((item, index) => (
       <div className="content__block" key={ index }>
         <h2 className="content__title">
@@ -18,9 +16,22 @@ class Content extends Component {
   };
 
   render() {
+    const { data } = this.props;
+    console.log(data);
+    const { blocks=[] } = data;
     return (
       <div className="content">
-        { this.renderBlocks() }
+        { data.text_to_description &&
+          <React.Fragment>
+            <h2 className="content__title">
+              Аннотация
+            </h2>
+            <p>
+              { data.text_to_description }
+            </p>
+          </React.Fragment>
+        }
+        { this.renderBlocks(blocks) }
       </div>
     );
   }

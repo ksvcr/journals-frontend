@@ -1,0 +1,19 @@
+.preview-link {
+  text-decoration: none;
+  color: $blue-color;
+  transition: color .2s;
+  font-weight: 600;
+
+  &:hover {
+    color: #000;
+  }
+
+  &__icon {
+    display: inline-block;
+    vertical-align: baseline;
+    width: 24px;
+    height: 15px;
+    fill: $orange-color;
+    margin-left: 12px;
+  }
+}

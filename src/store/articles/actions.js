@@ -1,4 +1,5 @@
-import { CREATE_ARTICLES, FETCH_ARTICLES, FETCH_ARTICLE } from './constants';
+import { CREATE_ARTICLE, FETCH_ARTICLES,
+         FETCH_ARTICLE, EDIT_ARTICLE } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -38,13 +39,13 @@ export function createArticle(data) {
     const payload = apiClient.createArticle(siteId, data).then((response) => {
       const articleId = response.id;
       return apiClient.lockArticle(articleId).then(() => {
-        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(response.id, item));
+        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(articleId, item));
         return Promise.all(blockGroupPromises);
       });
     });
 
     return dispatch({
-      type: CREATE_ARTICLES,
+      type: CREATE_ARTICLE,
       payload
     }).catch((error) => console.log(error));
   }
@@ -52,12 +53,14 @@ export function createArticle(data) {
 
 export function editArticle(id, data) {
   return (dispatch) => {
-    const payload = apiClient.editArticle(id, data).then((response) => {
-      const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(response.id, item));
-      return Promise.all(blockGroupPromises);
+    const payload = apiClient.lockArticle(id).then(() => {
+      return apiClient.editArticle(id, data).then(() => {
+        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(id, item));
+        return Promise.all(blockGroupPromises);
+      })
     });
     return dispatch({
-      type: CREATE_ARTICLES,
+      type: EDIT_ARTICLE,
       payload
     }).catch((error) => console.log(error));
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';

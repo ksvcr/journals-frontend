@@ -5,6 +5,10 @@
   overflow: hidden;
   border: 1px solid #efeeea;
 
+  a {
+    color: $link-color;
+  }
+
   > .DraftEditor-root > .DraftEditor-editorContainer > .public-DraftEditor-content {
     padding: 15px 20px;
     min-height: 150px;

@@ -1,0 +1,13 @@
+.cancel-link {
+  text-decoration: none;
+  color: inherit;
+
+  &__icon {
+    display: inline-block;
+    vertical-align: baseline;
+    width: 11px;
+    height: 11px;
+    fill: $orange-color;
+    margin-right: 12px;
+  }
+}
