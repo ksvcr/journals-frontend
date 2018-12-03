@@ -8,6 +8,8 @@ import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
 import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
+import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
+
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 
@@ -51,7 +53,7 @@ class ArticleForm extends Component {
       },
       {
         title: 'Список литературы',
-        component: <div>Раздел в разработке</div>
+        component: <ArticleSourcesForm { ...this.formProps } />
       }
     ];
   }
