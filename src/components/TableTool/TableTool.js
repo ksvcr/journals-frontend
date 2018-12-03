@@ -40,6 +40,7 @@ class TableTool extends Component {
           }
         ]
       ],
+      title: 'Заголовок таблицы',
       numberOfColumns: 2
     };
 

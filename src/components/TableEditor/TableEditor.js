@@ -75,7 +75,7 @@ class TableEditor extends Component {
     this.setState({ showTable: false });
     const { numberOfColumns, rows } = this.state;
     const newRow = [];
-    for (let i = 0; i<=numberOfColumns; i++) {
+    for (let i = 0; i<=numberOfColumns-1; i++) {
       newRow.push(cellData);
     }
     const newRows = [ ...rows, newRow ];

@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 
-import ImageMedia from '~/components/ImageMedia/ImageMedia';
+import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+import { EditorState } from 'draft-js';
 
 class AtomicBlock extends Component {
   handleChange = (data) => {
     const { contentState, block, blockProps } = this.props;
+    const { pluginEditor } = blockProps;
+    const { getEditorState, setEditorState } = pluginEditor;
+    const editorState = getEditorState();
+    const selection = editorState.getSelection();
+
     blockProps.onInteractChange(false);
 
     contentState.replaceEntityData(
       block.getEntityAt(0),
       data
     );
+    setEditorState(EditorState.forceSelection(editorState, selection));
   };
 
   handleInteract = () => {
@@ -35,9 +42,8 @@ class AtomicBlock extends Component {
     const type = this.entity.getType();
     switch(type){
       case 'image-list':
-        return <ImageMedia data={ data } onChange={ this.handleChange }
-                           onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
-  
+        return <ImageMediaEditor data={ data } onChange={ this.handleChange }
+                                 onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
       default:
         return null;
     }

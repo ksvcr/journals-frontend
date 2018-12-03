@@ -52,7 +52,7 @@ class ArticlePreview extends Component {
 
         <article className="page__content">
           <h1 className="page__title">Просмотр</h1>
-          { articleData.blocks &&
+          { articleData && articleData.blocks &&
             <Content blocks={ articleData.blocks } />
           }
         </article>
@@ -74,7 +74,6 @@ function mapStateToProps(state, props) {
   } else {
     articleData = articles.data[articleId]
   }
-  console.log(articleData);
   return {
     isFulfilled: articles.isFulfilled,
     articleData
