@@ -67,8 +67,9 @@ class AuthorAdd extends Component {
   };
 
   render() {
-    const { field, authorData, isCurrent, hash,
-            correspondingAuthor, source, authorsArray } = this.props;
+    const { field, authorData, correspondingAuthor,
+            authorsArray, data } = this.props;
+    const { source, isCurrent, hash } = data;
     return (
       <div className="author-add">
         { authorData !== undefined ?
@@ -133,16 +134,11 @@ function mapStateToProps(state, props) {
   const { users } = state;
 
   const formSelector = formValueSelector(formName);
-  const source = formSelector(state, `${field}.source`);
   const hash = formSelector(state, `${field}.hash`);
   const id = formSelector(state, `${field}.id`);
-  const isCurrent = formSelector(state, `${field}.isCurrent`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
 
   return {
-    source,
-    hash,
-    isCurrent,
     correspondingAuthor,
     authorData: users.data[id],
     authorsArray: users.searchData[hash]

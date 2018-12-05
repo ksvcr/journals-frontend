@@ -96,6 +96,7 @@ ArticleForm = reduxForm({
 })(ArticleForm);
 
 const initialAuthorHash = nanoid();
+const initialSourceHash = nanoid();
 
 function mapStateToProps(state, props) {
   const isInvalidForm = isInvalid(FORM_NAME)(state);
@@ -157,6 +158,10 @@ function getInitialValues(state, props) {
         static: true
       },
     ],
+    sources: [{
+      isEdit: true,
+      hash: initialSourceHash
+    }],
     ...data
   };
 }

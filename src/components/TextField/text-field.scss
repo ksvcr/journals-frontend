@@ -10,7 +10,7 @@
     border: 1px solid #dcdcdc;
     outline: 0;
     display: block;
-    padding: 18px 30px 18px 18px;
+    padding: 18px;
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
@@ -20,8 +20,12 @@
     transition: border-color .2s;
 
     #{$root}_small & {
-      padding: 11px 40px 11px 17px;
+      padding: 11px 17px 11px 17px;
       font-size: 14px;
+    }
+
+    #{$root}_small#{$root}_calendar & {
+      padding: 11px 40px 11px 17px;
     }
 
     &:hover {
