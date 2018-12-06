@@ -6,6 +6,9 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &_small {
       margin-bottom: 15px;

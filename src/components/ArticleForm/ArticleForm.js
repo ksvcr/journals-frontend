@@ -159,7 +159,11 @@ function getInitialValues(state, props) {
       },
     ],
     sources: [{
-      isEdit: true,
+      last_name: 'Куклин',
+      first_name: 'С. В.',
+      title: 'Название',
+      english_title: 'Name',
+      isEdit: false,
       hash: initialSourceHash
     }],
     ...data

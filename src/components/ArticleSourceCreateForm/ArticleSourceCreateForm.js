@@ -113,7 +113,7 @@ class ArticleSourceCreateForm extends Component {
               <Field name="date" id="source_date" validate={ [validate.required] }
                      component={ props =>  <Calendar className="text-field_white"
                                                      customInput={ <TextField meta={ props.meta } /> }
-                                                     selected={ props.input.value || moment() } { ...props } /> } />
+                                                     selected={ props.input.value } { ...props } /> } />
             </div>
             <div className="form__col form__col_2">
               <label htmlFor="source_confirm" className="form__label">

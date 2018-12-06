@@ -25,9 +25,14 @@ class ArticleSourceList extends Component {
     fields.remove(index);
   };
 
-  handleSourceCreate = (field, formData) => {
+  handleSourceCreate = (field, data) => {
     const { formName, change } = this.props;
-    change(formName, field, { ...formData, isEdit: false });
+    change(formName, field, { ...data, isEdit: false });
+  };
+
+  handleEdit = (field, data) => {
+    const { formName, change } = this.props;
+    change(formName, field, { ...data, isEdit: true });
   };
 
   render() {
@@ -49,7 +54,8 @@ class ArticleSourceList extends Component {
                       <ArticleSourceCreateForm formName={ `source-create[${hash}]` } data={ data }
                                                field={ field } onSubmit={ this.handleSourceCreate }/>
                     </FieldSet> :
-                    <ArticleSource index={ index } field={ field } data={ data } />
+                    <ArticleSource index={ index } field={ field } data={ data }
+                                   onRemove={ this.handleRemove } onEdit={ this.handleEdit } />
                   }
                 </React.Fragment>
               )

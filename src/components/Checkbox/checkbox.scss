@@ -2,9 +2,11 @@
   $root: &;
 
   font-size: 14px;
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   white-space: nowrap;
+  height: 100%;
+  align-items: center;
 
   & + & {
     margin-left: 30px;
