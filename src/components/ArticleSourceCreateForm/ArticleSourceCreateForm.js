@@ -7,12 +7,16 @@ import TextField from '~/components/TextField/TextField';
 import Button from '~/components/Button/Button';
 import Select from '~/components/Select/Select';
 import Calendar from '~/components/Calendar/Calendar';
+import Icon from '~/components/Icon/Icon';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 
 import * as validate from '~/utils/validate';
 import ReqMark from '~/components/ReqMark/ReqMark';
+
+import './article-source-create-form.scss';
+import './assets/save.svg';
 
 class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
@@ -159,7 +163,10 @@ class ArticleSourceCreateForm extends Component {
           </div>
         </div>
         <div className="form__field">
-          <Button type="submit" className="button_orange"> Сохранить </Button>
+          <Button type="submit">
+            <Icon name="save" className="article-source-create-form__save-icon" />
+            Сохранить
+          </Button>
         </div>
       </form>
     );
