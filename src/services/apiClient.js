@@ -12,8 +12,13 @@ const apiClient = {
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
-  getUsers: (params) => fetchInstance.request(`/users/`, { params }),
+  getUsers: (userId=null, params) => {
+    const tail = userId !== null ? `${userId}/` : '';
+    return fetchInstance.request(`/users/${tail}`, { params });
+  },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+
+  createFinancing: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
 
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';

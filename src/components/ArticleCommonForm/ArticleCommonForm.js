@@ -24,7 +24,6 @@ class ArticleCommonForm extends Component {
   state = {
     visibleFields: {
       conflicts: true,
-      financing: true,
       addressRadio: false,
       addressList: false
     }
@@ -129,7 +128,7 @@ class ArticleCommonForm extends Component {
 
   render() {
     const { visibleFields } = this.state;
-    const { hasFinancing } = this.props;
+    const { hasFinancing, isConflictInterest } = this.props;
 
     return (
       <div className="article-common-form">
@@ -237,10 +236,9 @@ class ArticleCommonForm extends Component {
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.conflicts) }
-                      name="conflicts" onChange={ this.handleFieldToggle } />
+            <Field name="is_conflict_interest" id="is_conflict_interest" type="checkbox" component={ Switcher } />
           </div>
-          { visibleFields.conflicts &&
+          { isConflictInterest &&
             <Field name="conflict_interest" id="conflict_interest" component={ TextField }
                    placeholder="Перечислите конфликты интересов" validate={ [validate.required] } />
           }
@@ -301,7 +299,7 @@ function mapStateToProps(state, props) {
   category = category && parseInt(category, 10);
 
   const hasFinancing = formSelector(state, 'has_financing');
-
+  const isConflictInterest = formSelector(state, 'is_conflict_interest');
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
@@ -309,6 +307,7 @@ function mapStateToProps(state, props) {
 
   return {
     hasFinancing,
+    isConflictInterest,
     rootCategory,
     category,
     rootCategoriesArray,

@@ -1,5 +1,5 @@
-export function serializeArticleData(data={}) {
-  const { authors=[], has_financing, financing_sources, ...rest } = data;
+export function serializeArticleData(data = {}) {
+  const { authors = [], has_financing, financing_sources, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -7,7 +7,7 @@ export function serializeArticleData(data={}) {
     article_type: 1,
     slug: `slug-${new Date().getTime()}`
   };
-  
+
   if (has_financing) {
     serializedData.financing_sources = financing_sources;
   }
@@ -19,8 +19,8 @@ export function serializeArticleData(data={}) {
   }
 
   const collaborators = authors
-                        .filter(author => author.id !== undefined && author.id !== serializedData.author)
-                        .map(author => ({ user: author.id }));
+    .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
+    .map(author => ({ user: author.id }));
 
   if (collaborators.length) {
     serializedData.collaborators = collaborators;
@@ -38,8 +38,13 @@ export function serializeArticleData(data={}) {
   return serializedData;
 }
 
-
-export function deserializeArticleData(data={}) {
-  const deserializedData = data;
+export function deserializeArticleData(data = {}) {
+  const { author, collaborators, ...rest } = data; 
+  const deserializedData = rest;
+  if (author && collaborators) {
+    deserializedData.authors = [{
+      id: author.user
+    }, ...collaborators.map(item => ({ id: item.user }))];
+  }
   return deserializedData;
 }

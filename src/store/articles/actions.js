@@ -21,7 +21,7 @@ export function fetchArticle(id) {
     const { data } = state().articles;
 
     if (data[id]) {
-      return Promise.resolve();
+      return Promise.resolve({ value: data[id] });
     } else {
       const payload = apiClient.getArticles(null, id);
       return dispatch({
@@ -35,15 +35,17 @@ export function fetchArticle(id) {
 export function createArticle(data) {
   return (dispatch, state) => {
     const { current:siteId } = state().sites;
-
-    const payload = apiClient.createArticle(siteId, data).then((response) => {
-      const articleId = response.id;
-      return apiClient.lockArticle(articleId).then(() => {
-        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(articleId, item));
-        return Promise.all(blockGroupPromises);
+    const financingPromises = data.financing_sources.map(item => apiClient.createFinancing(item))
+    const payload = Promise.all(financingPromises).then(() => {
+      return apiClient.createArticle(siteId, data).then((response) => {
+        const articleId = response.id;
+        return apiClient.lockArticle(articleId).then(() => {
+          const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(articleId, item));
+          return Promise.all(blockGroupPromises);
+        });
       });
     });
-
+ 
     return dispatch({
       type: CREATE_ARTICLE,
       payload

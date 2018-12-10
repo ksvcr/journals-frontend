@@ -120,6 +120,7 @@ function getInitialValues(state, props) {
 
   return {
     language: languagesArray.length ? languagesArray[0].id : null,
+    is_conflict_interest: true,
     has_financing: true,
     rubric: rubricsArray.length ? rubricsArray[0].id : null,
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
