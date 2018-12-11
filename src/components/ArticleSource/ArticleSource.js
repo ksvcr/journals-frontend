@@ -41,10 +41,10 @@ class ArticleSource extends Component {
             { `Источник №${index + 1}` }
           </div>
           <div className="article-source__title">
-            { this.getTitle(['last_name', 'first_name', 'title', 'count'], 'ru') }
+            { this.getTitle(['author', 'original_source_name', 'page_count'], 'ru') }
           </div>
           <div className="article-source__text">
-            { this.getTitle(['english_title', 'count'], 'en') }
+            { this.getTitle(['author', 'second_source_name', 'page_count'], 'en') }
           </div>
         </div>
         <div className="article-source__tools">

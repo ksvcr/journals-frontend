@@ -1,5 +1,5 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, ...rest } = data;
+  const { authors = [], has_financing, financing_sources, sources, blocks, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -8,8 +8,14 @@ export function serializeArticleData(data = {}) {
     slug: `slug-${new Date().getTime()}`
   };
 
-  if (has_financing) {
-    serializedData.financing_sources = financing_sources;
+  if (has_financing && financing_sources) {
+    serializedData.financing_sources = financing_sources.filter(item => {
+      return item.organization && item.grant_name && item.financing_id && item.grant_number;
+    });
+
+    if (!serializedData.financing_sources.length) {
+      delete serializedData.financing_sources;
+    }
   }
 
   const author = authors.find(author => author.id !== undefined);
@@ -26,14 +32,17 @@ export function serializeArticleData(data = {}) {
     serializedData.collaborators = collaborators;
   }
 
-  serializedData.blocks = serializedData.blocks.map((item, index) => ({
-    title: item.title,
-    ordered: index,
-    content_blocks: [{
-      content: item.content,
-      ordered: 0
-    }]
-  }));
+  if (blocks) {
+    serializedData.blocks = blocks.map((item, index) => ({
+      title: item.title,
+      ordered: index,
+      content: item.content
+    }));
+  }
+
+  if (sources) {
+    serializedData.sources = sources.filter(item => item.isValid)
+  }
 
   return serializedData;
 }

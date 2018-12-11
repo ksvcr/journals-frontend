@@ -30,25 +30,31 @@ const FinancingSourceForm = ({ field }) => {
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.financing_id` } className="form__label">ID организации</label>
+            <label htmlFor={ `${field}.financing_id` } className="form__label">
+              ID организации <ReqMark />
+            </label>
             <Field className="text-field_white" name={ `${field}.financing_id` } id={ `${field}.financing_id` }
-                   component={ TextField } placeholder="Введите ID" />
+                   component={ TextField } placeholder="Введите ID" validate={ [validate.required] } />
           </div>
         </div>
       </div>
       <div className="form__row">
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.grant_name` } className="form__label">Название гранта</label>
+            <label htmlFor={ `${field}.grant_name` } className="form__label">
+              Название гранта  <ReqMark />
+            </label>
             <Field className="text-field_white" name={ `${field}.grant_name` } id={ `${field}.grant_name` }
-                   component={ TextField } placeholder="Введите название гранта" />
+                   component={ TextField } placeholder="Введите название гранта" validate={ [validate.required] } />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.grant_number` } className="form__label">Номер гранта</label>
+            <label htmlFor={ `${field}.grant_number` } className="form__label">
+              Номер гранта  <ReqMark />
+            </label>
             <Field className="text-field_white" name={ `${field}.grant_number` } id={ `${field}.grant_number` }
-                   component={ TextField } placeholder="Введите номер гранта" />
+                   component={ TextField } placeholder="Введите номер гранта" validate={ [validate.required] } />
           </div>
         </div>
       </div>

@@ -35,13 +35,15 @@ export function fetchArticle(id) {
 export function createArticle(data) {
   return (dispatch, state) => {
     const { current:siteId } = state().sites;
-    const financingPromises = data.financing_sources.map(item => apiClient.createFinancing(item))
+    const financingPromises = data.financing_sources ? data.financing_sources.map(item => apiClient.createFinancing(item)): [];
     const payload = Promise.all(financingPromises).then(() => {
       return apiClient.createArticle(siteId, data).then((response) => {
         const articleId = response.id;
         return apiClient.lockArticle(articleId).then(() => {
-          const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(articleId, item));
-          return Promise.all(blockGroupPromises);
+          return Promise.all([
+            apiClient.createBlocks(articleId, data.blocks),
+            apiClient.createSources(articleId, data.sources)
+          ]);
         });
       });
     });

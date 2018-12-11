@@ -21,7 +21,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import {  getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
-import { deserializeArticleData } from '~/services/article';
+import { deserializeArticleData } from '~/services/articleFormat';
 
 
 const FORM_NAME = 'article-publish';
@@ -159,14 +159,6 @@ function getInitialValues(state, props) {
         static: true
       },
     ],
-    sources: [{
-      last_name: 'Куклин',
-      first_name: 'С. В.',
-      title: 'Название',
-      english_title: 'Name',
-      isEdit: false,
-      hash: initialSourceHash
-    }],
     ...data
   };
 }

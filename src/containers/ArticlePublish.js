@@ -14,7 +14,7 @@ import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 
-import { serializeArticleData } from '~/services/article';
+import { serializeArticleData } from '~/services/articleFormat';
 import PreviewLink from '~/components/PreviewLink/PreviewLink';
 
 class ArticlePublish extends Component {

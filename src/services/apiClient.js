@@ -20,6 +20,8 @@ const apiClient = {
 
   createFinancing: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
 
+  createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
+
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
     const tail = articleId  !== null ? `${articleId}/` : '';
@@ -35,8 +37,8 @@ const apiClient = {
   lockArticle: (articleId) => {
     return fetchInstance.request(`/articles/${articleId}/lock`);
   },
-  createBlockGroup: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/block-group/`, { method: 'post', data });
+  createBlocks: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
   }
 };
 
