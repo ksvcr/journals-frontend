@@ -35,10 +35,18 @@ const apiClient = {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
   lockArticle: (articleId) => {
-    return fetchInstance.request(`/articles/${articleId}/lock`);
+    return fetchInstance.request(`/articles/${articleId}/lock/`);
   },
+
   createBlocks: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
+  },
+  getBlocks: (articleId) => {
+    return fetchInstance.request(`/articles/${articleId}/blocks/`);
+  },
+
+  getFinancingSource: (id) => {
+    return fetchInstance.request(`/financing/${id}/`);
   }
 };
 

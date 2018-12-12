@@ -17,33 +17,45 @@ export function fetchArticles(params={}) {
 }
 
 export function fetchArticle(id) {
-  return (dispatch, state) => {
-    const { data } = state().articles;
-
-    if (data[id]) {
-      return Promise.resolve({ value: data[id] });
-    } else {
-      const payload = apiClient.getArticles(null, id);
-      return dispatch({
-        type: FETCH_ARTICLE,
-        payload
-      }).catch((error) => console.log(error));
-    }
+  return (dispatch) => {
+    const payload = apiClient.getArticles(null, id).then(({ financing_sources, ...articleData }) => {
+      if (financing_sources) {
+        const financingPromises = financing_sources.map(id => apiClient.getFinancingSource(id));
+        return Promise.all(financingPromises).then(financing_sources => {
+          return { ...articleData, financing_sources };
+        });
+      }
+    });
+    return dispatch({
+      type: FETCH_ARTICLE,
+      payload
+    }).catch((error) => console.log(error));
   }
 }
 
 export function createArticle(data) {
   return (dispatch, state) => {
     const { current:siteId } = state().sites;
-    const financingPromises = data.financing_sources ? data.financing_sources.map(item => apiClient.createFinancing(item)): [];
-    const payload = Promise.all(financingPromises).then(() => {
-      return apiClient.createArticle(siteId, data).then((response) => {
-        const articleId = response.id;
+    let { content_blocks, sources, financing_sources, ...articleData } = data;
+    const financingPromise = financing_sources ? apiClient.createFinancing(financing_sources) : Promise.resolve();
+    const payload = financingPromise.then((financingResponse=[]) => {
+      if (financingResponse.length) {
+        articleData.financing_sources = financingResponse.map(item => item.id);
+      }
+      return apiClient.createArticle(siteId, articleData).then((articleResponse) => {
+        const articleId = articleResponse.id;
         return apiClient.lockArticle(articleId).then(() => {
-          return Promise.all([
-            apiClient.createBlocks(articleId, data.blocks),
-            apiClient.createSources(articleId, data.sources)
-          ]);
+          const resourcePromises = [];
+          if (content_blocks) {
+            content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
+            resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
+          }
+
+          if (sources) {
+            resourcePromises.push(apiClient.createSources(articleId, sources));
+          }
+
+          return Promise.all(resourcePromises);
         });
       });
     });

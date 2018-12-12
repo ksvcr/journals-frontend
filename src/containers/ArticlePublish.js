@@ -38,14 +38,14 @@ class ArticlePublish extends Component {
     ];
 
     if (articleId !== undefined) {
-      promises.push(fetchArticle(articleId).then(({ value }) => {
-        const userIds = value.collaborators.map(item => item.user);
-        if (value.author) {
-          userIds.push(value.author.user);
+      promises.push(fetchArticle(articleId).then(({ value:articleDate }) => {
+        const userIds = articleDate.collaborators.map(item => item.user);
+        if (articleDate.author) {
+          userIds.push(articleDate.author.user);
         }
         const userPromises = userIds.map(id => fetchUser(id));
         return Promise.all(userPromises);
-      }))
+      }));
     }
 
     return Promise.all(promises);

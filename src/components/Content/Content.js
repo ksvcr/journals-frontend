@@ -17,7 +17,7 @@ class Content extends Component {
 
   render() {
     const { data } = this.props;
-    const { blocks=[] } = data;
+    const { content_blocks=[] } = data;
     return (
       <div className="content">
         { data.text_to_description &&
@@ -30,7 +30,7 @@ class Content extends Component {
             </p>
           </React.Fragment>
         }
-        { this.renderBlocks(blocks) }
+        { this.renderBlocks(content_blocks) }
       </div>
     );
   }
