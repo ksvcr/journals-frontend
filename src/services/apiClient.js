@@ -18,8 +18,6 @@ const apiClient = {
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
 
-  createFinancing: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
-
   createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 
   getArticles: (siteId=null, articleId=null, params) => {
@@ -41,12 +39,19 @@ const apiClient = {
   createBlocks: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
   },
-  getBlocks: (articleId) => {
-    return fetchInstance.request(`/articles/${articleId}/blocks/`);
+  editBlocks: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data });
   },
 
+  createFinancingSources: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
   getFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`);
+  },
+  editFinancingSource: (id, data) => {
+    return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
+  },
+  deleteFinancingSource: (id) => {
+    return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   }
 };
 

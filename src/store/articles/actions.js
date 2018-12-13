@@ -37,7 +37,7 @@ export function createArticle(data) {
   return (dispatch, state) => {
     const { current:siteId } = state().sites;
     let { content_blocks, sources, financing_sources, ...articleData } = data;
-    const financingPromise = financing_sources ? apiClient.createFinancing(financing_sources) : Promise.resolve();
+    const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
     const payload = financingPromise.then((financingResponse=[]) => {
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
@@ -69,10 +69,26 @@ export function createArticle(data) {
 
 export function editArticle(id, data) {
   return (dispatch) => {
-    const payload = apiClient.lockArticle(id).then(() => {
-      return apiClient.editArticle(id, data).then(() => {
-        const blockGroupPromises = data.blocks.map(item => apiClient.createBlockGroup(id, item));
-        return Promise.all(blockGroupPromises);
+    let { content_blocks, financing_sources, ...articleData } = data;
+    let financingPromises = [Promise.resolve()];
+
+    if (financing_sources) {
+      const newFinancingArray = financing_sources.filter(item => item.id === undefined);
+      const oldFinancingArray = financing_sources.filter(item => item.id !== undefined);
+
+      const createFinancingPromise = apiClient.createFinancingSources(newFinancingArray);
+      const editFinancingPromises = oldFinancingArray.map(item => apiClient.editFinancingSource(item.id, item));
+      financingPromises = [createFinancingPromise, ...editFinancingPromises];
+    }
+
+    const payload = Promise.all(financingPromises).then(([ createFinancingResponse, ...editFinancingResponse ]) => {
+      const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
+      if (financingResponse.length) {
+        articleData.financing_sources = financingResponse.map(item => item.id);
+      }
+      return apiClient.lockArticle(id).then(() => {
+        const editPromises = [apiClient.editArticle(id, articleData), apiClient.editBlocks(id, content_blocks)];
+        return Promise.all(editPromises);
       })
     });
     return dispatch({
