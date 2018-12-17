@@ -12,7 +12,7 @@ import Payment from '~/components/Payment/Payment';
 import { getArticlesArray } from '~/store/articles/selector';
 
 import * as formatDate from '~/services/formatDate';
-import getArticleStatusTitle from '~/services/getArticleStatusTitle';
+import { getArticleStatusTitle } from '~/services/articleStatuses';
 
 class AuthorArticleList extends Component {
   state = {

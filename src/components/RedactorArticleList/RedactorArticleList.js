@@ -8,13 +8,16 @@ import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
+import ListChecker from '~/components/ListChecker/ListChecker';
 
 import { getArticlesArray } from '~/store/articles/selector';
 
 import * as formatDate from '~/services/formatDate';
-import getArticleStatusTitle from '~/services/getArticleStatusTitle';
+import { getArticleStatusTitle, getArticleStatusOptions } from '~/services/articleStatuses';
 
 import './redactor-article-list.scss';
+
+const articleOptions = getArticleStatusOptions();
 
 class RedactorArticleList extends Component {
   state = {
@@ -90,6 +93,11 @@ class RedactorArticleList extends Component {
     onUpdateRequest({ filter: range });
   };
 
+  handleCheckerFilterChange = (name, data) => {
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ filter: { [name]: data } });
+  };
+
   handlePaginateChange = (paginate) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ paginate });
@@ -145,6 +153,8 @@ class RedactorArticleList extends Component {
           },
           sort: 'stage_article',
           head: () => 'Этап',
+          headToolTip: () => <ListChecker data={ articleOptions } name="stage"
+                                          onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             getArticleStatusTitle(data.stage)
         },
