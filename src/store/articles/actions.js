@@ -3,9 +3,8 @@ import { CREATE_ARTICLE, FETCH_ARTICLES,
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
-export function fetchArticles(params={}) {
-  return (dispatch, state) => {
-    const { current:siteId } = state().sites;
+export function fetchArticles(siteId, params={}) {
+  return (dispatch) => {
     const flatParams = getFlatParams(params);
     const payload = apiClient.getArticles(siteId, null, flatParams);
     return dispatch({
@@ -33,9 +32,8 @@ export function fetchArticle(id) {
   }
 }
 
-export function createArticle(data) {
-  return (dispatch, state) => {
-    const { current:siteId } = state().sites;
+export function createArticle(siteId, data) {
+  return (dispatch) => {
     let { content_blocks, sources, financing_sources, ...articleData } = data;
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
     const payload = financingPromise.then((financingResponse=[]) => {

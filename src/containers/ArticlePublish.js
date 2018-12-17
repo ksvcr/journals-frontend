@@ -31,10 +31,10 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
+    const { articleId, siteId, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
     const promises = [
-      fetchRubrics(),
-      fetchCategories()
+      fetchRubrics(siteId),
+      fetchCategories(siteId)
     ];
 
     if (articleId !== undefined) {
@@ -52,24 +52,24 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, createArticle, editArticle, push } = this.props;
+    const { siteId, articleId, createArticle, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'SENT' });
 
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
-      createArticle(data).then(() => { push('/'); });
+      createArticle(siteId, data).then(() => { push('/'); });
     }
   };
 
   handleDraftSubmit = (formData) => {
-    const { articleId, createArticle, editArticle, push } = this.props;
+    const { articleId, siteId, createArticle, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
     
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
-      createArticle(data).then(() => { push('/'); });
+      createArticle(siteId, data).then(() => { push('/'); });
     }
   };
 
@@ -127,10 +127,12 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
+  const { sites } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
 
   return {
+    siteId: sites.current,
     articleId
   };
 }

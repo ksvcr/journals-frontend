@@ -1,9 +1,8 @@
 import { FETCH_RUBRICS } from './constants';
 import apiClient from '~/services/apiClient';
 
-export function fetchRubrics() {
-  return (dispatch, state) => {
-    const { current:siteId } = state().sites;
+export function fetchRubrics(siteId=null) {
+  return (dispatch) => {
     const payload = apiClient.getRubrics(siteId);
     return dispatch({
       type: FETCH_RUBRICS,
