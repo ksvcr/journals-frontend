@@ -14,7 +14,9 @@ import { getArticlesArray } from '~/store/articles/selector';
 import * as formatDate from '~/services/formatDate';
 import getArticleStatusTitle from '~/services/getArticleStatusTitle';
 
-class AuthorArticleList extends Component {
+import './redactor-article-list.scss';
+
+class RedactorArticleList extends Component {
   state = {
     box: null,
     dateField: 'date_create'
@@ -94,7 +96,7 @@ class AuthorArticleList extends Component {
   };
 
   get listProps() {
-    const { articlesArray } = this.props;
+    const { articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -106,12 +108,24 @@ class AuthorArticleList extends Component {
       cells: [
         {
           style: {
-            width: '50%'
+            width: '30%'
           },
           isMain: true,
           head: () => 'Название',
           render: (data) =>
             data.title || 'Название статьи не указано'
+        },
+        {
+          style: {
+            width: '20%'
+          },
+          sort: 'site',
+          head: () => 'Журнал',
+          render: (data) => {
+            const siteId = data.site;
+            const siteName = sitesData[siteId] && sitesData[siteId].name;
+            return siteName || 'Журнал не найден';
+          }
         },
         {
           style: {
@@ -160,8 +174,8 @@ class AuthorArticleList extends Component {
   render() {
     const { total, paginate } = this.props;
     return (
-      <div className="author-article-list">
-        <div className="author-article-list__holder">
+      <div className="redactor-article-list">
+        <div className="redactor-article-list__holder">
           <List { ...this.listProps } />
         </div>
 
@@ -174,9 +188,11 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { total, paginate } = state.articles;
+  const { sites, articles } = state;
+  const { total, paginate } = articles;
   return {
     articlesArray: getArticlesArray(state),
+    sitesData: sites.data,
     total, paginate
   };
 }
@@ -187,4 +203,4 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps, mapDispatchToProps
-)(AuthorArticleList);
+)(RedactorArticleList);

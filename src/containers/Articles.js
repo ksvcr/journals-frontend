@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import AuthorArticles from '~/containers/AuthorArticles';
+// import AuthorArticles from '~/containers/AuthorArticles';
 import RedactorArticles from '~/containers/RedactorArticles';
 
 class Articles extends Component {
@@ -9,8 +9,8 @@ class Articles extends Component {
     const { userRole } = this.props;
     switch (userRole) {
       case 'AUTHOR':
-        return <AuthorArticles />;
-      case 'REDACTOR':
+      //   return <AuthorArticles />;
+      // case 'REDACTOR':
         return <RedactorArticles />;
       default:
         return null;

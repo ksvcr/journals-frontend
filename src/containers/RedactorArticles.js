@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
-import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
+import RedactorArticleList from '~/components/RedactorArticleList/RedactorArticleList';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
@@ -43,7 +43,7 @@ class RedactorArticles extends Component {
 
         <article className="page__content">
           <h1 className="page__title">Мои статьи</h1>
-          <AuthorArticleList onUpdateRequest={ this.handleRequest } />
+          <RedactorArticleList onUpdateRequest={ this.handleRequest } />
         </article>
       </React.Fragment>
     );
