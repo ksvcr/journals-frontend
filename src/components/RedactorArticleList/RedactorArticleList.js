@@ -151,9 +151,9 @@ class RedactorArticleList extends Component {
           style: {
             width: '13%'
           },
-          sort: 'stage_article',
+          sort: 'stage_artistage_articlecle',
           head: () => 'Этап',
-          headToolTip: () => <ListChecker data={ articleOptions } name="stage"
+          headToolTip: () => <ListChecker data={ articleOptions } name="stage_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             getArticleStatusTitle(data.stage)
@@ -162,8 +162,9 @@ class RedactorArticleList extends Component {
           style: {
             width: '20%'
           },
+          sort: 'state_article',
           head: () => 'Статус',
-          headToolTip: () => <ListChecker data={ articleOptions } name="stage"
+          headToolTip: () => <ListChecker data={ articleOptions } name="state_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             <StatusLabel status={ data.state_article } />
