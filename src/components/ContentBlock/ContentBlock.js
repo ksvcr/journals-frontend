@@ -19,7 +19,7 @@ import './assets/pen.svg';
 class ContentBlock extends Component {
   getRef = (ref) => {
     if (ref) {
-      this.input = ref.htmlEl;
+      this.input = ref.getEl();
     }
   };
 

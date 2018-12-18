@@ -1,5 +1,5 @@
 import { CREATE_ARTICLE, FETCH_ARTICLES,
-         FETCH_ARTICLE, EDIT_ARTICLE } from './constants';
+         FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -94,4 +94,14 @@ export function editArticle(id, data) {
       payload
     }).catch((error) => console.log(error));
   }
+}
+
+export function createArticleTag(id, data) {
+  return (dispatch) => {
+    const payload = apiClient.createArticleTag(id, data);
+    return dispatch({
+      type: CREATE_ARTICLE_TAG,
+      payload
+    }).catch((error) => console.log(error));
+  };
 }

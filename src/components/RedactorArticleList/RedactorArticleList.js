@@ -7,10 +7,11 @@ import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
-import Payment from '~/components/Payment/Payment';
+import TagEditor from '~/components/TagEditor/TagEditor';
 import ListChecker from '~/components/ListChecker/ListChecker';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStatusTitle, getArticleStatusOptions } from '~/services/articleStatuses';
@@ -21,7 +22,6 @@ const articleOptions = getArticleStatusOptions();
 
 class RedactorArticleList extends Component {
   state = {
-    box: null,
     dateField: 'date_create'
   };
 
@@ -35,15 +35,10 @@ class RedactorArticleList extends Component {
         title: 'Отозвать'
       },
       {
-        title: 'Оплатить',
-        handler: this.handlePaymentShow
-      },
-      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
         handler: this.handlePreview
-
       }
     ];
   };
@@ -59,12 +54,6 @@ class RedactorArticleList extends Component {
   handleSortChange = (ordering) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
-  };
-
-  handlePaymentShow = (id) => {
-    this.setState({
-      box: { id,  type: 'payment' }
-    });
   };
 
   handleEdit = (id) => {
@@ -83,10 +72,6 @@ class RedactorArticleList extends Component {
     }, 0);
   };
 
-  handlePaymentClose = () => {
-    this.setState({ box: null });
-  };
-
   handleDateFilterChange = (field, range) => {
     const { onUpdateRequest } = this.props;
     this.setState({ dateField: field });
@@ -101,6 +86,12 @@ class RedactorArticleList extends Component {
   handlePaginateChange = (paginate) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ paginate });
+  };
+
+  handleTagAdd = (article, text) => {
+    const { userId, userRole, createArticleTag } = this.props;
+    const tagData = { article, text, user: userId, user_role: userRole };
+    createArticleTag(article, tagData);
   };
 
   get listProps() {
@@ -151,7 +142,7 @@ class RedactorArticleList extends Component {
           style: {
             width: '13%'
           },
-          sort: 'stage_artistage_articlecle',
+          sort: 'stage_article',
           head: () => 'Этап',
           headToolTip: () => <ListChecker data={ articleOptions } name="stage_article"
                                           onChange={ this.handleCheckerFilterChange } />,
@@ -174,14 +165,11 @@ class RedactorArticleList extends Component {
   }
 
   renderBox = (data) => {
-    const { box } = this.state;
-    if (box && box.id === data.id) {
-      if (box.type === 'payment') {
-        return <Payment onClose={ this.handlePaymentClose } />;
-      }
-    }
-
-    return null;
+    return (
+      <div className="redactor-article-list__editor">
+        <TagEditor id={ data.id } data={ data.tags } onChange={ this.handleTagAdd } />
+      </div>
+    );
   };
 
   render() {
@@ -201,9 +189,11 @@ class RedactorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites, articles } = state;
+  const { sites, articles, user } = state;
   const { total, paginate } = articles;
   return {
+    userId: user.data.id,
+    userRole: user.data.role,
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
     total, paginate
@@ -211,7 +201,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push
+  push,
+  createArticleTag: articlesActions.createArticleTag
 };
 
 export default connect(
