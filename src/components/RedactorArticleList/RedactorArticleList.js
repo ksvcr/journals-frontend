@@ -163,6 +163,8 @@ class RedactorArticleList extends Component {
             width: '20%'
           },
           head: () => 'Статус',
+          headToolTip: () => <ListChecker data={ articleOptions } name="stage"
+                                          onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             <StatusLabel status={ data.state_article } />
         }
