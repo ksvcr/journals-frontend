@@ -18,6 +18,7 @@ class ImageMediaEditor extends Component {
     const { data, onChange } = this.props;
     const newImages = files.map(file => {
       const objectURL = window.URL.createObjectURL(file);
+      console.log(file);
       return {
         id: nanoid(),
         name: file.name,
