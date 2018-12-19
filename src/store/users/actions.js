@@ -1,9 +1,9 @@
 import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER, INSERT_USER } from './constants';
 import apiClient from '~/services/apiClient';
 
-export function fetchUsers() {
+export function fetchUsers(params) {
   return (dispatch) => {
-    const payload = apiClient.getUsers();
+    const payload = apiClient.getUsers(null, params);
     return dispatch({
       type: FETCH_USERS,
       payload

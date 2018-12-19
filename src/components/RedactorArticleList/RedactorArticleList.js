@@ -9,6 +9,8 @@ import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import ListChecker from '~/components/ListChecker/ListChecker';
+import RedactorActions from '~/components/RedactorActions/RedactorActions';
+import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorReviewerList';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -94,11 +96,6 @@ class RedactorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
-  handleTagRemove = (article, id) => {
-    const { removeArticleTag } = this.props;
-    removeArticleTag(article, id);
-  };
-
   get listProps() {
     const { articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
@@ -170,10 +167,16 @@ class RedactorArticleList extends Component {
   }
 
   renderBox = (data) => {
+    const { removeArticleTag } = this.props;
     return (
-      <div className="redactor-article-list__tags">
-        <TagEditor entityId={ data.id } data={ data.tags }
-                   onAdd={ this.handleTagAdd } onRemove={ this.handleTagRemove } />
+      <div className="redactor-article-list__box">
+        <div className="redactor-article-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
+        <div className="redactor-article-list__actions">
+          <RedactorActions />
+        </div>
       </div>
     );
   };
