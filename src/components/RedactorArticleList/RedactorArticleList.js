@@ -95,7 +95,8 @@ class RedactorArticleList extends Component {
   };
 
   handleTagRemove = (article, id) => {
-    console.log(article, id);
+    const { removeArticleTag } = this.props;
+    removeArticleTag(article, id);
   };
 
   get listProps() {
@@ -170,7 +171,7 @@ class RedactorArticleList extends Component {
 
   renderBox = (data) => {
     return (
-      <div className="redactor-article-list__editor">
+      <div className="redactor-article-list__tags">
         <TagEditor entityId={ data.id } data={ data.tags }
                    onAdd={ this.handleTagAdd } onRemove={ this.handleTagRemove } />
       </div>
@@ -207,7 +208,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   push,
-  createArticleTag: articlesActions.createArticleTag
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
 };
 
 export default connect(

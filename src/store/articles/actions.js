@@ -1,5 +1,7 @@
-import { CREATE_ARTICLE, FETCH_ARTICLES,
-         FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG } from './constants';
+import {
+  CREATE_ARTICLE, FETCH_ARTICLES,
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG
+} from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -96,11 +98,22 @@ export function editArticle(id, data) {
   }
 }
 
-export function createArticleTag(id, data) {
+export function createArticleTag(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.createArticleTag(id, data);
+    const payload = apiClient.createArticleTag(articleId, data);
     return dispatch({
       type: CREATE_ARTICLE_TAG,
+      payload
+    }).catch((error) => console.log(error));
+  };
+}
+
+export function removeArticleTag(articleId, id) {
+  return (dispatch) => {
+    const payload = apiClient.removeArticleTag(articleId, id);
+    return dispatch({
+      type: REMOVE_ARTICLE_TAG,
+      meta: { articleId, id },
       payload
     }).catch((error) => console.log(error));
   };

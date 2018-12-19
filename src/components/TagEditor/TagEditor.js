@@ -42,7 +42,7 @@ class TagEditor extends Component {
     onRemove(entityId, id);
   };
 
-  handleBlur = () => {
+  handleCreate = () => {
     const { entityId, onAdd } = this.props;
     const { newText } = this.state;
     const newState = {
@@ -66,6 +66,12 @@ class TagEditor extends Component {
     this.setState({
       newText: value
     });
+  };
+
+  handleKeyPressed = (event) => {
+    if (event.keyCode === 13) {
+      this.handleCreate();
+    }
   };
 
   renderTags = () => {
@@ -94,7 +100,7 @@ class TagEditor extends Component {
           <div className={ itemClasses }>
             { isEdit ?
               <ContentEditable className="tag-editor__box tag-editor__box_field" ref={ this.getRef } html={ newText }
-                               onChange={ this.handleChange } onBlur={ this.handleBlur } /> :
+                               onChange={ this.handleChange } onBlur={ this.handleCreate } onKeyDown={ this.handleKeyPressed } /> :
               <button className="tag-editor__add" type="button"
                       onClick={ this.handleAdd }>Добавить тег</button>
             }
