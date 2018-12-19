@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ContentEditable from 'react-contenteditable';
-import nanoid from 'nanoid';
 import classNames from 'classnames';
 
+import Icon from '~/components/Icon/Icon';
+
+import './assets/cancel.svg';
 import './tag-editor.scss';
 
 class TagEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEdit: this.props.data.length < 1,
+      isEdit: false,
       newText: ''
     };
   }
@@ -33,16 +35,23 @@ class TagEditor extends Component {
     });
   };
 
+  handleRemove = (event) => {
+    const { entityId, onRemove } = this.props;
+    let { id } = event.currentTarget.dataset;
+    id = parseInt(id, 10);
+    onRemove(entityId, id);
+  };
+
   handleBlur = () => {
-    const { id, onChange } = this.props;
+    const { entityId, onAdd } = this.props;
     const { newText } = this.state;
-    let newState = {
+    const newState = {
       isEdit: false,
       newText: ''
     };
 
     if (newText) {
-      onChange(id, newText);
+      onAdd(entityId, newText);
     }
 
     this.setState(newState);
@@ -62,9 +71,14 @@ class TagEditor extends Component {
   renderTags = () => {
     const { data } = this.props;
     return data.map(item => (
-      <div className="tag-editor__item" key={ item.id || item.key }>
+      <div className="tag-editor__item" key={ item.id }>
         <div className="tag-editor__box">
           { item.text }
+          <button type="button" className="tag-editor__remove"
+                  data-id={ item.id } onClick={ this.handleRemove }>
+            <Icon name="cancel" className="tag-editor__remove-icon" />
+            Удалить тег
+          </button>
         </div>
       </div>
     ));
@@ -96,8 +110,10 @@ TagEditor.defaultProps = {
 };
 
 TagEditor.propTypes = {
+  entityId: PropTypes.number,
   data: PropTypes.array,
-  onChange: PropTypes.func
+  onAdd: PropTypes.func,
+  onRemove: PropTypes.func
 };
 
 export default TagEditor;

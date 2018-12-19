@@ -94,6 +94,10 @@ class RedactorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
+  handleTagRemove = (article, id) => {
+    console.log(article, id);
+  };
+
   get listProps() {
     const { articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
@@ -167,7 +171,8 @@ class RedactorArticleList extends Component {
   renderBox = (data) => {
     return (
       <div className="redactor-article-list__editor">
-        <TagEditor id={ data.id } data={ data.tags } onChange={ this.handleTagAdd } />
+        <TagEditor entityId={ data.id } data={ data.tags }
+                   onAdd={ this.handleTagAdd } onRemove={ this.handleTagRemove } />
       </div>
     );
   };
