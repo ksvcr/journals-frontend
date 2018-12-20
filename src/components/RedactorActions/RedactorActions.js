@@ -11,10 +11,11 @@ class RedactorActions extends Component {
   };
 
   get actions() {
+    const { articleId } = this.props;
     return [
       {
         title: 'Рецензировать',
-        component: <RedactorReview />
+        component: <RedactorReview articleId={ articleId } />
       }
     ];
   }

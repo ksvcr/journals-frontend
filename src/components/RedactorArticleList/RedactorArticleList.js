@@ -10,7 +10,6 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import ListChecker from '~/components/ListChecker/ListChecker';
 import RedactorActions from '~/components/RedactorActions/RedactorActions';
-import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorReviewerList';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -175,7 +174,7 @@ class RedactorArticleList extends Component {
                      onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
         </div>
         <div className="redactor-article-list__actions">
-          <RedactorActions />
+          <RedactorActions articleId={ data.id } />
         </div>
       </div>
     );

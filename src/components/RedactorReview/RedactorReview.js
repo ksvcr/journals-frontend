@@ -4,9 +4,10 @@ import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorRevi
 
 class RedactorReview extends Component {
   render() {
+    const { articleId } = this.props;
     return (
       <div className="redactor-review">
-        <RedactorReviewerList />
+        <RedactorReviewerList articleId={ articleId } />
       </div>
     );
   }

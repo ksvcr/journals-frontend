@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import List from '~/components/List/List';
+import Button from '~/components/Button/Button';
 import InterestList from '~/components/InterestList/InterestList';
 
+import * as articlesActions from '~/store/articles/actions';
 import { getUsersArray } from '~/store/users/selector';
 
 import './redactor-reviewer-list.scss';
@@ -13,9 +15,10 @@ class RedactorReviewerList extends Component {
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
   handleChoose = (event) => {
+    const { articleId, inviteArticleReviewer } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    console.log(id);
+    inviteArticleReviewer(articleId, { reviewer: id });
   };
 
   get listProps() {
@@ -55,10 +58,10 @@ class RedactorReviewerList extends Component {
           },
           isMain: true,
           render: (data) =>
-            <button type="button" className="redactor-reviewer-list__choose"
+            <Button type="button" className="button_small redactor-reviewer-list__choose"
                     data-id={ data.id } onClick={ this.handleChoose }>
               Выбрать
-            </button>
+            </Button>
         }
       ]
     };
@@ -79,6 +82,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  inviteArticleReviewer: articlesActions.inviteArticleReviewer,
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(RedactorReviewerList);
