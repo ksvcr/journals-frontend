@@ -1,4 +1,4 @@
-import { FETCH_ARTICLES, FETCH_ARTICLE } from './constants';
+import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -52,6 +52,27 @@ function articles(state = initialState, action) {
           [ action.payload.id ]: action.payload
         },
         ids: [ ...state.ids, action.payload.id ]
+      };
+
+    case `${CREATE_ARTICLE_TAG}_FULFILLED`:
+      const oldTags = state.data[action.payload.article].tags || [];
+      return { ...state,
+        data: { ...state.data,
+          [ action.payload.article ]: {
+            ...state.data[action.payload.article],
+            tags: [ ...oldTags, action.payload]
+          }
+        }
+      };
+
+    case `${REMOVE_ARTICLE_TAG}_PENDING`:
+      return { ...state,
+        data: { ...state.data,
+          [ action.meta.articleId ]: {
+            ...state.data[action.meta.articleId],
+            tags: state.data[action.meta.articleId].tags.filter((item) => item.id !== action.meta.id)
+          }
+        }
       };
 
     default:

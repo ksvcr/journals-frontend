@@ -52,7 +52,13 @@ const apiClient = {
   },
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
-  }
+  },
+  createArticleTag: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
+  },
+  removeArticleTag: (articleId, id) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+  },
 };
 
 export default apiClient;
