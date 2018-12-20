@@ -13,7 +13,7 @@ import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
   render() {
-    const { handleSubmit, userRole } = this.props;
+    const { handleSubmit } = this.props;
     return (
       <form className="author-settings-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
@@ -230,12 +230,12 @@ class AuthorSettingsForm extends Component {
 
         <h2 className="form__subtitle">Вы зарегистрированы как:</h2>
         <div className="author-settings-form__role form__field form__field_inline">
-          <Radio disabled={ true } defaultChecked={ userRole === 'AUTHOR' }>
+          <Field name="role" value="AUTHOR" type="radio" component={ Radio }>
             Автор
-          </Radio>
-          <Radio disabled={ true } defaultChecked={ userRole === 'REVIEWER' }>
+          </Field>
+          <Field name="role" value="REVIEWER" type="radio" component={ Radio }>
             Автор и рецензент
-          </Radio>
+          </Field>
         </div>
 
         <div className="form__field">
@@ -253,11 +253,9 @@ AuthorSettingsForm = reduxForm({
 function mapStateToProps(state, props) {
   const { formName } = props;
   const { user } = state;
-  const { role:userRole } = user.data;
 
   return {
     form: formName,
-    userRole,
     initialValues: user.data
   };
 }
