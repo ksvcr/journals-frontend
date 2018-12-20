@@ -9,6 +9,7 @@ import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import ListChecker from '~/components/ListChecker/ListChecker';
+import RedactorActions from '~/components/RedactorActions/RedactorActions';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -94,10 +95,6 @@ class RedactorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
-  handleTagRemove = (article, id) => {
-    console.log(article, id);
-  };
-
   get listProps() {
     const { articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
@@ -169,10 +166,16 @@ class RedactorArticleList extends Component {
   }
 
   renderBox = (data) => {
+    const { removeArticleTag } = this.props;
     return (
-      <div className="redactor-article-list__editor">
-        <TagEditor entityId={ data.id } data={ data.tags }
-                   onAdd={ this.handleTagAdd } onRemove={ this.handleTagRemove } />
+      <div className="redactor-article-list__box">
+        <div className="redactor-article-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
+        <div className="redactor-article-list__actions">
+          <RedactorActions articleId={ data.id } />
+        </div>
       </div>
     );
   };
@@ -207,7 +210,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   push,
-  createArticleTag: articlesActions.createArticleTag
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
 };
 
 export default connect(

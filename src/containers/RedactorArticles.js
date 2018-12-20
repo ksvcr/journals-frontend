@@ -3,13 +3,22 @@ import { connect } from 'react-redux';
 
 import RedactorArticleList from '~/components/RedactorArticleList/RedactorArticleList';
 
+import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
 class RedactorArticles extends Component {
   componentDidMount() {
-    this.handleRequest();
+    this.handleInitialRequest();
   }
+
+  handleInitialRequest = () => {
+    const { fetchUsers } = this.props;
+    return Promise.all([
+      fetchUsers({ role: 'REVIEWER' }),
+      this.handleRequest()
+    ]);
+  };
 
   handleRequest = (params={}) => {
     const { articlesParams, fetchArticles } = this.props;
@@ -33,6 +42,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+  fetchUsers: usersActions.fetchUsers,
   fetchArticles: articlesActions.fetchArticles
 };
 

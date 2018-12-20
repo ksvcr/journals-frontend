@@ -1,5 +1,7 @@
-import { CREATE_ARTICLE, FETCH_ARTICLES,
-         FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG } from './constants';
+import {
+  CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER,
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG
+} from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -79,7 +81,8 @@ export function editArticle(id, data) {
       financingPromises = [createFinancingPromise, ...editFinancingPromises];
     }
 
-    const payload = Promise.all(financingPromises).then(([ createFinancingResponse, ...editFinancingResponse ]) => {
+    const payload = Promise.all(financingPromises).then(([ createFinancingResponse=[], ...editFinancingResponse ]) => {
+      console.log(createFinancingResponse);
       const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
@@ -96,11 +99,32 @@ export function editArticle(id, data) {
   }
 }
 
-export function createArticleTag(id, data) {
+export function createArticleTag(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.createArticleTag(id, data);
+    const payload = apiClient.createArticleTag(articleId, data);
     return dispatch({
       type: CREATE_ARTICLE_TAG,
+      payload
+    }).catch((error) => console.log(error));
+  };
+}
+
+export function removeArticleTag(articleId, id) {
+  return (dispatch) => {
+    const payload = apiClient.removeArticleTag(articleId, id);
+    return dispatch({
+      type: REMOVE_ARTICLE_TAG,
+      meta: { articleId, id },
+      payload
+    }).catch((error) => console.log(error));
+  };
+}
+
+export function inviteArticleReviewer(articleId, data) {
+  return (dispatch) => {
+    const payload = apiClient.inviteArticleReviewer(articleId, data);
+    return dispatch({
+      type: INVITE_ARTICLE_REVIEWER,
       payload
     }).catch((error) => console.log(error));
   };

@@ -12,6 +12,7 @@ const apiClient = {
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
+  updateCurrentUser: (data) => fetchInstance.request(`/users/me/`, { method: 'put', data }),
   getUsers: (userId=null, params) => {
     const tail = userId !== null ? `${userId}/` : '';
     return fetchInstance.request(`/users/${tail}`, { params });
@@ -53,12 +54,14 @@ const apiClient = {
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   },
-
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
   },
-  updateCurrentUser: (data) => {
-    return fetchInstance.request(`/users/me/`, { method: 'put', data });
+  removeArticleTag: (articleId, id) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+  },
+  inviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   }
 };
 

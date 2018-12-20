@@ -1,3 +1,9 @@
 .redactor-article-list {
+  &__box {
+    padding-bottom: 25px;
+  }
 
+  &__tags {
+    margin-bottom: 10px;
+  }
 }
