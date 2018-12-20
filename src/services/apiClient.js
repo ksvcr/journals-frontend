@@ -59,6 +59,9 @@ const apiClient = {
   removeArticleTag: (articleId, id) => {
     return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
   },
+  inviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
+  }
 };
 
 export default apiClient;
