@@ -57,6 +57,9 @@ const apiClient = {
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
   },
+  updateCurrentUser: (data) => {
+    return fetchInstance.request(`/users/me/`, { method: 'put', data });
+  }
 };
 
 export default apiClient;

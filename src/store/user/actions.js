@@ -1,5 +1,5 @@
 import apiClient from '~/services/apiClient';
-import { LOGIN, FETCH_CURRENT_USER } from './constants';
+import { LOGIN, FETCH_CURRENT_USER, UPDATE_CURRENT_USER } from './constants';
 
 export function login() {
   return (dispatch) => {
@@ -19,6 +19,16 @@ export function fetchCurrentUser() {
     const payload = apiClient.getCurrentUser();
     return dispatch({
       type: FETCH_CURRENT_USER,
+      payload
+    }).catch((error) => console.log(error));
+  }
+}
+
+export function updateCurrentUser(data) {
+  return (dispatch) => {
+    const payload = apiClient.updateCurrentUser(data);
+    return dispatch({
+      type: UPDATE_CURRENT_USER,
       payload
     }).catch((error) => console.log(error));
   }
