@@ -1,4 +1,5 @@
-import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER, INSERT_USER } from './constants';
+import { FETCH_USERS, FETCH_USER, SEARCH_USERS,
+         CREATE_USER, INSERT_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
 import apiClient from '~/services/apiClient';
 
 export function fetchUsers(params) {
@@ -52,4 +53,25 @@ export function insertUser(data) {
       });
     }
   }
+}
+
+export function createUserTag(userId, data) {
+  return (dispatch) => {
+    const payload = apiClient.createUserTag(userId, data);
+    return dispatch({
+      type: CREATE_USER_TAG,
+      payload
+    }).catch((error) => console.log(error));
+  };
+}
+
+export function removeUserTag(userId, id) {
+  return (dispatch) => {
+    const payload = apiClient.removeUserTag(userId, id);
+    return dispatch({
+      type: REMOVE_USER_TAG,
+      meta: { userId, id },
+      payload
+    }).catch((error) => console.log(error));
+  };
 }

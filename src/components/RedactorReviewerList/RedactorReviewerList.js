@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 
 import List from '~/components/List/List';
 import Button from '~/components/Button/Button';
+import Icon from '~/components/Icon/Icon';
 import InterestList from '~/components/InterestList/InterestList';
+import TagEditor from '~/components/TagEditor/TagEditor';
 
 import * as articlesActions from '~/store/articles/actions';
+import * as usersActions from '~/store/users/actions';
 import { getUsersArray } from '~/store/users/selector';
 
 import './redactor-reviewer-list.scss';
+import './assets/arrow.svg'
 
 class RedactorReviewerList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
@@ -21,12 +25,19 @@ class RedactorReviewerList extends Component {
     inviteArticleReviewer(articleId, { reviewer: id });
   };
 
+  handleTagAdd = (user, text) => {
+    const { currentUserId, createUserTag } = this.props;
+    const tagData = { text, user, tag_author: currentUserId };
+    createUserTag(user, tagData);
+  };
+
   get listProps() {
     const { usersArray } = this.props;
 
     return {
       data: usersArray,
       head: true,
+      box: this.renderBox,
       cells: [
         {
           style: {
@@ -61,11 +72,24 @@ class RedactorReviewerList extends Component {
             <Button type="button" className="button_small redactor-reviewer-list__choose"
                     data-id={ data.id } onClick={ this.handleChoose }>
               Выбрать
+              <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
             </Button>
         }
       ]
     };
   }
+
+  renderBox = (data) => {
+    const { removeUserTag } = this.props;
+    return (
+      <div className="redactor-reviewer-list__box">
+        <div className="redactor-reviewer-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeUserTag } />
+        </div>
+      </div>
+    );
+  };
 
   render() {
     return (
@@ -77,13 +101,18 @@ class RedactorReviewerList extends Component {
 }
 
 function mapStateToProps(state) {
+  const { user } = state;
+
   return {
+    currentUserId: user.data.id,
     usersArray: getUsersArray(state)
   };
 }
 
 const mapDispatchToProps = {
   inviteArticleReviewer: articlesActions.inviteArticleReviewer,
+  createUserTag : usersActions.createUserTag,
+  removeUserTag : usersActions.removeUserTag
 };
 
 export default connect(

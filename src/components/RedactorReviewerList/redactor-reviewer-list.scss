@@ -5,6 +5,20 @@
   }
 
   &__choose {
+    white-space: nowrap;
+  }
 
+  &__choose-icon {
+    width: 7px;
+    height: 12px;
+    display: inline-block;
+    vertical-align: baseline;
+    margin-left: 10px;
+    fill: $blue-color;
+    transform: rotate(180deg);
+  }
+
+  &__box {
+    padding-bottom: 25px;
   }
 }

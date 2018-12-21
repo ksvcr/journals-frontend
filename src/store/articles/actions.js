@@ -125,6 +125,7 @@ export function inviteArticleReviewer(articleId, data) {
     const payload = apiClient.inviteArticleReviewer(articleId, data);
     return dispatch({
       type: INVITE_ARTICLE_REVIEWER,
+      meta: { articleId, data },
       payload
     }).catch((error) => console.log(error));
   };
