@@ -28,7 +28,7 @@ class Page extends Component {
       },
       {
         title: 'Мои скидки',
-        href: '/second'
+        href: '/discounts'
       },
       {
         title: 'Настройки',

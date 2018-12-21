@@ -8,6 +8,7 @@ import ArticlePublish from '~/containers/ArticlePublish';
 import ArticlePreview from '~/containers/ArticlePreview';
 import Editor from '~/containers/Editor';
 import AuthorSettings from '~/containers/AuthorSettings';
+import Discounts from '~/containers/Discounts';
 
 const routes = () => (
   <Page>
@@ -18,6 +19,7 @@ const routes = () => (
       <Route path="/article/:articleId" component={ ArticlePreview } />
       <Route path="/editor" component={ Editor } />
       <Route path="/settings" component={ AuthorSettings } />
+      <Route path="/discounts" component={ Discounts } />
       <Route component={ Articles } />
     </Switch>
   </Page>
