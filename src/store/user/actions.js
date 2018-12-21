@@ -1,5 +1,5 @@
 import apiClient from '~/services/apiClient';
-import { LOGIN, FETCH_CURRENT_USER } from './constants';
+import { LOGIN, FETCH_CURRENT_USER, UPDATE_CURRENT_USER } from './constants';
 
 export function login() {
   return (dispatch) => {
@@ -21,5 +21,24 @@ export function fetchCurrentUser() {
       type: FETCH_CURRENT_USER,
       payload
     }).catch((error) => console.log(error));
+  }
+}
+
+export function updateCurrentUser(data) {
+  return (dispatch, state) => {
+    const { user } = state();
+    const { id } = user.data;
+
+    // Небольшой костыль.
+    // Можно убрать, когда PUT /users/me/ научится обновлять role.
+    apiClient.updateUserRole(id, data)
+    .catch(error => console.log(error))
+    .finally(() => {
+      const payload = apiClient.updateCurrentUser(data);
+      return dispatch({
+        type: UPDATE_CURRENT_USER,
+        payload
+      }).catch((error) => console.log(error));
+    });
   }
 }

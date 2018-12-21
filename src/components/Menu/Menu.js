@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
 import './menu.scss';
@@ -10,9 +10,9 @@ class Menu extends Component {
     const { items } = this.props;
     return items.map((item, index) => (
       <li className="menu__item" key={ `item-${index}` }>
-        <Link to={ item.href ? item.href : '/' } className="menu__link">
+        <NavLink to={ item.href ? item.href : '/' } className="menu__link" exact activeClassName="menu__link_active">
           { item.title }
-        </Link>
+        </NavLink>
       </li>
     ));
   };

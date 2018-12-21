@@ -12,11 +12,13 @@ const apiClient = {
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
+  updateCurrentUser: (data) => fetchInstance.request(`/users/me/`, { method: 'put', data }),
   getUsers: (userId=null, params) => {
     const tail = userId !== null ? `${userId}/` : '';
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
 
   createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 
