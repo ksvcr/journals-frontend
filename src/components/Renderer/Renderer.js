@@ -49,7 +49,7 @@ class Renderer extends Component {
         'image-list': (children, data, { key }) => (
           data.images.length > 1 ? <ImageSlider data={ data } key={ key }/> : <ImageMedia data={ data } key={ key }/>
         ),
-        'block-table': (children, data, { key }) => <Table data={ data } index={ key } key={ key }/>
+        'block-table': (children, data, { key }) => <Table data={ data } key={ key }/>
       },
     };
   }

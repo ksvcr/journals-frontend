@@ -21,11 +21,17 @@ class Table extends Component {
   };
 
   render() {
-    const { data, index } = this.props;
+    const { data } = this.props;
     return (
       <div className="table">
         <div className="table__title">
-          { `Таблица ${index+1} - ${data.title}` }
+          { data.title }
+        </div>
+        <div className="table__doi">
+          DOI:
+          <a href="/" className="table__doi-link">
+            https://doi.org/10.18454/IRJ.2016.44.041
+          </a>
         </div>
         <table className="table__box">
           <tbody>
