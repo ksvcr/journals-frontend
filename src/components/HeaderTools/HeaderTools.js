@@ -8,17 +8,20 @@ class HeaderTools extends Component {
   get langLinks() {
     return [
       {
-        title: 'Rus'
+        title: 'Rus',
+        href: '/rus'
       },
       {
-        title: 'Eng'
+        title: 'Eng',
+        href: '/eng'
       }
     ];
   };
 
   get journalLink() {
     return [{
-      title: 'Наши журналы'
+      title: 'Наши журналы',
+      href: '/journals'
     }];
   };
 

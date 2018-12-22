@@ -104,13 +104,13 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, users } = state;
+  const { sites, articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
 
   return {
     siteId: sites.current,
-    isFulfilled: articles.isFulfilled && users.isFulfilled,
+    isFulfilled: articleId === undefined || articles.isFulfilled,
     articleId
   };
 }
