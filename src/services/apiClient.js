@@ -63,6 +63,9 @@ const apiClient = {
   },
   inviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
+  },
+  getDiscountsInfo: (userId) => {
+    return fetchInstance.request(`users/${userId}/balance`, { method: 'get' });
   }
 };
 
