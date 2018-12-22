@@ -32,12 +32,13 @@ export function updateCurrentUser(data) {
     // Небольшой костыль.
     // Можно убрать, когда PUT /users/me/ научится обновлять role.
     apiClient.updateUserRole(id, data)
-      .catch((error) => console.log(error));
-
-    const payload = apiClient.updateCurrentUser(data);
-    return dispatch({
-      type: UPDATE_CURRENT_USER,
-      payload
-    }).catch((error) => console.log(error));
+    .catch(error => console.log(error))
+    .finally(() => {
+      const payload = apiClient.updateCurrentUser(data);
+      return dispatch({
+        type: UPDATE_CURRENT_USER,
+        payload
+      }).catch((error) => console.log(error));
+    });
   }
 }
