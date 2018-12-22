@@ -19,6 +19,12 @@ const apiClient = {
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
   updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
+  createUserTag: (userId, data) => {
+    return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
+  },
+  removeUserTag: (userId, id) => {
+    return fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' });
+  },
 
   createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 

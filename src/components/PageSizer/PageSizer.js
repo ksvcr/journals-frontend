@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Select from '../Select/Select';
+import Select from '~/components/Select/Select';
 
 import './page-sizer.scss';
 

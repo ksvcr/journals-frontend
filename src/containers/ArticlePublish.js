@@ -73,7 +73,7 @@ class ArticlePublish extends Component {
   };
 
   render() {
-    const { articleId } = this.props;
+    const { articleId, isFulfilled } = this.props;
     return (
       <article className="page__content">
         <ArticleTopTools>
@@ -93,9 +93,10 @@ class ArticlePublish extends Component {
             </div>
           </form>
         </div>
-
-        <ArticleForm id={ articleId }
-                      onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
+        { isFulfilled &&
+            <ArticleForm id={ articleId }
+                         onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
+        }
       </article>
     );
   }
@@ -103,12 +104,13 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites } = state;
+  const { sites, articles, users } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
 
   return {
     siteId: sites.current,
+    isFulfilled: articles.isFulfilled && users.isFulfilled,
     articleId
   };
 }

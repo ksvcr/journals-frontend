@@ -1,5 +1,5 @@
 import { List, Map, Repeat } from 'immutable';
-import { CharacterMetadata, ContentBlock, EditorState, genKey } from 'draft-js';
+import { CharacterMetadata, ContentBlock, EditorState, BlockMapBuilder, Modifier, genKey } from 'draft-js';
 import Icon from '~/components/Icon/Icon';
 import React from 'react';
 
@@ -82,56 +82,71 @@ export function findEntities(type) {
 
 export function addNewBlockAt(
   editorState,
-  pivotBlockKey,
   newBlockType = 'unstyled',
   entityData = {}
 ) {
-  const content = editorState.getCurrentContent();
-  const blockMap = content.getBlockMap();
-  const block = blockMap.get(pivotBlockKey);
+  const currentContentState = editorState.getCurrentContent();
+  const currentSelectionState = editorState.getSelection();
 
-  if (!block) {
-    throw new Error(`The pivot key - ${ pivotBlockKey } is not present in blockMap.`);
-  }
-
-  const blocksBefore = blockMap.toSeq().takeUntil((v) => (v === block));
-  const blocksAfter = blockMap.toSeq().skipUntil((v) => (v === block)).rest();
-  const newBlockKey = genKey();
-
-  const contentStateWithEntity = content.createEntity(
-    newBlockType, 'IMMUTABLE', entityData
+  const afterRemovalContentState = Modifier.removeRange(
+    currentContentState,
+    currentSelectionState,
+    'backward'
   );
 
+  const targetSelection = afterRemovalContentState.getSelectionAfter();
+  const blockKeyForTarget = targetSelection.get('focusKey');
+  const block = currentContentState.getBlockForKey(blockKeyForTarget);
+  let insertionTargetSelection;
+  let insertionTargetBlock;
+
+  const isEmptyBlock = block.getLength() === 0 && block.getEntityAt(0) === null;
+  const selectedFromStart = currentSelectionState.getStartOffset() === 0;
+  if (isEmptyBlock || selectedFromStart) {
+    insertionTargetSelection = targetSelection;
+    insertionTargetBlock = afterRemovalContentState;
+  } else {
+    insertionTargetBlock = Modifier.splitBlock(afterRemovalContentState, targetSelection);
+    insertionTargetSelection = insertionTargetBlock.getSelectionAfter();
+  }
+
+  const newContentStateAfterSplit = Modifier.setBlockType(insertionTargetBlock, insertionTargetSelection, 'sticker');
+
+  const contentStateWithEntity = newContentStateAfterSplit.createEntity(
+    newBlockType, 'IMMUTABLE', entityData
+  );
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-  const charData = CharacterMetadata.create({ entity: entityKey });
+  const charDataOfSticker = CharacterMetadata.create({ entity: entityKey });
 
-  const newBlock = new ContentBlock({
-    key: newBlockKey,
-    type: newBlockType,
-    text: ' ',
-    characterList: List(Repeat(charData, 1)),
-    depth: 0,
-    data: new Map({})
-  });
-
-  const newBlockMap = blocksBefore.concat(
-    [[pivotBlockKey, block], [newBlockKey, newBlock]],
-    blocksAfter
-  ).toOrderedMap();
-
-  const selection = editorState.getSelection();
-
-  const newContent = content.merge({
-    blockMap: newBlockMap,
-    selectionBefore: selection,
-    selectionAfter: selection.merge({
-      anchorKey: newBlockKey,
-      anchorOffset: 0,
-      focusKey: newBlockKey,
-      focusOffset: 0,
-      isBackward: false,
+  const fragmentArray = [
+    new ContentBlock({
+      key: genKey(),
+      type: newBlockType,
+      text: ' ',
+      characterList: List(Repeat(charDataOfSticker, 1)),
+      depth: 0,
+      data: new Map({})
     }),
-  });
 
-  return EditorState.push(editorState, newContent, 'split-block');
+    new ContentBlock({
+      key: genKey(),
+      type: 'unstyled',
+      text: '',
+      characterList: List(),
+    }),
+  ];
+
+  const fragment = BlockMapBuilder.createFromArray(fragmentArray);
+
+  const contentStateWithSticker = Modifier.replaceWithFragment(
+    newContentStateAfterSplit,
+    insertionTargetSelection,
+    fragment
+  );
+
+  return EditorState.push(
+    editorState,
+    contentStateWithSticker,
+    'insert-custom-block'
+  );
 }

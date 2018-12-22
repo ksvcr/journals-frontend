@@ -47,10 +47,8 @@ class TableTool extends Component {
     const { getEditorState, setEditorState } = this.props;
     const editorState = getEditorState();
     const blockKey = 'block-table';
-    const selection = editorState.getSelection();
     setEditorState(addNewBlockAt(
       editorState,
-      selection.getAnchorKey(),
       blockKey,
       entityData
     ))

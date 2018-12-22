@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ToolTip from '../ToolTip/ToolTip';
+import ToolTip from '~/components/ToolTip/ToolTip';
 
 import './ui-hint.scss';
 
