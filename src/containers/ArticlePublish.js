@@ -6,6 +6,7 @@ import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import CancelLink from '~/components/CancelLink/CancelLink';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
@@ -14,6 +15,7 @@ import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 
 import { serializeArticleData } from '~/services/article';
+import PreviewLink from '~/components/PreviewLink/PreviewLink';
 
 class ArticlePublish extends Component {
   componentDidMount() {
@@ -91,7 +93,10 @@ class ArticlePublish extends Component {
         </aside>
 
         <article className="page__content">
-          <ArticleTopTools />
+          <ArticleTopTools>
+            <CancelLink />
+            <PreviewLink href="/article/new" />
+          </ArticleTopTools>
 
           <h1 className="page__title">
             { articleId === undefined ? 'Опубликовать статью' : 'Редактировать статью' }

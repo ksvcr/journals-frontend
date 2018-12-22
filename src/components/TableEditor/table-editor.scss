@@ -21,7 +21,6 @@
     background: #fff;
 
     td {
-      padding: 18px;
       border-left: 1px solid #dcdcdc;
       border-top: 1px solid #dcdcdc;
 
@@ -32,6 +31,10 @@
 
     tr:first-child td {
       border-top: 0;
+    }
+
+    .public-DraftEditor-content {
+      padding: 18px;
     }
   }
 

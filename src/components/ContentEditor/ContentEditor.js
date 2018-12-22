@@ -7,7 +7,6 @@ import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
 import createUndoPlugin from 'draft-js-undo-plugin';
-import createCounterPlugin from 'draft-js-counter-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
 import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';

@@ -52,13 +52,13 @@ export const undoParams = {
 
 export function getBlockStyle(block) {
   switch (block.getType()) {
-    case 'left':
+    case 'align-left':
       return 'align-left';
-    case 'center':
+    case 'align-center':
       return 'align-center';
-    case 'right':
+    case 'align-right':
       return 'align-right';
-    case 'justify':
+    case 'align-justify':
       return 'align-justify';
     default:
       return null;

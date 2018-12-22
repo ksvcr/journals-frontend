@@ -38,7 +38,9 @@ class AuthorArticleList extends Component {
       {
         title: 'Просмотр',
         type: 'preview',
-        icon: 'preview'
+        icon: 'preview',
+        handler: this.handlePreview
+
       }
     ];
   };
@@ -67,6 +69,14 @@ class AuthorArticleList extends Component {
 
     setTimeout(() => {
       push(`/edit/${id}`);
+    }, 0);
+  };
+
+  handlePreview = (id) => {
+    const { push } = this.props;
+
+    setTimeout(() => {
+      push(`/article/${id}`);
     }, 0);
   };
 

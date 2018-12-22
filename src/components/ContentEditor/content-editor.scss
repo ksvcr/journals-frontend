@@ -5,18 +5,14 @@
   overflow: hidden;
   border: 1px solid #efeeea;
 
-  &__counters {
-    display: flex;
+  a {
+    color: $link-color;
   }
 
-  &__counter {
-    & + & {
-      margin-left: 10px;
-    }
-  }
-
-  > .DraftEditor-root {
+  > .DraftEditor-root > .DraftEditor-editorContainer > .public-DraftEditor-content {
     padding: 15px 20px;
+    min-height: 150px;
+    box-sizing: border-box;
   }
 
   .align-right > div {
