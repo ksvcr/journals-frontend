@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
 import './field-add-button.scss';
 
 class FieldAddButton extends Component {
   render() {
-    const { children, onAdd } = this.props;
+    const { children, onAdd, className } = this.props;
+    const buttonClasses = classNames('field-add-button', className);
     return (
-      <button type="button" className="field-add-button" onClick={ onAdd }>
+      <button type="button" className={ buttonClasses } onClick={ onAdd }>
         <span className="field-add-button__circle" />
         { children }
       </button>

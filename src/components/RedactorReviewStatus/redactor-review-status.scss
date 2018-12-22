@@ -1,0 +1,16 @@
+.redactor-review-status {
+  display: flex;
+
+  &__text {
+    padding-right: 20px;
+  }
+
+  &__button {
+    margin-left: auto;
+    color: $orange-color;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+  }
+}

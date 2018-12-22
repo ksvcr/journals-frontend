@@ -12,7 +12,7 @@ import Payment from '~/components/Payment/Payment';
 import { getArticlesArray } from '~/store/articles/selector';
 
 import * as formatDate from '~/services/formatDate';
-import { getArticleStatusTitle } from '~/services/articleStatuses';
+import { getArticleStageTitle } from '~/services/articleStages';
 
 class AuthorArticleList extends Component {
   state = {
@@ -132,7 +132,7 @@ class AuthorArticleList extends Component {
           sort: 'stage_article',
           head: () => 'Этап',
           render: (data) =>
-            getArticleStatusTitle(data.stage)
+            getArticleStageTitle(data.stage)
         },
         {
           style: {

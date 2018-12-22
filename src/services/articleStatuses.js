@@ -18,9 +18,7 @@ export const statusMap = {
   DELETE: 'Удалена'
 };
 
-export function getArticleStatusOptions() {
-  return Object.keys(statusMap).map(key => ({ label: statusMap[key], value: key }));
-}
+export const articleStatusOptions = Object.keys(statusMap).map(key => ({ label: statusMap[key], value: key }));
 
 export function getArticleStatusTitle(status) {
   return statusMap[status] || status;

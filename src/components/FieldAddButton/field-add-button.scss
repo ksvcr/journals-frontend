@@ -10,6 +10,10 @@
   transition: color .2s;
   outline: 0;
 
+  &_small {
+    font-size: 14px;
+  }
+
   &:hover,
   &:focus {
     color: $blue-color;

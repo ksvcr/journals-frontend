@@ -15,11 +15,10 @@ import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
-import { getArticleStatusTitle, getArticleStatusOptions } from '~/services/articleStatuses';
+import { articleStatusOptions } from '~/services/articleStatuses';
+import { getArticleStageTitle, articleStageOptions } from '~/services/articleStages';
 
 import './redactor-article-list.scss';
-
-const articleOptions = getArticleStatusOptions();
 
 class RedactorArticleList extends Component {
   state = {
@@ -145,10 +144,10 @@ class RedactorArticleList extends Component {
           },
           sort: 'stage_article',
           head: () => 'Этап',
-          headToolTip: () => <ListChecker data={ articleOptions } name="stage_article"
+          headToolTip: () => <ListChecker data={ articleStageOptions } name="stage_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
-            getArticleStatusTitle(data.stage)
+            getArticleStageTitle(data.stage)
         },
         {
           style: {
@@ -156,7 +155,7 @@ class RedactorArticleList extends Component {
           },
           sort: 'state_article',
           head: () => 'Статус',
-          headToolTip: () => <ListChecker data={ articleOptions } name="state_article"
+          headToolTip: () => <ListChecker data={ articleStatusOptions } name="state_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             <StatusLabel status={ data.state_article } />
