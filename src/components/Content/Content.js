@@ -28,6 +28,14 @@ class Content extends Component {
             <p>
               { data.text_to_description }
             </p>
+            { data.text_to_keywords &&
+              <div className="content__keywords">
+                <div className="content__keywords-title">Ключевые слова:</div>
+                <div className="content__keywords-text">
+                  { data.text_to_keywords }
+                </div>
+              </div>
+            }
           </React.Fragment>
         }
         { this.renderBlocks(content_blocks) }
