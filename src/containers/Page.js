@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Header from '~/components/Header/Header';
+import Menu from '~/components/Menu/Menu';
 import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
@@ -19,6 +20,23 @@ class Page extends Component {
     });
   }
 
+  get menuItems() {
+    return [
+      {
+        title: 'Мои статьи',
+        href: '/'
+      },
+      {
+        title: 'Мои скидки',
+        href: '/second'
+      },
+      {
+        title: 'Настройки',
+        href: '/settings'
+      }
+    ];
+  }
+
   authUser = () => {
     const { login, fetchCurrentUser } = this.props;
     if (hasToken()) {
@@ -29,7 +47,7 @@ class Page extends Component {
       });
     }
   };
-  
+
   render() {
     const { isFulfilled } = this.props;
     return (
@@ -38,6 +56,10 @@ class Page extends Component {
         <main className="page__main">
           { isFulfilled &&
             <div className="page__holder">
+              <aside className="page__sidebar">
+                <Menu items={ this.menuItems } />
+              </aside>
+
               { this.props.children }
             </div>
           }

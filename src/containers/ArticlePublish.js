@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-import Menu from '~/components/Menu/Menu';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
@@ -65,7 +64,7 @@ class ArticlePublish extends Component {
   handleDraftSubmit = (formData) => {
     const { articleId, siteId, createArticle, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
-    
+
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
@@ -73,55 +72,32 @@ class ArticlePublish extends Component {
     }
   };
 
-  get menuItems() {
-    return [
-      {
-        title: 'Мои статьи',
-        href: '/'
-      },
-      {
-        title: 'Мои скидки',
-        href: '/second'
-      },
-      {
-        title: 'Настройки',
-        href: '/'
-      }
-    ];
-  }
-
   render() {
     const { articleId, isFulfilled } = this.props;
     return (
-      <React.Fragment>
-        <aside className="page__sidebar">
-          <Menu items={ this.menuItems } />
-        </aside>
+      <article className="page__content">
+        <ArticleTopTools>
+          <CancelLink />
+          <PreviewLink href="/article/new" />
+        </ArticleTopTools>
 
-        <article className="page__content">
-          <ArticleTopTools>
-            <CancelLink />
-            <PreviewLink href="/article/new" />
-          </ArticleTopTools>
+        <h1 className="page__title">
+          { articleId === undefined ? 'Опубликовать статью' : 'Редактировать статью' }
+        </h1>
 
-          <h1 className="page__title">
-            { articleId === undefined ? 'Опубликовать статью' : 'Редактировать статью' }
-          </h1>
-
-          <div className="page__tools">
-            <form className="form">
-              <div className="form__field">
-                <label htmlFor="sites-list" className="form__label">Для журнала</label>
-                <SiteSelect id="sites-list" onChange={ this.handleRequest } />
-              </div>
-            </form>
-          </div>
-          { isFulfilled &&
-            <ArticleForm id={ articleId }
-                         onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
-          }
-        </article>
-      </React.Fragment>
+        <div className="page__tools">
+          <form className="form">
+            <div className="form__field">
+              <label htmlFor="sites-list" className="form__label">Для журнала</label>
+              <SiteSelect id="sites-list" onChange={ this.handleRequest } />
+            </div>
+          </form>
+        </div>
+        { isFulfilled &&
+        <ArticleForm id={ articleId }
+                     onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
+        }
+      </article>
     );
   }
 }
