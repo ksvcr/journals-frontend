@@ -9,7 +9,7 @@ class AuthorSettings extends Component {
   handleSubmit = (data) => {
     const { dispatch } = this.props;
     dispatch(userActions.updateCurrentUser(data));
-  }
+  };
 
   render() {
     return (

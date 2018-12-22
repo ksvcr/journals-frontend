@@ -64,9 +64,9 @@ const apiClient = {
   inviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   },
-  getDiscountsInfo: (userId) => {
-    return fetchInstance.request(`users/${userId}/balance`, { method: 'get' });
-  }
+
+  getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
+  transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data })
 };
 
 export default apiClient;

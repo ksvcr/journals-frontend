@@ -1,0 +1,16 @@
+.discounts-transfer {
+  padding-top: 30px;
+
+  &__cancel {
+    color: #020201;
+    text-decoration: none;
+    padding-bottom: 12px;
+  }
+
+  &__search {
+    &__count {
+      color: #192A3E;
+      font-size: 14px;
+    }
+  }
+}
