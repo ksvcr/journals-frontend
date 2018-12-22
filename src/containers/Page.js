@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Header from '~/components/Header/Header';
-import Menu from '~/components/Menu/Menu';
+import MainMenu from '~/components/MainMenu/MainMenu';
 import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
@@ -18,23 +18,6 @@ class Page extends Component {
     this.authUser().then(() => {
       return fetchSites();
     });
-  }
-
-  get menuItems() {
-    return [
-      {
-        title: 'Мои статьи',
-        href: '/'
-      },
-      {
-        title: 'Мои скидки',
-        href: '/second'
-      },
-      {
-        title: 'Настройки',
-        href: '/settings'
-      }
-    ];
   }
 
   authUser = () => {
@@ -57,7 +40,7 @@ class Page extends Component {
           { isFulfilled &&
             <div className="page__holder">
               <aside className="page__sidebar">
-                <Menu items={ this.menuItems } />
+                <MainMenu items={ this.menuItems } />
               </aside>
 
               { this.props.children }

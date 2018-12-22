@@ -9,6 +9,7 @@ class Articles extends Component {
     const { userRole } = this.props;
     switch (userRole) {
       case 'AUTHOR':
+      case 'REVIEWER':
         return <AuthorArticles />;
       case 'REDACTOR':
         return <RedactorArticles />;
