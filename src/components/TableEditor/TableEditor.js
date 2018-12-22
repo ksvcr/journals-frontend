@@ -38,7 +38,6 @@ class TableEditor extends Component {
     this.state = {
       meta: {},
       showTable: true,
-      numberOfColumns: entityData.numberOfColumns || 1,
       rows: entityData.rows || [{}]
     };
   }
@@ -55,8 +54,7 @@ class TableEditor extends Component {
   addColumn = () => {
     // showTable нужен для ремаунта таблицы, так как нужно переопредеоить default state
     this.setState({ showTable: false });
-    const { numberOfColumns, rows } = this.state;
-    const newNumberOfColumns = (numberOfColumns || 1) + 1;
+    const { rows } = this.state;
     const newRows = rows.map(row => {
       row.push(cellData);
       return row;
@@ -64,7 +62,6 @@ class TableEditor extends Component {
 
     setTimeout(() => {
       this.setState({
-        numberOfColumns: newNumberOfColumns,
         rows: newRows,
         showTable: true
       });
@@ -73,7 +70,8 @@ class TableEditor extends Component {
 
   addRow = () => {
     this.setState({ showTable: false });
-    const { numberOfColumns, rows } = this.state;
+    const { rows } = this.state;
+    const numberOfColumns = rows[0].length;
     const newRow = [];
     for (let i = 0; i<=numberOfColumns-1; i++) {
       newRow.push(cellData);
@@ -118,11 +116,11 @@ class TableEditor extends Component {
 
   get blockProps() {
     const { blockProps } = this.props;
-    const { numberOfColumns, rows } = this.state;
+    const { rows } = this.state;
     return { ...blockProps,
       entityData: { ...blockProps.entityData,
-        numberOfColumns,
-        rows
+        rows,
+        numberOfColumns: rows[0].length
       },
     };
   }
