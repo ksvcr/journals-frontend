@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as validate from '~/utils/validate';
 
 import TextField from '~/components/TextField/TextField';
-import Checkbox from '~/components/Checkbox/Checkbox';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
 
@@ -115,12 +114,6 @@ class AuthorSettingsForm extends Component {
                     component={ TextField } placeholder="Введите город" />
             </div>
           </div>
-        </div>
-        <div className="form__field form__field_inline">
-          <Field disabled={ true } name="is_permission_free_public" id="is_permission_free_public" type="checkbox"
-                  component={ Checkbox }>
-            Имею право на бесплатную публикацию
-          </Field>
         </div>
 
         <hr className="author-settings-form__separator" />
