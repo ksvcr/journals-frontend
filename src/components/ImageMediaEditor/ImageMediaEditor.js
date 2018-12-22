@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Dropzone from 'react-dropzone';
 import nanoid from 'nanoid';
 
@@ -9,6 +8,7 @@ import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
 import ImageDropPlaceholder from '~/components/ImageDropPlaceholder/ImageDropPlaceholder';
 
 import formatBytes from '~/utils/formatBytes';
+import fileToBase64 from '~/utils/fileToBase64';
 
 import './assets/edit.svg';
 import './image-media-editor.scss';
@@ -16,22 +16,27 @@ import './image-media-editor.scss';
 class ImageMediaEditor extends Component {
   handleDropFile = files => {
     const { data, onChange } = this.props;
-    const newImages = files.map(file => {
-      const objectURL = window.URL.createObjectURL(file);
-      console.log(file);
-      return {
-        id: nanoid(),
-        name: file.name,
-        title: file.name,
-        size: file.size,
-        type: file.type,
-        preview: objectURL
-      }
+    const newImagesPromises = files.map(file => {
+      return fileToBase64(file);
     });
 
-    const newData = { ...data,
-      images: [ ...data.images, ...newImages ] };
-    onChange(newData);
+    Promise.all(newImagesPromises).then((result) => {
+      const newImages = result.map((base64, index) => {
+        const file = files[index];
+        return {
+          id: nanoid(),
+          name: file.name,
+          title: file.name,
+          size: file.size,
+          type: file.type,
+          preview: base64,
+        }
+      });
+
+      const newData = { ...data,
+        images: [ ...data.images, ...newImages ] };
+      onChange(newData);
+    });
   };
 
   handleSubmit = (id, formData) => {

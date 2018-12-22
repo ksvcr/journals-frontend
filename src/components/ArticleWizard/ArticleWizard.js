@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import Icon from '~/components/Icon/Icon';
 
-import './assets/arrow.svg'
+import './assets/arrow.svg';
 import './article-wizard.scss';
 
 class ArticleWizard extends Component {
