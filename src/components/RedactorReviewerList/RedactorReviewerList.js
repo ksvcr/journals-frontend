@@ -41,7 +41,7 @@ class RedactorReviewerList extends Component {
       cells: [
         {
           style: {
-            width: '20%'
+            width: '25%'
           },
           isMain: true,
           head: () => 'ФИО',
@@ -49,7 +49,7 @@ class RedactorReviewerList extends Component {
         },
         {
           style: {
-            width: '20%'
+            width: '30%'
           },
           isMain: true,
           head: () => 'Научные интересы',
@@ -57,7 +57,7 @@ class RedactorReviewerList extends Component {
         },
         {
           style: {
-            width: '10%'
+            width: '15%'
           },
           isMain: true,
           head: () => 'Рецензий в мес.',
@@ -65,15 +65,17 @@ class RedactorReviewerList extends Component {
         },
         {
           style: {
-            width: '10%'
+            width: '30%'
           },
           isMain: true,
           render: (data) =>
-            <Button type="button" className="button_small redactor-reviewer-list__choose"
-                    data-id={ data.id } onClick={ this.handleChoose }>
-              Выбрать
-              <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
-            </Button>
+            <div className="redactor-reviewer-list__choose-wrapper">
+              <Button type="button" className="button_small redactor-reviewer-list__choose"
+                      data-id={ data.id } onClick={ this.handleChoose }>
+                Выбрать
+                <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
+              </Button>
+            </div>
         }
       ]
     };

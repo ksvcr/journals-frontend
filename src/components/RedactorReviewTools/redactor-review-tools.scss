@@ -1,0 +1,27 @@
+.redactor-review-tools {
+  &__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    & + & {
+      padding-left: 35px;
+    }
+  }
+
+  &__button {
+    color: $link-color;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: $blue-color;
+    }
+  }
+}

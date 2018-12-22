@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Logo from '../Logo/Logo';
-import HeaderTools from '../HeaderTools/HeaderTools';
-import UserPanel from '../UserPanel/UserPanel';
+import Logo from '~/components/Logo/Logo';
+import HeaderTools from '~/components/HeaderTools/HeaderTools';
+import UserPanel from '~/components/UserPanel/UserPanel';
 
 import './header.scss';
 
