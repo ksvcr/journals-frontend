@@ -40,9 +40,10 @@ class MainMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { user, router } = state;
   return {
-    userRole: user.data.role
+    userRole: user.data.role,
+    pathname: router.location.pathname
   };
 }
 

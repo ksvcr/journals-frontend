@@ -82,7 +82,6 @@ export function editArticle(id, data) {
     }
 
     const payload = Promise.all(financingPromises).then(([ createFinancingResponse=[], ...editFinancingResponse ]) => {
-      console.log(createFinancingResponse);
       const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);

@@ -75,7 +75,7 @@ class ArticlePublish extends Component {
   render() {
     const { articleId, isFulfilled } = this.props;
     return (
-      <article className="page__content">
+      <React.Fragment>
         <ArticleTopTools>
           <CancelLink />
           <PreviewLink href="/article/new" />
@@ -97,7 +97,7 @@ class ArticlePublish extends Component {
         <ArticleForm id={ articleId }
                      onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
         }
-      </article>
+      </React.Fragment>
     );
   }
 }

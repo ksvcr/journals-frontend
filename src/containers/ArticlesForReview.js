@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import ArticlesForReviewList from '~/components/ArticlesForReviewList/ArticlesForReviewList';
+
 import * as articlesActions from '~/store/articles/actions';
+import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
 class ArticlesForReview extends Component {
@@ -16,27 +19,34 @@ class ArticlesForReview extends Component {
   };
 
   handleRequest = (params={}) => {
-    const { articlesParams, fetchArticles } = this.props;
-    return fetchArticles(null, { ...articlesParams, ...params, current_reviewer: 10 });
+    const { userId, articlesParams, fetchArticles, fetchReviewInvites } = this.props;
+    return Promise.all([
+      fetchArticles(null, { ...articlesParams, ...params, invited_reviewer: userId }),
+      fetchReviewInvites({ reviewer: userId })
+    ]);
   };
 
   render() {
     return (
-      <article className="page__content">
+      <React.Fragment>
         <h1 className="page__title">Статьи на рецензию</h1>
-      </article>
+        <ArticlesForReviewList onUpdateRequest={ this.handleRequest } />
+      </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const { user } = state;
   return {
-    articlesParams: getArticlesParams(state)
+    articlesParams: getArticlesParams(state),
+    userId: user.data.id
   };
 }
 
 const mapDispatchToProps = {
-  fetchArticles: articlesActions.fetchArticles
+  fetchArticles: articlesActions.fetchArticles,
+  fetchReviewInvites: reviewInvitesActions.fetchReviewInvites
 };
 
 export default connect(

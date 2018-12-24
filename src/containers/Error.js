@@ -4,10 +4,10 @@ class Error extends Component {
   render() {
     const { text } = this.props;
     return (
-      <article className="page__content">
+      <React.Fragment>
         <h2 className="page__title"> Ошибка </h2>
         <p>{ text }</p>
-      </article>
+      </React.Fragment>
     );
   }
 }

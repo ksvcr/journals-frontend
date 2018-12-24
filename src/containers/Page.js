@@ -42,8 +42,9 @@ class Page extends Component {
               <aside className="page__sidebar">
                 <MainMenu items={ this.menuItems } />
               </aside>
-
-              { this.props.children }
+              <article className="page__content">
+                { this.props.children }
+              </article>
             </div>
           }
         </main>
