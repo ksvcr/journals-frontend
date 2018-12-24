@@ -43,6 +43,9 @@ const apiClient = {
   lockArticle: (articleId) => {
     return fetchInstance.request(`/articles/${articleId}/lock/`);
   },
+  createArticleAttachment: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data });
+  },
 
   createBlocks: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });

@@ -55,11 +55,20 @@ export function createArticle(siteId, data) {
             resourcePromises.push(apiClient.createSources(articleId, sources));
           }
 
-          return Promise.all(resourcePromises);
+          return Promise.all(resourcePromises).then(() => {
+            // Создаем вложения
+            const attachmentsPromises = data.attachments.map((attachment) => {
+              return apiClient.createArticleAttachment(articleId, attachment);
+            });
+
+            return Promise.all(attachmentsPromises);
+          });
         });
+
+
       });
     });
- 
+
     return dispatch({
       type: CREATE_ARTICLE,
       payload
