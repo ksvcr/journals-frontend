@@ -10,6 +10,8 @@ import Icon from '~/components/Icon/Icon';
 import SourceThesisFields from '~/components/SourceThesisFields/SourceThesisFields';
 import SourceArticleSerialEditionFields from '~/components/SourceArticleSerialEditionFields/SourceArticleSerialEditionFields';
 import SourceOneVolumeBookFields from '~/components/SourceOneVolumeBookFields/SourceOneVolumeBookFields';
+import SourceMultiVolumeBookFields from '~/components/SourceMultiVolumeBookFields/SourceMultiVolumeBookFields';
+import SourceElectronic from '~/components/SourceElectronic/SourceElectronic';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
@@ -23,6 +25,12 @@ import './assets/save.svg';
 class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
     const { field, onSubmit } = this.props;
+    // Для многотомного и Однотомного изданий принимается массив авторов
+    const multiAuthorsFields = ['SourceMultiVolumeBook', 'SourceElectronic'];
+    if (!!~multiAuthorsFields.indexOf(formData.resourcetype)) {
+      formData.author = [{ id: 1, initials: 'П. И.', lastname: formData.author }];
+    }
+
     onSubmit(field, { ...formData, isValid: true });
   };
 
@@ -53,6 +61,12 @@ class ArticleSourceCreateForm extends Component {
 
       case 'SourceOneVolumeBook':
         return <SourceOneVolumeBookFields />;
+
+      case 'SourceMultiVolumeBook':
+        return <SourceMultiVolumeBookFields />;
+
+      case 'SourceElectronic':
+        return <SourceElectronic />;
 
       default:
         return null;
