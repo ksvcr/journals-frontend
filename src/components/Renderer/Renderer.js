@@ -3,7 +3,6 @@ import redraft from 'redraft';
 import { convertFromRaw, EditorState } from 'draft-js';
 import { exporter } from '~/services/editorCustomStyler';
 import { styleMap } from '~/services/customDraftUtils';
-import { Link } from 'react-router-dom';
 
 import ImageMedia from '~/components/ImageMedia/ImageMedia';
 import Table from '~/components/Table/Table';
@@ -45,7 +44,7 @@ class Renderer extends Component {
         'block-table': (children) => children.map((child, index) => <React.Fragment key={ index }>{child}</React.Fragment>),
       },
       entities: {
-        LINK: (children, data, { key }) => <Link key={key} to={data.url}>{children}</Link>,
+        LINK: (children, data, { key }) => <a key={key} href={data.url}>{children}</a>,
         'image-list': (children, data, { key }) => (
           data.images.length > 1 ? <ImageSlider data={ data } key={ key }/> : <ImageMedia data={ data } key={ key }/>
         ),
