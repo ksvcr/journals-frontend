@@ -18,6 +18,15 @@ class ReviewCreate extends Component {
     ]);
   };
 
+  handleSubmit = (formData) => {
+    const { articleId, currentUserId, createArticleReview } = this.props;
+    const data = { ...formData,
+      article: articleId,
+      reviewer: currentUserId
+    };
+    createArticleReview(articleId, data);
+  }
+
   render() {
     const { articleId } = this.props;
     return (
@@ -26,7 +35,7 @@ class ReviewCreate extends Component {
           Новая рецензия
         </h1>
 
-        <ReviewCreateForm id={ articleId } />
+        <ReviewCreateForm id={ articleId } onSubmit={ this.handleSubmit } />
       </React.Fragment>
     )
   }
@@ -34,15 +43,18 @@ class ReviewCreate extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
+  const { user } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
   return {
-    articleId
+    articleId,
+    currentUserId: user.data.id,
   };
 }
 
 const mapDispatchToProps = {
-  fetchArticle: articlesActions.fetchArticle
+  fetchArticle: articlesActions.fetchArticle,
+  createArticleReview: articlesActions.createArticleReview
 };
 
 export default connect(

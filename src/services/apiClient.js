@@ -67,12 +67,20 @@ const apiClient = {
   removeArticleTag: (articleId, id) => {
     return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
   },
-  inviteArticleReviewer: (articleId, data) => {
+  createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
+  },
+  editInviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
   },
   getReviewInvites: (params) => {
     return fetchInstance.request(`/review/invites/`, { params });
-  }
+  },
+
+  getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
+  transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
+
+  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data })
 };
 
 export default apiClient;

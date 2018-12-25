@@ -14,7 +14,7 @@ class MainMenu extends Component {
       },
       {
         title: 'Мои скидки',
-        href: '/second'
+        href: '/discounts'
       },
       {
         title: 'Настройки',

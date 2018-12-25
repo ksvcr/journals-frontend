@@ -1,5 +1,5 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER } from './constants';
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -86,6 +86,9 @@ function articles(state = initialState, action) {
           }
         }
       };
+
+    case `${RESET_ARTICLES}`:
+      return initialState;
 
     default:
       return state

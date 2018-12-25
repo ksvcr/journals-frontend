@@ -9,6 +9,7 @@ import ArticlePreview from '~/containers/ArticlePreview';
 import AuthorSettings from '~/containers/AuthorSettings';
 import ArticlesForReview from '~/containers/ArticlesForReview';
 import ReviewCreate from '~/containers/ReviewCreate';
+import Discounts from '~/containers/Discounts';
 import Error from '~/containers/Error';
 
 const NotFound = () => <Error text="Страница не найдена" />;
@@ -21,8 +22,9 @@ const routes = () => (
       <Route exact path="/article/:articleId" component={ ArticlePreview } />
       <Route path="/article/:articleId/edit" component={ ArticlePublish } />
       <Route path="/article/:articleId/review" component={ ReviewCreate } />
-      <Route path="/settings" component={ AuthorSettings } />
       <Route path="/articles-for-review" component={ ArticlesForReview } />
+      <Route path="/settings" component={ AuthorSettings } />
+      <Route path="/discounts" component={ Discounts } />
       <Route component={ NotFound } />
     </Switch>
   </Page>

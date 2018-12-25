@@ -8,6 +8,11 @@ import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
 class ArticlesForReview extends Component {
+  componentWillMount() {
+    const { resetArticles } = this.props;
+    resetArticles();
+  }
+
   componentDidMount() {
     this.handleInitialRequest();
   }
@@ -46,7 +51,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   fetchArticles: articlesActions.fetchArticles,
-  fetchReviewInvites: reviewInvitesActions.fetchReviewInvites
+  resetArticles: articlesActions.resetArticles,
+  fetchReviewInvites: reviewInvitesActions.fetchReviewInvites,
 };
 
 export default connect(
