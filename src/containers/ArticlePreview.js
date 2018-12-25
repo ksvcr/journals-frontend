@@ -35,9 +35,9 @@ class ArticlePreview extends Component {
     const { articleId, articleData } = this.props;
     return articleData ? (
       <React.Fragment>
-        { articleId &&
+        { articleId === 'new' &&
           <ArticleTopTools>
-            <CancelLink href="/publish"/>
+            <CancelLink href="/article"/>
           </ArticleTopTools>
         }
 

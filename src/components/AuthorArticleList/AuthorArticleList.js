@@ -66,7 +66,7 @@ class AuthorArticleList extends Component {
     const { push } = this.props;
 
     setTimeout(() => {
-      push(`/edit/${id}`);
+      push(`/article/${id}/edit/`);
     }, 0);
   };
 

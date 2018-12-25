@@ -7,7 +7,7 @@ export function fetchSites() {
     return dispatch({
       type: FETCH_SITES,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 

@@ -24,6 +24,10 @@ class ArticlesForReviewList extends Component {
   get toolsMenuItems() {
     return [
       {
+        title: 'Написать рецензию',
+        handler: this.handleCreateReview
+      },
+      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
@@ -36,6 +40,14 @@ class ArticlesForReviewList extends Component {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
   };
+
+  handleCreateReview = (id) => {
+    const { push } = this.props;
+
+    setTimeout(() => {
+      push(`/article/${id}/review`);
+    }, 0);
+  }
 
   handlePreview = (id) => {
     const { push } = this.props;

@@ -13,7 +13,7 @@ export function fetchArticles(siteId, params={}) {
       type: FETCH_ARTICLES,
       meta: params,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -30,7 +30,7 @@ export function fetchArticle(id) {
     return dispatch({
       type: FETCH_ARTICLE,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -59,11 +59,11 @@ export function createArticle(siteId, data) {
         });
       });
     });
- 
+
     return dispatch({
       type: CREATE_ARTICLE,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -94,7 +94,7 @@ export function editArticle(id, data) {
     return dispatch({
       type: EDIT_ARTICLE,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -104,7 +104,7 @@ export function createArticleTag(articleId, data) {
     return dispatch({
       type: CREATE_ARTICLE_TAG,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
 
@@ -115,7 +115,7 @@ export function removeArticleTag(articleId, id) {
       type: REMOVE_ARTICLE_TAG,
       meta: { articleId, id },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
 
@@ -126,6 +126,6 @@ export function inviteArticleReviewer(articleId, data) {
       type: INVITE_ARTICLE_REVIEWER,
       meta: { articleId, data },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
