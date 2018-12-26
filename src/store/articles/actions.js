@@ -1,5 +1,5 @@
 import {
-  CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
+  CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW
 } from './constants';
 import apiClient from '~/services/apiClient';
@@ -19,14 +19,7 @@ export function fetchArticles(siteId, params={}) {
 
 export function fetchArticle(id) {
   return (dispatch) => {
-    const payload = apiClient.getArticles(null, id).then(({ financing_sources, ...articleData }) => {
-      if (financing_sources) {
-        const financingPromises = financing_sources.map(id => apiClient.getFinancingSource(id));
-        return Promise.all(financingPromises).then(financing_sources => {
-          return { ...articleData, financing_sources };
-        });
-      }
-    });
+    const payload = apiClient.getArticles(null, id);
     return dispatch({
       type: FETCH_ARTICLE,
       payload
@@ -132,15 +125,23 @@ export function inviteArticleReviewer(articleId, data) {
 
 export function createArticleReview(articleId, data) {
   return (dispatch) => {
-    //  Принимаем статью на рецензирование и создаем рецензию
-    const payload = apiClient.editInviteArticleReviewer(articleId, { is_agree: true }).then(() => {
-      return apiClient.createArticleReview(articleId, data);
-    });
+    const payload = apiClient.createArticleReview(articleId, data);;
     return dispatch({
       type: CREATE_ARTICLE_REVIEW,
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function acceptArticleReviewInvite(articleId) {
+  return (dispatch) => {
+    const payload = apiClient.editInviteArticleReviewer(articleId, { is_agree: true });
+    return dispatch({
+      type: ACCEPT_ARTICLE_REVIEW_INVITE,
+      meta: { articleId },
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function resetArticles() {

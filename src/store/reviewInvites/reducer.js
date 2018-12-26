@@ -17,7 +17,8 @@ function reviewInvites(state = initialState, action) {
       };
 
     case `${FETCH_REVIEW_INVITES}_FULFILLED`:
-      const entity = entityNormalize.toObject(action.payload.results, 'id', 'article');
+      const results = action.payload.results.map(item => ({ ...item, articleId: item.article.id }));
+      const entity = entityNormalize.toObject(results, 'id', 'articleId');
 
       return { ...state,
         isPending: false,

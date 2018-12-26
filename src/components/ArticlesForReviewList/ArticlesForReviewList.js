@@ -9,6 +9,7 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import DeadlineLabel from '~/components/DeadlineLabel/DeadlineLabel';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
@@ -21,19 +22,32 @@ class ArticlesForReviewList extends Component {
     dateField: 'date_create'
   };
 
-  get toolsMenuItems() {
-    return [
-      {
+  getToolsMenuItems(data) {
+    const tools = [];
+    console.log(data);
+
+    if (data.state_article === 'AWAIT_REVIEWER') {
+      tools.push({
+        title: 'Принять статью',
+        handler: this.handleAcceptInvite
+      });
+    }
+
+    if (data.state_article === 'AWAIT_REVIEW') {
+      tools.push({
         title: 'Написать рецензию',
         handler: this.handleCreateReview
-      },
-      {
-        title: 'Просмотр',
-        type: 'preview',
-        icon: 'preview',
-        handler: this.handlePreview
-      }
-    ];
+      });
+    }
+
+    tools.push({
+      title: 'Просмотр',
+      type: 'preview',
+      icon: 'preview',
+      handler: this.handlePreview
+    });
+
+    return tools;
   };
 
   handleSortChange = (ordering) => {
@@ -47,7 +61,12 @@ class ArticlesForReviewList extends Component {
     setTimeout(() => {
       push(`/article/${id}/review`);
     }, 0);
-  }
+  };
+
+  handleAcceptInvite = (id) => {
+    const { acceptArticleReviewInvite } = this.props;
+    acceptArticleReviewInvite(id);
+  };
 
   handlePreview = (id) => {
     const { push } = this.props;
@@ -70,7 +89,7 @@ class ArticlesForReviewList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
       cells: [
         {
           style: {
@@ -146,13 +165,14 @@ function mapStateToProps(state) {
   return {
     articlesArray: getArticlesArray(state),
     reviewInvites: reviewInvites.data,
-    reviewInvitesArticlesMap: reviewInvites.article || {},
+    reviewInvitesArticlesMap: reviewInvites.articleId || {},
     total, paginate
   };
 }
 
 const mapDispatchToProps = {
-  push
+  push,
+  acceptArticleReviewInvite: articlesActions.acceptArticleReviewInvite
 };
 
 export default connect(
