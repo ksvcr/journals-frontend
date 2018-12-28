@@ -7,11 +7,15 @@ import TextField from '~/components/TextField/TextField';
 import Button from '~/components/Button/Button';
 import Select from '~/components/Select/Select';
 import Icon from '~/components/Icon/Icon';
+import Radio from '~/components/Radio/Radio';
 import SourceThesisFields from '~/components/SourceThesisFields/SourceThesisFields';
 import SourceArticleSerialEditionFields from '~/components/SourceArticleSerialEditionFields/SourceArticleSerialEditionFields';
 import SourceOneVolumeBookFields from '~/components/SourceOneVolumeBookFields/SourceOneVolumeBookFields';
 import SourceMultiVolumeBookFields from '~/components/SourceMultiVolumeBookFields/SourceMultiVolumeBookFields';
 import SourceElectronic from '~/components/SourceElectronic/SourceElectronic';
+import SourceLegislativeMaterial from '~/components/SourceLegislativeMaterial/SourceLegislativeMaterial';
+import SourceStandart from '~/components/SourceStandart/SourceStandart';
+import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
@@ -50,11 +54,31 @@ class ArticleSourceCreateForm extends Component {
     }));
   }
 
+  get thesisCategories() {
+    return [{
+      title: 'Кандидатская',
+      value: 1,
+    }, {
+      title: 'Докторская',
+      value: 2
+    }]
+  }
+
+  renderThesisCategories = () => {
+    return this.thesisCategories.map((item, index) => (
+      <Field key={ index } name="category" value={ item.value }
+             type="radio" component={ Radio }>
+        { item.title }
+      </Field>
+    ));
+  };
+
   get specialFields() {
     const { resourceType } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
-        return <SourceThesisFields rubricsOptions={ this.rubricsOptions } />;
+        return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
+                                   languagesOptions={ this.languagesOptions } />;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -66,7 +90,16 @@ class ArticleSourceCreateForm extends Component {
         return <SourceMultiVolumeBookFields />;
 
       case 'SourceElectronic':
-        return <SourceElectronic />;
+        return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
+
+      case 'SourceLegislativeMaterial':
+        return <SourceLegislativeMaterial />;
+
+      case 'SourceStandart':
+        return <SourceStandart />;
+
+      case 'SourcePatent':
+        return <SourcePatent />;
 
       default:
         return null;
@@ -74,7 +107,7 @@ class ArticleSourceCreateForm extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, resourceType } = this.props;
     return (
       <form className="article-source-create-form form" onSubmit={ handleSubmit(this.handleSubmit) }>
         <div className="form__field">
@@ -86,13 +119,21 @@ class ArticleSourceCreateForm extends Component {
               <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
                      component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
             </div>
-            <div className="form__col form__col_6">
-              <label htmlFor="source_language" className="form__label">
-                Язык оригинала
-              </label>
-              <Field name="language" id="source_language" className="select_white"
-                     component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
-            </div>
+            { resourceType === 'SourceThesis' ?
+              <div className="form__col form__col_6">
+                <label htmlFor="category" className="form__label">
+                  Тип диссертации
+                </label>
+                { this.renderThesisCategories() }
+              </div> :
+              <div className="form__col form__col_6">
+                <label htmlFor="source_language" className="form__label">
+                  Язык оригинала
+                </label>
+                <Field name="language" id="source_language" className="select_white"
+                       component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+              </div>
+            }
           </div>
         </div>
 
@@ -155,9 +196,14 @@ function mapStateToProps(state, props) {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
-      defense_country: 132, // Россия
+      // defense_country: 132, // Россия
       defense_date: moment().format('YYYY-MM-DD'),
       statement_date: moment().format('YYYY-MM-DD'),
+      standart_entry_date: moment().format('YYYY-MM-DD'),
+      adoption_date: moment().format('YYYY-MM-DD'),
+      approval_date: moment().format('YYYY-MM-DD'),
+      patent_application_date: moment().format('YYYY-MM-DD'),
+      publication_date: moment().format('YYYY-MM-DD'),
       ...data
     }
   };
