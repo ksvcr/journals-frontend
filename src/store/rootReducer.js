@@ -9,10 +9,12 @@ import sites from './sites/reducer';
 import articles from './articles/reducer';
 import user from './user/reducer';
 import users from './users/reducer';
+import countries from './countries/reducer';
 
 export default combineReducers({
   form: formReducer,
   languages,
+  countries,
   rubrics,
   categories,
   page,

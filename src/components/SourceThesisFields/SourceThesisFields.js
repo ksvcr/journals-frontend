@@ -8,7 +8,7 @@ import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
 
-const SourceThesisFields = ({ rubricsOptions, languagesOptions }) => {
+const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -78,8 +78,8 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions }) => {
             <label htmlFor="defense_country" className="form__label">
               Страна защиты <ReqMark />
             </label>
-            <Field name="defense_country" id="defense_country" className="text-field_white" component={ TextField }
-                   placeholder="Введите страну защиты" validate={ [validate.required] } />
+            <Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }
+                   component={ props => <Select options={ countriesOptions } { ...props } /> } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="defense_city" className="form__label">

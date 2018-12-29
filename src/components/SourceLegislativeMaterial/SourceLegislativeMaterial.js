@@ -6,8 +6,9 @@ import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
+import Select from '~/components/Select/Select';
 
-const SourceLegislativeMaterial = () => {
+const SourceLegislativeMaterial = ({ countriesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -51,8 +52,8 @@ const SourceLegislativeMaterial = () => {
             <label htmlFor="country" className="form__label">
               Страна <ReqMark />
             </label>
-            <Field name="country" id="country" className="text-field_white" component={ TextField }
-                   placeholder="Введите страну" validate={ [validate.required] } />
+            <Field name="country" id="country" className="select_white" validate={ [validate.required] }
+                   component={ props => <Select options={ countriesOptions } { ...props } /> } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue" className="form__label">

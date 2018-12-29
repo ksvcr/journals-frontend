@@ -73,8 +73,8 @@ const apiClient = {
   getLawtypes: () => {
     return fetchInstance.request(`/lawtypes/`);
   },
-  getCountries: () => {
-    return fetchInstance.request(`/countries/`);
+  getCountries: (params) => {
+    return fetchInstance.request(`/countries/`, { params });
   }
 };
 

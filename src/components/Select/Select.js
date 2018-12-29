@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import AsyncSelect from 'react-select';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -27,7 +28,7 @@ class Select extends Component {
   };
 
   render() {
-    const { meta, value, input, id, disabled, required, className, onChange } = this.props;
+    const { meta, value, input, id, disabled, required, className, onChange, isAsync } = this.props;
     const classes = classNames('select', className,
       { 'select_error': meta && meta.submitFailed && meta.error });
 
@@ -36,12 +37,20 @@ class Select extends Component {
     }
 
     return (
-      <div className={ classes }>
-        <select id={ id } disabled={ disabled } required={ required }
-                onChange={ onChange } { ...input } className="select__field">
-          { this.renderOptions() }
-        </select>
-      </div>
+      <React.Fragment>
+      { isAsync
+          ?
+        <AsyncSelect className={ classes } cacheOptions
+                     defaultOptions />
+          :
+        <div className={ classes }>
+          <select id={ id } disabled={ disabled } required={ required }
+                  onChange={ onChange } { ...input } className="select__field">
+            {this.renderOptions()}
+          </select>
+        </div>
+      }
+      </React.Fragment>
     );
   }
 }

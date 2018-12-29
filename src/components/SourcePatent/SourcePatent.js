@@ -1,13 +1,14 @@
 import React from 'react';
 import { Field } from 'redux-form';
+import moment from 'moment';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
+import Select from '~/components/Select/Select';
 import * as validate from '~/utils/validate';
-import moment from "moment";
 
-const SourcePatent = () => {
+const SourcePatent = ({ countriesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -160,8 +161,8 @@ const SourcePatent = () => {
             <label htmlFor="country" className="form__label">
               Страна <ReqMark />
             </label>
-            <Field name="country" id="country" className="text-field_white" component={ TextField }
-                   placeholder="Введите страну" />
+            <Field name="country" id="country" className="select_white" validate={ [validate.required] }
+                   component={ props => <Select options={ countriesOptions } { ...props } /> } />
           </div>
         </div>
       </div>

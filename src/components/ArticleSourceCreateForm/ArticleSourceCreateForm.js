@@ -19,6 +19,9 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
+import { getCountriesArray } from '~/store/countries/selector';
+
+import countriesActions from '~/store/countries/actions';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import * as validate from '~/utils/validate';
@@ -54,6 +57,21 @@ class ArticleSourceCreateForm extends Component {
     }));
   }
 
+  get countriesOptions() {
+    const { countriesArray } = this.props;
+    return countriesArray.map(item => ({
+      title: item.name,
+      value: item.id
+    }));
+  }
+
+  handleFetchCountries = (value) => {
+    const { dispatch } = this.props;
+    // value = input value
+
+    dispatch(countriesActions.fetchCountries({ name: value }));
+  };
+
   get thesisCategories() {
     return [{
       title: 'Кандидатская',
@@ -78,7 +96,9 @@ class ArticleSourceCreateForm extends Component {
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
-                                   languagesOptions={ this.languagesOptions } />;
+                                   languagesOptions={ this.languagesOptions }
+                                   countriesOptions={ this.countriesOptions }
+                                   onFetchCountries={ this.handleFetchCountries }/>;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -93,13 +113,13 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial />;
+        return <SourceLegislativeMaterial countriesOptions={ this.countriesOptions } />;
 
       case 'SourceStandart':
         return <SourceStandart />;
 
       case 'SourcePatent':
-        return <SourcePatent />;
+        return <SourcePatent countriesOptions={ this.countriesOptions } />;
 
       default:
         return null;
@@ -187,11 +207,13 @@ function mapStateToProps(state, props) {
   const rubricsArray = getRubricsArray(state);
   const resourceType = formSelector(state, 'resourcetype');
   const sourceTypes = getSourceTypes();
+  const countriesArray = getCountriesArray(state);
   return {
     form: formName,
     languagesArray,
     rubricsArray,
     resourceType,
+    countriesArray,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
