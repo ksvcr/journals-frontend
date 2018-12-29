@@ -80,12 +80,16 @@ export function editArticle(id, data) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
       return apiClient.lockArticle(id).then(() => {
-        const editPromises = [apiClient.editArticle(id, articleData), apiClient.editBlocks(id, content_blocks)];
+        const editPromises = [apiClient.editArticle(id, articleData)];
+        if (content_blocks) {
+          editPromises.push(apiClient.editBlocks(id, content_blocks));
+        }
         return Promise.all(editPromises);
       })
     });
     return dispatch({
       type: EDIT_ARTICLE,
+      meta: { articleId: id, data: articleData },
       payload
     }).catch(error => console.error(error));
   }

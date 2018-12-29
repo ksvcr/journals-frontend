@@ -22,10 +22,11 @@ class ReviewCreate extends Component {
     const { articleId, currentUserId, createArticleReview } = this.props;
     const data = { ...formData,
       article: articleId,
-      reviewer: currentUserId
+      reviewer: currentUserId,
+      review_round: 1
     };
     createArticleReview(articleId, data);
-  }
+  };
 
   render() {
     const { articleId } = this.props;

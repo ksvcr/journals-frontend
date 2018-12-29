@@ -3,22 +3,55 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as articlesActions from '~/store/articles/actions';
 
+import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
+import Button from '~/components/Button/Button';
+
+import './redactor-decision.scss';
+
 class RedactorDecision extends Component {
-  handleAccept = () => {
-    const { articleId, editArticle } = this.props;
-    editArticle(articleId, { state_article: 'Опубликована' })
+  state = {
+    decision: null
   };
 
-  handleDecline = () => {
-    const { articleId, editArticle } = this.props;
-    editArticle(articleId, { state_article: 'Отклонена' })
+  handleChange = (value) => {
+    this.setState({
+      decision: value
+    });
   };
+
+  handleSave = () => {
+    const { articleId, editArticle } = this.props;
+    const { decision } = this.state;
+    editArticle(articleId, { state_article: decision });
+  };
+
+  get options() {
+    return [
+      {
+        title: 'Принять',
+        value: 'AWAIT_PAYMENT'
+      },
+      {
+        title: 'Отклонить',
+        value: 'DISAPPROVED'
+      }
+    ];
+  }
 
   render() {
+    const { decision } = this.state;
+    const { articleId } = this.props;
     return (
       <div className="redactor-decision">
-        <button type="button" onClick={ this.handleAccept }>Принять</button>
-        <button type="button" onClick={ this.handleDecline }>Отклонить</button>
+        <div className="redactor-decision__switch">
+          <MultiSwitch options={ this.options } name={ `decision-${articleId}` } value={ decision }
+                       onChange={ this.handleChange } />
+        </div>
+        <div className="redactor-decision__bottom">
+          <Button type="button" className="button_orange" onClick={ this.handleSave }>
+            Отправить
+          </Button>
+        </div>
       </div>
     );
   }
