@@ -7,16 +7,21 @@ import DateFilter from '~/components/DateFilter/DateFilter';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
-import Payment from '~/components/Payment/Payment';
+import TagEditor from '~/components/TagEditor/TagEditor';
+import ListChecker from '~/components/ListChecker/ListChecker';
+import RedactorActions from '~/components/RedactorActions/RedactorActions';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
-import { getArticleStageTitle } from '~/services/articleStages';
+import { articleStatusOptions } from '~/services/articleStatuses';
+import { getArticleStageTitle, articleStageOptions } from '~/services/articleStages';
 
-class AuthorArticleList extends Component {
+import './redactor-article-list.scss';
+
+class RedactorArticleList extends Component {
   state = {
-    box: null,
     dateField: 'date_create'
   };
 
@@ -30,15 +35,10 @@ class AuthorArticleList extends Component {
         title: 'Отозвать'
       },
       {
-        title: 'Оплатить',
-        handler: this.handlePaymentShow
-      },
-      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
         handler: this.handlePreview
-
       }
     ];
   };
@@ -54,12 +54,6 @@ class AuthorArticleList extends Component {
   handleSortChange = (ordering) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
-  };
-
-  handlePaymentShow = (id) => {
-    this.setState({
-      box: { id,  type: 'payment' }
-    });
   };
 
   handleEdit = (id) => {
@@ -78,14 +72,15 @@ class AuthorArticleList extends Component {
     }, 0);
   };
 
-  handlePaymentClose = () => {
-    this.setState({ box: null });
-  };
-
   handleDateFilterChange = (field, range) => {
     const { onUpdateRequest } = this.props;
     this.setState({ dateField: field });
     onUpdateRequest({ filter: range });
+  };
+
+  handleCheckerFilterChange = (name, data) => {
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ filter: { [name]: data } });
   };
 
   handlePaginateChange = (paginate) => {
@@ -93,8 +88,14 @@ class AuthorArticleList extends Component {
     onUpdateRequest({ paginate });
   };
 
+  handleTagAdd = (article, text) => {
+    const { userId, userRole, createArticleTag } = this.props;
+    const tagData = { article, text, user: userId, user_role: userRole };
+    createArticleTag(article, tagData);
+  };
+
   get listProps() {
-    const { articlesArray } = this.props;
+    const { articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -106,12 +107,24 @@ class AuthorArticleList extends Component {
       cells: [
         {
           style: {
-            width: '50%'
+            width: '30%'
           },
           isMain: true,
           head: () => 'Название',
           render: (data) =>
             data.title || 'Название статьи не указано'
+        },
+        {
+          style: {
+            width: '20%'
+          },
+          sort: 'site',
+          head: () => 'Журнал',
+          render: (data) => {
+            const siteId = data.site;
+            const siteName = sitesData[siteId] && sitesData[siteId].name;
+            return siteName || 'Журнал не найден';
+          }
         },
         {
           style: {
@@ -131,6 +144,8 @@ class AuthorArticleList extends Component {
           },
           sort: 'stage_article',
           head: () => 'Этап',
+          headToolTip: () => <ListChecker data={ articleStageOptions } name="stage_article"
+                                          onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             getArticleStageTitle(data.stage)
         },
@@ -138,7 +153,10 @@ class AuthorArticleList extends Component {
           style: {
             width: '20%'
           },
+          sort: 'state_article',
           head: () => 'Статус',
+          headToolTip: () => <ListChecker data={ articleStatusOptions } name="state_article"
+                                          onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             <StatusLabel status={ data.state_article } />
         }
@@ -147,21 +165,25 @@ class AuthorArticleList extends Component {
   }
 
   renderBox = (data) => {
-    const { box } = this.state;
-    if (box && box.id === data.id) {
-      if (box.type === 'payment') {
-        return <Payment onClose={ this.handlePaymentClose } />;
-      }
-    }
-
-    return null;
+    const { removeArticleTag } = this.props;
+    return (
+      <div className="redactor-article-list__box">
+        <div className="redactor-article-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
+        <div className="redactor-article-list__actions">
+          <RedactorActions articleId={ data.id } />
+        </div>
+      </div>
+    );
   };
 
   render() {
     const { total, paginate } = this.props;
     return (
-      <div className="author-article-list">
-        <div className="author-article-list__holder">
+      <div className="redactor-article-list">
+        <div className="redactor-article-list__holder">
           <List { ...this.listProps } />
         </div>
 
@@ -174,17 +196,23 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { total, paginate } = state.articles;
+  const { sites, articles, user } = state;
+  const { total, paginate } = articles;
   return {
+    userId: user.data.id,
+    userRole: user.data.role,
     articlesArray: getArticlesArray(state),
+    sitesData: sites.data,
     total, paginate
   };
 }
 
 const mapDispatchToProps = {
-  push
+  push,
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
 };
 
 export default connect(
   mapStateToProps, mapDispatchToProps
-)(AuthorArticleList);
+)(RedactorArticleList);

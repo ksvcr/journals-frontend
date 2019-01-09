@@ -1,0 +1,15 @@
+.list-checker {
+  &__list {
+    max-height: 480px;
+    overflow-y: auto;
+    width: 230px;
+  }
+
+  &__item {
+    padding: 17px 20px;
+  }
+
+  &__item + &__item {
+    border-top: 1px solid #dcdcdc;
+  }
+}

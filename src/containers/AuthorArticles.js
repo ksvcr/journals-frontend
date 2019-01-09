@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
+import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
-import SiteSelect from '~/components/SiteSelect/SiteSelect';
-import SearchPanel from '~/components/SearchPanel/SearchPanel';
+
 
 class AuthorArticles extends Component {
   componentDidMount() {
@@ -15,8 +16,8 @@ class AuthorArticles extends Component {
   }
 
   handleRequest = (params={}) => {
-    const { articlesParams, fetchArticles } = this.props;
-    return fetchArticles({ ...articlesParams, ...params });
+    const { siteId, articlesParams, fetchArticles } = this.props;
+    return fetchArticles(siteId, { ...articlesParams, ...params });
   };
 
   get searchTargets() {
@@ -76,7 +77,9 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
+  const { sites } = state;
   return {
+    siteId: sites.current,
     articlesParams: getArticlesParams(state)
   };
 }

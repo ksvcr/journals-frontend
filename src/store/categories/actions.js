@@ -1,9 +1,8 @@
 import { FETCH_CATEGORIES } from './constants';
 import apiClient from '~/services/apiClient';
 
-export function fetchCategories() {
-  return (dispatch, state) => {
-    const { current:siteId } = state().sites;
+export function fetchCategories(siteId=null) {
+  return (dispatch) => {
     const payload = apiClient.getCategories(siteId);
     return dispatch({
       type: FETCH_CATEGORIES,

@@ -1,4 +1,5 @@
-import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER, INSERT_USER } from './constants';
+import { FETCH_USERS, FETCH_USER, SEARCH_USERS,
+        CREATE_USER, INSERT_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -78,6 +79,27 @@ function users(state = initialState, action) {
           [ action.payload.id ]: action.payload
         },
         ids: [ ...state.ids, action.payload.id ]
+      };
+
+    case `${CREATE_USER_TAG}_FULFILLED`:
+      const oldTags = state.data[action.payload.user].tags || [];
+      return { ...state,
+        data: { ...state.data,
+          [ action.payload.user ]: {
+            ...state.data[action.payload.user],
+            tags: [ ...oldTags, action.payload]
+          }
+        }
+      };
+
+    case `${REMOVE_USER_TAG}_PENDING`:
+      return { ...state,
+        data: { ...state.data,
+          [ action.meta.userId ]: {
+            ...state.data[action.meta.userId],
+            tags: state.data[action.meta.userId].tags.filter((item) => item.id !== action.meta.id)
+          }
+        }
       };
 
     default:

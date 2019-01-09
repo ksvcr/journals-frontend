@@ -17,6 +17,12 @@ const apiClient = {
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+  createUserTag: (userId, data) => {
+    return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
+  },
+  removeUserTag: (userId, id) => {
+    return fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' });
+  },
 
   createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 
@@ -52,6 +58,15 @@ const apiClient = {
   },
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
+  },
+  createArticleTag: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
+  },
+  removeArticleTag: (articleId, id) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+  },
+  inviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   }
 };
 

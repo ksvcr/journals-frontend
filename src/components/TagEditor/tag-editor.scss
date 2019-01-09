@@ -1,0 +1,106 @@
+.tag-editor {
+  $root: &;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 -5px;
+  }
+
+  &__item {
+    padding: 0 5px;
+    margin-bottom: 10px;
+  }
+
+  &__box {
+    background: #fbf0df;
+    border: 1px solid #fcdfb2;
+    border-radius: 36px;
+    padding: 6px 23px;
+    line-height: 1;
+    min-width: 50px;
+    font-size: 11px;
+    text-align: center;
+    box-sizing: border-box;
+    position: relative;
+
+    &_field {
+      border: 1px solid $orange-color;
+      background: #fff;
+      outline: 0;
+    }
+
+    #{$root}__item_empty &:before {
+      content: 'Введите новый тег';
+      color: #9a9a99;
+    }
+  }
+
+  &__add {
+    width: 25px;
+    height: 25px;
+    color: $orange-color;
+    border: solid 1px currentColor;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    outline: 0;
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      background: currentColor;
+    }
+
+    &:before {
+      height: 1px;
+      width: 9px;
+    }
+
+    &:after {
+      width: 1px;
+      height: 9px;
+    }
+  }
+
+  &__remove {
+    font-size: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    opacity: 0;
+    transition: opacity .2s;
+
+    #{$root}__box:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__remove-icon {
+    width: 7px;
+    height: 7px;
+    fill: $orange-color;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Menu from '../Menu/Menu';
-import Button from '../Button/Button';
+import Menu from '~/components/Menu/Menu';
+import Button from '~/components/Button/Button';
 
 import './header-tools.scss';
 

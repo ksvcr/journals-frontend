@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import getArticleStatusTitle from '~/services/getArticleStatusTitle';
+import { getArticleStatusTitle } from '~/services/articleStatuses';
 import getStatusColor from '~/services/getStatusColor';
 
 import './status-label.scss';
