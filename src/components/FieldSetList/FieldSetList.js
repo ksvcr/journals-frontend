@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
-import FieldSet from '~/components/FieldSet/FieldSet';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import FieldSet from '~/components/FieldSet/FieldSet';
 import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
 
 import './field-set-list.scss';
@@ -32,7 +33,7 @@ class FieldSetList extends PureComponent {
             fields.map((field, index) => (
               <FieldSet key={ index } isLast={ index === fields.length - 1 } index={ index }
                         legend={`${legend} №${index + 1}`} onRemove={ this.handleRemove } onMove={ this.handleMove } >
-                { children(field, index) }
+                { children(field, index, fields.get(index)) }
               </FieldSet>
             ))
           }

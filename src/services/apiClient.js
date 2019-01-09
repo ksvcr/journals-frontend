@@ -12,8 +12,13 @@ const apiClient = {
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
-  getUsers: (params) => fetchInstance.request(`/users/`, { params }),
+  getUsers: (userId=null, params) => {
+    const tail = userId !== null ? `${userId}/` : '';
+    return fetchInstance.request(`/users/${tail}`, { params });
+  },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+
+  createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
@@ -28,10 +33,25 @@ const apiClient = {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
   lockArticle: (articleId) => {
-    return fetchInstance.request(`/articles/${articleId}/lock`);
+    return fetchInstance.request(`/articles/${articleId}/lock/`);
   },
-  createBlockGroup: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/block-group/`, { method: 'post', data });
+
+  createBlocks: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
+  },
+  editBlocks: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data });
+  },
+
+  createFinancingSources: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
+  getFinancingSource: (id) => {
+    return fetchInstance.request(`/financing/${id}/`);
+  },
+  editFinancingSource: (id, data) => {
+    return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
+  },
+  deleteFinancingSource: (id) => {
+    return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   }
 };
 

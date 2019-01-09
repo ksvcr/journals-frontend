@@ -8,6 +8,8 @@ import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
 import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
+import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
+
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 
@@ -19,7 +21,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import {  getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
-import { deserializeArticleData } from '~/services/article';
+import { deserializeArticleData } from '~/services/articleFormat';
 
 
 const FORM_NAME = 'article-publish';
@@ -51,7 +53,7 @@ class ArticleForm extends Component {
       },
       {
         title: 'Список литературы',
-        component: <div>Раздел в разработке</div>
+        component: <ArticleSourcesForm { ...this.formProps } />
       }
     ];
   }
@@ -115,8 +117,9 @@ function getInitialValues(state, props) {
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
 
-  return {
+  const initialValues = {
     language: languagesArray.length ? languagesArray[0].id : null,
+    is_conflict_interest: true,
     has_financing: true,
     rubric: rubricsArray.length ? rubricsArray[0].id : null,
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
@@ -133,12 +136,9 @@ function getInitialValues(state, props) {
       hash: initialAuthorHash
     }],
     article_type: 0,
-    blocks: [
+    content_blocks: [
       {
-        title: 'Введение',
-        hint: 'Подсказка про Введение',
-        static: true,
-        content: {"blocks":[{"key":"525dr","text":"sdfsdf sdfsdf dsfsdf sdsf sdfsdfsdf","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":6,"style":"CUSTOM_COLOR_rgba(22,107,28,1)"},{"offset":7,"length":6,"style":"CUSTOM_BACKGROUND_rgba(255,0,0,1)"},{"offset":26,"length":9,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"37bso","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"ag5ji","text":" ","type":"block-table","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}}],"entityMap":{"0":{"type":"block-table","mutability":"IMMUTABLE","data":{"rows":[[{"blocks":[{"key":"dskf2","text":"колонка1","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},{"blocks":[{"key":"53nat","text":"колонка12","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}]],"numberOfColumns":2,"title":"Заголовок таблицы1","additional":"1","keywords":"2"}}}}
+        title: 'Введение'
       },
       {
         title: 'Методы и принципы исследования'
@@ -150,13 +150,26 @@ function getInitialValues(state, props) {
         title: 'Обсуждение'
       },
       {
-        title: 'Заключение',
-        hint: 'Подсказка про Заключение',
-        static: true
+        title: 'Заключение'
       },
     ],
     ...data
   };
+
+  if (initialValues.content_blocks.length > 2) {
+    initialValues.content_blocks[0] = {
+      ...initialValues.content_blocks[0],
+      hint: 'Подсказка про Введение',
+      static: true
+    };
+    initialValues.content_blocks[initialValues.content_blocks.length - 1] = {
+      ...initialValues.content_blocks[initialValues.content_blocks.length - 1],
+      hint: 'Подсказка про Заключение',
+      static: true
+    };
+  }
+
+  return initialValues;
 }
 
 ArticleForm.propTypes = {

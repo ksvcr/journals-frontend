@@ -10,15 +10,20 @@ import TextField from '~/components/TextField/TextField'
 class Calendar extends Component {
   handleChange = (date) => {
     const { datepicker } = this.refs;
-    const { onChange } = this.props;
+    const { input={}, endDate } = this.props;
+
+    let onChange = input.onChange ? input.onChange : this.props.onChange;
     onChange(date);
-    setTimeout(() => {
-      datepicker.setOpen(false);
-    }, 0)
+
+    if (endDate !== undefined) {
+      setTimeout(() => {
+        datepicker.setOpen(false);
+      }, 0);
+    }
   };
 
   render() {
-    const { onChange, ...restProps } = this.props;
+    const { onChange, meta={}, ...restProps } = this.props;
     return (
       <div className="calendar">
         <DatePicker
@@ -27,7 +32,7 @@ class Calendar extends Component {
           locale="ru"
           shouldCloseOnSelect={ false }
           onChange={ this.handleChange }
-          customInput={ <TextField icon="calendar" /> }
+          customInput={ <TextField icon="calendar" meta={ meta } /> }
           calendarClassName="calendar__box"
           { ...restProps }
         />

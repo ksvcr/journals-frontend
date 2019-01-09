@@ -7,7 +7,7 @@ import Radio from '~/components/Radio/Radio';
 import AuthorChooser from '~/components/AuthorChooser/AuthorChooser';
 import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
 
-import { searchUsers, createUser } from '~/store/users/actions';
+import { searchUsers, createUser, insertUser } from '~/store/users/actions';
 
 import './author-add.scss';
 import Checkbox from '~/components/Checkbox/Checkbox';
@@ -22,17 +22,21 @@ class AuthorAdd extends Component {
   }
 
   handleSearchChange = (event) => {
-    const { hash, searchUsers } = this.props;
+    const { searchUsers, data } = this.props;
     const { value } = event.target;
+    const { hash } = data;
 
     const searchQuery = {
       search_query: value
     };
+
     searchUsers(hash, searchQuery);
   };
 
-  handleAuthorChoose = (id) => {
-    const { field, formName, change } = this.props;
+  handleAuthorChoose = (id, index) => {
+    const { field, formName, change, insertUser, searchData, data } = this.props;
+    const { hash } = data;
+    insertUser(searchData[hash][index]);
     change(formName, `${field}.id`, id);
   };
 
@@ -47,10 +51,11 @@ class AuthorAdd extends Component {
   };
 
   handleAuthorCreate = (data) => {
-    const { createUser, field, formName } = this.props;
-    createUser(data).then(response => {
-      if (response.id !== undefined) {
-        change(formName, `${field}.id`, response.id);
+    const { createUser, field, formName, change } = this.props;
+    createUser(data).then(({ value }) => {
+      if (value.id !== undefined) {
+        console.log(formName, `${field}.id`, value.id);
+        change(formName, `${field}.id`, value.id);
       }
     });
   };
@@ -67,8 +72,9 @@ class AuthorAdd extends Component {
   };
 
   render() {
-    const { field, authorData, isCurrent, hash,
-            correspondingAuthor, source, authorsArray } = this.props;
+    const { field, authorData, correspondingAuthor,
+            authorsArray, data } = this.props;
+    const { source, isCurrent, hash } = data;
     return (
       <div className="author-add">
         { authorData !== undefined ?
@@ -129,30 +135,28 @@ AuthorAdd.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  const { formName, field } = props;
-  const { users } = state;
+  const { formName, field, data } = props;
+  const { users, user } = state;
+  const { isCurrent } = data;
 
   const formSelector = formValueSelector(formName);
-  const source = formSelector(state, `${field}.source`);
   const hash = formSelector(state, `${field}.hash`);
   const id = formSelector(state, `${field}.id`);
-  const isCurrent = formSelector(state, `${field}.isCurrent`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
 
   return {
-    source,
-    hash,
-    isCurrent,
     correspondingAuthor,
-    authorData: users.data[id],
-    authorsArray: users.searchData[hash]
+    authorData: isCurrent ? user.data : users.data[id],
+    authorsArray: users.searchData[hash],
+    searchData: users.searchData
   };
 }
 
 const mapDispatchToProps = {
   change,
   searchUsers,
-  createUser
+  createUser,
+  insertUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorAdd);

@@ -12,25 +12,25 @@ import CancelLink from '~/components/CancelLink/CancelLink';
 
 class ArticlePreview extends Component {
   componentDidMount() {
-    const { articleId } = this.props;
-    if (articleId !== 'new') {
+    const { articleId, articleData } = this.props;
+    if (articleId !== 'new' && !articleData) {
       this.handleRequest();
     }
   }
 
-  handleRequest = (params={}) => {
-    const { fetchArticles } = this.props;
-    return fetchArticles({ ...params });
-  };
-
   componentDidUpdate() {
-    const { articleId, articleData, push, isFulfilled } = this.props;
-    const hasDataForPreview = articleId === 'new' && !articleData;
-    const hasDataForArticle = articleId !== 'new' && !articleData;
-    if (hasDataForPreview || (isFulfilled && hasDataForArticle)) {
+    const { articleId, articleData, push, isFulfilled, isRejected } = this.props;
+    const noDataForPreview = articleId === 'new' && !articleData;
+    const noDataForArticle = articleId !== 'new' && !articleData;
+    if (noDataForPreview || isRejected || (isFulfilled && noDataForArticle)) {
       push('/');
     }
   }
+
+  handleRequest = () => {
+    const { fetchArticle, articleId } = this.props;
+    return fetchArticle(articleId);
+  };
 
   get menuItems() {
     return [
@@ -93,6 +93,7 @@ function mapStateToProps(state, props) {
   }
   return {
     articleId,
+    isRejected: articles.isRejected,
     isFulfilled: articles.isFulfilled,
     articleData
   };
@@ -100,7 +101,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   push,
-  fetchArticles: articlesActions.fetchArticles
+  fetchArticle: articlesActions.fetchArticle
 };
 
 export default connect(

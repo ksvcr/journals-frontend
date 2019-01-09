@@ -10,14 +10,15 @@ import './author-chooser.scss';
 class AuthorChooser extends Component {
   handleClick = (event) => {
     const { onChoose } = this.props;
-    let { id } = event.currentTarget.dataset;
+    let { id, index } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    onChoose(id);
+    index = parseInt(index, 10);
+    onChoose(id, index);
   };
 
   renderItems = () => {
     const { data } = this.props;
-    return data.map(item => (
+    return data.map((item, index) => (
       <div className="author-chooser__item" key={ item.id }>
         <div className="author-chooser__box">
           <div className="author-chooser__name">
@@ -28,7 +29,7 @@ class AuthorChooser extends Component {
           </div>
         </div>
         <div className="author-chooser__button">
-          <Button className="button_small" data-id={ item.id } onClick={ this.handleClick }>
+          <Button className="button_small" data-id={ item.id } data-index={ index } onClick={ this.handleClick }>
             Выбрать
           </Button>
         </div>

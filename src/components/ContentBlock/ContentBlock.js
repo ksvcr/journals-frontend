@@ -64,9 +64,10 @@ class ContentBlock extends Component {
             }
           </label> :
           <div className="form__label content-block__label">
-            <ContentEditable className="content-block__title" disabled={ !isEditable }
-                             ref={ this.getRef } html={ data.title } onChange={ this.handleTitleChange } /> <ReqMark />
-
+            <div className="content-block__label-tools">
+              <ContentEditable className="content-block__title" disabled={ !isEditable }
+                              ref={ this.getRef } html={ data.title } onChange={ this.handleTitleChange } /> <ReqMark />
+            </div>
             <button className={ editClasses } type="button" onClick={ this.handleTitleEditToogle }>
               <Icon className="content-block__edit-icon" name="pen" />
               Изменить

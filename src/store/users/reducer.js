@@ -1,4 +1,4 @@
-import { FETCH_USERS, SEARCH_USERS, CREATE_USER } from './constants';
+import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER, INSERT_USER } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -15,6 +15,7 @@ function users(state = initialState, action) {
     case `${FETCH_USERS}_PENDING`:
     case `${SEARCH_USERS}_PENDING`:
     case `${CREATE_USER}_PENDING`:
+    case `${FETCH_USER}_PENDING`:   
       return { ...state,
         isPending: true
       };
@@ -22,6 +23,7 @@ function users(state = initialState, action) {
     case `${FETCH_USERS}_REJECTED`:
     case `${SEARCH_USERS}_REJECTED`:
     case `${CREATE_USER}_REJECTED`:
+    case `${FETCH_USER}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,
@@ -35,6 +37,16 @@ function users(state = initialState, action) {
         isPending: false,
         isFulfilled: true,
         ...entity
+      };
+
+    case `${FETCH_USER}_FULFILLED`:
+      return { ...state,
+        isPending: false,
+        isFulfilled: true,
+        data: { ...state.data,
+          [ action.payload.id ]: action.payload
+        },
+        ids: [ ...state.ids, action.payload.id ]
       };
 
     case `${SEARCH_USERS}_FULFILLED`:
@@ -52,6 +64,15 @@ function users(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        data: {
+          ...state.data,
+          [ action.payload.id ]: action.payload
+        },
+        ids: [ ...state.ids, action.payload.id ]
+      };
+
+    case INSERT_USER:
+      return { ...state,
         data: {
           ...state.data,
           [ action.payload.id ]: action.payload

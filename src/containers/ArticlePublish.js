@@ -14,7 +14,7 @@ import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 
-import { serializeArticleData } from '~/services/article';
+import { serializeArticleData } from '~/services/articleFormat';
 import PreviewLink from '~/components/PreviewLink/PreviewLink';
 
 class ArticlePublish extends Component {
@@ -23,23 +23,29 @@ class ArticlePublish extends Component {
   }
 
   handleInitialRequest = () => {
-    const { fetchLanguages, fetchUsers } = this.props;
+    const { fetchLanguages } = this.props;
     return Promise.all([
       fetchLanguages(),
-      fetchUsers(),
       this.handleRequest()
     ]);
   };
 
   handleRequest = () => {
-    const { articleId, fetchArticle, fetchRubrics, fetchCategories,  } = this.props;
+    const { articleId, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
     const promises = [
       fetchRubrics(),
       fetchCategories()
     ];
 
     if (articleId !== undefined) {
-      promises.push(fetchArticle(articleId))
+      promises.push(fetchArticle(articleId).then(({ value:articleDate }) => {
+        const userIds = articleDate.collaborators.map(item => item.user);
+        if (articleDate.author) {
+          userIds.push(articleDate.author.user);
+        }
+        const userPromises = userIds.map(id => fetchUser(id));
+        return Promise.all(userPromises);
+      }));
     }
 
     return Promise.all(promises);
@@ -59,7 +65,7 @@ class ArticlePublish extends Component {
   handleDraftSubmit = (formData) => {
     const { articleId, createArticle, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
-
+    
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
@@ -135,7 +141,7 @@ const mapDispatchToProps = {
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
   fetchCategories: categoriesActions.fetchCategories,
-  fetchUsers: usersActions.fetchUsers,
+  fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle
 };

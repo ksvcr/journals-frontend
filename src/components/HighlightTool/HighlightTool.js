@@ -20,7 +20,6 @@ class HighlightTool extends Component {
 
   handleChange = ({ r, g, b, a }) => {
     const { getEditorState, setEditorState } = this.props;
-    console.log(getEditorState());
     const color = `rgba(${r},${g},${b},${a})`;
     const newState = styles.background.add(getEditorState(), color);
     setEditorState(newState);

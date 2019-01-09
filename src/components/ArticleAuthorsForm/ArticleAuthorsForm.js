@@ -6,7 +6,6 @@ import nanoid from 'nanoid';
 import FieldSetList from '~/components/FieldSetList/FieldSetList';
 import AuthorAdd from '~/components/AuthorAdd/AuthorAdd';
 
-
 class ArticleAuthorsForm extends Component {
   renderAuthorList = (props) => {
     const { formName } = this.props;

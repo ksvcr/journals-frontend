@@ -20,6 +20,7 @@ function articles(state = initialState, action) {
     case `${FETCH_ARTICLE}_PENDING`:
       return { ...state,
         isPending: true,
+        isRejected: false,
         ...action.meta
       };
 
@@ -28,6 +29,7 @@ function articles(state = initialState, action) {
       return { ...state,
         isRejected: true,
         isPending: false,
+        isFulfilled: false,
         error: action.payload
       };
 
@@ -36,6 +38,7 @@ function articles(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        isRejected: false,
         total: action.payload.count,
         ...entity
       };
@@ -44,6 +47,7 @@ function articles(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        isRejected: false,
         data: { ...state.data,
           [ action.payload.id ]: action.payload
         },

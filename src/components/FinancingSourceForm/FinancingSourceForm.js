@@ -1,8 +1,12 @@
 import React from 'react';
 import { Field } from 'redux-form';
+
 import TextField from '~/components/TextField/TextField';
 import Select from '~/components/Select/Select';
+import ReqMark from '~/components/ReqMark/ReqMark';
+
 import getFinancingIds from '~/services/getFinancingIds';
+import * as validate from '~/utils/validate';
 
 const FinancingSourceForm = ({ field }) => {
   return (
@@ -10,9 +14,11 @@ const FinancingSourceForm = ({ field }) => {
       <div className="form__row">
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.organization` } className="form__label">Название организации</label>
+            <label htmlFor={ `${field}.organization` } className="form__label">
+              Название организации <ReqMark />
+            </label>
             <Field className="text-field_white" name={ `${field}.organization` } id={ `${field}.organization` }
-                   component={ TextField } placeholder="Введите название" />
+                   component={ TextField } placeholder="Введите название" validate={ [validate.required] } />
           </div>
         </div>
         <div className="form__col form__col_4">
@@ -24,25 +30,31 @@ const FinancingSourceForm = ({ field }) => {
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.organizationId` } className="form__label">ID организации</label>
-            <Field className="text-field_white" name={ `${field}.organizationId` } id={ `${field}.organizationId` }
-                   component={ TextField } placeholder="Введите ID" />
+            <label htmlFor={ `${field}.financing_id` } className="form__label">
+              ID организации <ReqMark />
+            </label>
+            <Field className="text-field_white" name={ `${field}.financing_id` } id={ `${field}.financing_id` }
+                   component={ TextField } placeholder="Введите ID" validate={ [validate.required] } />
           </div>
         </div>
       </div>
       <div className="form__row">
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.grant` } className="form__label">Название гранта</label>
-            <Field className="text-field_white" name={ `${field}.grant_name` } id={ `${field}.grant` }
-                   component={ TextField } placeholder="Введите название гранта" />
+            <label htmlFor={ `${field}.grant_name` } className="form__label">
+              Название гранта  <ReqMark />
+            </label>
+            <Field className="text-field_white" name={ `${field}.grant_name` } id={ `${field}.grant_name` }
+                   component={ TextField } placeholder="Введите название гранта" validate={ [validate.required] } />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.grantId` } className="form__label">Номер гранта</label>
-            <Field className="text-field_white" name={ `${field}.grantId` } id={ `${field}.grant_number` }
-                   component={ TextField } placeholder="Введите номер гранта" />
+            <label htmlFor={ `${field}.grant_number` } className="form__label">
+              Номер гранта  <ReqMark />
+            </label>
+            <Field className="text-field_white" name={ `${field}.grant_number` } id={ `${field}.grant_number` }
+                   component={ TextField } placeholder="Введите номер гранта" validate={ [validate.required] } />
           </div>
         </div>
       </div>
