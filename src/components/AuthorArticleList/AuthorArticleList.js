@@ -27,9 +27,6 @@ class AuthorArticleList extends Component {
         handler: this.handleEdit
       },
       {
-        title: 'Отозвать'
-      },
-      {
         title: 'Оплатить',
         handler: this.handlePaymentShow
       },

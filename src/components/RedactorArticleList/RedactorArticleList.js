@@ -32,9 +32,6 @@ class RedactorArticleList extends Component {
         handler: this.handleEdit
       },
       {
-        title: 'Отозвать'
-      },
-      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
 
@@ -19,13 +20,13 @@ class ReviewCreate extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, currentUserId, createArticleReview } = this.props;
+    const { articleId, currentUserId, createArticleReview, push } = this.props;
     const data = { ...formData,
       article: articleId,
       reviewer: currentUserId,
       review_round: 1
     };
-    createArticleReview(articleId, data);
+    createArticleReview(articleId, data).then(() => { push('/'); });
   };
 
   render() {
@@ -54,6 +55,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
+  push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleReview: articlesActions.createArticleReview
 };
