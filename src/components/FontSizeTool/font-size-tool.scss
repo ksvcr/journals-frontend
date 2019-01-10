@@ -1,0 +1,28 @@
+.font-size-tool {
+  position: relative;
+  min-width: 40px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    display: block;
+    border: solid #292929;
+    border-width: 0 2px 2px 0;
+    margin: -5px 0 0;
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  &__select {
+    appearance: none;
+    border-radius: 0;
+    padding: 6px 25px 5px 6px;
+    border: 1px solid #d4d1c5;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+}
