@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { push } from 'connected-react-router';
 
 import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import Button from '~/components/Button/Button';
+import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 
 import * as validate from '~/utils/validate';
 
@@ -17,11 +18,40 @@ class ReviewCreateForm extends Component {
     }
   }
 
+  get recommendationOptions() {
+    return [
+      {
+        title: 'Принять',
+        value: '1'
+      },
+      {
+        title: 'Доработать',
+        value: '2'
+      },
+      {
+        title: 'Отклонить',
+        value: '3'
+      }
+    ];
+  }
+
+  handleRecommendationChange = (value) => {
+    const { change } = this.props;
+    change('recommendation', value);
+  };
+
   render() {
-    const { articleData, handleSubmit } = this.props;
+    const { articleData, handleSubmit, recommendation } = this.props;
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit } >
         <h2 className="page__title">{ articleData.title }</h2>
+        <div className="form__field">
+          <label htmlFor="recommendation" className="form__label">
+            Ваши рекомендации к статье:
+          </label>
+          <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
+                       onChange={ this.handleRecommendationChange } value={ recommendation } />
+        </div>
         <div className="form__field">
           <label htmlFor="comment_for_author" className="form__label">
             Текст рецензии
@@ -51,10 +81,15 @@ ReviewCreateForm = reduxForm({
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
   const { articles } = state;
+  const selector = formValueSelector('review-create');
 
   return {
     push,
-    articleData: articles.data[articleId]
+    articleData: articles.data[articleId],
+    recommendation: selector(state, 'recommendation'),
+    initialValues: {
+      recommendation: '1'
+    }
   };
 }
 
