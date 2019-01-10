@@ -253,7 +253,7 @@ class ArticleCommonForm extends Component {
           </div>
 
           { hasFinancing &&
-            <FieldArray name="financing_sources" rerenderOnEveryChange={ true }
+            <FieldArray name="financing_sources"
                         component={ this.renderFinancingSourcesList } />
           }
         </div>
@@ -280,7 +280,7 @@ class ArticleCommonForm extends Component {
           }
 
           { visibleFields.addressList &&
-            <FieldArray name="addresses" rerenderOnEveryChange={ true }
+            <FieldArray name="addresses"
                         component={ this.renderAddressList } />
           }
         </div>

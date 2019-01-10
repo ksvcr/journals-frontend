@@ -1,0 +1,42 @@
+.multi-switch {
+  $root: &;
+
+  border-radius: 6px;
+  display: inline-flex;
+  padding: 1px;
+  box-sizing: border-box;
+  border: 1px solid $orange-color;
+
+  &_checked {
+    border: 1px solid transparent;
+    background: #94B964;
+  }
+
+  &__label {
+    padding: 10px 20px;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-weight: 600;
+
+    #{$root}_checked & {
+      color: #fff;
+    }
+  }
+
+  &:not(.multi-switch_checked)  &__label:hover {
+    border: 1px solid #dcdcdc;
+    box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &__input {
+    @include visuallyhidden;
+  }
+
+  &__input:checked ~ &__label {
+    background: #fff;
+    color: #020201;
+  }
+}

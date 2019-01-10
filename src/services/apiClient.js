@@ -12,11 +12,14 @@ const apiClient = {
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
+  updateCurrentUser: (data) => fetchInstance.request(`/users/me/`, { method: 'put', data }),
   getUsers: (userId=null, params) => {
     const tail = userId !== null ? `${userId}/` : '';
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
+
   createUserTag: (userId, data) => {
     return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
   },
@@ -65,9 +68,20 @@ const apiClient = {
   removeArticleTag: (articleId, id) => {
     return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
   },
-  inviteArticleReviewer: (articleId, data) => {
+  createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
-  }
+  },
+  editInviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
+  },
+  getReviewInvites: (params) => {
+    return fetchInstance.request(`/review/invites/`, { params });
+  },
+
+  getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
+  transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
+
+  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data })
 };
 
 export default apiClient;

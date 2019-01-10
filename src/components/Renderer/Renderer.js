@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import ImageMedia from '~/components/ImageMedia/ImageMedia';
 import Table from '~/components/Table/Table';
+import ImageSlider from '~/components/ImageSlider/ImageSlider';
 
 class Renderer extends Component {
   get renderers() {
@@ -45,8 +46,10 @@ class Renderer extends Component {
       },
       entities: {
         LINK: (children, data, { key }) => <Link key={key} to={data.url}>{children}</Link>,
-        'image-list': (children, data, { key }) => <ImageMedia data={ data } key={ key }/>,
-        'block-table': (children, data, { key }) => <Table data={ data } index={ key } key={ key }/>
+        'image-list': (children, data, { key }) => (
+          data.images.length > 1 ? <ImageSlider data={ data } key={ key }/> : <ImageMedia data={ data } key={ key }/>
+        ),
+        'block-table': (children, data, { key }) => <Table data={ data } key={ key }/>
       },
     };
   }

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { getFormValues } from 'redux-form';
 
-import Menu from '~/components/Menu/Menu';
 import Content from '~/components/Content/Content';
 
 import * as articlesActions from '~/store/articles/actions';
@@ -32,47 +31,24 @@ class ArticlePreview extends Component {
     return fetchArticle(articleId);
   };
 
-  get menuItems() {
-    return [
-      {
-        title: 'Мои статьи',
-        href: '/'
-      },
-      {
-        title: 'Мои скидки',
-        href: '/second'
-      },
-      {
-        title: 'Настройки',
-        href: '/'
-      }
-    ];
-  }
-
   render() {
     const { articleId, articleData } = this.props;
     return articleData ? (
       <React.Fragment>
-        <aside className="page__sidebar">
-          <Menu items={ this.menuItems } />
-        </aside>
+        { articleId === 'new' &&
+          <ArticleTopTools>
+            <CancelLink href="/article"/>
+          </ArticleTopTools>
+        }
 
-        <article className="page__content">
-          { articleId &&
-            <ArticleTopTools>
-              <CancelLink href="/publish"/>
-            </ArticleTopTools>
-          }
-
-          { articleData &&
-            <React.Fragment>
-              <h1 className="page__title">
-                { articleData.title }
-              </h1>
-              <Content data={ articleData } />
-            </React.Fragment>
-          }
-        </article>
+        { articleData &&
+          <React.Fragment>
+            <h1 className="page__title">
+              { articleData.title }
+            </h1>
+            <Content data={ articleData } />
+          </React.Fragment>
+        }
       </React.Fragment>
     ) : null;
   }

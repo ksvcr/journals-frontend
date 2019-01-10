@@ -7,6 +7,6 @@ export function fetchCategories(siteId=null) {
     return dispatch({
       type: FETCH_CATEGORIES,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }

@@ -1,4 +1,4 @@
-import { FETCH_CURRENT_USER, LOGIN } from './constants';
+import { FETCH_CURRENT_USER, LOGIN, UPDATE_CURRENT_USER } from './constants';
 
 const initialState = {
   isPending: false,
@@ -11,12 +11,14 @@ function user(state = initialState, action) {
   switch (action.type) {
     case `${LOGIN}_PENDING`:
     case `${FETCH_CURRENT_USER}_PENDING`:
+    case `${UPDATE_CURRENT_USER}_PENDING`:
       return { ...state,
         isPending: true
       };
 
     case `${LOGIN}_FULFILLED`:
     case `${FETCH_CURRENT_USER}_FULFILLED`:
+    case `${UPDATE_CURRENT_USER}_FULFILLED`:
       return { ...state,
         isPending: false,
         isFulfilled: true,
@@ -25,6 +27,7 @@ function user(state = initialState, action) {
 
     case `${LOGIN}_REJECTED`:
     case `${FETCH_CURRENT_USER}_REJECTED`:
+    case `${UPDATE_CURRENT_USER}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,

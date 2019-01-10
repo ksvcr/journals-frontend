@@ -7,6 +7,6 @@ export function fetchRubrics(siteId=null) {
     return dispatch({
       type: FETCH_RUBRICS,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }

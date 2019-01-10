@@ -22,7 +22,7 @@ class RedactorReviewerList extends Component {
     const { articleId, inviteArticleReviewer } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    inviteArticleReviewer(articleId, { reviewer: id });
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: id });
   };
 
   handleTagAdd = (user, text) => {

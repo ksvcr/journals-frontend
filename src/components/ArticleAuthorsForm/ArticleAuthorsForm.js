@@ -29,7 +29,7 @@ class ArticleAuthorsForm extends Component {
       <div className="article-authors">
         <h2 className="page__title">Авторы</h2>
         <div className="form__field">
-          <FieldArray name="authors" rerenderOnEveryChange={ true }
+          <FieldArray name="authors"
                       component={ this.renderAuthorList } />
         </div>
       </div>

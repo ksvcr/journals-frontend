@@ -23,7 +23,7 @@ class RedactorReview extends Component {
 
   handleSelfInvite = () => {
     const { articleId, currentUserId, inviteArticleReviewer } = this.props;
-    inviteArticleReviewer(articleId, { reviewer: currentUserId });
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId });
   };
 
   render() {

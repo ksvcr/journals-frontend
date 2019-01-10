@@ -1,0 +1,20 @@
+.discounts-balance {
+  padding-bottom: 18px;
+
+  &__text {
+    margin: 0;
+    color: #16506D;
+    font-weight: 500;
+    font-family: $pragmatica;
+  }
+
+  &__value {
+    font-weight: 600;
+  }
+
+  &__transfer {
+    color: #131313;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

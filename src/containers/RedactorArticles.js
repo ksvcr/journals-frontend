@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Menu from '~/components/Menu/Menu';
 import RedactorArticleList from '~/components/RedactorArticleList/RedactorArticleList';
 
 import * as usersActions from '~/store/users/actions';
@@ -26,34 +25,11 @@ class RedactorArticles extends Component {
     return fetchArticles(null, { ...articlesParams, ...params });
   };
 
-  get menuItems() {
-    return [
-      {
-        title: 'Мои статьи',
-        href: '/'
-      },
-      {
-        title: 'Мои скидки',
-        href: '/second'
-      },
-      {
-        title: 'Настройки',
-        href: '/'
-      }
-    ];
-  }
-
   render() {
     return (
       <React.Fragment>
-        <aside className="page__sidebar">
-          <Menu items={ this.menuItems } />
-        </aside>
-
-        <article className="page__content">
-          <h1 className="page__title">Мои статьи</h1>
-          <RedactorArticleList onUpdateRequest={ this.handleRequest } />
-        </article>
+        <h1 className="page__title">Мои статьи</h1>
+        <RedactorArticleList onUpdateRequest={ this.handleRequest } />
       </React.Fragment>
     );
   }

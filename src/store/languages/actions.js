@@ -11,7 +11,7 @@ export function fetchLanguages() {
       return dispatch({
         type: FETCH_LANGUAGES,
         payload
-      }).catch((error) => console.log(error));
+      }).catch(error => console.error(error));
     }
   }
 }

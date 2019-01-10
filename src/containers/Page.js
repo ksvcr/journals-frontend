@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Header from '~/components/Header/Header';
+import MainMenu from '~/components/MainMenu/MainMenu';
 import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
@@ -29,7 +30,7 @@ class Page extends Component {
       });
     }
   };
-  
+
   render() {
     const { isFulfilled } = this.props;
     return (
@@ -38,7 +39,12 @@ class Page extends Component {
         <main className="page__main">
           { isFulfilled &&
             <div className="page__holder">
-              { this.props.children }
+              <aside className="page__sidebar">
+                <MainMenu items={ this.menuItems } />
+              </aside>
+              <article className="page__content">
+                { this.props.children }
+              </article>
             </div>
           }
         </main>

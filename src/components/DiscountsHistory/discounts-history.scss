@@ -1,0 +1,66 @@
+.discounts-history {
+  &__tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    border-bottom: 1px solid $gray-color;
+  }
+
+  &__tab {
+    margin-right: 20px;
+    font-size: 16px;
+    font-family: $pragmatica;
+    cursor: pointer;
+    padding: 16px 0;
+    color: $blue-color;
+    position: relative;
+
+    // Отключаем выделение при двойном клике на вкладку
+    user-select: none;
+    outline: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      display: block;
+      height: 2px;
+      background: transparent;
+      transition: background .2s;
+    }
+
+    &_selected {
+      color: $orange-color;
+
+      &:after {
+        background: $orange-color;
+      }
+    }
+  }
+
+  &__content {
+    padding: 16px 0;
+  }
+
+  &__panel {
+    display: none;
+
+    &_selected {
+      display: block;
+      animation: panelFadeIn 300ms linear;
+    }
+  }
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
