@@ -1,0 +1,10 @@
+.review-estimate {
+  &__radio {
+    margin-right: -12px; // avoid margin-right: 12px from .radio__title:before
+  }
+
+  &__title {
+    font-size: 14px;
+    margin: 0;
+  }
+}

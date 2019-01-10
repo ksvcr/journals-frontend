@@ -1,14 +1,5 @@
 .review-create-form {
   &__estimate {
     padding: 32px 0;
-
-    &__title {
-      font-size: 14px;
-      margin: 0;
-    }
-
-    &__radio {
-      margin-right: -12px; // avoid margin-right: 12px from .radio__title:before
-    }
   }
 }
