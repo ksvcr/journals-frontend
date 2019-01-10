@@ -112,7 +112,11 @@ class ReviewEstimate extends Component {
   }
 
   render() {
-    return <List { ...this.estimateProps } />;
+    return (
+      <div className="review-estimate">
+        <List { ...this.estimateProps } />
+      </div>
+    );
   }
 }
 

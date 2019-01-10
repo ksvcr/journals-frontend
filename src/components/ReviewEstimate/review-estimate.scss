@@ -7,4 +7,12 @@
     font-size: 14px;
     margin: 0;
   }
+
+  & span > .list__item {
+    &:hover {
+      cursor: pointer;
+      background-color: #FFF8EC;
+      transition: all .25s;
+    }
+  }
 }
