@@ -23,6 +23,7 @@ import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
 import TableEditor from '~/components/TableEditor/TableEditor';
 import ContentCounter from '~/components/ContentCounter/ContentCounter';
 import HeadlinesButtons from '~/components/HeadlinesButtons/HeadlinesButtons';
+import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
 import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
@@ -128,12 +129,13 @@ class ContentEditor extends Component {
     return (
       <React.Fragment>
         <div className="editor-toolbar__row">
+          <FontSizeTool { ...externalProps } />
+          <HeadlinesButtons { ...externalProps } />
           <ToolbarStyleSection { ...externalProps } />
           <Separator className="editor-toolbar__separator" />
           <ToolbarAligmentSection { ...externalProps } />
           <ToolbarUndoSection />
           <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
-          <HeadlinesButtons { ...externalProps } />
         </div>
 
         { isExpanded &&
