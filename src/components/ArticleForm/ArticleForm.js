@@ -8,6 +8,7 @@ import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
 import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsForm';
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
+import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
 
 import Button from '~/components/Button/Button';
@@ -49,7 +50,7 @@ class ArticleForm extends Component {
       },
       {
         title: 'Файлы к статье',
-        component: <div>Раздел в разработке</div>
+        component: <ArticleFilesForm { ...this.formProps } />
       },
       {
         title: 'Список литературы',
@@ -153,6 +154,7 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
+    attachments: [],
     ...data
   };
 

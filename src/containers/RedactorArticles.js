@@ -27,10 +27,10 @@ class RedactorArticles extends Component {
 
   render() {
     return (
-      <article className="page__content">
+      <React.Fragment>
         <h1 className="page__title">Мои статьи</h1>
         <RedactorArticleList onUpdateRequest={ this.handleRequest } />
-      </article>
+      </React.Fragment>
     );
   }
 }

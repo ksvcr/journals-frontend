@@ -1,6 +1,7 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER } from './constants';
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
+import {ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE} from '~/store/articles/constants';
 
 const initialState = {
   isPending: false,
@@ -86,6 +87,30 @@ function articles(state = initialState, action) {
           }
         }
       };
+
+    case `${ACCEPT_ARTICLE_REVIEW_INVITE}_PENDING`:
+      return { ...state,
+        data: { ...state.data,
+          [ action.meta.articleId ]: {
+            ...state.data[action.meta.articleId],
+            stage: 'REVISION',
+            state_article: 'AWAIT_REVIEW'
+          }
+        }
+      };
+
+    case `${EDIT_ARTICLE}_PENDING`:
+      return { ...state,
+        data: { ...state.data,
+          [ action.meta.articleId ]: {
+            ...state.data[action.meta.articleId],
+            ...action.meta.data
+          }
+        }
+      };
+
+    case `${RESET_ARTICLES}`:
+      return initialState;
 
     default:
       return state

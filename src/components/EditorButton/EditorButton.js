@@ -33,11 +33,11 @@ const createFn = {
   blockType: createBlockStyleButton
 };
 
-const EditorButton = ({ type, value, icon }) => {
+const EditorButton = ({ type, value, icon, iconText='' }) => {
   const iconClasses = classNames('editor-button__icon', { [`editor-button__icon_${icon}`]: icon });
   return createFn[type]({
     [type]: value,
-    children: icon ? <Icon className={ iconClasses } name={ icon } /> : value,
+    children: icon ? <Icon className={ iconClasses } name={ icon } /> : iconText,
   });
 };
 

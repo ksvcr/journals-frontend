@@ -13,10 +13,10 @@ class AuthorSettings extends Component {
 
   render() {
     return (
-      <article className="page__content">
+      <React.Fragment>
         <h1 className="page__title">Настройки</h1>
         <AuthorSettingsForm formName="author-settings-form" onSubmit={ this.handleSubmit } />
-      </article>
+      </React.Fragment>
     );
   }
 }

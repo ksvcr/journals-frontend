@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
-
+import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
 import './redactor-actions.scss';
 
 class RedactorActions extends Component {
@@ -16,6 +16,10 @@ class RedactorActions extends Component {
       {
         title: 'Рецензировать',
         component: <RedactorReview articleId={ articleId } />
+      },
+      {
+        title: 'Решение',
+        component: <RedactorDecision articleId={ articleId } />
       }
     ];
   }

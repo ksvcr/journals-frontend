@@ -35,7 +35,7 @@ class HeaderTools extends Component {
           <Menu items={ this.journalLink } type="horizontal" />
         </div>
         <div className="header-tools__item header-tools__item_right">
-          <Button type="link" href="/publish">
+          <Button type="link" href="/article">
             Опубликовать статью
           </Button>
         </div>

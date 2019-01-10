@@ -24,6 +24,7 @@ import { getCountriesArray } from '~/store/countries/selector';
 import countriesActions from '~/store/countries/actions';
 
 import getSourceTypes from '~/services/getSourceTypes';
+import getRightholderTypes from '~/services/getRightholderTypes';
 import * as validate from '~/utils/validate';
 
 import './article-source-create-form.scss';
@@ -119,7 +120,8 @@ class ArticleSourceCreateForm extends Component {
         return <SourceStandart />;
 
       case 'SourcePatent':
-        return <SourcePatent countriesOptions={ this.countriesOptions } />;
+        return <SourcePatent countriesOptions={ this.countriesOptions }
+                             rightholderOptions={ getRightholderTypes() } />;
 
       default:
         return null;

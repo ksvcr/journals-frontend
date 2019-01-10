@@ -27,7 +27,7 @@ class ArticleContentForm extends Component {
                  component={ props => <Select options={ this.typeOptions } { ...props } /> } />
         </div>
 
-        <FieldArray name="content_blocks" rerenderOnEveryChange={ true }
+        <FieldArray name="content_blocks"
                     component={ this.renderContentBlockList } />
       </div>
     );

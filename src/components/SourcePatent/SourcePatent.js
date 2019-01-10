@@ -8,7 +8,7 @@ import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
 import * as validate from '~/utils/validate';
 
-const SourcePatent = ({ countriesOptions }) => {
+const SourcePatent = ({ countriesOptions, rightholderOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -115,8 +115,8 @@ const SourcePatent = ({ countriesOptions }) => {
             <label htmlFor="rightholder" className="form__label">
               Правообладатель
             </label>
-            <Field name="rightholder" id="rightholder" className="text-field_white" component={ TextField }
-                   placeholder="Введите правообладателя" />
+            <Field name="rightholder" id="rightholder" className="select_white"
+                   component={ props => <Select options={ rightholderOptions } { ...props } /> } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="patent_application_number" className="form__label">
