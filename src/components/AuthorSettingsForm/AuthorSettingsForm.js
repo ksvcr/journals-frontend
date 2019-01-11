@@ -7,10 +7,21 @@ import * as validate from '~/utils/validate';
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
+import Select from '~/components/Select/Select';
+
+import getCountries from '~/services/getCountries';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
+  get countriesOptions() {
+    const countries = getCountries();
+    return countries.map(item => ({
+      title: item.title,
+      value: item.id
+    }));
+  }
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -164,8 +175,8 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="mail_address_country" className="form__label">
                 Страна
               </label>
-              <Field name="mail_address_country" id="mail_address_country" component={ TextField }
-                     placeholder="Введите страну" />
+              <Field name="mail_address_country" id="mail_address_country" placeholder="Выберите страну"
+                     component={ props => <Select options={ this.countriesOptions } { ...props } /> }  />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">

@@ -18,7 +18,6 @@ const apiClient = {
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
-  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
 
   createUserTag: (userId, data) => {
     return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
