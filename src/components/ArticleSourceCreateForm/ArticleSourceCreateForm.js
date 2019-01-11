@@ -21,7 +21,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCountriesArray } from '~/store/countries/selector';
 
-import countriesActions from '~/store/countries/actions';
+import * as countriesActions from '~/store/countries/actions';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -61,16 +61,15 @@ class ArticleSourceCreateForm extends Component {
   get countriesOptions() {
     const { countriesArray } = this.props;
     return countriesArray.map(item => ({
-      title: item.name,
+      label: item.name,
       value: item.id
     }));
   }
 
   handleFetchCountries = (value) => {
     const { dispatch } = this.props;
-    // value = input value
-
-    dispatch(countriesActions.fetchCountries({ name: value }));
+    console.log(value);
+    dispatch(countriesActions.fetchCountries({ name: value, limit: 5 }));
   };
 
   get thesisCategories() {
@@ -99,7 +98,7 @@ class ArticleSourceCreateForm extends Component {
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
                                    languagesOptions={ this.languagesOptions }
                                    countriesOptions={ this.countriesOptions }
-                                   onFetchCountries={ this.handleFetchCountries }/>;
+                                   onCountriesFetch={ this.handleFetchCountries }/>;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -122,7 +121,8 @@ class ArticleSourceCreateForm extends Component {
       case 'SourcePatent':
         return <SourcePatent countriesOptions={ this.countriesOptions }
                              rightholderType={ rightholderType }
-                             rightholderOptions={ getRightholderTypes() } />;
+                             rightholderOptions={ getRightholderTypes() }
+                             onCountriesFetch={ this.handleFetchCountries }/>;
 
       default:
         return null;
@@ -225,6 +225,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
+      country: countriesArray[0].value,
       // defense_country: 132, // Россия
       defense_date: moment().format('YYYY-MM-DD'),
       statement_date: moment().format('YYYY-MM-DD'),
@@ -238,5 +239,10 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(ArticleSourceCreateForm);
+const mapDispatchToProps = {
+  fetchCountries: countriesActions.fetchCountries
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleSourceCreateForm);
 

@@ -33,7 +33,8 @@ class ArticlePublish extends Component {
     const { fetchLanguages, fetchCountries } = this.props;
     return Promise.all([
       fetchLanguages(),
-      fetchCountries({ name: "Б" }),
+      // fetchCountries({ name: "Б" }),
+      fetchCountries({ limit: 5 }),
       this.handleRequest()
     ]);
   };

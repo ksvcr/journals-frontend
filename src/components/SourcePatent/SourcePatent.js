@@ -6,9 +6,10 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
+import DynamicSelect from '~/components/DynamicSelect/DynamicSelect';
 import * as validate from '~/utils/validate';
 
-const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions }) => {
+const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions, onCountriesFetch }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -168,7 +169,8 @@ const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions })
               Страна <ReqMark />
             </label>
             <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <Select options={ countriesOptions } { ...props } /> } />
+                   component={ props => <DynamicSelect isAsync options={ countriesOptions } { ...props }
+                                                onInputChange={ onCountriesFetch } /> } />
           </div>
         </div>
       </div>

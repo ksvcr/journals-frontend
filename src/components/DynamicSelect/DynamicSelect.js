@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import AsyncSelect from 'react-select/lib/Async';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import './select.scss';
+// import './select.scss';
 
-class Select extends Component {
+class DynamicSelect extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: props.value };
+  }
+
   renderOptions = () => {
     const { options } = this.props;
 
@@ -13,7 +19,7 @@ class Select extends Component {
 
       if (typeof option === 'object') {
         value = option.value;
-        title = option.title;
+        title = option.label;
       } else {
         value = title = option;
       }
@@ -26,6 +32,16 @@ class Select extends Component {
     })
   };
 
+  handleInputChange = (newValue) => {
+    const { onInputChange } = this.props;
+    onInputChange(newValue);
+  };
+
+  handleChange = (event) => {
+    console.log(event.target.value);
+    this.setState({ value: event.target.value });
+  };
+
   render() {
     const { meta, value, input, id, disabled, required, className, onChange } = this.props;
     const classes = classNames('select', className,
@@ -36,23 +52,22 @@ class Select extends Component {
     }
 
     return (
-      <div className={ classes }>
-        <select id={ id } disabled={ disabled } required={ required }
-                onChange={ onChange } { ...input } className="select__field">
-          {this.renderOptions()}
-        </select>
+      <div>
+        <AsyncSelect id={ id } disabled={ disabled } required={ required }
+                     onChange={ this.handleChange } cacheOptions defaultOptions={ this.props.options }
+                     onInputChange={ this.handleInputChange } { ...input } value={ this.state.value } />
       </div>
     );
   }
 }
 
-Select.defaultProps = {
+DynamicSelect.defaultProps = {
   input: {}, // Props from redux-form field
   meta: {}
 };
 
-Select.propTypes = {
+DynamicSelect.propTypes = {
   options: PropTypes.array.isRequired
 };
 
-export default Select;
+export default DynamicSelect;
