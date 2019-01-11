@@ -6,9 +6,12 @@ import { push } from 'connected-react-router';
 import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import Button from '~/components/Button/Button';
+import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 
 import * as validate from '~/utils/validate';
+
+import './review-create-form.scss';
 
 class ReviewCreateForm extends Component {
   componentDidUpdate() {
@@ -17,6 +20,11 @@ class ReviewCreateForm extends Component {
       push('/');
     }
   }
+
+  handleEstimateChange = (field, value) => {
+    const { change } = this.props;
+    change(field, value);
+  };
 
   get recommendationOptions() {
     return [
@@ -58,6 +66,9 @@ class ReviewCreateForm extends Component {
           </label>
           <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea rows={ 20 }
                  placeholder="Введите текст рецензии" />
+        </div>
+        <div className="review-create-form__estimate">
+          <ReviewEstimate onChange={ this.handleEstimateChange } />
         </div>
         <div className="form__field">
           <label htmlFor="comment_for_redactor" className="form__label">
