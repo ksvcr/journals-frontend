@@ -8,7 +8,7 @@ export function fetchUsers(params) {
     return dispatch({
       type: FETCH_USERS,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -18,7 +18,7 @@ export function fetchUser(id) {
     return dispatch({
       type: FETCH_USER,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -29,7 +29,7 @@ export function searchUsers(key, params={}) {
       type: SEARCH_USERS,
       meta: { key },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -39,7 +39,7 @@ export function createUser(data) {
     return dispatch({
       type: CREATE_USER,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -61,7 +61,7 @@ export function createUserTag(userId, data) {
     return dispatch({
       type: CREATE_USER_TAG,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
 
@@ -72,6 +72,6 @@ export function removeUserTag(userId, id) {
       type: REMOVE_USER_TAG,
       meta: { userId, id },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }

@@ -11,5 +11,5 @@ export default (props) => {
 
   return buttons
     .map(button => EditorButton(button))
-    .map((Button, index) => <Button key={ index } { ...props } />)
+    .map((Button, index) => <Button key={ index } { ...props } />);
 };

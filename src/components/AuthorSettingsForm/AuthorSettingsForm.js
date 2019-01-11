@@ -116,7 +116,7 @@ class AuthorSettingsForm extends Component {
           </div>
         </div>
 
-        <hr className="author-settings-form__separator" />
+        <hr className="page__divider" />
 
         <div className="form__field">
           <div className="form__row">
@@ -144,7 +144,7 @@ class AuthorSettingsForm extends Component {
           </div>
         </div>
 
-        <hr className="author-settings-form__separator" />
+        <hr className="page__divider" />
 
         <h2 className="form__subtitle">Почтовый адрес:</h2>
         <div className="form__field">
@@ -219,7 +219,7 @@ class AuthorSettingsForm extends Component {
           </div>
         </div>
 
-        <hr className="author-settings-form__separator" />
+        <hr className="page__divider" />
 
         <h2 className="form__subtitle">Вы зарегистрированы как:</h2>
         <div className="author-settings-form__role form__field form__field_inline">

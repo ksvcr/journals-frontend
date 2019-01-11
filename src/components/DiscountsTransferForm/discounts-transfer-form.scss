@@ -1,0 +1,27 @@
+.discounts-transfer-form {
+  &__infobox {
+    padding: 14px 0;
+
+    & > p {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    &__fullname {
+      font-weight: 500;
+      font-size: 16px;
+      color: #192A3E;
+    }
+
+    &__info {
+      font-size: 14px;
+      color: #C1C4BF;
+    }
+  }
+
+  &__submit {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0 2px 8px;
+  }
+}

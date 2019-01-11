@@ -27,9 +27,6 @@ class AuthorArticleList extends Component {
         handler: this.handleEdit
       },
       {
-        title: 'Отозвать'
-      },
-      {
         title: 'Оплатить',
         handler: this.handlePaymentShow
       },
@@ -66,7 +63,7 @@ class AuthorArticleList extends Component {
     const { push } = this.props;
 
     setTimeout(() => {
-      push(`/edit/${id}`);
+      push(`/article/${id}/edit/`);
     }, 0);
   };
 

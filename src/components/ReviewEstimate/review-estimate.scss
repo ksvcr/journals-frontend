@@ -1,0 +1,18 @@
+.review-estimate {
+  &__radio {
+    margin-right: -12px; // avoid margin-right: 12px from .radio__title:before
+  }
+
+  &__title {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  & span > .list__item {
+    &:hover {
+      cursor: pointer;
+      background-color: #FFF8EC;
+      transition: all .25s;
+    }
+  }
+}

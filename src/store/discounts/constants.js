@@ -1,0 +1,2 @@
+export const FETCH_DISCOUNTS = 'FETCH_DISCOUNTS';
+export const TRANSFER_BONUS = 'TRANSFER_BONUS';

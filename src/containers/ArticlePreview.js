@@ -34,10 +34,10 @@ class ArticlePreview extends Component {
   render() {
     const { articleId, articleData } = this.props;
     return articleData ? (
-      <article className="page__content">
-        { articleId &&
+      <React.Fragment>
+        { articleId === 'new' &&
           <ArticleTopTools>
-            <CancelLink href="/publish"/>
+            <CancelLink href="/article"/>
           </ArticleTopTools>
         }
 
@@ -49,7 +49,7 @@ class ArticlePreview extends Component {
             <Content data={ articleData } />
           </React.Fragment>
         }
-      </article>
+      </React.Fragment>
     ) : null;
   }
 }

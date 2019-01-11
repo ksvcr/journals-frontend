@@ -1,6 +1,6 @@
 import {
-  CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER,
-  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG
+  CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -13,24 +13,17 @@ export function fetchArticles(siteId, params={}) {
       type: FETCH_ARTICLES,
       meta: params,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
 export function fetchArticle(id) {
   return (dispatch) => {
-    const payload = apiClient.getArticles(null, id).then(({ financing_sources, ...articleData }) => {
-      if (financing_sources) {
-        const financingPromises = financing_sources.map(id => apiClient.getFinancingSource(id));
-        return Promise.all(financingPromises).then(financing_sources => {
-          return { ...articleData, financing_sources };
-        });
-      }
-    });
+    const payload = apiClient.getArticles(null, id);
     return dispatch({
       type: FETCH_ARTICLE,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -55,15 +48,24 @@ export function createArticle(siteId, data) {
             resourcePromises.push(apiClient.createSources(articleId, sources));
           }
 
-          return Promise.all(resourcePromises);
+          return Promise.all(resourcePromises).then(() => {
+            // Создаем вложения
+            const attachmentsPromises = data.attachments.map((attachment) => {
+              return apiClient.createArticleAttachment(articleId, attachment);
+            });
+
+            return Promise.all(attachmentsPromises);
+          });
         });
+
+
       });
     });
- 
+
     return dispatch({
       type: CREATE_ARTICLE,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -82,20 +84,23 @@ export function editArticle(id, data) {
     }
 
     const payload = Promise.all(financingPromises).then(([ createFinancingResponse=[], ...editFinancingResponse ]) => {
-      console.log(createFinancingResponse);
       const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
       return apiClient.lockArticle(id).then(() => {
-        const editPromises = [apiClient.editArticle(id, articleData), apiClient.editBlocks(id, content_blocks)];
+        const editPromises = [apiClient.editArticle(id, articleData)];
+        if (content_blocks) {
+          editPromises.push(apiClient.editBlocks(id, content_blocks));
+        }
         return Promise.all(editPromises);
       })
     });
     return dispatch({
       type: EDIT_ARTICLE,
+      meta: { articleId: id, data: articleData },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   }
 }
 
@@ -105,7 +110,7 @@ export function createArticleTag(articleId, data) {
     return dispatch({
       type: CREATE_ARTICLE_TAG,
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
 
@@ -116,17 +121,44 @@ export function removeArticleTag(articleId, id) {
       type: REMOVE_ARTICLE_TAG,
       meta: { articleId, id },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
   };
 }
 
 export function inviteArticleReviewer(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.inviteArticleReviewer(articleId, data);
+    const payload = apiClient.createInviteArticleReviewer(articleId, data);
     return dispatch({
       type: INVITE_ARTICLE_REVIEWER,
       meta: { articleId, data },
       payload
-    }).catch((error) => console.log(error));
+    }).catch(error => console.error(error));
+  };
+}
+
+export function createArticleReview(articleId, data) {
+  return (dispatch) => {
+    const payload = apiClient.createArticleReview(articleId, data);;
+    return dispatch({
+      type: CREATE_ARTICLE_REVIEW,
+      payload
+    }).catch(error => console.error(error));
+  };
+}
+
+export function acceptArticleReviewInvite(articleId) {
+  return (dispatch) => {
+    const payload = apiClient.editInviteArticleReviewer(articleId, { is_agree: true });
+    return dispatch({
+      type: ACCEPT_ARTICLE_REVIEW_INVITE,
+      meta: { articleId },
+      payload
+    }).catch(error => console.error(error));
+  }
+}
+
+export function resetArticles() {
+  return {
+    type: RESET_ARTICLES
   };
 }

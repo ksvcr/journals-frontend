@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
-import ArticleForm from '~/components/ArticleForm/ArticleForm';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import CancelLink from '~/components/CancelLink/CancelLink';
+import PreviewLink from '~/components/PreviewLink/PreviewLink';
+import ArticleForm from '~/components/ArticleForm/ArticleForm';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
@@ -14,11 +15,17 @@ import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
-import PreviewLink from '~/components/PreviewLink/PreviewLink';
 
 class ArticlePublish extends Component {
   componentDidMount() {
     this.handleInitialRequest();
+  }
+
+  componentDidUpdate() {
+    const { notFound, push } = this.props;
+    if (notFound) {
+      push('/');
+    }
   }
 
   handleInitialRequest = () => {
@@ -30,7 +37,7 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
+    const { articleId, siteId, push, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
     const promises = [
       fetchRubrics(siteId),
       fetchCategories(siteId)
@@ -44,7 +51,7 @@ class ArticlePublish extends Component {
         }
         const userPromises = userIds.map(id => fetchUser(id));
         return Promise.all(userPromises);
-      }));
+      }).catch(() =>{ push('/') }));
     }
 
     return Promise.all(promises);
@@ -75,7 +82,7 @@ class ArticlePublish extends Component {
   render() {
     const { articleId, isFulfilled } = this.props;
     return (
-      <article className="page__content">
+      <React.Fragment>
         <ArticleTopTools>
           <CancelLink />
           <PreviewLink href="/article/new" />
@@ -94,23 +101,25 @@ class ArticlePublish extends Component {
           </form>
         </div>
         { isFulfilled &&
-        <ArticleForm id={ articleId }
-                     onSubmit={ this.handleSubmit } onDraftSubmit={  this.handleDraftSubmit }/>
+          <ArticleForm id={ articleId }
+                       onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>
         }
-      </article>
+      </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles } = state;
+  const { sites, articles, languages, rubrics, categories } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
 
+  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled;
   return {
     siteId: sites.current,
-    isFulfilled: articleId === undefined || articles.isFulfilled,
+    notFound: articles.isFulfilled && !articles.data[articleId],
+    isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
     articleId
   };
 }

@@ -18,13 +18,14 @@ const apiClient = {
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
+  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
+
   createUserTag: (userId, data) => {
     return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
   },
   removeUserTag: (userId, id) => {
     return fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' });
   },
-  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
 
   createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
 
@@ -42,6 +43,9 @@ const apiClient = {
   },
   lockArticle: (articleId) => {
     return fetchInstance.request(`/articles/${articleId}/lock/`);
+  },
+  createArticleAttachment: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data });
   },
 
   createBlocks: (articleId, data) => {
@@ -67,9 +71,20 @@ const apiClient = {
   removeArticleTag: (articleId, id) => {
     return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
   },
-  inviteArticleReviewer: (articleId, data) => {
+  createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
-  }
+  },
+  editInviteArticleReviewer: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
+  },
+  getReviewInvites: (params) => {
+    return fetchInstance.request(`/review/invites/`, { params });
+  },
+
+  getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
+  transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
+
+  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data })
 };
 
 export default apiClient;
