@@ -145,6 +145,7 @@
       "mjs"
     ]
   },
+  "homepage": "https://journals.green.jetstyle.ru/p",
   "proxy": {
     "/api": {
       "target": "https://journals.green.jetstyle.ru",
