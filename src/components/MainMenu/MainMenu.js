@@ -4,10 +4,31 @@ import { connect } from 'react-redux';
 import Menu from '~/components/Menu/Menu';
 
 class MainMenu extends Component {
-  get menuItems() {
-    const { userRole } = this.props;
+  get defaultItems() {
+    return [
+      {
+        title: 'Настройки',
+        href: '/settings'
+      }
+    ];
+  }
 
-    const items = [
+  get correctorItems() {
+    return [
+      {
+        title: 'Статьи в работе',
+        href: '/'
+      },
+      {
+        title: 'Статистика',
+        href: '/stats'
+      },
+      ...this.defaultItems
+    ];
+  }
+
+  get authorItems() {
+    return [
       {
         title: 'Мои статьи',
         href: '/'
@@ -16,20 +37,54 @@ class MainMenu extends Component {
         title: 'Мои скидки',
         href: '/discounts'
       },
-      {
-        title: 'Настройки',
-        href: '/settings'
-      }
+      ...this.defaultItems
     ];
+  }
 
-    if (userRole === 'REVIEWER') {
-      items.push({
+  get reviewerItems() {
+    return [
+      ...this.authorItems,
+      {
         title: 'Статьи на рецензию',
         href: '/articles-for-review'
-      });
-    }
+      }
+    ];
+  }
 
-    return items;
+  get redactorItems() {
+    return [
+      {
+        title: 'Мои статьи',
+        href: '/'
+      },
+      {
+        title: 'Выпуски',
+        href: '/releases'
+      },
+      {
+        title: 'Пользователи',
+        href: '/users'
+      },
+      ...this.defaultItems
+    ];
+  }
+
+  get menuItems() {
+    const { userRole } = this.props;
+
+    switch (userRole) {
+      case 'AUTHOR':
+        return this.authorItems;
+      case 'REVIEWER':
+        return this.reviewerItems;
+      case 'REDACTOR':
+        return this.redactorItems;
+      case 'TRANSLATOR':
+      case 'CORRECTOR':
+        return this.correctorItems;
+      default:
+        return this.defaultItems;
+    }
   }
 
   render() {
