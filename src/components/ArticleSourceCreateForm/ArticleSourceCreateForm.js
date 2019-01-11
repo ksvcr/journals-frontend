@@ -93,7 +93,7 @@ class ArticleSourceCreateForm extends Component {
   };
 
   get specialFields() {
-    const { resourceType } = this.props;
+    const { resourceType, rightholderType } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
@@ -121,6 +121,7 @@ class ArticleSourceCreateForm extends Component {
 
       case 'SourcePatent':
         return <SourcePatent countriesOptions={ this.countriesOptions }
+                             rightholderType={ rightholderType }
                              rightholderOptions={ getRightholderTypes() } />;
 
       default:
@@ -208,6 +209,8 @@ function mapStateToProps(state, props) {
   const languagesArray = getLanguagesArray(state);
   const rubricsArray = getRubricsArray(state);
   const resourceType = formSelector(state, 'resourcetype');
+  const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
+  const rightholderTypes = getRightholderTypes();
   const sourceTypes = getSourceTypes();
   const countriesArray = getCountriesArray(state);
   return {
@@ -215,11 +218,13 @@ function mapStateToProps(state, props) {
     languagesArray,
     rubricsArray,
     resourceType,
+    rightholderType,
     countriesArray,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
+      rightholder: rightholderTypes[0].value,
       // defense_country: 132, // Россия
       defense_date: moment().format('YYYY-MM-DD'),
       statement_date: moment().format('YYYY-MM-DD'),
