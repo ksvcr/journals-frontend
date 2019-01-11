@@ -40,7 +40,7 @@ class Page extends Component {
           { isFulfilled &&
             <div className="page__holder">
               <aside className="page__sidebar">
-                <MainMenu items={ this.menuItems } />
+                <MainMenu />
               </aside>
               <article className="page__content">
                 { this.props.children }
