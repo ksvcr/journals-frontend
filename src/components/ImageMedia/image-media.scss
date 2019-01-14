@@ -4,6 +4,10 @@
   padding: 40px 40px 35px;
   margin: 30px 0;
 
+  .modal__content & {
+    margin: 0;
+  }
+
   &__box {
     border: 1px solid #BDBDBD;
     box-sizing: border-box;
