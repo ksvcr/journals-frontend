@@ -6,13 +6,22 @@ import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
+import TagEditor from '~/components/TagEditor/TagEditor';
 
 import { getArticlesArray } from '~/store/articles/selector';
-import { getArticleStageTitle } from '~/services/articleStages';
+import * as articlesActions from '~/store/articles/actions';
+
+import * as formatDate from '~/services/formatDate';
+
+import './translator-article-list.scss';
 
 class TranslatorArticleList extends Component {
   get toolsMenuItems() {
     return [
+      {
+        title: 'Перевести',
+        handler: this.handleTranslate
+      },
       {
         title: 'Просмотр',
         type: 'preview',
@@ -24,8 +33,12 @@ class TranslatorArticleList extends Component {
 
   handlePreview = (id) => {
     const { push } = this.props;
-
     push(`/article/${id}`);
+  };
+
+  handleTranslate = (id) => {
+    const { push } = this.props;
+    push(`/article/${id}/translate`);
   };
 
   handlePaginateChange = (paginate) => {
@@ -33,8 +46,14 @@ class TranslatorArticleList extends Component {
     onUpdateRequest({ paginate });
   };
 
+  handleTagAdd = (article, text) => {
+    const { userId, userRole, createArticleTag } = this.props;
+    const tagData = { article, text, user: userId, user_role: userRole };
+    createArticleTag(article, tagData);
+  };
+
   get listProps() {
-    const { articlesArray } = this.props;
+    const { articlesArray, sitesData } = this.props;
 
     return {
       data: articlesArray,
@@ -54,12 +73,23 @@ class TranslatorArticleList extends Component {
         },
         {
           style: {
-            width: '13%'
+            width: '20%'
           },
-          sort: 'stage_article',
-          head: () => 'Этап',
-          render: (data) =>
-            getArticleStageTitle(data.stage)
+          sort: 'site',
+          head: () => 'Журнал',
+          render: (data) => {
+            const siteId = data.site;
+            const siteName = sitesData[siteId] && sitesData[siteId].name;
+            return siteName || 'Журнал не найден';
+          }
+        },
+        {
+          style: {
+            width: '12%'
+          },
+          sort: 'date_send_to_review',
+          head: () => 'Отправлена',
+          render: (data) => formatDate.toString(data.date_send_to_review)
         },
         {
           style: {
@@ -72,6 +102,18 @@ class TranslatorArticleList extends Component {
       ]
     };
   }
+
+  renderBox = (data) => {
+    const { removeArticleTag } = this.props;
+    return (
+      <div className="translator-article-list__box">
+        <div className="translator-article-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
+      </div>
+    );
+  };
 
   render() {
     const { total, paginate } = this.props;
@@ -90,16 +132,19 @@ class TranslatorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { articles } = state;
+  const { articles, sites } = state;
   const { total, paginate } = articles;
   return {
     articlesArray: getArticlesArray(state),
+    sitesData: sites.data,
     total, paginate
   };
 }
 
 const mapDispatchToProps = {
-  push
+  push,
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
 };
 
 export default connect(
