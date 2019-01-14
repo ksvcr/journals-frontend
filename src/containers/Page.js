@@ -7,6 +7,8 @@ import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
 import * as sitesActions from '~/store/sites/actions';
+import * as countriesActions from '~/store/countries/actions';
+
 import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
@@ -14,9 +16,12 @@ import '~/static/styles/index.scss';
 
 class Page extends Component {
   componentDidMount() {
-    const { fetchSites } = this.props;
+    const { fetchSites, fetchCountries } = this.props;
     this.authUser().then(() => {
-      return fetchSites();
+      return Promise.all([
+        fetchCountries(),
+        fetchSites()
+      ]);
     });
   }
 
@@ -61,6 +66,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+  fetchCountries: countriesActions.fetchCountries,
   fetchSites: sitesActions.fetchSites,
   fetchCurrentUser: userActions.fetchCurrentUser,
   login: userActions.login

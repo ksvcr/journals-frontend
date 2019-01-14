@@ -7,6 +7,7 @@ const fetchInstance = new fetchService({
 const apiClient = {
   getSites: () => fetchInstance.request(`/sites/`),
   getLanguages: () => fetchInstance.request(`/languages/`),
+  getCountries: (params) => fetchInstance.request(`/countries/`, { params }),
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
 

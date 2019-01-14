@@ -9,15 +9,15 @@ import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
 import Select from '~/components/Select/Select';
 
-import getCountries from '~/services/getCountries';
+import { getCountriesArray } from '~/store/countries/selector';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
   get countriesOptions() {
-    const countries = getCountries();
-    return countries.map(item => ({
-      title: item.title,
+    const { countriesArray } = this.props;
+    return countriesArray.map((item) => ({
+      title: item.name,
       value: item.id
     }));
   }
@@ -257,10 +257,12 @@ AuthorSettingsForm = reduxForm({
 function mapStateToProps(state, props) {
   const { formName } = props;
   const { user } = state;
+  const countriesArray = getCountriesArray(state);
 
   return {
     form: formName,
-    initialValues: user.data
+    initialValues: user.data,
+    countriesArray
   };
 }
 
