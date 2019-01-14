@@ -1,0 +1,15 @@
+.article-correct-info {
+  .form__field {
+    margin-top: 25px;
+
+    & > label {
+      opacity: .5;
+      margin-bottom: 6px;
+    }
+
+    & > span {
+      font-size: 18px;
+      color: #131313;
+    }
+  }
+}

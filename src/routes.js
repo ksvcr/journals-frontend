@@ -5,6 +5,7 @@ import { hot } from 'react-hot-loader';
 import Page from '~/containers/Page';
 import Articles from '~/containers/Articles';
 import ArticlePublish from '~/containers/ArticlePublish';
+import ArticleCorrect from '~/containers/ArticleCorrect';
 import ArticlePreview from '~/containers/ArticlePreview';
 import AuthorSettings from '~/containers/AuthorSettings';
 import ArticlesForReview from '~/containers/ArticlesForReview';
@@ -21,6 +22,7 @@ const routes = () => (
       <Route exact path="/article" component={ ArticlePublish } />
       <Route exact path="/article/:articleId" component={ ArticlePreview } />
       <Route path="/article/:articleId/edit" component={ ArticlePublish } />
+      <Route path="/article/:articleId/correct" component={ ArticleCorrect } />
       <Route path="/article/:articleId/review" component={ ReviewCreate } />
       <Route path="/articles-for-review" component={ ArticlesForReview } />
       <Route path="/settings" component={ AuthorSettings } />
