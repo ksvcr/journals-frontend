@@ -57,15 +57,15 @@ class ArticleCorrect extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { siteId, articleId, createArticle, editArticle, push } = this.props;
+    const { articleId, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'SENT' });
-    // correctArticle(articleId, data).then(() => push('/'));
+    editArticle(articleId, data).then(() => push('/'));
   };
 
   handleDraftSubmit = (formData) => {
-    const { articleId, siteId, createArticle, editArticle, push } = this.props;
+    const { articleId, editArticle, push } = this.props;
     const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
-    // correctArticle(articleId, data).then(() => push('/'));
+    editArticle(articleId, data).then(() => push('/'));
   };
 
   render() {

@@ -35,28 +35,52 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    return [
-      {
-        title: 'Общие сведения',
-        component: <ArticleCommonForm { ...this.formProps } />
-      },
-      {
-        title: 'Авторы',
-        component: <ArticleAuthorsForm { ...this.formProps } />
-      },
-      {
-        title: 'Текст статьи',
-        component: <ArticleContentForm { ...this.formProps } />
-      },
-      {
-        title: 'Файлы к статье',
-        component: <ArticleFilesForm { ...this.formProps } />
-      },
-      {
-        title: 'Список литературы',
-        component: <ArticleSourcesForm { ...this.formProps } />
-      }
-    ];
+    const { userData } = this.props;
+
+    switch (userData.role) {
+      case 'CORRECTOR':
+        return [
+          {
+            title: 'Общие сведения',
+            component: <ArticleCommonForm { ...this.formProps } />
+          },
+          {
+            title: 'Текст статьи',
+            component: <ArticleContentForm { ...this.formProps } />
+          },
+          {
+            title: 'Файлы к статье',
+            component: <ArticleFilesForm { ...this.formProps } />
+          },
+          {
+            title: 'Список литературы',
+            component: <ArticleSourcesForm { ...this.formProps } />
+          }
+        ];
+      default:
+        return [
+          {
+            title: 'Общие сведения',
+            component: <ArticleCommonForm { ...this.formProps } />
+          },
+          {
+            title: 'Авторы',
+            component: <ArticleAuthorsForm { ...this.formProps } />
+          },
+          {
+            title: 'Текст статьи',
+            component: <ArticleContentForm { ...this.formProps } />
+          },
+          {
+            title: 'Файлы к статье',
+            component: <ArticleFilesForm { ...this.formProps } />
+          },
+          {
+            title: 'Список литературы',
+            component: <ArticleSourcesForm { ...this.formProps } />
+          }
+        ];
+    }
   }
 
   handleDraftSubmit = () => {
@@ -99,13 +123,15 @@ ArticleForm = reduxForm({
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
+  const { user } = state;
   const isInvalidForm = isInvalid(FORM_NAME)(state);
   const formValues = getFormValues(FORM_NAME)(state);
 
   return {
     formValues,
     isInvalidForm,
-    initialValues: getInitialValues(state, props)
+    initialValues: getInitialValues(state, props),
+    userData: user.data
   };
 }
 

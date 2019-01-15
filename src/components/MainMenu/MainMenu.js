@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import Menu from '~/components/Menu/Menu';
 
+import './main-menu.scss';
+
 class MainMenu extends Component {
   get defaultItems() {
     return [
@@ -89,7 +91,9 @@ class MainMenu extends Component {
 
   render() {
     return (
-      <Menu items={ this.menuItems } />
+      <div className="main-menu">
+        <Menu items={ this.menuItems } />
+      </div>
     );
   }
 }
