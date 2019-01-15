@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Menu from '~/components/Menu/Menu';
 import Button from '~/components/Button/Button';
 
@@ -25,6 +27,12 @@ class HeaderTools extends Component {
     }];
   };
 
+  get hasPublishAccess() {
+    const { userRole } = this.props;
+    const roles = ['AUTHOR', 'REVIEWER', 'REDACTOR'];
+    return Boolean(~roles.indexOf(userRole));
+  }
+
   render() {
     return (
       <div className="header-tools">
@@ -34,14 +42,25 @@ class HeaderTools extends Component {
         <div className="header-tools__item">
           <Menu items={ this.journalLink } type="horizontal" />
         </div>
-        <div className="header-tools__item header-tools__item_right">
-          <Button type="link" href="/article">
-            Опубликовать статью
-          </Button>
-        </div>
+        { this.hasPublishAccess &&
+          <div className="header-tools__item header-tools__item_right">
+            <Button type="link" href="/article">
+              Опубликовать статью
+            </Button>
+          </div>
+        }
       </div>
     );
   }
 }
 
-export default HeaderTools;
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    userRole: user.data.role
+  };
+}
+
+export default connect(
+  mapStateToProps
+)(HeaderTools);

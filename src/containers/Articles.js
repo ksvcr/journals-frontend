@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AuthorArticles from '~/containers/AuthorArticles';
 import RedactorArticles from '~/containers/RedactorArticles';
 import CorrectorArticles from '~/containers/CorrectorArticles';
+import TranslatorArticles from '~/containers/TranslatorArticles';
 
 class Articles extends Component {
   render() {
@@ -16,6 +17,8 @@ class Articles extends Component {
         return <RedactorArticles />;
       case 'CORRECTOR':
         return <CorrectorArticles />;
+      case 'TRANSLATOR':
+        return <TranslatorArticles />;
       default:
         return null;
     }

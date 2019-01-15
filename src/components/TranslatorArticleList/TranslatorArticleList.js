@@ -1,35 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from "connected-react-router";
 
 import List from '~/components/List/List';
-import DateFilter from '~/components/DateFilter/DateFilter';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
-import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
-import ListChecker from '~/components/ListChecker/ListChecker';
-import RedactorActions from '~/components/RedactorActions/RedactorActions';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
-import { articleStatusOptions } from '~/services/articleStatuses';
-import { getArticleStageTitle, articleStageOptions } from '~/services/articleStages';
 
-import './redactor-article-list.scss';
+import './translator-article-list.scss';
 
-class RedactorArticleList extends Component {
-  state = {
-    dateField: 'date_create'
-  };
-
+class TranslatorArticleList extends Component {
   get toolsMenuItems() {
     return [
       {
-        title: 'Редактировать',
-        handler: this.handleEdit
+        title: 'Перевести',
+        handler: this.handleTranslate
       },
       {
         title: 'Просмотр',
@@ -40,38 +31,14 @@ class RedactorArticleList extends Component {
     ];
   };
 
-  get dateTitle() {
-    return {
-      'date_create': 'Создана',
-      'date_send_to_review': 'Отправлена',
-      'last_change': 'Изменена'
-    };
-  };
-
-  handleSortChange = (ordering) => {
-    const { onUpdateRequest } = this.props;
-    onUpdateRequest({ ordering });
-  };
-
-  handleEdit = (id) => {
-    const { push } = this.props;
-    push(`article/${id}/edit`);
-  };
-
   handlePreview = (id) => {
     const { push } = this.props;
     push(`/article/${id}`);
   };
 
-  handleDateFilterChange = (field, range) => {
-    const { onUpdateRequest } = this.props;
-    this.setState({ dateField: field });
-    onUpdateRequest({ filter: range });
-  };
-
-  handleCheckerFilterChange = (name, data) => {
-    const { onUpdateRequest } = this.props;
-    onUpdateRequest({ filter: { [name]: data } });
+  handleTranslate = (id) => {
+    const { push } = this.props;
+    push(`/article/${id}/translate`);
   };
 
   handlePaginateChange = (paginate) => {
@@ -87,7 +54,6 @@ class RedactorArticleList extends Component {
 
   get listProps() {
     const { articlesArray, sitesData } = this.props;
-    const { dateField } = this.state;
 
     return {
       data: articlesArray,
@@ -121,33 +87,15 @@ class RedactorArticleList extends Component {
           style: {
             width: '12%'
           },
-          sort: dateField,
-          head: () => this.dateTitle[dateField],
-          headToolTip: () =>
-            <DateFilter field={ dateField }
-                        onChange={ this.handleDateFilterChange } />,
-          render: (data) =>
-            formatDate.toString(data[dateField])
-        },
-        {
-          style: {
-            width: '13%'
-          },
-          sort: 'stage_article',
-          head: () => 'Этап',
-          headToolTip: () => <ListChecker data={ articleStageOptions } name="stage_article"
-                                          onChange={ this.handleCheckerFilterChange } />,
-          render: (data) =>
-            getArticleStageTitle(data.stage)
+          sort: 'date_send_to_review',
+          head: () => 'Отправлена',
+          render: (data) => formatDate.toString(data.date_send_to_review)
         },
         {
           style: {
             width: '20%'
           },
-          sort: 'state_article',
           head: () => 'Статус',
-          headToolTip: () => <ListChecker data={ articleStatusOptions } name="state_article"
-                                          onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
             <StatusLabel status={ data.state_article } />
         }
@@ -158,13 +106,10 @@ class RedactorArticleList extends Component {
   renderBox = (data) => {
     const { removeArticleTag } = this.props;
     return (
-      <div className="redactor-article-list__box">
-        <div className="redactor-article-list__tags">
+      <div className="translator-article-list__box">
+        <div className="translator-article-list__tags">
           <TagEditor entityId={ data.id } data={ data.tags }
                      onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
-        </div>
-        <div className="redactor-article-list__actions">
-          <RedactorActions articleId={ data.id } />
         </div>
       </div>
     );
@@ -173,8 +118,8 @@ class RedactorArticleList extends Component {
   render() {
     const { total, paginate } = this.props;
     return (
-      <div className="redactor-article-list">
-        <div className="redactor-article-list__holder">
+      <div className="translator-article-list">
+        <div className="translator-article-list__holder">
           <List { ...this.listProps } />
         </div>
 
@@ -187,11 +132,9 @@ class RedactorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites, articles, user } = state;
+  const { articles, sites } = state;
   const { total, paginate } = articles;
   return {
-    userId: user.data.id,
-    userRole: user.data.role,
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
     total, paginate
@@ -207,4 +150,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RedactorArticleList);
+)(TranslatorArticleList);
