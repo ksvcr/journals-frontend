@@ -23,24 +23,26 @@ class FieldSet extends Component {
   };
 
   render() {
-    const { legend, index, isLast, children } = this.props;
+    const { legend, index, isLast, children, onMove, onRemove } = this.props;
     return (
       <fieldset className="field-set">
         <div className="field-set__tools">
-          { index > 0 &&
+          { onMove && index > 0 &&
             <button className="field-set__tool field-set__tool_up" type="button" onClick={ this.handleMoveUp }>
               Сместить на уровень выше
             </button>
           }
-          { !isLast &&
+          { onMove && !isLast &&
             <button className="field-set__tool field-set__tool_down" type="button" onClick={ this.handleMoveDown }>
               Сместить на уровень ниже
             </button>
           }
-          <button className="field-set__tool field-set__tool_remove" type="button" onClick={ this.handleRemove }>
-            <Icon name="cancel" className="field-set__icon field-set__icon_remove" />
-            Удалить
-          </button>
+          { onRemove &&
+            <button className="field-set__tool field-set__tool_remove" type="button" onClick={ this.handleRemove }>
+              <Icon name="cancel" className="field-set__icon field-set__icon_remove" />
+              Удалить
+            </button>
+          }
         </div>
         <legend className="field-set__legend"> { legend } </legend>
         <div className="field-set__holder">

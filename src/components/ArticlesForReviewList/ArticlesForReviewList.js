@@ -24,7 +24,6 @@ class ArticlesForReviewList extends Component {
 
   getToolsMenuItems(data) {
     const tools = [];
-    console.log(data);
 
     if (data.state_article === 'AWAIT_REVIEWER') {
       tools.push({

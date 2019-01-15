@@ -1,6 +1,10 @@
 .text-field {
   $root: &;
 
+  &_preview {
+    margin-bottom: 20px;
+  }
+
   &__box {
     position: relative;
   }
@@ -41,6 +45,16 @@
 
       &:hover {
         border-color: #dcdcdc;
+      }
+    }
+
+    &:read-only {
+      background: #fafaf9;
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: #fafaf9;
       }
     }
 
