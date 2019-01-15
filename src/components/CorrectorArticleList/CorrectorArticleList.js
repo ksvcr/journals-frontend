@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from "connected-react-router";
 
 import List from '~/components/List/List';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
-import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
+import TagEditor from '~/components/TagEditor/TagEditor';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 
-class CorrectorArticleList extends Component {
-  state = {
-    box: null
-  };
+import './corrector-article-list.scss';
 
+class CorrectorArticleList extends Component {
   get toolsMenuItems() {
     return [
       {
@@ -31,23 +31,14 @@ class CorrectorArticleList extends Component {
     ];
   };
 
-  handleSortChange = (ordering) => {
-    const { onUpdateRequest } = this.props;
-    onUpdateRequest({ ordering });
-  };
-
-  handleCorrect = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/correct/`);
-  };
-
   handlePreview = (id) => {
     const { push } = this.props;
     push(`/article/${id}`);
   };
 
-  handlePaymentClose = () => {
-    this.setState({ box: null });
+  handleCorrect = (id) => {
+    const { push } = this.props;
+    push(`/article/${id}/correct`);
   };
 
   handlePaginateChange = (paginate) => {
@@ -55,8 +46,14 @@ class CorrectorArticleList extends Component {
     onUpdateRequest({ paginate });
   };
 
+  handleTagAdd = (article, text) => {
+    const { userData, createArticleTag } = this.props;
+    const tagData = { article, text, user: userData.id, user_role: userData.role };
+    createArticleTag(article, tagData);
+  };
+
   get listProps() {
-    const { articlesArray, sites } = this.props;
+    const { articlesArray, sitesData } = this.props;
 
     return {
       data: articlesArray,
@@ -82,7 +79,7 @@ class CorrectorArticleList extends Component {
           head: () => 'Журнал',
           render: (data) => {
             const siteId = data.site;
-            const site = sites.data[siteId];
+            const site = sitesData[siteId];
             return site ? site.name : 'Журнал не найден';
           }
         },
@@ -117,14 +114,15 @@ class CorrectorArticleList extends Component {
   }
 
   renderBox = (data) => {
-    // const { box } = this.state;
-    // if (box && box.id === data.id) {
-    //   if (box.type === 'payment') {
-    //     return <Payment onClose={ this.handlePaymentClose } />;
-    //   }
-    // }
-
-    return null;
+    const { removeArticleTag } = this.props;
+    return (
+      <div className="corrector-article-list__box">
+        <div className="corrector-article-list__tags">
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
+      </div>
+    );
   };
 
   render() {
@@ -144,19 +142,23 @@ class CorrectorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { articles, sites } = state;
+  const { articles, sites, user } = state;
   const { total, paginate } = articles;
   return {
     articlesArray: getArticlesArray(state),
-    sites,
+    sitesData: sites.data,
+    userData: user.data,
     total, paginate
   };
 }
 
 const mapDispatchToProps = {
-  push
+  push,
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
 };
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(CorrectorArticleList);

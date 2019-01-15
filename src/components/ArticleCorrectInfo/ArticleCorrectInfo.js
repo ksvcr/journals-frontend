@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import TagEditor from '~/components/TagEditor/TagEditor';
+
+import * as articlesActions from '~/store/articles/actions';
+
 import getArticleTypes from '../../services/getArticleTypes';
 
 import './article-correct-info.scss';
@@ -23,7 +28,15 @@ class ArticleCorrectInfo extends Component {
     return 'Категория не указана';
   }
 
+  handleTagAdd = (article, text) => {
+    const { userData, createArticleTag } = this.props;
+    const tagData = { article, text, user: userData.id, user_role: userData.role };
+    createArticleTag(article, tagData);
+  };
+
   render() {
+    const { articleData, removeArticleTag } = this.props;
+
     return (
       <div className="article-correct-info">
         <div className="form">
@@ -40,6 +53,11 @@ class ArticleCorrectInfo extends Component {
             <span id="type">{ this.articleType }</span>
           </div>
         </div>
+
+        <div className="article-correct-info__tags">
+          <TagEditor entityId={ articleData.id } data={ articleData.tags }
+                      onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
+        </div>
       </div>
     );
   }
@@ -51,12 +69,18 @@ ArticleCorrectInfo.propTypes = {
 
 function mapStateToProps(state, props) {
   const { articleId } = props;
-  const { articles, sites } = state;
+  const { articles, sites, user } = state;
 
   return {
     articleData: articles.data[articleId],
-    sitesData: sites.data
+    sitesData: sites.data,
+    userData: user.data
   };
 }
 
-export default connect(mapStateToProps)(ArticleCorrectInfo);
+const mapDispatchToProps = {
+  createArticleTag: articlesActions.createArticleTag,
+  removeArticleTag: articlesActions.removeArticleTag
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleCorrectInfo);

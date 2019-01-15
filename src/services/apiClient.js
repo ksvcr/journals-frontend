@@ -65,11 +65,14 @@ const apiClient = {
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   },
+  getArticleTags: (articleId, params) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { params });
+  },
   createArticleTag: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
   },
   removeArticleTag: (articleId, id) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/`, { method: 'delete' });
   },
   createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });

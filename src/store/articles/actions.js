@@ -1,6 +1,6 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
-  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, FETCH_ARTICLE_TAGS
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -102,6 +102,20 @@ export function editArticle(id, data) {
       payload
     }).catch(error => console.error(error));
   }
+}
+
+export function fetchArticleTags(articleId, data) {
+  return (dispatch) => {
+    const payload = apiClient.getArticleTags(articleId, data).then(result => ({
+      ...result,
+      article: articleId
+    }));
+
+    return dispatch({
+      type: FETCH_ARTICLE_TAGS,
+      payload
+    }).catch(error => console.error(error));
+  };
 }
 
 export function createArticleTag(articleId, data) {

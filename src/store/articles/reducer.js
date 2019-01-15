@@ -1,5 +1,5 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES } from './constants';
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_TAGS } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 import {ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE} from '~/store/articles/constants';
 
@@ -66,6 +66,16 @@ function articles(state = initialState, action) {
           }
         }
       };
+
+    case `${FETCH_ARTICLE_TAGS}_FULFILLED`:
+    return { ...state,
+      data: { ...state.data,
+        [ action.payload.article ]: {
+          ...state.data[action.payload.article],
+          tags: action.payload.results
+        }
+      }
+    };
 
     case `${REMOVE_ARTICLE_TAG}_PENDING`:
       return { ...state,
