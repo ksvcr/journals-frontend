@@ -22,7 +22,7 @@ class MainMenu extends Component {
       }
     ];
 
-    if (userRole === 'REVIEWER') {
+    if (userRole === 'REVIEWER' || userRole === 'REDACTOR') {
       items.push({
         title: 'Статьи на рецензию',
         href: '/articles-for-review'

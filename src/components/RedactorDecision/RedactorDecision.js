@@ -10,7 +10,7 @@ import './redactor-decision.scss';
 
 class RedactorDecision extends Component {
   state = {
-    decision: null
+    decision: 'AWAIT_PAYMENT'
   };
 
   handleChange = (value) => {
@@ -29,11 +29,13 @@ class RedactorDecision extends Component {
     return [
       {
         title: 'Принять',
-        value: 'AWAIT_PAYMENT'
+        value: 'AWAIT_PAYMENT',
+        color: 'green'
       },
       {
         title: 'Отклонить',
-        value: 'DISAPPROVED'
+        value: 'DISAPPROVED',
+        color: 'red'
       }
     ];
   }

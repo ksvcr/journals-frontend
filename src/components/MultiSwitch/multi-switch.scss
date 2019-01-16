@@ -5,11 +5,15 @@
   display: inline-flex;
   padding: 1px;
   box-sizing: border-box;
-  border: 1px solid $orange-color;
+  border: 1px solid transparent;
+  background: #94B964;
 
-  &_checked {
-    border: 1px solid transparent;
-    background: #94B964;
+  &_orange {
+    background: #FFB932;
+  }
+
+  &_red {
+    background: #FF5C00;
   }
 
   &__label {
@@ -20,15 +24,7 @@
     cursor: pointer;
     border: 1px solid transparent;
     font-weight: 600;
-
-    #{$root}_checked & {
-      color: #fff;
-    }
-  }
-
-  &:not(.multi-switch_checked)  &__label:hover {
-    border: 1px solid #dcdcdc;
-    box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.25);
+    color: #fff;
   }
 
   &__input {
