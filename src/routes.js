@@ -14,9 +14,9 @@ import ReviewCreate from '~/containers/ReviewCreate';
 import Discounts from '~/containers/Discounts';
 import NotFound from '~/containers/NotFound';
 
-const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
-const ReviewCreateWithAccess = RoleAccess(ReviewCreate, ['REVIEWER']);
-const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER']);
+const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
+const ReviewCreateWithAccess = RoleAccess(ReviewCreate, ['REVIEWER', 'REDACTOR']);
+const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER', 'REDACTOR']);
 const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR']);
 
 const routes = () => (

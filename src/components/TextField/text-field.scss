@@ -74,6 +74,10 @@
       background: #fff;
     }
 
+    #{$root}_dark & {
+      background: #e7e7e7;
+    }
+
     #{$root}_search & {
       padding: 18px 45px 18px 18px;
     }

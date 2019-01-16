@@ -18,7 +18,7 @@ class ArticleCommonTranslateForm extends Component {
             Название организации <ReqMark />
           </label>
 
-          <TextField className="text-field_preview" textarea value={ item.organization } readOnly />
+          <TextField className="text-field_preview text-field_dark" textarea value={ item.organization } readOnly />
           <Field name={ `financing_sources[${index}].organization` } id={ `financing_sources[${index}].organization` }
                  textarea component={ TextField } className="text-field_white"
                  placeholder="Введите перевод" validate={ [validate.required] } />
@@ -27,7 +27,7 @@ class ArticleCommonTranslateForm extends Component {
           <label htmlFor={ `financing_sources[${index}].grant_name` } className="form__label">
             Название гранта <ReqMark />
           </label>
-          <TextField className="text-field_preview" textarea value={ item.grant_name } readOnly />
+          <TextField className="text-field_preview text-field_dark" textarea value={ item.grant_name } readOnly />
           <Field name={ `financing_sources[${index}].grant_name` } id={ `financing_sources[${index}].grant_name` }
                  textarea component={ TextField } className="text-field_white"
                  placeholder="Введите перевод" validate={ [validate.required] } />
@@ -93,14 +93,16 @@ class ArticleCommonTranslateForm extends Component {
                    placeholder="Введите перевод" validate={ [validate.required] } />
           </div>
         }
+        { articleData.financing_sources.length > 0 &&
+          <div className="form__field">
+            <label className="form__label">
+              Финансирование
+            </label>
 
-        <div className="form__field">
-          <label className="form__label">
-            Финансирование
-          </label>
+            { this.renderFinancingSources() }
+          </div>
+        }
 
-          { this.renderFinancingSources() }
-        </div>
       </div>
     );
   }

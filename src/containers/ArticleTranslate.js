@@ -20,6 +20,16 @@ class ArticleTranslate extends Component {
     return Promise.all(promises);
   };
 
+
+  handleDraftSubmit = (formData) => {
+    const { articleId, createArticleTranslation } = this.props;
+    createArticleTranslation(articleId, formData);
+  };
+
+  handleSubmit = (formData) => {
+    console.log(formData);
+  };
+
   render() {
     const { articleId, isFulfilled } = this.props;
 
@@ -50,7 +60,8 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-  fetchArticle: articlesActions.fetchArticle
+  fetchArticle: articlesActions.fetchArticle,
+  createArticleTranslation: articlesActions.createArticleTranslation
 };
 
 export default connect(

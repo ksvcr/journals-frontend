@@ -29,7 +29,7 @@ class HeaderTools extends Component {
 
   get hasPublishAccess() {
     const { userRole } = this.props;
-    const roles = ['AUTHOR', 'REVIEWER', 'REDACTOR'];
+    const roles = ['AUTHOR', 'REVIEWER'];
     return Boolean(~roles.indexOf(userRole));
   }
 

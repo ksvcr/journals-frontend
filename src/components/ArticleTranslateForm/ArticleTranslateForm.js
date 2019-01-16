@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { isInvalid, reduxForm } from 'redux-form';
+import {getFormValues, isInvalid, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
@@ -27,13 +27,14 @@ class ArticleTranslateForm extends Component {
       {
         title: 'Общие сведения',
         component: <ArticleCommonTranslateForm { ...this.formProps } />
-      },
-      {
-        title: 'Список литературы',
-        component: <div>2</div>
       }
     ];
   }
+
+  handleDraftSubmit = () => {
+    const { formValues, onDraftSubmit } = this.props;
+    onDraftSubmit(formValues);
+  };
 
   renderTools = () => {
     const { handleSubmit, isInvalidForm } = this.props;
@@ -69,9 +70,11 @@ ArticleTranslateForm = reduxForm({
 
 function mapStateToProps(state) {
   const isInvalidForm = isInvalid(FORM_NAME)(state);
+  const formValues = getFormValues(FORM_NAME)(state);
 
   return {
-    isInvalidForm
+    isInvalidForm,
+    formValues
   };
 }
 
