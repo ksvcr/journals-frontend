@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
+import Textarea from 'react-textarea-autosize';
+
 import Icon from '~/components/Icon/Icon';
 
 import './assets/calendar.svg';
@@ -24,7 +26,7 @@ class TextField extends Component {
       <div className={ fieldClasses }>
         <div className="text-field__box">
           { textarea ?
-            <textarea { ...input } { ...rest }
+            <Textarea { ...input } { ...rest }
                       className="text-field__input" autoComplete="off" /> :
             <input type="text" { ...input } { ...rest }
                    className="text-field__input" autoComplete="off" />

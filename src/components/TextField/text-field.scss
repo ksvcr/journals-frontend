@@ -1,6 +1,10 @@
 .text-field {
   $root: &;
 
+  &_preview {
+    margin-bottom: 20px;
+  }
+
   &__box {
     position: relative;
   }
@@ -44,6 +48,16 @@
       }
     }
 
+    &:read-only {
+      background: #fafaf9;
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: #fafaf9;
+      }
+    }
+
     &:required {
       box-shadow: none;
     }
@@ -58,6 +72,10 @@
 
     #{$root}_white & {
       background: #fff;
+    }
+
+    #{$root}_dark & {
+      background: #e7e7e7;
     }
 
     #{$root}_search & {

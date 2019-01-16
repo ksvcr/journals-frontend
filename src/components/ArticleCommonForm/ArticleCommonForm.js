@@ -200,7 +200,7 @@ class ArticleCommonForm extends Component {
           <label htmlFor="title" className="form__label">
             Название статьи <ReqMark />
           </label>
-          <Field name="title" id="title" textarea component={ TextField }
+          <Field name="title" id="title" textarea minRows={ 2 } component={ TextField }
                  placeholder="Введите название" validate={ [validate.required] } />
         </div>
 
@@ -226,7 +226,7 @@ class ArticleCommonForm extends Component {
           <label htmlFor="text_to_description" className="form__label">
             Аннотация <ReqMark />
           </label>
-          <Field name="text_to_description" id="text_to_description" textarea component={ TextField }
+          <Field name="text_to_description" id="text_to_description" textarea minRows={ 2 } component={ TextField }
                  placeholder="Введите аннотацию" validate={ [validate.required] } />
         </div>
 

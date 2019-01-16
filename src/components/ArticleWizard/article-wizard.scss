@@ -6,7 +6,6 @@
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: space-between;
     border-bottom: 1px solid $gray-color;
   }
 
@@ -18,6 +17,10 @@
     padding: 19px 0;
     color: $blue-color;
     position: relative;
+
+    & + & {
+      margin-left: 5%;
+    }
 
     &:after {
       content: '';

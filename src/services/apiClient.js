@@ -80,6 +80,9 @@ const apiClient = {
   getReviewInvites: (params) => {
     return fetchInstance.request(`/review/invites/`, { params });
   },
+  createArticleTranslation: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/translations/`, { method: 'post', data });
+  },
 
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
