@@ -15,17 +15,21 @@ class ReviewCreate extends Component {
     const { articleId, fetchArticle } = this.props;
 
     return Promise.all([
-      fetchArticle(articleId)
+      fetchArticle(articleId),
     ]);
   };
 
   handleSubmit = (formData) => {
-    const { articleId, currentUserId, createArticleReview, push } = this.props;
+    const { articleId, currentUserId, createArticleReview, push, reviews } = this.props;
+    const reviewsFromCurrentUser = reviews.filter((item) => item.reviewer === currentUserId);
+    const review_round = reviewsFromCurrentUser.length + 1;
+
     const data = { ...formData,
       article: articleId,
       reviewer: currentUserId,
-      review_round: 1
+      review_round
     };
+
     createArticleReview(articleId, data).then(() => { push('/'); });
   };
 
@@ -45,12 +49,14 @@ class ReviewCreate extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { user } = state;
+  const { user, articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
+  const reviews = articles.data[articleId] ? articles.data[articleId].reviews : [];
   return {
     articleId,
     currentUserId: user.data.id,
+    reviews
   };
 }
 
