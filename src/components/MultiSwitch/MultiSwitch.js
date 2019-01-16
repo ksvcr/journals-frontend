@@ -8,11 +8,10 @@ class MultiSwitch extends Component {
   state = { color: null };
 
   handleChange = (event) => {
-    let { value } = event.target;
-    const { color } = event.target.dataset;
     const { onChange } = this.props;
+    const { value, dataset } = event.target;
+    const { color } = dataset;
     this.setState({ color });
-    value = parseInt(value, 10);
     onChange(value);
   };
 
