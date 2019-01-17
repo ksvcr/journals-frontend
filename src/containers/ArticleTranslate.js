@@ -20,14 +20,9 @@ class ArticleTranslate extends Component {
     return Promise.all(promises);
   };
 
-
-  handleDraftSubmit = (formData) => {
+  handleSubmit = (formData) => {
     const { articleId, createArticleTranslation } = this.props;
     createArticleTranslation(articleId, formData);
-  };
-
-  handleSubmit = (formData) => {
-    console.log(formData);
   };
 
   render() {
@@ -39,8 +34,7 @@ class ArticleTranslate extends Component {
 
         { isFulfilled &&
           <ArticleTranslateForm id={ articleId }
-                                onSubmit={ this.handleSubmit }
-                                onDraftSubmit={ this.handleDraftSubmit } />
+                                onSubmit={ this.handleSubmit } />
         }
       </React.Fragment>
     );

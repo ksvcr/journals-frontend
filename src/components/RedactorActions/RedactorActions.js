@@ -86,7 +86,7 @@ function mapStateToProps(state, props) {
   const { articleId } = props;
 
   return {
-    articleState: articles.data[articleId].state_article
+    articleState: articles.data[articleId] && articles.data[articleId].state_article
   };
 }
 

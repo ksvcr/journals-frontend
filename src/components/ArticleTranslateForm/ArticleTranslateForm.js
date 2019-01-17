@@ -31,19 +31,10 @@ class ArticleTranslateForm extends Component {
     ];
   }
 
-  handleDraftSubmit = () => {
-    const { formValues, onDraftSubmit } = this.props;
-    onDraftSubmit(formValues);
-  };
-
   renderTools = () => {
     const { handleSubmit, isInvalidForm } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={ this.handleDraftSubmit }>
-          <Icon name="save" className="article-translate-form__save-icon" />
-          Сохранить как черновик
-        </Button>
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
           Отправить перевод
         </Button>
@@ -80,8 +71,7 @@ function mapStateToProps(state) {
 
 ArticleTranslateForm.propTypes = {
   id: PropTypes.number,
-  onSubmit: PropTypes.func,
-  onDraftSubmit: PropTypes.func
+  onSubmit: PropTypes.func
 };
 
 export default connect(

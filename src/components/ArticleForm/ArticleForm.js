@@ -24,12 +24,13 @@ import {  getRootCategoriesArray } from '~/store/categories/selector';
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
 
-const FORM_NAME = 'article-publish';
+const FORM_NAME_BASE = 'article-publish';
 
 class ArticleForm extends Component {
   get formProps() {
+    const { form } = this.props;
     return {
-      formName: FORM_NAME
+      formName: form
     };
   }
 
@@ -90,18 +91,18 @@ class ArticleForm extends Component {
 }
 
 ArticleForm = reduxForm({
-  form: FORM_NAME,
-  destroyOnUnmount: false,
-  enableReinitialize: true
+  destroyOnUnmount: false
 })(ArticleForm);
 
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
-  const isInvalidForm = isInvalid(FORM_NAME)(state);
-  const formValues = getFormValues(FORM_NAME)(state);
-
+  const { id='new' } = props;
+  const formName = `${FORM_NAME_BASE}-${id}`;
+  const isInvalidForm = isInvalid(formName)(state);
+  const formValues = getFormValues(formName)(state);
   return {
+    form: formName,
     formValues,
     isInvalidForm,
     initialValues: getInitialValues(state, props)
