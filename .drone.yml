@@ -13,7 +13,7 @@ pipeline:
       branch: dev
       status: success
     script:
-      - cd frontend
+      - cd frontend/admin
       - git checkout -- package-lock.json
       - git checkout dev
       - git pull origin dev
@@ -23,7 +23,7 @@ pipeline:
       - npm i
       - CI=true node scripts/test.js --env=jsdom
       - npm run build
-      - pm2 restart journals-frontend --update-env
+      - pm2 restart journals-frontend-admin --update-env
 
   deploy-master:
     image: appleboy/drone-ssh
@@ -36,7 +36,7 @@ pipeline:
       branch: master
       status: success
     script:
-      - cd frontend
+      - cd frontend/admin
       - git checkout master
       - git pull origin master
       - export NVM_DIR="$HOME/.nvm"
@@ -44,4 +44,4 @@ pipeline:
       - nvm use stable
       - npm i
       - npm run build
-      - pm2 restart journals-frontend --update-env
+      - pm2 restart journals-frontend-admin --update-env

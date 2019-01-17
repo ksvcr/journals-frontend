@@ -5,9 +5,13 @@ import classNames from 'classnames';
 import './multi-switch.scss';
 
 class MultiSwitch extends Component {
+  state = { color: null };
+
   handleChange = (event) => {
-    const { value } = event.target;
     const { onChange } = this.props;
+    const { value, dataset } = event.target;
+    const { color } = dataset;
+    this.setState({ color });
     onChange(value);
   };
 
@@ -16,7 +20,8 @@ class MultiSwitch extends Component {
     return options.map((item, index) =>
       <label className="multi-switch__option" key={ index }>
         <input name={ name } type="radio" checked={ item.value === value }
-               value={ item.value } onChange={ this.handleChange }
+               data-color={ item.color || null } value={ item.value }
+               onChange={ this.handleChange }
                className="multi-switch__input" />
         <span className="multi-switch__label">
           { item.title }
@@ -27,7 +32,12 @@ class MultiSwitch extends Component {
 
   render() {
     const { value } = this.props;
-    const switchClasses = classNames('multi-switch', { 'multi-switch_checked': value });
+    const { color } = this.state;
+    const switchClasses = classNames('multi-switch', {
+      'multi-switch_checked': value,
+      "multi-switch_orange": color==='orange',
+      'multi-switch_red': color==='red'
+    });
     return (
       <div className={ switchClasses }>
         { this.renderOptions() }

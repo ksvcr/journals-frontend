@@ -23,8 +23,8 @@ class ArticlePublish extends Component {
   }
 
   componentDidUpdate() {
-    const { notFound, push } = this.props;
-    if (notFound) {
+    const { articleId, notFound, push } = this.props;
+    if (articleId !== undefined && notFound) {
       push('/');
     }
   }
