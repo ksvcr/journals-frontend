@@ -100,6 +100,11 @@ class ArticlePublish extends Component {
             </div>
           </form>
         </div>
+
+        {
+          'PRELIMINARY_REVISION' || 'REVISION'
+        }
+
         { isFulfilled &&
           <ArticleForm id={ articleId }
                        onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>

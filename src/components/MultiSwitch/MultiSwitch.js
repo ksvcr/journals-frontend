@@ -12,7 +12,6 @@ class MultiSwitch extends Component {
     const { color } = event.target.dataset;
     const { onChange } = this.props;
     this.setState({ color });
-    value = parseInt(value, 10);
     onChange(value);
   };
 

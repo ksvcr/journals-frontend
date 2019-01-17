@@ -58,16 +58,17 @@ class ReviewCreateForm extends Component {
 
   handleRecommendationChange = (value) => {
     const { change } = this.props;
+    value = parseInt(value, 10);
     change('recommendation', value);
   };
 
   render() {
-    const { articleData, handleSubmit, recommendation } = this.props;
+    const { articleData, handleSubmit, recommendation, currentUserId } = this.props;
+    const reviews = articleData && articleData.reviews.filter((item) => item.reviewer === currentUserId);
+
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
         <h2 className="page__title">{ articleData.title }</h2>
-
-        <ReviewsHistory reviews={ articleData.reviews } />
 
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
@@ -76,6 +77,10 @@ class ReviewCreateForm extends Component {
           <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
         </div>
+
+        { recommendation === 2 &&
+          <ReviewsHistory reviews={ reviews } />
+        }
 
         <div className="form__field">
           <label htmlFor="comment_for_author" className="form__label">
@@ -115,7 +120,7 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles } = state;
+  const { articles, user } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
@@ -124,6 +129,7 @@ function mapStateToProps(state, props) {
     push,
     articleData,
     recommendation,
+    currentUserId: user.data.id,
     initialValues: {
       recommendation: 1
     }
