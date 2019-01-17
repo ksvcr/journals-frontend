@@ -7,6 +7,7 @@ import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import CancelLink from '~/components/CancelLink/CancelLink';
 import PreviewLink from '~/components/PreviewLink/PreviewLink';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
+import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
@@ -80,7 +81,11 @@ class ArticlePublish extends Component {
   };
 
   render() {
-    const { articleId, isFulfilled } = this.props;
+    const { articleId, isFulfilled, articleStatus, articleData } = this.props;
+    const isStatusRework = (articleStatus === 'PRELIMINARY_REVISION' ||
+                            articleStatus === 'REVISION' ||
+                            articleStatus === 'AWAIT_REDACTOR') ? true : false;
+
     return (
       <React.Fragment>
         <ArticleTopTools>
@@ -102,7 +107,8 @@ class ArticlePublish extends Component {
         </div>
 
         {
-          'PRELIMINARY_REVISION' || 'REVISION'
+          isStatusRework &&
+            <ReviewsDialog reviews={ articleData.reviews }/>
         }
 
         { isFulfilled &&
@@ -119,13 +125,17 @@ function mapStateToProps(state, props) {
   const { sites, articles, languages, rubrics, categories } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
+  const articleData = articleId && articles.data[articleId];
+  const articleStatus = articleData && articleData.state_article;
 
   const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled;
   return {
     siteId: sites.current,
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
-    articleId
+    articleId,
+    articleData,
+    articleStatus
   };
 }
 

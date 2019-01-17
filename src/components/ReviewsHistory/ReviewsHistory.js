@@ -1,19 +1,47 @@
 import React, { Component } from 'react';
 
-import ReviewsHistoryItem from '~/components/ReviewsHistoryItem/ReviewsHistoryItem';
+import ToggleItem from '~/components/ToggleItem/ToggleItem';
 
 import './reviews-history.scss';
 
 class ReviewsHistory extends Component {
-  renderList = () => {
-    const { reviews } = this.props;
-    return reviews.map((item, index) => <ReviewsHistoryItem key={ index } item={ item }/>);
+  renderList = (list) => {
+    return list.map((item, index) => (
+      <ToggleItem key={ index } title={ item.review_round + ` раунд рецензирования` }>
+        <div className="reviews-history__content">
+          <div className="reviews-history__review">
+            <div className="reviews-history__title">
+              Текст рецензии
+            </div>
+            <div className="reviews-history__notice">
+              Будет опубликован вместе с текстом статьи
+            </div>
+            <div className="reviews-history__text">
+              { item.comment_for_author }
+            </div>
+          </div>
+          <div className="reviews-history__answer">
+            <div className="reviews-history__title">
+              Ответ автора
+            </div>
+            <div className="reviews-history__author">
+              Крестовоздвиженский Евгений Николаевич
+            </div>
+            <div className="reviews-history__text">
+              { item.author_answer }
+            </div>
+          </div>
+        </div>
+      </ToggleItem>
+    ));
   };
 
   render() {
+    const { reviews } = this.props;
+
     return (
       <div className="reviews-history">
-        { this.renderList() }
+        { this.renderList(reviews) }
       </div>
     );
   }
