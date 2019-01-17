@@ -24,7 +24,6 @@ import {  getRootCategoriesArray } from '~/store/categories/selector';
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
 
-
 const FORM_NAME = 'article-publish';
 
 class ArticleForm extends Component {
