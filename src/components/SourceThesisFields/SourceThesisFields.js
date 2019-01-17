@@ -7,7 +7,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
-import DynamicSelect from '~/components/DynamicSelect/DynamicSelect';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
 const SourceThesisFields = ({ onCountriesFetch, rubricsOptions, languagesOptions, countriesOptions }) => {
   return (
@@ -81,9 +81,9 @@ const SourceThesisFields = ({ onCountriesFetch, rubricsOptions, languagesOptions
             </label>
             {/*<Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }*/}
                    {/*component={ props => <Select options={ countriesOptions } { ...props } /> } />*/}
-            <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <DynamicSelect isAsync options={ countriesOptions } { ...props }
-                                                       onInputChange={ onCountriesFetch } /> } />
+            <Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }
+                   component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
+                                                       onLoadOptions={ onCountriesFetch } /> } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="defense_city" className="form__label">

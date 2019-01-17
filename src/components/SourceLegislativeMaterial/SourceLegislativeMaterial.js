@@ -6,9 +6,9 @@ import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
-import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const SourceLegislativeMaterial = ({ countriesOptions }) => {
+const SourceLegislativeMaterial = ({ countriesOptions, onCountriesFetch }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -53,7 +53,8 @@ const SourceLegislativeMaterial = ({ countriesOptions }) => {
               Страна <ReqMark />
             </label>
             <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <Select options={ countriesOptions } { ...props } /> } />
+                   component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
+                                                          onLoadOptions={ onCountriesFetch } /> } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue" className="form__label">

@@ -34,10 +34,10 @@ class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
     const { field, onSubmit } = this.props;
     // Для многотомного и Однотомного изданий принимается массив авторов
-    const multiAuthorsFields = ['SourceMultiVolumeBook', 'SourceElectronic'];
-    if (!!~multiAuthorsFields.indexOf(formData.resourcetype)) {
-      formData.author = [{ id: 1, initials: 'П. И.', lastname: formData.author }];
-    }
+    // const multiAuthorsFields = ['SourceMultiVolumeBook', 'SourceElectronic'];
+    // if (!!~multiAuthorsFields.indexOf(formData.resourcetype)) {
+    //   formData.author = [{ id: 1, initials: 'П. И.', lastname: formData.author }];
+    // }
 
     onSubmit(field, { ...formData, isValid: true });
   };
@@ -58,18 +58,9 @@ class ArticleSourceCreateForm extends Component {
     }));
   }
 
-  get countriesOptions() {
-    const { countriesArray } = this.props;
-    return countriesArray.map(item => ({
-      label: item.name,
-      value: item.id
-    }));
-  }
-
   handleFetchCountries = (value) => {
-    const { dispatch } = this.props;
-    console.log(value);
-    dispatch(countriesActions.fetchCountries({ name: value, limit: 5 }));
+    const { fetchCountries } = this.props;
+    return fetchCountries({ name: value, limit: 5 });
   };
 
   get thesisCategories() {
@@ -92,12 +83,12 @@ class ArticleSourceCreateForm extends Component {
   };
 
   get specialFields() {
-    const { resourceType, rightholderType } = this.props;
+    const { resourceType, rightholderType, countriesArray } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
                                    languagesOptions={ this.languagesOptions }
-                                   countriesOptions={ this.countriesOptions }
+                                   countriesOptions={ countriesArray }
                                    onCountriesFetch={ this.handleFetchCountries }/>;
 
       case 'SourceArticleSerialEdition':
@@ -113,13 +104,13 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial countriesOptions={ this.countriesOptions } />;
+        return <SourceLegislativeMaterial countriesOptions={ countriesArray } />;
 
       case 'SourceStandart':
         return <SourceStandart />;
 
       case 'SourcePatent':
-        return <SourcePatent countriesOptions={ this.countriesOptions }
+        return <SourcePatent countriesOptions={ countriesArray }
                              rightholderType={ rightholderType }
                              rightholderOptions={ getRightholderTypes() }
                              onCountriesFetch={ this.handleFetchCountries }/>;
@@ -225,7 +216,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
-      country: countriesArray[0].value,
+      defense_country: countriesArray.length ? countriesArray[0].id : [],
       // defense_country: 132, // Россия
       defense_date: moment().format('YYYY-MM-DD'),
       statement_date: moment().format('YYYY-MM-DD'),

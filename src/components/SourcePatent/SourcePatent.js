@@ -6,7 +6,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
-import DynamicSelect from '~/components/DynamicSelect/DynamicSelect';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import * as validate from '~/utils/validate';
 
 const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions, onCountriesFetch }) => {
@@ -169,8 +169,8 @@ const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions, o
               Страна <ReqMark />
             </label>
             <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <DynamicSelect isAsync options={ countriesOptions } { ...props }
-                                                onInputChange={ onCountriesFetch } /> } />
+                   component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
+                                                          onLoadOptions={ onCountriesFetch } /> } />
           </div>
         </div>
       </div>
