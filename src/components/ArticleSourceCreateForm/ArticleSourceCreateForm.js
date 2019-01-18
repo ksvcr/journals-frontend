@@ -39,6 +39,8 @@ class ArticleSourceCreateForm extends Component {
     //   formData.author = [{ id: 1, initials: 'П. И.', lastname: formData.author }];
     // }
 
+    formData.author = { initials: formData.initials, lastname: formData.lastname };
+
     onSubmit(field, { ...formData, isValid: true });
   };
 
@@ -138,7 +140,9 @@ class ArticleSourceCreateForm extends Component {
                 <label htmlFor="category" className="form__label">
                   Тип диссертации
                 </label>
-                { this.renderThesisCategories() }
+                <div className="form__box form__box_radios">
+                  { this.renderThesisCategories() }
+                </div>
               </div> :
               <div className="form__col form__col_6">
                 <label htmlFor="source_language" className="form__label">

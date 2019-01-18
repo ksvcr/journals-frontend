@@ -18,14 +18,14 @@ const SourceThesisFields = ({ onCountriesFetch, rubricsOptions, languagesOptions
             <label htmlFor="lastname" className="form__label">
               Фамилия автора <ReqMark />
             </label>
-            <Field name="lastname" id="lastname" className="text-field_white" component={ TextField }
+            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
                    placeholder="Введите фамилию автора" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="initials" className="form__label">
               Инициалы автора <ReqMark />
             </label>
-            <Field name="initials" id="initials" className="text-field_white" component={ TextField }
+            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
                    placeholder="Введите инициалы автора" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_4">
@@ -79,8 +79,6 @@ const SourceThesisFields = ({ onCountriesFetch, rubricsOptions, languagesOptions
             <label htmlFor="defense_country" className="form__label">
               Страна защиты <ReqMark />
             </label>
-            {/*<Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }*/}
-                   {/*component={ props => <Select options={ countriesOptions } { ...props } /> } />*/}
             <Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }
                    component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
                                                        onLoadOptions={ onCountriesFetch } /> } />
