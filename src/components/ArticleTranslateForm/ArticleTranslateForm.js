@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {getFormValues, isInvalid, reduxForm} from 'redux-form';
+import { isInvalid, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import Button from '~/components/Button/Button';
-import Icon from '~/components/Icon/Icon';
 import ArticleCommonTranslateForm from '~/components/ArticleCommonTranslateForm/ArticleCommonTranslateForm';
 
 import './article-translate-form.scss';
@@ -61,11 +60,9 @@ ArticleTranslateForm = reduxForm({
 
 function mapStateToProps(state) {
   const isInvalidForm = isInvalid(FORM_NAME)(state);
-  const formValues = getFormValues(FORM_NAME)(state);
 
   return {
-    isInvalidForm,
-    formValues
+    isInvalidForm
   };
 }
 

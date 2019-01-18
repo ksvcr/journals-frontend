@@ -65,15 +65,19 @@ class ArticleForm extends Component {
   };
 
   renderTools = () => {
-    const { handleSubmit, isInvalidForm } = this.props;
+    const { id, articleData, handleSubmit, isInvalidForm } = this.props;
+    const isDraft = articleData && articleData.state_article === 'DRAFT';
     return (
       <React.Fragment>
-        <Button onClick={ this.handleDraftSubmit }>
-          <Icon name="save" className="article-publish-form__save-icon" />
-          Сохранить как черновик
-        </Button>
+        { (id === 'new' || isDraft) &&
+          <Button onClick={ this.handleDraftSubmit }>
+            <Icon name="save" className="article-publish-form__save-icon" />
+            Сохранить как черновик
+          </Button>
+        }
+
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          Отправить статью
+          { id === 'new' || isDraft ? 'Отправить статью' : 'Сохранить статью' }
         </Button>
       </React.Fragment>
     );
@@ -97,7 +101,8 @@ ArticleForm = reduxForm({
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
-  const { id='new' } = props;
+  const { articles } = state;
+  const { id } = props;
   const formName = `${FORM_NAME_BASE}-${id}`;
   const isInvalidForm = isInvalid(formName)(state);
   const formValues = getFormValues(formName)(state);
@@ -105,6 +110,7 @@ function mapStateToProps(state, props) {
     form: formName,
     formValues,
     isInvalidForm,
+    articleData: articles.data[id],
     initialValues: getInitialValues(state, props)
   };
 }
@@ -174,8 +180,12 @@ function getInitialValues(state, props) {
   return initialValues;
 }
 
+ArticleForm.defaultProps = {
+  id: 'new'
+};
+
 ArticleForm.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
   onSubmit: PropTypes.func,
   onDraftSubmit: PropTypes.func
 };

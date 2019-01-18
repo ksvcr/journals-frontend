@@ -13,7 +13,7 @@ class RedactorActions extends Component {
 
   get actions() {
     const { articleId, articleState } = this.props;
-    const statusesForDecision = ['AWAIT_REDACTOR', 'AWAIT_PAYMENT'];
+    const statusesForDecision = ['AWAIT_REDACTOR', 'AWAIT_PAYMENT', 'AWAIT_PUBLICATION'];
     const isShowDecision = ~statusesForDecision.indexOf(articleState);
 
     const actions = [

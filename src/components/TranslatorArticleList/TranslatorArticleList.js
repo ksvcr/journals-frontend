@@ -52,6 +52,11 @@ class TranslatorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
+  handleSortChange = (ordering) => {
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ ordering });
+  };
+
   get listProps() {
     const { articlesArray, sitesData } = this.props;
 

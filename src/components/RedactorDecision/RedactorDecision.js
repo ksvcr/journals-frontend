@@ -54,6 +54,15 @@ class RedactorDecision extends Component {
           }
         ];
 
+      case 'AWAIT_PUBLICATION':
+        return [
+          {
+            title: 'Опубликовать',
+            value: 'PUBLISHED',
+            color: 'green'
+          }
+        ];
+
       default:
         return [];
     }

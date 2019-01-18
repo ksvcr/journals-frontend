@@ -21,8 +21,11 @@ class ArticleTranslate extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, createArticleTranslation } = this.props;
-    createArticleTranslation(articleId, formData);
+    const { articleId, articleData, createArticleTranslation } = this.props;
+    let language_code = articleData.language === 'en' ? 'ru' : 'en';
+    const data = { ...formData, language_code };
+
+    createArticleTranslation(articleId, data);
   };
 
   render() {
@@ -49,6 +52,7 @@ function mapStateToProps(state, props) {
 
   return {
     articleId,
+    articleData: articles.isFulfilled && articles.data[articleId],
     isFulfilled: articles.isFulfilled
   };
 }
