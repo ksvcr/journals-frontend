@@ -5,7 +5,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
 
-const SourceOneVolumeBookFields = () => {
+const SourceMultiVolumeBookFields = () => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -28,11 +28,27 @@ const SourceOneVolumeBookFields = () => {
       </div>
 
       <div className="form__field">
+        <label htmlFor="original_part_name" className="form__label">
+          Название части/тома оригинальное <ReqMark />
+        </label>
+        <Field name="original_part_name" id="original_part_name" className="text-field_white" component={ TextField }
+               placeholder="Введите название" validate={ [validate.required] } />
+      </div>
+
+      <div className="form__field">
+        <label htmlFor="second_part_name" className="form__label">
+          Название части/тома английском
+        </label>
+        <Field name="second_part_name" id="second_part_name" className="text-field_white" component={ TextField }
+               placeholder="Введите название" />
+      </div>
+
+      <div className="form__field">
         <label htmlFor="original_source_name" className="form__label">
-          Название на языке оригинала <ReqMark />
+          Название на языке оригинала
         </label>
         <Field name="original_name" id="original_source_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" validate={ [validate.required] } />
+               placeholder="Введите название" />
       </div>
 
       <div className="form__field">
@@ -50,14 +66,14 @@ const SourceOneVolumeBookFields = () => {
               Издательство <ReqMark />
             </label>
             <Field name="issue" id="source_issue" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите Издательство" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_city" className="form__label">
               Город издания <ReqMark />
             </label>
             <Field name="issue_city" id="source_issue_city" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите город" validate={ [validate.required] } />
           </div>
         </div>
       </div>
@@ -84,4 +100,4 @@ const SourceOneVolumeBookFields = () => {
   );
 };
 
-export default SourceOneVolumeBookFields;
+export default SourceMultiVolumeBookFields;

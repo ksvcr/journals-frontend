@@ -74,6 +74,14 @@ const apiClient = {
   createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   },
+
+  getLawtypes: () => {
+    return fetchInstance.request(`/lawtypes/`);
+  },
+  getCountries: (params) => {
+    return fetchInstance.request(`/countries/`, { params });
+  },
+
   editInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
   },
@@ -83,7 +91,6 @@ const apiClient = {
   createArticleTranslation: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/translations/`, { method: 'post', data });
   },
-
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
 
