@@ -7,12 +7,14 @@ import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import CancelLink from '~/components/CancelLink/CancelLink';
 import PreviewLink from '~/components/PreviewLink/PreviewLink';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
+import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
+import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 
@@ -29,9 +31,11 @@ class ArticlePublish extends Component {
   }
 
   handleInitialRequest = () => {
-    const { fetchLanguages } = this.props;
+    const { fetchLanguages, fetchCountries } = this.props;
     return Promise.all([
       fetchLanguages(),
+      // fetchCountries({ name: "Б" }),
+      fetchCountries({ limit: 5 }),
       this.handleRequest()
     ]);
   };
@@ -44,10 +48,10 @@ class ArticlePublish extends Component {
     ];
 
     if (articleId !== undefined) {
-      promises.push(fetchArticle(articleId).then(({ value:articleDate }) => {
-        const userIds = articleDate.collaborators.map(item => item.user);
-        if (articleDate.author) {
-          userIds.push(articleDate.author.user);
+      promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
+        const userIds = articleData.collaborators.map(item => item.user);
+        if (articleData.author) {
+          userIds.push(articleData.author.user);
         }
         const userPromises = userIds.map(id => fetchUser(id));
         return Promise.all(userPromises);
@@ -79,9 +83,21 @@ class ArticlePublish extends Component {
     }
   };
 
+  get articleInfo() {
+    const { articleData, sitesData } = this.props;
+    return [
+      {
+        title: 'Для журнала',
+        value: sitesData[articleData.site].name
+      }
+    ];
+  }
+
   render() {
-    const { articleId, isFulfilled } = this.props;
-    return (
+    const { articleId, isFulfilled, userRole, articleData } = this.props;
+    const isEdit = articleId !== undefined;
+
+    return isFulfilled && (
       <React.Fragment>
         <ArticleTopTools>
           <CancelLink />
@@ -89,21 +105,27 @@ class ArticlePublish extends Component {
         </ArticleTopTools>
 
         <h1 className="page__title">
-          { articleId === undefined ? 'Опубликовать статью' : 'Редактировать статью' }
+          { isEdit ? 'Опубликовать статью' : 'Редактировать статью' }
         </h1>
 
         <div className="page__tools">
-          <form className="form">
-            <div className="form__field">
-              <label htmlFor="sites-list" className="form__label">Для журнала</label>
-              <SiteSelect id="sites-list" onChange={ this.handleRequest } />
-            </div>
-          </form>
+          { userRole === 'AUTHOR' &&
+            <form className="form">
+              <div className="form__field">
+                <label htmlFor="sites-list" className="form__label">Для журнала</label>
+                <SiteSelect id="sites-list" onChange={ this.handleRequest } />
+              </div>
+            </form>
+          }
+
+          { isEdit && userRole === 'REDACTOR' &&
+            <ArticleInfo id={ articleId } specData={ this.articleInfo }
+                         tags={ articleData.tags } />
+          }
         </div>
-        { isFulfilled &&
-          <ArticleForm id={ articleId }
-                       onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>
-        }
+
+        <ArticleForm id={ articleId }
+                     onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>
       </React.Fragment>
     );
   }
@@ -111,13 +133,16 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, languages, rubrics, categories } = state;
+  const { sites, articles, languages, rubrics, categories, user } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
 
-  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled;
+  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled && sites.isFulfilled;
   return {
     siteId: sites.current,
+    sitesData: sites.data,
+    userRole: user.data.role,
+    articleData: articles.isFulfilled && articles.data[articleId],
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
     articleId
@@ -132,7 +157,8 @@ const mapDispatchToProps = {
   fetchCategories: categoriesActions.fetchCategories,
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
-  editArticle: articlesActions.editArticle
+  editArticle: articlesActions.editArticle,
+  fetchCountries: countriesActions.fetchCountries,
 };
 
 export default connect(

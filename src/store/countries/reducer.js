@@ -5,7 +5,6 @@ const initialState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  current: null,
   data: {},
   ids: []
 };

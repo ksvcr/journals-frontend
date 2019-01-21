@@ -138,7 +138,7 @@ class RedactorArticleList extends Component {
           headToolTip: () => <ListChecker data={ articleStageOptions } name="stage_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
-            getArticleStageTitle(data.stage)
+            getArticleStageTitle(data.stage_article)
         },
         {
           style: {

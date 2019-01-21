@@ -8,6 +8,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import Button from '~/components/Button/Button';
 import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
+import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 
 import * as validate from '~/utils/validate';
 
@@ -30,17 +31,29 @@ class ReviewCreateForm extends Component {
     return [
       {
         title: 'Принять',
-        value: '1'
+        value: 1,
+        color: 'green'
       },
       {
         title: 'Доработать',
-        value: '2'
+        value: 2,
+        color: 'orange'
       },
       {
         title: 'Отклонить',
-        value: '3'
+        value: 3,
+        color: 'red'
       }
     ];
+  }
+
+  get commentForAuthorLabel() {
+    const { recommendation } = this.props;
+    let label = 'Текст рецензии';
+    if (recommendation !== 1) {
+      label = 'Замечания после первого раунда рецензирования';
+    }
+    return label;
   }
 
   handleRecommendationChange = (value) => {
@@ -51,8 +64,11 @@ class ReviewCreateForm extends Component {
   render() {
     const { articleData, handleSubmit, recommendation } = this.props;
     return articleData ? (
-      <form className="review-create-form" onSubmit={ handleSubmit } >
+      <form className="review-create-form" onSubmit={ handleSubmit }>
         <h2 className="page__title">{ articleData.title }</h2>
+
+        <ReviewsHistory reviews={ articleData.reviews } />
+
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
             Ваши рекомендации к статье:
@@ -60,23 +76,31 @@ class ReviewCreateForm extends Component {
           <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
         </div>
+
         <div className="form__field">
           <label htmlFor="comment_for_author" className="form__label">
-            Текст рецензии
+            { this.commentForAuthorLabel }
           </label>
-          <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea rows={ 20 }
+          <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea
+                 rows={ recommendation === 1 ? 20 : 6 }
                  placeholder="Введите текст рецензии" />
         </div>
-        <div className="review-create-form__estimate">
-          <ReviewEstimate onChange={ this.handleEstimateChange } />
-        </div>
+
+        { recommendation === 1 &&
+          <div className="review-create-form__estimate">
+            <ReviewEstimate onChange={ this.handleEstimateChange } />
+          </div>
+        }
+
         <div className="form__field">
           <label htmlFor="comment_for_redactor" className="form__label">
             Замечания для редактора по доработке статьи (не показываются автору) <ReqMark />
           </label>
-          <Field name="comment_for_redactor" id="comment_for_redactor" component={ TextField } textarea rows={ 10 }
+          <Field name="comment_for_redactor" id="comment_for_redactor" component={ TextField } textarea
+                 rows={ 6 }
                  placeholder="Введите текст рецензии" validate={ [validate.required] } />
         </div>
+
         <div className="form__field">
           <Button type="submit">Отправить рецензию</Button>
         </div>
@@ -93,13 +117,15 @@ function mapStateToProps(state, props) {
   const { id:articleId } = props;
   const { articles } = state;
   const selector = formValueSelector('review-create');
+  const recommendation = selector(state, 'recommendation');
+  const articleData = articles.data[articleId];
 
   return {
     push,
-    articleData: articles.data[articleId],
-    recommendation: selector(state, 'recommendation'),
+    articleData,
+    recommendation,
     initialValues: {
-      recommendation: '1'
+      recommendation: 1
     }
   };
 }

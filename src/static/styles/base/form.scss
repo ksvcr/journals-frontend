@@ -73,4 +73,12 @@
     margin: 1em 0;
     color: #192A3E;
   }
+
+  &__box {
+    &_radios {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+    }
+  }
 }

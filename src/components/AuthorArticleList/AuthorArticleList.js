@@ -123,7 +123,7 @@ class AuthorArticleList extends Component {
           sort: 'stage_article',
           head: () => 'Этап',
           render: (data) =>
-            getArticleStageTitle(data.stage)
+            getArticleStageTitle(data.stage_article)
         },
         {
           style: {

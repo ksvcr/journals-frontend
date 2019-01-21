@@ -24,7 +24,6 @@ class ArticlesForReviewList extends Component {
 
   getToolsMenuItems(data) {
     const tools = [];
-    console.log(data);
 
     if (data.state_article === 'AWAIT_REVIEWER') {
       tools.push({
@@ -110,7 +109,7 @@ class ArticlesForReviewList extends Component {
           sort: 'stage_article',
           head: () => 'Этап',
           render: (data) =>
-            getArticleStageTitle(data.stage)
+            getArticleStageTitle(data.stage_article)
         },
         {
           style: {

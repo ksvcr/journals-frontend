@@ -55,7 +55,7 @@ class ArticlePreview extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const formValues = getFormValues('article-publish')(state);
+  const formValues = getFormValues('article-publish-new')(state);
   const { match } = props;
   const { articles } = state;
   let { articleId } = match.params;

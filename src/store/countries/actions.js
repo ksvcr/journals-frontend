@@ -1,13 +1,16 @@
 import { FETCH_COUNTRIES } from './constants';
 import apiClient from '~/services/apiClient';
+import getFlatParams from '~/services/getFlatParams';
 
-export function fetchCountries() {
+export function fetchCountries(params={}) {
   return (dispatch) => {
-    const COUNTRIES_LIMIT = 200;
-    const payload = apiClient.getCountries({ limit: COUNTRIES_LIMIT });
+    const flatParams = getFlatParams(params);
+    const payload = apiClient.getCountries(flatParams);
     return dispatch({
       type: FETCH_COUNTRIES,
       payload
-    }).catch(error => console.error(error));
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 }

@@ -24,13 +24,13 @@ import {  getRootCategoriesArray } from '~/store/categories/selector';
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
 
-
-const FORM_NAME = 'article-publish';
+const FORM_NAME_BASE = 'article-publish';
 
 class ArticleForm extends Component {
   get formProps() {
+    const { form } = this.props;
     return {
-      formName: FORM_NAME
+      formName: form
     };
   }
 
@@ -89,15 +89,19 @@ class ArticleForm extends Component {
   };
 
   renderTools = () => {
-    const { handleSubmit, isInvalidForm } = this.props;
+    const { id, articleData, handleSubmit, isInvalidForm } = this.props;
+    const isDraft = articleData && articleData.state_article === 'DRAFT';
     return (
       <React.Fragment>
-        <Button onClick={ this.handleDraftSubmit }>
-          <Icon name="save" className="article-publish-form__save-icon" />
-          Сохранить как черновик
-        </Button>
+        { (id === 'new' || isDraft) &&
+          <Button onClick={ this.handleDraftSubmit }>
+            <Icon name="save" className="article-publish-form__save-icon" />
+            Сохранить как черновик
+          </Button>
+        }
+
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          Отправить статью
+          { id === 'new' || isDraft ? 'Отправить статью' : 'Сохранить статью' }
         </Button>
       </React.Fragment>
     );
@@ -115,23 +119,24 @@ class ArticleForm extends Component {
 }
 
 ArticleForm = reduxForm({
-  form: FORM_NAME,
-  destroyOnUnmount: false,
-  enableReinitialize: true
+  destroyOnUnmount: false
 })(ArticleForm);
 
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
-  const { user } = state;
-  const isInvalidForm = isInvalid(FORM_NAME)(state);
-  const formValues = getFormValues(FORM_NAME)(state);
-
+  const { user, articles } = state;
+  const { id } = props;
+  const formName = `${FORM_NAME_BASE}-${id}`;
+  const isInvalidForm = isInvalid(formName)(state);
+  const formValues = getFormValues(formName)(state);
   return {
+    form: formName,
     formValues,
     isInvalidForm,
     initialValues: getInitialValues(state, props),
-    userData: user.data
+    userData: user.data,
+    articleData: articles.data[id]
   };
 }
 
@@ -200,8 +205,12 @@ function getInitialValues(state, props) {
   return initialValues;
 }
 
+ArticleForm.defaultProps = {
+  id: 'new'
+};
+
 ArticleForm.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
   onSubmit: PropTypes.func,
   onDraftSubmit: PropTypes.func
 };
