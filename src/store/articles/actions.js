@@ -76,8 +76,8 @@ export function createArticle(siteId, data) {
 export function editArticle(id, data) {
   return (dispatch) => {
     let { content_blocks, financing_sources, sources, ...articleData } = data;
-    let financingPromises = [Promise.resolve()];
-    let sourcesPromises = [Promise.resolve()];
+    let financingPromises = [];
+    let sourcesPromises = [];
 
     if (financing_sources) {
       const newFinancingArray = financing_sources.filter(item => item.id === undefined);
