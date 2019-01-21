@@ -152,6 +152,11 @@
       "target": "https://journals.green.jetstyle.ru",
       "secure": false,
       "changeOrigin": true
+    },
+    "/media": {
+      "target": "https://journals.green.jetstyle.ru",
+      "secure": false,
+      "changeOrigin": true
     }
   }
 }
