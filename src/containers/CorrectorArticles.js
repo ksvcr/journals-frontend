@@ -16,7 +16,13 @@ class CorrectorArticles extends Component {
 
   handleRequest = (params={}) => {
     const { siteId, articlesParams, fetchArticles, fetchArticleTags } = this.props;
-    return fetchArticles(siteId, { ...articlesParams, ...params }).then(({ value }) => {
+    const fetchArticlesParams = {
+      ...articlesParams,
+      ...params,
+      state_article: 'AWAIT_PROOFREADING'
+    };
+
+    return fetchArticles(siteId, fetchArticlesParams).then(({ value }) => {
       const tagsPromises = value.results.map(article => fetchArticleTags(article.id));
       return Promise.all(tagsPromises);
     });
