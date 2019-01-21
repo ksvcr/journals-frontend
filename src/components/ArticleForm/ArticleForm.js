@@ -10,6 +10,7 @@ import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsFo
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
+import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
 
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
@@ -50,7 +51,7 @@ class ArticleForm extends Component {
           },
           {
             title: 'Файлы к статье',
-            component: <ArticleFilesForm { ...this.formProps } />
+            component: <CorrectFilesForm { ...this.formProps } />
           },
           {
             title: 'Список литературы',
@@ -185,7 +186,7 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: [],
+    attachments: data.file_atachments || [],
     ...data
   };
 

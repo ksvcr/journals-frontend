@@ -10,10 +10,16 @@ import Button from '~/components/Button/Button';
 import Select from '~/components/Select/Select';
 
 import { getCountriesArray } from '~/store/countries/selector';
+import * as countriesActions from '~/store/countries/actions';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
+  componentDidMount() {
+    const { fetchCountries } = this.props;
+    fetchCountries({ limit: 200 });
+  }
+
   get countriesOptions() {
     const { countriesArray } = this.props;
     return countriesArray.map((item) => ({
@@ -266,5 +272,9 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(AuthorSettingsForm);
+const mapDispatchToProps = {
+  fetchCountries: countriesActions.fetchCountries
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettingsForm);
 
