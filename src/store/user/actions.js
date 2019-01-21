@@ -4,8 +4,8 @@ import { LOGIN, FETCH_CURRENT_USER, UPDATE_CURRENT_USER } from './constants';
 export function login() {
   return (dispatch) => {
     const payload = apiClient.login({
-      email: process.env.REACT_APP_EMAIL,
-      password: process.env.REACT_APP_PASSWORD
+      email: prompt('Email', ''),
+      password: prompt('Пароль', '')
     });
     return dispatch({
       type: LOGIN,

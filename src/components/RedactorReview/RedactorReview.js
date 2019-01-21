@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorReviewerList';
 import RedactorReviewTools from '~/components/RedactorReviewTools/RedactorReviewTools';
 import RedactorReviewStatus from '~/components/RedactorReviewStatus/RedactorReviewStatus';
+import Collapse from '~/components/Collapse/Collapse';
+import RedactorCollapseButton from '~/components/RedactorCollapseButton/RedactorCollapseButton';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -14,6 +16,27 @@ class RedactorReview extends Component {
   state = {
     isShowReviewerList: false
   };
+
+  get collapseItems() {
+    return [
+      {
+        title: (props) => (
+          <RedactorCollapseButton { ...props }>
+            Рецензенты
+          </RedactorCollapseButton>
+        ),
+        box: <div>1</div>
+      },
+      {
+        title: (props) => (
+          <RedactorCollapseButton { ...props }>
+            Предварительная доработка
+          </RedactorCollapseButton>
+        ),
+        box: <div>2</div>
+      }
+    ];
+  }
 
   handleReviewerAdd = () => {
     this.setState({
@@ -43,9 +66,12 @@ class RedactorReview extends Component {
             </div>
           }
         </div>
+
         { isShowReviewerList &&
           <RedactorReviewerList articleId={ articleId } />
         }
+
+        <Collapse items={ this.collapseItems } />
       </div>
     );
   }

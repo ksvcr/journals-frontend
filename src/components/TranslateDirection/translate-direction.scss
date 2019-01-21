@@ -1,0 +1,19 @@
+.translate-direction {
+  white-space: nowrap;
+
+  &__icon {
+    width: 9px;
+    height: 6px;
+    fill: $blue-color;
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  &__label {
+    color: #676767;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0 5px;
+  }
+}
