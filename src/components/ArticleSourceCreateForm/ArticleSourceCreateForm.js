@@ -216,7 +216,7 @@ function mapStateToProps(state, props) {
     rightholderType,
     countriesArray,
     initialValues: {
-      language: languagesArray.length ? languagesArray[0].id : null,
+      language: languagesArray.length ? languagesArray[0].twochar_code : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,

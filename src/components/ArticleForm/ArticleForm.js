@@ -150,7 +150,7 @@ function getInitialValues(state, props) {
   const data = deserializeArticleData(articles.data[id]);
 
   const initialValues = {
-    language: languagesArray.length ? languagesArray[0].id : null,
+    language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
     has_financing: true,
     rubric: rubricsArray.length ? rubricsArray[0].id : null,
