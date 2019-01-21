@@ -81,9 +81,6 @@ const apiClient = {
   getLawtypes: () => {
     return fetchInstance.request(`/lawtypes/`);
   },
-  getCountries: (params) => {
-    return fetchInstance.request(`/countries/`, { params });
-  },
 
   editInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
