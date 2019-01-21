@@ -45,7 +45,7 @@ class CorrectFilesFormItem extends Component {
     const { file } = this.props;
     return (
       <p onClick={ this.handleDescriptionClick } className="correct-files-form-item__description">
-        <Icon className="correct-files-form-item__description__edit-icon" name="edit" />
+        <Icon className="correct-files-form-item__edit-icon" name="edit" />
         { file.text_to_description }
       </p>
     );
@@ -62,7 +62,7 @@ class CorrectFilesFormItem extends Component {
         </div>
         <div className="form__field">
           <Button className="correct-files-form-item__save button_small" type="submit">
-            <Icon className="correct-files-form-item__save__icon" name="save" />
+            <Icon className="correct-files-form-item__save-icon" name="save" />
             Сохранить
           </Button>
         </div>
@@ -80,7 +80,7 @@ class CorrectFilesFormItem extends Component {
           <div className="correct-files-form-item__infobox">
             <div className="correct-files-form-item__top">
               <a href={ file.file } target="blank" rel="noopener noreferrer" className="correct-files-form-item__link">
-                <Icon className="correct-files-form-item__download" name="download" />
+                <Icon className="correct-files-form-item__download-icon" name="download" />
                 <span className="correct-files-form-item__name">
                   { file.name }
                 </span>

@@ -99,7 +99,13 @@ class CorrectorArticleList extends Component {
           },
           sort: '',
           head: () => 'Знаков',
-          render: (data) => Math.round(Math.random() * 10000).toLocaleString() // TODO: заменить на реальные данные
+          render: (data) => {
+            return data.content_blocks.reduce((count, block) => {
+              return count + block.content.blocks.reduce((textCount, textBlock) => {
+                return textCount + textBlock.text.length;
+              }, 0);
+            }, 0);
+          }
         },
         {
           style: {

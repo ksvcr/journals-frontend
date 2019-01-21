@@ -37,14 +37,13 @@
     padding: 2px 8px;
   }
 
-
   &__link {
     display: flex;
     align-items: flex-end;
 
     text-decoration: none;
 
-    &:hover #{$root}__download {
+    &:hover #{$root}__download-icon {
       fill: #FDAF39;
     }
 
@@ -54,34 +53,34 @@
     }
   }
 
-  &__download {
+  &__download-icon {
     width: 17px;
     height: 18px;
     fill: #2E73FB;
-    margin-right: 4px;
+    margin-right: 6px;
   }
 
   &__description {
     cursor: pointer;
     margin-top: 0;
 
-    &__edit-icon {
-      width: 14px;
-      height: 14px;
-      fill: #B8B6B0;
-      margin-right: 10px;
-    }
-
-    &:hover &__edit-icon {
+    &:hover #{$root}__edit-icon {
       fill: #333;
       transition: all .3s;
     }
   }
 
+  &__edit-icon {
+    width: 14px;
+    height: 14px;
+    fill: #B8B6B0;
+    margin-right: 10px;
+  }
+
   &__save {
     background: transparent;
 
-    &__icon {
+    &-icon {
       width: 16px;
       height: 16px;
       fill: $orange-color;
