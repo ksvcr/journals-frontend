@@ -7,6 +7,7 @@ import RedactorReviewTools from '~/components/RedactorReviewTools/RedactorReview
 import RedactorReviewStatus from '~/components/RedactorReviewStatus/RedactorReviewStatus';
 import Collapse from '~/components/Collapse/Collapse';
 import RedactorCollapseButton from '~/components/RedactorCollapseButton/RedactorCollapseButton';
+import InvitedReviewersList from '~/components/InvitedReviewersList/InvitedReviewersList';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -18,6 +19,7 @@ class RedactorReview extends Component {
   };
 
   get collapseItems() {
+    const { articleId } = this.props;
     return [
       {
         title: (props) => (
@@ -25,7 +27,7 @@ class RedactorReview extends Component {
             Рецензенты
           </RedactorCollapseButton>
         ),
-        box: <div>1</div>
+        box: <InvitedReviewersList articleId={ articleId } />
       },
       {
         title: (props) => (
