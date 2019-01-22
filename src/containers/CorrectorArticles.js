@@ -42,6 +42,7 @@ class CorrectorArticles extends Component {
   }
 
   get selectTagsProps() {
+    // TODO: Добавить список тегов
     return {
       name: 'tags',
       options: [],
