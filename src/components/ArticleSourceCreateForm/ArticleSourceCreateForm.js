@@ -19,12 +19,10 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
-import { getCountriesArray } from '~/store/countries/selector';
-
-import * as countriesActions from '~/store/countries/actions';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
+import apiClient from '~/services/apiClient';
 import * as validate from '~/utils/validate';
 
 import './article-source-create-form.scss';
@@ -60,11 +58,6 @@ class ArticleSourceCreateForm extends Component {
     }));
   }
 
-  handleFetchCountries = (value) => {
-    const { fetchCountries } = this.props;
-    return fetchCountries({ name: value, limit: 5 });
-  };
-
   get thesisCategories() {
     return [{
       title: 'Кандидатская',
@@ -84,14 +77,18 @@ class ArticleSourceCreateForm extends Component {
     ));
   };
 
+  fetchCountries = (value) => {
+    console.log('fetch countries', value);
+    return apiClient.getCountries({ name: value, limit: 5});
+  };
+
   get specialFields() {
-    const { resourceType, rightholderType, countriesArray } = this.props;
+    const { resourceType, rightholderType } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
                                    languagesOptions={ this.languagesOptions }
-                                   countriesOptions={ countriesArray }
-                                   onCountriesFetch={ this.handleFetchCountries }/>;
+                                   loadCountries={ this.fetchCountries } />;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -106,16 +103,15 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial countriesOptions={ countriesArray } />;
+        return <SourceLegislativeMaterial loadCountries={ this.fetchCountries } />;
 
       case 'SourceStandart':
         return <SourceStandart />;
 
       case 'SourcePatent':
-        return <SourcePatent countriesOptions={ countriesArray }
-                             rightholderType={ rightholderType }
+        return <SourcePatent rightholderType={ rightholderType }
                              rightholderOptions={ getRightholderTypes() }
-                             onCountriesFetch={ this.handleFetchCountries }/>;
+                             loadCountries={ this.fetchCountries }/>;
 
       default:
         return null;
@@ -207,20 +203,17 @@ function mapStateToProps(state, props) {
   const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
   const rightholderTypes = getRightholderTypes();
   const sourceTypes = getSourceTypes();
-  const countriesArray = getCountriesArray(state);
   return {
     form: formName,
     languagesArray,
     rubricsArray,
     resourceType,
     rightholderType,
-    countriesArray,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
-      defense_country: countriesArray.length ? countriesArray[0].id : [],
       // defense_country: 132, // Россия
       defense_date: moment().format('YYYY-MM-DD'),
       statement_date: moment().format('YYYY-MM-DD'),
@@ -234,10 +227,6 @@ function mapStateToProps(state, props) {
   };
 }
 
-const mapDispatchToProps = {
-  fetchCountries: countriesActions.fetchCountries
-};
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleSourceCreateForm);
+export default connect(mapStateToProps)(ArticleSourceCreateForm);
 
