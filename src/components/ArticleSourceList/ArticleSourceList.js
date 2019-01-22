@@ -36,7 +36,7 @@ class ArticleSourceList extends Component {
   };
 
   render() {
-    const { fields, legend, addText } = this.props;
+    const { fields, legend, addText, isCorrector } = this.props;
     return (
       <div className="article-source-list">
         <ReactCSSTransitionGroup transitionName="fade"
@@ -63,11 +63,14 @@ class ArticleSourceList extends Component {
           }
         </ReactCSSTransitionGroup>
 
-        <div className="field-set-list__button">
-          <FieldAddButton onAdd={ this.handleAdd }>
-            { addText }
-          </FieldAddButton>
-        </div>
+        {
+          !isCorrector &&
+          <div className="field-set-list__button">
+            <FieldAddButton onAdd={ this.handleAdd }>
+              { addText }
+            </FieldAddButton>
+          </div>
+        }
       </div>
     );
   }
