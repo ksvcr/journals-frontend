@@ -13,14 +13,21 @@ const SourceElectronic = ({ rubricsOptions }) => {
     <React.Fragment>
       <div className="form__field">
         <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="source_author" className="form__label">
-              Автор <ReqMark />
+          <div className="form__col form__col_4">
+            <label htmlFor="lastname" className="form__label">
+              Фамилия автора <ReqMark />
             </label>
-            <Field name="author" id="source_author" className="text-field_white" component={ TextField }
-                   placeholder="Введите имя автора" validate={ [validate.required] } />
+            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
+                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
           </div>
-          <div className="form__col form__col_6">
+          <div className="form__col form__col_4">
+            <label htmlFor="initials" className="form__label">
+              Инициалы автора <ReqMark />
+            </label>
+            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
+                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
+          </div>
+          <div className="form__col form__col_4">
             <label htmlFor="source_rubric" className="form__label">
               Направление <ReqMark />
             </label>
