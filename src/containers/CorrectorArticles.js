@@ -8,24 +8,20 @@ import Select from '~/components/Select/Select';
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
-
 class CorrectorArticles extends Component {
   componentDidMount() {
     this.handleRequest();
   }
 
   handleRequest = (params={}) => {
-    const { siteId, articlesParams, fetchArticles, fetchArticleTags } = this.props;
+    const { siteId, articlesParams, fetchArticles } = this.props;
     const fetchArticlesParams = {
       ...articlesParams,
       ...params,
       state_article: 'AWAIT_PROOFREADING'
     };
 
-    return fetchArticles(siteId, fetchArticlesParams).then(({ value }) => {
-      const tagsPromises = value.results.map(article => fetchArticleTags(article.id));
-      return Promise.all(tagsPromises);
-    });
+    return fetchArticles(siteId, fetchArticlesParams);
   };
 
   get searchTargets() {
@@ -90,8 +86,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  fetchArticles: articlesActions.fetchArticles,
-  fetchArticleTags: articlesActions.fetchArticleTags
+  fetchArticles: articlesActions.fetchArticles
 };
 
 export default connect(
