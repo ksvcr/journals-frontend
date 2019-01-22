@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import {Field} from 'redux-form';
 
 import ToggleItem from '~/components/ToggleItem/ToggleItem';
+import TextField from '~/components/TextField/TextField';
+
 
 class ReviewsDialog extends Component {
   renderList = () => {
@@ -9,7 +12,21 @@ class ReviewsDialog extends Component {
     return newArray.map((array, index) => {
       return array.map((item, i) => (
         <ToggleItem key={ i } title={ index+1 + ' рецензент' }>
-          { item.comment_for_author }
+          <div className="reviews-dialog__comment">
+            { item.comment_for_author }
+          </div>          
+          <div className="reviews-dialog__answer">
+            <form action="">
+              <div className="form__field">
+                <label htmlFor="" className="form__label">
+                  ваш ответ (будет опубликован вместе со статьей)
+                </label>
+                {/*<Field name="" id="" textarea minRows={ 2 } component={ TextField }*/}
+                       {/*placeholder="Введите аннотацию" />*/}
+              </div>
+              <button>Ответить</button>
+            </form>
+          </div>
         </ToggleItem>
       ));
     });
