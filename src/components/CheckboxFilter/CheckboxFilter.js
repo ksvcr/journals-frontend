@@ -56,7 +56,7 @@ CheckboxFilter.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     value: PropTypes.any.isRequired
-  })),
+  })).isRequired,
   onChange: PropTypes.func
 };
 

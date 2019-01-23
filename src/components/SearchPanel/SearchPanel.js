@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Radio from '~/components/Radio/Radio';
+import TextField from '~/components/TextField/TextField';
 
 import './search-panel.scss';
 import './assets/search.svg';
-import TextField from '~/components/TextField/TextField';
 
 class SearchPanel extends Component {
   constructor(props) {
