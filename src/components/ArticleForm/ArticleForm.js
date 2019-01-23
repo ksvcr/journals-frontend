@@ -90,12 +90,11 @@ class ArticleForm extends Component {
   };
 
   renderTools = () => {
-    const { id, articleData, userData, handleSubmit, isInvalidForm } = this.props;
+    const { id, articleData, handleSubmit, isInvalidForm } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
-    const isCorrector = userData.role === 'CORRECTOR';
     return (
       <React.Fragment>
-        { (id === 'new' || isDraft || isCorrector) &&
+        { (id === 'new' || isDraft) &&
           <Button onClick={ this.handleDraftSubmit }>
             <Icon name="save" className="article-publish-form__save-icon" />
             Сохранить как черновик
@@ -103,7 +102,7 @@ class ArticleForm extends Component {
         }
 
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          { id === 'new' || isDraft || isCorrector ? 'Отправить статью' : 'Сохранить статью' }
+          { id === 'new' || isDraft ? 'Отправить статью' : 'Сохранить статью' }
         </Button>
       </React.Fragment>
     );

@@ -75,9 +75,8 @@ export function createArticle(siteId, data) {
 
 export function editArticle(id, data) {
   return (dispatch) => {
-    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    let { content_blocks, financing_sources, ...articleData } = data;
     let financingPromises = [];
-    let sourcesPromises = [];
 
     if (financing_sources) {
       const newFinancingArray = financing_sources.filter(item => item.id === undefined);
@@ -88,20 +87,13 @@ export function editArticle(id, data) {
       financingPromises = [createFinancingPromise, ...editFinancingPromises];
     }
 
-    if (sources) {
-      sourcesPromises = apiClient.createSources(id, sources);
-    }
-
-    const payload = Promise.all(financingPromises, sourcesPromises).then((
-      [ createFinancingResponse=[], ...editFinancingResponse ],
-      [ sourcesResponse ]) => {
+    const payload = Promise.all(financingPromises).then(
+      ([ createFinancingResponse=[], ...editFinancingResponse ]) => {
       const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
-      if (sourcesResponse.length) {
-        articleData.sources = sourcesResponse.map(item => item.id);
-      }
+
       return apiClient.lockArticle(id).then(() => {
         const editPromises = [apiClient.editArticle(id, articleData)];
         if (content_blocks) {
