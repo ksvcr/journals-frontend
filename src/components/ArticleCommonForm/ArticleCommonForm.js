@@ -17,6 +17,7 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
+import apiClient from '~/services/apiClient';
 
 import * as validate from '~/utils/validate';
 
@@ -79,6 +80,12 @@ class ArticleCommonForm extends Component {
       }));
   }
 
+  get hasPublishAccess() {
+    const { userData } = this.props;
+    const roles = ['AUTHOR', 'REVIEWER', 'REDACTOR'];
+    return Boolean(~roles.indexOf(userData.role));
+  }
+
   setInitialCategory = (prevRootCategory) => {
     const { rootCategory, change } = this.props;
     if (rootCategory !== prevRootCategory) {
@@ -88,6 +95,10 @@ class ArticleCommonForm extends Component {
         change('category', null);
       }
     }
+  };
+
+  fetchCountries = (value) => {
+    return apiClient.getCountries({ name: value, limit: 5});
   };
 
   handleFieldToggle = (event) => {
@@ -121,7 +132,7 @@ class ArticleCommonForm extends Component {
     return (
       <FieldSetList legend="Адрес" addText="Добавить адрес"
                     initialValues={ initialValues } { ...props }>
-        { field => <AddressForm field={ field } /> }
+        { field => <AddressForm field={ field } loadCountries={ this.fetchCountries } /> }
       </FieldSetList>
     );
   };
@@ -133,68 +144,74 @@ class ArticleCommonForm extends Component {
     return (
       <div className="article-common-form">
         <h2 className="page__title">Общие сведения</h2>
-        <div className="form__field">
-          <label htmlFor="language" className="form__label">Язык статьи</label>
-          <div className="form__row">
-            <div className="form__col form__col_4">
-              <Field name="language" id="language"
-                     component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
-            </div>
-            <div className="form__col form__col_8">
-              <Field name="need_translation" id="need_translation" type="checkbox"
-                     component={ Checkbox } >
-                Нужен перевод сопроводительной информации на русский
-              </Field>
-              <FieldHint position={ 'top-end' } text={
-                `Наши переводчики быстро и грамотно переведут на русский язык
-                всю сопроводительную информацию для вашей статьи.
-                Иначе вам придется делать это самостоятельно`
-              } />
-            </div>
-          </div>
-        </div>
 
-        <div className="form__row">
-          <div className="form__col form__col_4">
+        {
+          this.hasPublishAccess &&
+          <React.Fragment>
             <div className="form__field">
-              <label htmlFor="rubric" className="form__label">Направление</label>
-              <Field name="rubric" id="rubric"
-                     component={ props => <Select options={ this.rubricsOptions } { ...props } /> } />
-            </div>
-          </div>
-          <div className="form__col form__col_4">
-            <div className="form__field">
-              <label htmlFor="root_category" className="form__label">Категория</label>
-              <Field name="root_category" id="root_category"
-                     component={ props => <Select options={ this.rootCategoriesOptions } { ...props } /> } />
-            </div>
-          </div>
-          { this.childCategoriesOptions.length > 0 &&
-            <div className="form__col form__col_4">
-              <div className="form__field">
-                <label htmlFor="category" className="form__label">Подкатегория</label>
-                <Field name="category" id="category"
-                       component={ props => <Select options={ this.childCategoriesOptions } { ...props } /> } />
+              <label htmlFor="language" className="form__label">Язык статьи</label>
+              <div className="form__row">
+                <div className="form__col form__col_4">
+                  <Field name="language" id="language"
+                        component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+                </div>
+                <div className="form__col form__col_8">
+                  <Field name="need_translation" id="need_translation" type="checkbox"
+                        component={ Checkbox } >
+                    Нужен перевод сопроводительной информации на русский
+                  </Field>
+                  <FieldHint position={ 'top-end' } text={
+                    `Наши переводчики быстро и грамотно переведут на русский язык
+                    всю сопроводительную информацию для вашей статьи.
+                    Иначе вам придется делать это самостоятельно`
+                  } />
+                </div>
               </div>
             </div>
-          }
-        </div>
 
-        <div className="form__field form__field_inline">
-          <Field name="agris_unload" id="agris_unload" type="checkbox"
-                 component={ Checkbox } >
-            Статья AGRIS
-          </Field>
-          <FieldHint text={ 'Подсказка про AGRIS' } />
-        </div>
+            <div className="form__row">
+              <div className="form__col form__col_4">
+                <div className="form__field">
+                  <label htmlFor="rubric" className="form__label">Направление</label>
+                  <Field name="rubric" id="rubric"
+                        component={ props => <Select options={ this.rubricsOptions } { ...props } /> } />
+                </div>
+              </div>
+              <div className="form__col form__col_4">
+                <div className="form__field">
+                  <label htmlFor="root_category" className="form__label">Категория</label>
+                  <Field name="root_category" id="root_category"
+                        component={ props => <Select options={ this.rootCategoriesOptions } { ...props } /> } />
+                </div>
+              </div>
+              { this.childCategoriesOptions.length > 0 &&
+                <div className="form__col form__col_4">
+                  <div className="form__field">
+                    <label htmlFor="category" className="form__label">Подкатегория</label>
+                    <Field name="category" id="category"
+                          component={ props => <Select options={ this.childCategoriesOptions } { ...props } /> } />
+                  </div>
+                </div>
+              }
+            </div>
 
-        <div className="form__field form__field_inline">
-          <Field name="georef_unload" id="georef_unload" type="checkbox"
-                 component={ Checkbox } >
-            Статья GEOREF
-          </Field>
-          <FieldHint text={ 'Подсказка про GEOREF' } />
-        </div>
+            <div className="form__field form__field_inline">
+              <Field name="agris_unload" id="agris_unload" type="checkbox"
+                    component={ Checkbox } >
+                Статья AGRIS
+              </Field>
+              <FieldHint text={ 'Подсказка про AGRIS' } />
+            </div>
+
+            <div className="form__field form__field_inline">
+              <Field name="georef_unload" id="georef_unload" type="checkbox"
+                    component={ Checkbox } >
+                Статья GEOREF
+              </Field>
+              <FieldHint text={ 'Подсказка про GEOREF' } />
+            </div>
+          </React.Fragment>
+        }
 
         <div className="form__field">
           <label htmlFor="title" className="form__label">
@@ -291,6 +308,7 @@ class ArticleCommonForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName } = props;
+  const { user } = state;
   const formSelector = formValueSelector(formName);
 
   let rootCategory = formSelector(state, 'root_category');
@@ -306,6 +324,7 @@ function mapStateToProps(state, props) {
   const languagesArray = getLanguagesArray(state);
 
   return {
+    userData: user.data,
     hasFinancing,
     isConflictInterest,
     rootCategory,
@@ -313,7 +332,7 @@ function mapStateToProps(state, props) {
     rootCategoriesArray,
     categoriesArray,
     rubricsArray,
-    languagesArray
+    languagesArray,
   };
 }
 

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {getFormValues, isInvalid, reduxForm} from 'redux-form';
+import { isInvalid, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import Button from '~/components/Button/Button';
-import Icon from '~/components/Icon/Icon';
 import ArticleCommonTranslateForm from '~/components/ArticleCommonTranslateForm/ArticleCommonTranslateForm';
 
 import './article-translate-form.scss';
@@ -31,19 +30,10 @@ class ArticleTranslateForm extends Component {
     ];
   }
 
-  handleDraftSubmit = () => {
-    const { formValues, onDraftSubmit } = this.props;
-    onDraftSubmit(formValues);
-  };
-
   renderTools = () => {
     const { handleSubmit, isInvalidForm } = this.props;
     return (
       <React.Fragment>
-        <Button onClick={ this.handleDraftSubmit }>
-          <Icon name="save" className="article-translate-form__save-icon" />
-          Сохранить как черновик
-        </Button>
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
           Отправить перевод
         </Button>
@@ -70,18 +60,15 @@ ArticleTranslateForm = reduxForm({
 
 function mapStateToProps(state) {
   const isInvalidForm = isInvalid(FORM_NAME)(state);
-  const formValues = getFormValues(FORM_NAME)(state);
 
   return {
-    isInvalidForm,
-    formValues
+    isInvalidForm
   };
 }
 
 ArticleTranslateForm.propTypes = {
   id: PropTypes.number,
-  onSubmit: PropTypes.func,
-  onDraftSubmit: PropTypes.func
+  onSubmit: PropTypes.func
 };
 
 export default connect(

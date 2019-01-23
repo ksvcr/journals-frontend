@@ -7,25 +7,33 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const SourceThesisFields = ({ rubricsOptions }) => {
+const SourceThesisFields = ({ loadCountries, rubricsOptions, languagesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
         <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="source_author" className="form__label">
-              Автор <ReqMark />
+          <div className="form__col form__col_4">
+            <label htmlFor="lastname" className="form__label">
+              Фамилия автора <ReqMark />
             </label>
-            <Field name="author" id="source_author" className="text-field_white" component={ TextField }
-                   placeholder="Введите имя автора" validate={ [validate.required] } />
+            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
+                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
           </div>
-          <div className="form__col form__col_6">
-            <label htmlFor="source_rubric" className="form__label">
-              Направление <ReqMark />
+          <div className="form__col form__col_4">
+            <label htmlFor="initials" className="form__label">
+              Инициалы автора <ReqMark />
             </label>
-            <Field name="rubric" id="source_rubric" className="select_white" validate={ [validate.required] }
-                   component={ props => <Select options={ rubricsOptions } { ...props } /> } />
+            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
+                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
+          </div>
+          <div className="form__col form__col_4">
+            <label htmlFor="source_language" className="form__label">
+              Язык оригинала
+            </label>
+            <Field name="language" id="source_language" className="select_white"
+                   component={ props => <Select options={ languagesOptions } { ...props } /> } />
           </div>
         </div>
       </div>
@@ -47,11 +55,42 @@ const SourceThesisFields = ({ rubricsOptions }) => {
       </div>
 
       <div className="form__field">
-        <label htmlFor="defense_city" className="form__label">
-          Город защиты <ReqMark />
-        </label>
-        <Field name="defense_city" id="defense_city" className="text-field_white" component={ TextField }
-               placeholder="Введите город защиты" validate={ [validate.required] } />
+        <div className="form__row">
+          <div className="form__col form__col_6">
+            <label htmlFor="source_rubric" className="form__label">
+              Направление <ReqMark />
+            </label>
+            <Field name="rubric" id="source_rubric" className="select_white" validate={ [validate.required] }
+                   component={ props => <Select options={ rubricsOptions } { ...props } /> } />
+          </div>
+          <div className="form__col form__col_6">
+            <label htmlFor="specialty_code" className="form__label">
+              Шифр специальности
+            </label>
+            <Field name="specialty_code" id="specialty_code" className="text-field_white" component={ TextField }
+                   placeholder="Введите шифр" />
+          </div>
+        </div>
+      </div>
+
+      <div className="form__field">
+        <div className="form__row">
+          <div className="form__col form__col_6">
+            <label htmlFor="defense_country" className="form__label">
+              Страна защиты <ReqMark />
+            </label>
+            <Field name="defense_country" id="defense_country" className="select_white" validate={ [validate.required] }
+                   component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                       onLoadOptions={ loadCountries } /> } />
+          </div>
+          <div className="form__col form__col_6">
+            <label htmlFor="defense_city" className="form__label">
+              Город защиты <ReqMark />
+            </label>
+            <Field name="defense_city" id="defense_city" className="text-field_white" component={ TextField }
+                   placeholder="Введите город защиты" validate={ [validate.required] } />
+          </div>
+        </div>
       </div>
 
       <div className="form__field">

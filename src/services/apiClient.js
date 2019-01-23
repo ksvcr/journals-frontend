@@ -7,6 +7,7 @@ const fetchInstance = new fetchService({
 const apiClient = {
   getSites: () => fetchInstance.request(`/sites/`),
   getLanguages: () => fetchInstance.request(`/languages/`),
+  getCountries: (params) => fetchInstance.request(`/countries/`, { params }),
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
 
@@ -18,7 +19,6 @@ const apiClient = {
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
-  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
 
   createUserTag: (userId, data) => {
     return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
@@ -65,15 +65,23 @@ const apiClient = {
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   },
+  getArticleTags: (articleId, params) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { params });
+  },
   createArticleTag: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
   },
   removeArticleTag: (articleId, id) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/`, { method: 'delete' });
   },
   createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   },
+
+  getLawtypes: () => {
+    return fetchInstance.request(`/lawtypes/`);
+  },
+
   editInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
   },
@@ -83,7 +91,6 @@ const apiClient = {
   createArticleTranslation: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/translations/`, { method: 'post', data });
   },
-
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
 

@@ -6,6 +6,7 @@ import Page from '~/containers/Page';
 import RoleAccess from '~/containers/RoleAccess';
 import Articles from '~/containers/Articles';
 import ArticlePublish from '~/containers/ArticlePublish';
+import ArticleCorrect from '~/containers/ArticleCorrect';
 import ArticlePreview from '~/containers/ArticlePreview';
 import ArticleTranslate from '~/containers/ArticleTranslate';
 import AuthorSettings from '~/containers/AuthorSettings';
@@ -15,9 +16,11 @@ import Discounts from '~/containers/Discounts';
 import NotFound from '~/containers/NotFound';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
+const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
 const ReviewCreateWithAccess = RoleAccess(ReviewCreate, ['REVIEWER', 'REDACTOR']);
 const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER', 'REDACTOR']);
 const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR']);
+const ArticleCorrectWithAccess = RoleAccess(ArticleCorrect, ['CORRECTOR']);
 
 const routes = () => (
   <Page>
@@ -25,9 +28,10 @@ const routes = () => (
       <Route exact path="/" component={ Articles } />
       <Route exact path="/article" component={ ArticlePublishWithAccess } />
       <Route exact path="/article/:articleId" component={ ArticlePreview } />
-      <Route path="/article/:articleId/edit" component={ ArticlePublishWithAccess } />
+      <Route path="/article/:articleId/edit" component={ ArticleEditWithAccess } />
       <Route path="/article/:articleId/review" component={ ReviewCreateWithAccess } />
       <Route path="/article/:articleId/translate" component={ ArticleTranslateWithAccess } />
+      <Route path="/article/:articleId/correct" component={ ArticleCorrectWithAccess }/>
       <Route path="/articles-for-review" component={ ArticlesForReviewWithAccess } />
       <Route path="/settings" component={ AuthorSettings } />
       <Route path="/discounts" component={ Discounts } />

@@ -44,6 +44,7 @@
     "react-redux": "^5.1.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "react-select": "^2.2.0",
     "react-tabs": "^2.3.0",
     "react-textarea-autosize": "^7.1.0",
     "react-tippy": "^1.2.2",
@@ -57,6 +58,7 @@
     "sass-mq": "^5.0.0",
     "stable": "^0.1.8",
     "style-loader": "0.19.0",
+    "throttle-debounce": "^2.1.0",
     "url-loader": "0.6.2",
     "webpack": "3.8.1",
     "webpack-dev-server": "2.9.4",
@@ -148,6 +150,11 @@
   },
   "proxy": {
     "/api": {
+      "target": "https://journals.green.jetstyle.ru",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/media": {
       "target": "https://journals.green.jetstyle.ru",
       "secure": false,
       "changeOrigin": true

@@ -23,5 +23,5 @@ export default combineReducers({
   user,
   users,
   reviewInvites,
-  discounts
+  discounts,
 });

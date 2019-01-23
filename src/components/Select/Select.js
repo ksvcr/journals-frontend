@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -39,7 +39,7 @@ class Select extends Component {
       <div className={ classes }>
         <select id={ id } disabled={ disabled } required={ required }
                 onChange={ onChange } { ...input } className="select__field">
-          { this.renderOptions() }
+          {this.renderOptions()}
         </select>
       </div>
     );

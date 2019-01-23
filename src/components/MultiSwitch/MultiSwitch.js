@@ -35,8 +35,7 @@ class MultiSwitch extends Component {
     const { color } = this.state;
     const switchClasses = classNames('multi-switch', {
       'multi-switch_checked': value,
-      "multi-switch_orange": color==='orange',
-      'multi-switch_red': color==='red'
+      [`multi-switch_${color}`]: color
     });
     return (
       <div className={ switchClasses }>

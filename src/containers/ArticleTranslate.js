@@ -20,14 +20,12 @@ class ArticleTranslate extends Component {
     return Promise.all(promises);
   };
 
-
-  handleDraftSubmit = (formData) => {
-    const { articleId, createArticleTranslation } = this.props;
-    createArticleTranslation(articleId, formData);
-  };
-
   handleSubmit = (formData) => {
-    console.log(formData);
+    const { articleId, articleData, createArticleTranslation } = this.props;
+    let language_code = articleData.language === 'en' ? 'ru' : 'en';
+    const data = { ...formData, language_code };
+
+    createArticleTranslation(articleId, data);
   };
 
   render() {
@@ -39,8 +37,7 @@ class ArticleTranslate extends Component {
 
         { isFulfilled &&
           <ArticleTranslateForm id={ articleId }
-                                onSubmit={ this.handleSubmit }
-                                onDraftSubmit={ this.handleDraftSubmit } />
+                                onSubmit={ this.handleSubmit } />
         }
       </React.Fragment>
     );
@@ -55,6 +52,7 @@ function mapStateToProps(state, props) {
 
   return {
     articleId,
+    articleData: articles.isFulfilled && articles.data[articleId],
     isFulfilled: articles.isFulfilled
   };
 }

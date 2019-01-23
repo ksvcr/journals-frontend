@@ -6,7 +6,7 @@ export const stageMap = {
   AWAIT_PUBLICATION: 'Ожидает публикации',
   PUBLISHED: 'Опубликована',
   DISAPPROVED: 'Отклонена',
-  CALL_OFF: 'Отозвана'
+  CALL_OFF: 'Отозвана',
 };
 
 export const articleStageOptions = Object.keys(stageMap).map(key => ({ label: stageMap[key], value: key }));

@@ -27,11 +27,9 @@ class TagEditor extends Component {
     this.setState({
       isEdit: true
     }, () => {
-      setTimeout(() => {
-        if (this.input) {
-          this.input.focus();
-        }
-      }, 0);
+      if (this.input) {
+        this.input.focus();
+      }
     });
   };
 

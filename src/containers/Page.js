@@ -7,6 +7,7 @@ import Footer from '~/components/Footer/Footer';
 
 import * as userActions from '~/store/user/actions';
 import * as sitesActions from '~/store/sites/actions';
+
 import hasToken from '~/services/hasToken';
 
 import 'normalize.css';
@@ -16,7 +17,9 @@ class Page extends Component {
   componentDidMount() {
     const { fetchSites } = this.props;
     this.authUser().then(() => {
-      return fetchSites();
+      return Promise.all([
+        fetchSites()
+      ]);
     });
   }
 
@@ -40,7 +43,7 @@ class Page extends Component {
           { isFulfilled &&
             <div className="page__holder">
               <aside className="page__sidebar">
-                <MainMenu items={ this.menuItems } />
+                <MainMenu />
               </aside>
               <article className="page__content">
                 { this.props.children }

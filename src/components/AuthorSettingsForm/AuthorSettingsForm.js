@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
-import * as validate from '~/utils/validate';
-
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+
+import apiClient from '~/services/apiClient';
+import * as validate from '~/utils/validate';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
+  fetchCountries = (value) => {
+    return apiClient.getCountries({ name: value, limit: 5});
+  };
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -86,7 +92,8 @@ class AuthorSettingsForm extends Component {
                 Cтрана
               </label>
               <Field name="country" id="country"
-                    component={ TextField } placeholder="Введите страну" />
+                    component={(props) => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                            onLoadOptions={ this.fetchCountries } /> } />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
@@ -104,7 +111,8 @@ class AuthorSettingsForm extends Component {
                 Страна по английски
               </label>
               <Field name="country_en" id="country_en"
-                    component={ TextField } placeholder="Введите страну" />
+                    component={(props) => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                            onLoadOptions={ this.fetchCountries } /> } />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city_en" className="form__label">
@@ -164,8 +172,9 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="mail_address_country" className="form__label">
                 Страна
               </label>
-              <Field name="mail_address_country" id="mail_address_country" component={ TextField }
-                     placeholder="Введите страну" />
+              <Field name="mail_address_country" id="mail_address_country"
+                     component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                            onLoadOptions={ this.fetchCountries } /> }  />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -249,7 +258,7 @@ function mapStateToProps(state, props) {
 
   return {
     form: formName,
-    initialValues: user.data
+    initialValues: user.data,
   };
 }
 
