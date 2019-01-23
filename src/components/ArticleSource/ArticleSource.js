@@ -9,17 +9,19 @@ import './assets/cancel.svg';
 class ArticleSource extends Component {
   getTitle(parts, lang) {
    const { data } = this.props;
-   return parts.filter(key => data[key]).reduce((result, key) => {
+   const { lastname, initials } = data.author;
+   let params = parts.filter(key => data[key]).reduce((result, key) => {
      let item = data[key];
-     if (key === 'count') {
+     if (key === 'page_count') {
        if (lang === 'ru') {
          item = `- ${item} с.`
        } else {
          item = `${item} P`
        }
      }
-     return `${result} ${item}`
-   }, '')
+     return `${result} ${item}`;
+   }, '');
+   return `${lastname} ${initials} ${params}`;
   }
 
   handleRemove = () => {
@@ -41,10 +43,10 @@ class ArticleSource extends Component {
             { `Источник №${index + 1}` }
           </div>
           <div className="article-source__title">
-            { this.getTitle(['author', 'original_source_name', 'page_count'], 'ru') }
+            { this.getTitle(['original_name', 'page_count'], 'ru') }
           </div>
           <div className="article-source__text">
-            { this.getTitle(['author', 'second_source_name', 'page_count'], 'en') }
+            { this.getTitle(['original_name', 'page_count'], 'en') }
           </div>
         </div>
         <div className="article-source__tools">

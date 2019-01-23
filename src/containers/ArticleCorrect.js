@@ -34,7 +34,7 @@ class ArticleCorrect extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, push, fetchArticle, fetchRubrics, fetchCategories, fetchUser, fetchArticleTags } = this.props;
+    const { articleId, siteId, push, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
     const promises = [
       fetchRubrics(siteId),
       fetchCategories(siteId),
@@ -46,10 +46,7 @@ class ArticleCorrect extends Component {
         }
 
         const userPromises = userIds.map(id => fetchUser(id));
-        return Promise.all([
-          fetchArticleTags(articleId),
-          ...userPromises
-        ]);
+        return Promise.all(userPromises);
       }).catch(() => push('/')),
     ];
 
@@ -108,7 +105,6 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
-  fetchArticleTags: articlesActions.fetchArticleTags,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
   fetchCategories: categoriesActions.fetchCategories,

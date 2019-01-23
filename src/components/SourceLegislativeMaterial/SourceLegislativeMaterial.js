@@ -8,7 +8,7 @@ import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const SourceLegislativeMaterial = ({ countriesOptions, onCountriesFetch }) => {
+const SourceLegislativeMaterial = ({ loadCountries }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -17,14 +17,14 @@ const SourceLegislativeMaterial = ({ countriesOptions, onCountriesFetch }) => {
             <label htmlFor="lastname" className="form__label">
               Фамилия автора <ReqMark />
             </label>
-            <Field name="lastname" id="lastname" className="text-field_white" component={ TextField }
+            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
                    placeholder="Введите фамилию автора" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="initials" className="form__label">
               Инициалы автора <ReqMark />
             </label>
-            <Field name="initials" id="initials" className="text-field_white" component={ TextField }
+            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
                    placeholder="Введите инициалы автора" validate={ [validate.required] } />
           </div>
         </div>
@@ -53,8 +53,8 @@ const SourceLegislativeMaterial = ({ countriesOptions, onCountriesFetch }) => {
               Страна <ReqMark />
             </label>
             <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
-                                                          onLoadOptions={ onCountriesFetch } /> } />
+                   component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                          onLoadOptions={ loadCountries } /> } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue" className="form__label">

@@ -78,7 +78,7 @@ class SearchPanel extends Component {
            { this.renderParams() }
          </div>
         <div className="search-panel__field">
-          <TextField input={this.inputProps} className="text-field_search" icon="search"
+          <TextField input={ this.inputProps } className="text-field_search" icon="search"
                      onChange={ this.handleSearchChange } />
         </div>
       </div>

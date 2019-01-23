@@ -14,7 +14,6 @@ import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
-import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 
@@ -31,11 +30,9 @@ class ArticlePublish extends Component {
   }
 
   handleInitialRequest = () => {
-    const { fetchLanguages, fetchCountries } = this.props;
+    const { fetchLanguages } = this.props;
     return Promise.all([
       fetchLanguages(),
-      // fetchCountries({ name: "Б" }),
-      fetchCountries({ limit: 5 }),
       this.handleRequest()
     ]);
   };
@@ -158,7 +155,6 @@ const mapDispatchToProps = {
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,
-  fetchCountries: countriesActions.fetchCountries,
 };
 
 export default connect(
