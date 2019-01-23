@@ -1,1 +1,0 @@
-export const FETCH_COUNTRIES = 'FETCH_COUNTRIES';

@@ -9,7 +9,7 @@ import Select from '~/components/Select/Select';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import * as validate from '~/utils/validate';
 
-const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions, onCountriesFetch }) => {
+const SourcePatent = ({ rightholderType, loadCountries, rightholderOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -169,8 +169,8 @@ const SourcePatent = ({ rightholderType, countriesOptions, rightholderOptions, o
               Страна <ReqMark />
             </label>
             <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <SearchableSelect defaultOptions={ countriesOptions } placeholder="Выберите страну" { ...props }
-                                                          onLoadOptions={ onCountriesFetch } /> } />
+                   component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
+                                                          onLoadOptions={ loadCountries } /> } />
           </div>
         </div>
       </div>
