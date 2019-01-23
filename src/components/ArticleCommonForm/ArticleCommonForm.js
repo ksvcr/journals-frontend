@@ -17,6 +17,7 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
+import apiClient from '~/services/apiClient';
 
 import * as validate from '~/utils/validate';
 
@@ -96,6 +97,10 @@ class ArticleCommonForm extends Component {
     }
   };
 
+  fetchCountries = (value) => {
+    return apiClient.getCountries({ name: value, limit: 5});
+  };
+
   handleFieldToggle = (event) => {
     const { checked, name } = event.target;
     this.setState(prevState => (
@@ -127,7 +132,7 @@ class ArticleCommonForm extends Component {
     return (
       <FieldSetList legend="Адрес" addText="Добавить адрес"
                     initialValues={ initialValues } { ...props }>
-        { field => <AddressForm field={ field } /> }
+        { field => <AddressForm field={ field } loadCountries={ this.fetchCountries } /> }
       </FieldSetList>
     );
   };
