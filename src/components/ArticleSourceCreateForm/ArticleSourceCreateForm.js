@@ -118,37 +118,42 @@ class ArticleSourceCreateForm extends Component {
   }
 
   render() {
-    const { handleSubmit, resourceType } = this.props;
+    const { handleSubmit, resourceType, isCorrector } = this.props;
     return (
       <form className="article-source-create-form form" onSubmit={ handleSubmit(this.handleSubmit) }>
-        <div className="form__field">
-          <div className="form__row">
-            <div className="form__col form__col_6">
-              <label htmlFor="resourcetype" className="form__label">
-                Тип источника
-              </label>
-              <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
-                     component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
-            </div>
-            { resourceType === 'SourceThesis' ?
-              <div className="form__col form__col_6">
-                <label htmlFor="category" className="form__label">
-                  Тип диссертации
-                </label>
-                <div className="form__box form__box_radios">
-                  { this.renderThesisCategories() }
+        {
+          !isCorrector &&
+          (
+            <div className="form__field">
+              <div className="form__row">
+                <div className="form__col form__col_6">
+                  <label htmlFor="resourcetype" className="form__label">
+                    Тип источника
+                  </label>
+                  <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
+                        component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
                 </div>
-              </div> :
-              <div className="form__col form__col_6">
-                <label htmlFor="source_language" className="form__label">
-                  Язык оригинала
-                </label>
-                <Field name="language" id="source_language" className="select_white"
-                       component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+                { resourceType === 'SourceThesis' ?
+                  <div className="form__col form__col_6">
+                    <label htmlFor="category" className="form__label">
+                      Тип диссертации
+                    </label>
+                    <div className="form__box form__box_radios">
+                      { this.renderThesisCategories() }
+                    </div>
+                  </div> :
+                  <div className="form__col form__col_6">
+                    <label htmlFor="source_language" className="form__label">
+                      Язык оригинала
+                    </label>
+                    <Field name="language" id="source_language" className="select_white"
+                          component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+                  </div>
+                }
               </div>
-            }
-          </div>
-        </div>
+            </div>
+          )
+        }
 
         { this.specialFields }
 
@@ -195,6 +200,7 @@ ArticleSourceCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
+  const { user } = state;
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
   const rubricsArray = getRubricsArray(state);
@@ -209,7 +215,7 @@ function mapStateToProps(state, props) {
     resourceType,
     rightholderType,
     initialValues: {
-      language: languagesArray.length ? languagesArray[0].id : null,
+      language: languagesArray.length ? languagesArray[0].twochar_code : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
@@ -222,7 +228,8 @@ function mapStateToProps(state, props) {
       patent_application_date: moment().format('YYYY-MM-DD'),
       publication_date: moment().format('YYYY-MM-DD'),
       ...data
-    }
+    },
+    isCorrector: user.data.role === 'CORRECTOR'
   };
 }
 

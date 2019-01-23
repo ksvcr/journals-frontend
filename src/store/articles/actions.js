@@ -1,6 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
-  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW,
+  CREATE_ARTICLE_TRANSLATION
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -75,8 +76,8 @@ export function createArticle(siteId, data) {
 export function editArticle(id, data) {
   return (dispatch) => {
     let { content_blocks, financing_sources, sources, ...articleData } = data;
-    let financingPromises = [Promise.resolve()];
-    let sourcesPromises = [Promise.resolve()];
+    let financingPromises = [];
+    let sourcesPromises = [];
 
     if (financing_sources) {
       const newFinancingArray = financing_sources.filter(item => item.id === undefined);

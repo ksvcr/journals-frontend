@@ -10,6 +10,7 @@ import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsFo
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
+import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
 
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
@@ -35,28 +36,52 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    return [
-      {
-        title: 'Общие сведения',
-        component: <ArticleCommonForm { ...this.formProps } />
-      },
-      {
-        title: 'Авторы',
-        component: <ArticleAuthorsForm { ...this.formProps } />
-      },
-      {
-        title: 'Текст статьи',
-        component: <ArticleContentForm { ...this.formProps } />
-      },
-      {
-        title: 'Файлы к статье',
-        component: <ArticleFilesForm { ...this.formProps } />
-      },
-      {
-        title: 'Список литературы',
-        component: <ArticleSourcesForm { ...this.formProps } />
-      }
-    ];
+    const { userData } = this.props;
+
+    switch (userData.role) {
+      case 'CORRECTOR':
+        return [
+          {
+            title: 'Общие сведения',
+            component: <ArticleCommonForm { ...this.formProps } />
+          },
+          {
+            title: 'Текст статьи',
+            component: <ArticleContentForm { ...this.formProps } />
+          },
+          {
+            title: 'Файлы к статье',
+            component: <CorrectFilesForm { ...this.formProps } />
+          },
+          {
+            title: 'Список литературы',
+            component: <ArticleSourcesForm { ...this.formProps } />
+          }
+        ];
+      default:
+        return [
+          {
+            title: 'Общие сведения',
+            component: <ArticleCommonForm { ...this.formProps } />
+          },
+          {
+            title: 'Авторы',
+            component: <ArticleAuthorsForm { ...this.formProps } />
+          },
+          {
+            title: 'Текст статьи',
+            component: <ArticleContentForm { ...this.formProps } />
+          },
+          {
+            title: 'Файлы к статье',
+            component: <ArticleFilesForm { ...this.formProps } />
+          },
+          {
+            title: 'Список литературы',
+            component: <ArticleSourcesForm { ...this.formProps } />
+          }
+        ];
+    }
   }
 
   handleDraftSubmit = () => {
@@ -65,11 +90,12 @@ class ArticleForm extends Component {
   };
 
   renderTools = () => {
-    const { id, articleData, handleSubmit, isInvalidForm } = this.props;
+    const { id, articleData, userData, handleSubmit, isInvalidForm } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
+    const isCorrector = userData.role === 'CORRECTOR';
     return (
       <React.Fragment>
-        { (id === 'new' || isDraft) &&
+        { (id === 'new' || isDraft || isCorrector) &&
           <Button onClick={ this.handleDraftSubmit }>
             <Icon name="save" className="article-publish-form__save-icon" />
             Сохранить как черновик
@@ -77,7 +103,7 @@ class ArticleForm extends Component {
         }
 
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          { id === 'new' || isDraft ? 'Отправить статью' : 'Сохранить статью' }
+          { id === 'new' || isDraft || isCorrector ? 'Отправить статью' : 'Сохранить статью' }
         </Button>
       </React.Fragment>
     );
@@ -101,7 +127,7 @@ ArticleForm = reduxForm({
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
-  const { articles } = state;
+  const { user, articles } = state;
   const { id } = props;
   const formName = `${FORM_NAME_BASE}-${id}`;
   const isInvalidForm = isInvalid(formName)(state);
@@ -110,8 +136,9 @@ function mapStateToProps(state, props) {
     form: formName,
     formValues,
     isInvalidForm,
-    articleData: articles.data[id],
-    initialValues: getInitialValues(state, props)
+    initialValues: getInitialValues(state, props),
+    userData: user.data,
+    articleData: articles.data[id]
   };
 }
 
@@ -125,7 +152,7 @@ function getInitialValues(state, props) {
   const data = deserializeArticleData(articles.data[id]);
 
   const initialValues = {
-    language: languagesArray.length ? languagesArray[0].id : null,
+    language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
     has_financing: true,
     rubric: rubricsArray.length ? rubricsArray[0].id : null,
@@ -160,7 +187,7 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: [],
+    attachments: data.file_atachments || [],
     ...data
   };
 

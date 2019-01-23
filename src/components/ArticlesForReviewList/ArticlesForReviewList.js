@@ -56,10 +56,7 @@ class ArticlesForReviewList extends Component {
 
   handleCreateReview = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}/review`);
-    }, 0);
+    push(`/article/${id}/review`);
   };
 
   handleAcceptInvite = (id) => {
@@ -69,10 +66,7 @@ class ArticlesForReviewList extends Component {
 
   handlePreview = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}`);
-    }, 0);
+    push(`/article/${id}`);
   };
 
   handlePaginateChange = (paginate) => {

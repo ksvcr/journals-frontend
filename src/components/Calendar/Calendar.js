@@ -16,9 +16,7 @@ class Calendar extends Component {
     onChange(date);
 
     if (endDate !== undefined) {
-      setTimeout(() => {
-        datepicker.setOpen(false);
-      }, 0);
+      datepicker.setOpen(false);
     }
   };
 

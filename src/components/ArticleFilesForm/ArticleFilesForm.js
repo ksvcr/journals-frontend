@@ -59,7 +59,6 @@ class ArticleFilesForm extends Component {
       return (
         <React.Fragment key={ index }>
             <ArticleFilesFormItem
-              key={ index }
               file={ item }
               onChangeDescription={ this.handleChangeDescription }
               onRemove={ this.handleRemoveFile } />

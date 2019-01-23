@@ -7,6 +7,7 @@ const fetchInstance = new fetchService({
 const apiClient = {
   getSites: () => fetchInstance.request(`/sites/`),
   getLanguages: () => fetchInstance.request(`/languages/`),
+  getCountries: (params) => fetchInstance.request(`/countries/`, { params }),
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
 
@@ -18,7 +19,6 @@ const apiClient = {
     return fetchInstance.request(`/users/${tail}`, { params });
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
-  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
 
   createUserTag: (userId, data) => {
     return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
@@ -65,6 +65,9 @@ const apiClient = {
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   },
+  getArticleTags: (articleId, params) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { params });
+  },
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
   },
@@ -77,9 +80,6 @@ const apiClient = {
 
   getLawtypes: () => {
     return fetchInstance.request(`/lawtypes/`);
-  },
-  getCountries: (params) => {
-    return fetchInstance.request(`/countries/`, { params });
   },
 
   editInviteArticleReviewer: (articleId, data) => {

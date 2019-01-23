@@ -61,18 +61,12 @@ class AuthorArticleList extends Component {
 
   handleEdit = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}/edit/`);
-    }, 0);
+    push(`/article/${id}/edit/`);
   };
 
   handlePreview = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}`);
-    }, 0);
+    push(`/article/${id}`);
   };
 
   handlePaymentClose = () => {

@@ -7,7 +7,7 @@ import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList'
 
 class ArticleSourcesForm extends Component {
   renderSourceList = (props) => {
-    const { formName } = this.props;
+    const { formName, isCorrector } = this.props;
 
     const initialValues = {
       isEdit: true,
@@ -16,7 +16,7 @@ class ArticleSourcesForm extends Component {
 
     return (
       <ArticleSourceList formName={ formName } legend="Источник" addText="Добавить источник"
-                         initialValues={ initialValues } { ...props } />
+                         initialValues={ initialValues } isCorrector={ isCorrector } { ...props } />
     );
   };
 
@@ -34,7 +34,10 @@ class ArticleSourcesForm extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { user } = state;
+  return {
+    isCorrector: user.data.role === 'CORRECTOR'
+  };
 }
 
 export default connect(

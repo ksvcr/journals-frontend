@@ -25,20 +25,11 @@ export function fetchCurrentUser() {
 }
 
 export function updateCurrentUser(data) {
-  return (dispatch, state) => {
-    const { user } = state();
-    const { id } = user.data;
-
-    // Небольшой костыль.
-    // Можно убрать, когда PUT /users/me/ научится обновлять role.
-    apiClient.updateUserRole(id, data)
-    .catch(error => console.error(error))
-    .finally(() => {
-      const payload = apiClient.updateCurrentUser(data);
-      return dispatch({
-        type: UPDATE_CURRENT_USER,
-        payload
-      }).catch(error => console.error(error));
-    });
+  return (dispatch) => {
+    const payload = apiClient.updateCurrentUser(data);
+    return dispatch({
+      type: UPDATE_CURRENT_USER,
+      payload
+    }).catch(error => console.error(error));
   }
 }

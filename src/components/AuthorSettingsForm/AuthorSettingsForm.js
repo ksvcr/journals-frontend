@@ -7,10 +7,27 @@ import * as validate from '~/utils/validate';
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
+import Select from '~/components/Select/Select';
+
+import { getCountriesArray } from '~/store/countries/selector';
+import * as countriesActions from '~/store/countries/actions';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
+  componentDidMount() {
+    const { fetchCountries } = this.props;
+    fetchCountries({ limit: 200 });
+  }
+
+  get countriesOptions() {
+    const { countriesArray } = this.props;
+    return countriesArray.map((item) => ({
+      title: item.name,
+      value: item.id
+    }));
+  }
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -164,8 +181,8 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="mail_address_country" className="form__label">
                 Страна
               </label>
-              <Field name="mail_address_country" id="mail_address_country" component={ TextField }
-                     placeholder="Введите страну" />
+              <Field name="mail_address_country" id="mail_address_country" placeholder="Выберите страну"
+                     component={ props => <Select options={ this.countriesOptions } { ...props } /> }  />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -246,12 +263,18 @@ AuthorSettingsForm = reduxForm({
 function mapStateToProps(state, props) {
   const { formName } = props;
   const { user } = state;
+  const countriesArray = getCountriesArray(state);
 
   return {
     form: formName,
-    initialValues: user.data
+    initialValues: user.data,
+    countriesArray
   };
 }
 
-export default connect(mapStateToProps)(AuthorSettingsForm);
+const mapDispatchToProps = {
+  fetchCountries: countriesActions.fetchCountries
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettingsForm);
 
