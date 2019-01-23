@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import classNames from 'classnames';
+import { debounce } from 'throttle-debounce';
 
 import './searchable-select.scss';
 
@@ -14,32 +15,24 @@ class SearchableSelect extends Component {
 
   handleChange = (selectedOption) => {
     const { input } = this.props;
+
     this.setState({
       selectedOption: selectedOption
     });
     input.onChange(selectedOption.id);
   };
 
-  getOptions = (inputValue) => {
-    console.log('getOptions');
+  getOptions = (inputValue, callback) => {
+    const { onLoadOptions } = this.props;
+
     if (!inputValue) {
       return [];
     }
-    const { onLoadOptions } = this.props;
 
-    return new Promise((resolve, reject) => {
-      onLoadOptions(inputValue)
-        .then(response => {
-          resolve(response.results);
-        }).catch(reject);
-    }).catch((error) => console.log(error));
-  };
-
-  handleInputChange = (newValue) => {
-    const inputValue = newValue.replace(/\W/g, '');
-    this.setState({ inputValue });
-    console.log('input change');
-    return inputValue;
+    return onLoadOptions(inputValue)
+      .then(response => {
+        callback(response.results);
+      });
   };
 
   getOptionValue = (option) => option.id;
@@ -50,10 +43,9 @@ class SearchableSelect extends Component {
   render() {
     const { meta, id, required, defaultOptions, placeholder } = this.props;
     const { selectedOption } = this.state;
-    const classes = classNames('searchable-select-wrapper searchable-select-wrapper_white',
-      { 'searchable-select-wrapper_error': meta && meta.submitFailed && meta.error });
-
     const hasError = meta && meta.submitFailed && meta.error;
+    const classes = classNames('searchable-select-wrapper searchable-select-wrapper_white',
+      { 'searchable-select-wrapper_error': hasError });
 
     return (
       <React.Fragment>
@@ -69,9 +61,8 @@ class SearchableSelect extends Component {
           getOptionValue={this.getOptionValue}
           getOptionLabel={this.getOptionLabel}
           defaultOptions={defaultOptions}
-          loadOptions={this.getOptions}
+          loadOptions={ debounce(500, this.getOptions) }
           onChange={this.handleChange}
-          onInputChange={this.handleInputChange}
         />
         { hasError &&
           <div className="searchable-select-wrapper__error">

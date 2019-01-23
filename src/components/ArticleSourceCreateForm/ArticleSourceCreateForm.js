@@ -78,7 +78,6 @@ class ArticleSourceCreateForm extends Component {
   };
 
   fetchCountries = (value) => {
-    console.log('fetch countries', value);
     return apiClient.getCountries({ name: value, limit: 5});
   };
 
