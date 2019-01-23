@@ -8,6 +8,7 @@ import PaginateLine from '~/components/PaginateLine/PaginateLine';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersParams } from '~/store/users/selector';
+import { getSitesArray } from '~/store/sites/selector';
 
 class RedactorUsers extends Component {
   componentDidMount() {
@@ -19,7 +20,7 @@ class RedactorUsers extends Component {
     const data = {
       ...usersParams,
       ...params,
-      search: params.search_query
+      search: params.search_query || usersParams.search,
     };
     fetchUsers(data);
   };
@@ -38,17 +39,26 @@ class RedactorUsers extends Component {
   }
 
   get selectSiteProps() {
+    const { sitesArray } = this.props;
+    const options = sitesArray.map(item => ({
+      title: item.name,
+      value: item.id
+    }));
+
     return {
       name: 'site',
-      options: [],
+      options,
       onChange: (event) => {}
-    };
+    }
   }
 
   get selectActionProps() {
     return {
       name: 'action',
-      options: [],
+      options: [{
+        title: 'Отправить письмо',
+        value: 'mail'
+      }],
       onChange: (event) => {}
     };
   }
@@ -101,8 +111,7 @@ class RedactorUsers extends Component {
           </div>
         </div>
 
-        <RedactorUsersList />
-
+        <RedactorUsersList onUpdateRequest={ this.handleRequest } />
 
         { total > 0 &&
           <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
@@ -118,7 +127,8 @@ function mapStateToProps(state) {
   return {
     usersParams: getUsersParams(state),
     total,
-    paginate
+    paginate,
+    sitesArray: getSitesArray(state)
   }
 }
 
