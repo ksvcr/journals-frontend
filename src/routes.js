@@ -14,6 +14,7 @@ import ArticlesForReview from '~/containers/ArticlesForReview';
 import ReviewCreate from '~/containers/ReviewCreate';
 import Discounts from '~/containers/Discounts';
 import NotFound from '~/containers/NotFound';
+import RedactorUsers from '~/containers/RedactorUsers';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
 const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
@@ -21,6 +22,7 @@ const ReviewCreateWithAccess = RoleAccess(ReviewCreate, ['REVIEWER', 'REDACTOR']
 const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER', 'REDACTOR']);
 const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR']);
 const ArticleCorrectWithAccess = RoleAccess(ArticleCorrect, ['CORRECTOR']);
+const RedactorUsersWithAccess = RoleAccess(RedactorUsers, ['REDACTOR']);
 
 const routes = () => (
   <Page>
@@ -33,6 +35,7 @@ const routes = () => (
       <Route path="/article/:articleId/translate" component={ ArticleTranslateWithAccess } />
       <Route path="/article/:articleId/correct" component={ ArticleCorrectWithAccess }/>
       <Route path="/articles-for-review" component={ ArticlesForReviewWithAccess } />
+      <Route path="/users" component={ RedactorUsersWithAccess } />
       <Route path="/settings" component={ AuthorSettings } />
       <Route path="/discounts" component={ Discounts } />
       <Route component={ NotFound } />

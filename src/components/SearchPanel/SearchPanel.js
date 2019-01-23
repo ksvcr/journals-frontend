@@ -8,9 +8,13 @@ import './assets/search.svg';
 import TextField from '~/components/TextField/TextField';
 
 class SearchPanel extends Component {
-  state = {
-    target: 'all'
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      target: props.initialTarget
+    };
+  }
 
   handleParamsChange = (event) => {
     const { value } = event.target;
@@ -45,10 +49,10 @@ class SearchPanel extends Component {
 
     onChange(searchData);
   };
-  
+
   get targets() {
-    const { targets } = this.props;
-    return targets ? [{ value: 'all', title: 'Искать везде' }, ...targets ] : [];
+    const { targets, hasDefaultTarget } = this.props;
+    return hasDefaultTarget ? [{ value: 'all', title: 'Искать везде' }, ...targets ] : targets;
   }
 
   renderParams = () => {
@@ -61,6 +65,12 @@ class SearchPanel extends Component {
     ));
   };
 
+  get inputProps() {
+    return {
+      placeholder: 'Поиск'
+    };
+  }
+
   render() {
     return (
       <div className="search-panel">
@@ -68,7 +78,7 @@ class SearchPanel extends Component {
            { this.renderParams() }
          </div>
         <div className="search-panel__field">
-          <TextField placeholder="Поиск" className="text-field_search" icon="search"
+          <TextField input={this.inputProps} className="text-field_search" icon="search"
                      onChange={ this.handleSearchChange } />
         </div>
       </div>
@@ -78,7 +88,16 @@ class SearchPanel extends Component {
 
 SearchPanel.propTypes = {
   params: PropTypes.array,
+  targets: PropTypes.array,
+  hasDefaultTarget: PropTypes.bool,
+  initialTarget: PropTypes.string,
   onChange: PropTypes.func
+};
+
+SearchPanel.defaultProps = {
+  hasDefaultTarget: true,
+  initialTarget: 'all',
+  targets: []
 };
 
 export default SearchPanel;

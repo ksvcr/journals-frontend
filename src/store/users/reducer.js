@@ -8,7 +8,12 @@ const initialState = {
   isRejected: false,
   data: {},
   ids: [],
-  searchData: {}
+  searchData: {},
+  total: 0,
+  paginate: {
+    limit: 5,
+    offset: 0,
+  }
 };
 
 function users(state = initialState, action) {
@@ -16,9 +21,10 @@ function users(state = initialState, action) {
     case `${FETCH_USERS}_PENDING`:
     case `${SEARCH_USERS}_PENDING`:
     case `${CREATE_USER}_PENDING`:
-    case `${FETCH_USER}_PENDING`:   
+    case `${FETCH_USER}_PENDING`:
       return { ...state,
-        isPending: true
+        isPending: true,
+        ...action.meta
       };
 
     case `${FETCH_USERS}_REJECTED`:
@@ -37,6 +43,7 @@ function users(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        total: action.payload.count,
         ...entity
       };
 
