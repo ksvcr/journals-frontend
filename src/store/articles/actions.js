@@ -75,7 +75,7 @@ export function createArticle(siteId, data) {
 
 export function editArticle(id, data) {
   return (dispatch) => {
-    let { content_blocks, financing_sources, ...articleData } = data;
+    let { content_blocks, financing_sources, sources, ...articleData } = data;
     let financingPromises = [];
 
     if (financing_sources) {
@@ -95,9 +95,20 @@ export function editArticle(id, data) {
       }
 
       return apiClient.lockArticle(id).then(() => {
-        const editPromises = [apiClient.editArticle(id, articleData)];
+        let editPromises = [apiClient.editArticle(id, articleData)];
         if (content_blocks) {
           editPromises.push(apiClient.editBlocks(id, content_blocks));
+        }
+
+        // Список литературы
+        if (sources) {
+          const newSourcesArray = sources.filter(item => item.id === undefined);
+          const oldSourcesArray = sources.filter(item => item.id !== undefined);
+
+          const createSourcesPromise = apiClient.createSources(id, newSourcesArray);
+          const editSourcesPromises = oldSourcesArray.map(item => apiClient.editFinancingSource(id, item));
+
+          editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises ]
         }
 
         return Promise.all(editPromises);

@@ -51,7 +51,7 @@ class ArticleCommonForm extends Component {
     const { languagesArray } = this.props;
     return languagesArray.map(item => ({
       title: item.name,
-      value: item.id
+      value: item.twochar_code
     }));
   }
 

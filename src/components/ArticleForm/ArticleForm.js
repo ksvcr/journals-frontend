@@ -127,7 +127,7 @@ const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
   const { user, articles } = state;
-  const { id } = props;
+  const { id='new' } = props;
   const formName = `${FORM_NAME_BASE}-${id}`;
   const isInvalidForm = isInvalid(formName)(state);
   const formValues = getFormValues(formName)(state);
@@ -205,10 +205,6 @@ function getInitialValues(state, props) {
 
   return initialValues;
 }
-
-ArticleForm.defaultProps = {
-  id: 'new'
-};
 
 ArticleForm.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
