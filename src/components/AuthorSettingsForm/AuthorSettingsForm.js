@@ -21,18 +21,19 @@ class AuthorSettingsForm extends Component {
   renderRoleFields = () => {
     const { userData } = this.props;
     const { role } = userData;
+    const isDisabled = Boolean(~['CORRECTOR', 'TRANSLATOR'].indexOf(role));
     const isFullAccess = Boolean(~['CORRECTOR', 'TRANSLATOR', 'REDACTOR'].indexOf(role));
     const roles = isFullAccess ? Object.keys(roleMap) : ['AUTHOR', 'REVIEWER'];
     return roles.map((item) => (
-      <Field key={ item } name="role" value={ item } type="radio" component={ Radio }>
+      <Field disabled={ isDisabled } key={ item } name="role" value={ item }
+             type="radio" component={ Radio }>
         { getUserRoleTitle(item) }
       </Field>
     ))
   };
 
   get isCurrentUser() {
-    const { userId } = this.props;
-    return !userId;
+    return !this.props.userId;
   }
 
   render() {
