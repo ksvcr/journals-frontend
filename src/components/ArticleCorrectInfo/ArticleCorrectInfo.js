@@ -6,7 +6,7 @@ import TagEditor from '~/components/TagEditor/TagEditor';
 
 import * as articlesActions from '~/store/articles/actions';
 
-import getArticleTypes from '../../services/getArticleTypes';
+import getArticleTypes from '~/services/getArticleTypes';
 
 import './article-correct-info.scss';
 

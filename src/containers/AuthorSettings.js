@@ -16,8 +16,13 @@ class AuthorSettings extends Component {
   }
 
   handleSubmit = (data) => {
-    const { updateCurrentUser } = this.props;
-    updateCurrentUser(data);
+    const { updateCurrentUser, updateUser, userId } = this.props;
+
+    if (userId) {
+      updateUser(userId, data);
+    } else {
+      updateCurrentUser(data);
+    }
   };
 
   render() {
@@ -41,7 +46,8 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   updateCurrentUser: userActions.updateCurrentUser,
-  fetchUser: usersActions.fetchUser
+  fetchUser: usersActions.fetchUser,
+  updateUser: usersActions.updateUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

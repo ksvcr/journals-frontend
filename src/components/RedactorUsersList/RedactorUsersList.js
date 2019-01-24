@@ -14,6 +14,7 @@ import { getUsersArray } from '~/store/users/selector';
 import * as userRoles from '~/services/userRoles';
 
 import './redactor-users-list.scss';
+import apiClient from '~/services/apiClient';
 
 class RedactorUsersList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
@@ -61,8 +62,10 @@ class RedactorUsersList extends Component {
     push(`/settings/${userId}`);
   };
 
-  handleUserBlock = (userId) => {
-
+  handleUserLock = (userId) => {
+    const { usersData } = this.props;
+    const { email } = usersData[userId];
+    return apiClient.lockUser({ email });
   };
 
 
@@ -78,7 +81,7 @@ class RedactorUsersList extends Component {
       },
       {
         title: 'Заблокировать',
-        handler: this.handleUserBlock
+        handler: this.handleUserLock
       }
     ];
   }
@@ -138,9 +141,10 @@ RedactorUsersList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { user, users } = state;
   return {
     currentUserId: user.data.id,
+    usersData: users.data,
     usersArray: getUsersArray(state)
   }
 }
