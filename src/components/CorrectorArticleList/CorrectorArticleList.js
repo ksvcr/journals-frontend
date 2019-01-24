@@ -100,11 +100,8 @@ class CorrectorArticleList extends Component {
           sort: '',
           head: () => 'Знаков',
           render: (data) => {
-            return data.content_blocks.reduce((count, block) => {
-              return count + block.content.blocks.reduce((textCount, textBlock) => {
-                return textCount + textBlock.text.length;
-              }, 0);
-            }, 0);
+            // TODO: Количество символов из апи
+            return data.count || 0;
           }
         },
         {
