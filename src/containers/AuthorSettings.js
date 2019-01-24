@@ -4,21 +4,44 @@ import { connect } from 'react-redux';
 import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsForm';
 
 import * as userActions from '~/store/user/actions';
+import * as usersActions from '~/store/users/actions';
 
 class AuthorSettings extends Component {
+  componentDidMount() {
+    const { fetchUser, userId } = this.props;
+
+    if (userId) {
+      fetchUser(userId);
+    }
+  }
+
   handleSubmit = (data) => {
-    const { dispatch } = this.props;
-    dispatch(userActions.updateCurrentUser(data));
+    const { updateCurrentUser } = this.props;
+    updateCurrentUser(data);
   };
 
   render() {
+    const { userId } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">Настройки</h1>
-        <AuthorSettingsForm formName="author-settings-form" onSubmit={ this.handleSubmit } />
+        <AuthorSettingsForm userId={ userId } onSubmit={ this.handleSubmit } />
       </React.Fragment>
     );
   }
 }
 
-export default connect()(AuthorSettings);
+function mapStateToProps(state, props) {
+  const { match } = props;
+
+  return {
+    userId: match.params.userId
+  }
+}
+
+const mapDispatchToProps = {
+  updateCurrentUser: userActions.updateCurrentUser,
+  fetchUser: usersActions.fetchUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

@@ -23,6 +23,7 @@ const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER', '
 const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR']);
 const ArticleCorrectWithAccess = RoleAccess(ArticleCorrect, ['CORRECTOR']);
 const RedactorUsersWithAccess = RoleAccess(RedactorUsers, ['REDACTOR']);
+const AuthorSettingsWithAccess = RoleAccess(AuthorSettings, ['REDACTOR']);
 
 const routes = () => (
   <Page>
@@ -36,6 +37,7 @@ const routes = () => (
       <Route path="/article/:articleId/correct" component={ ArticleCorrectWithAccess }/>
       <Route path="/articles-for-review" component={ ArticlesForReviewWithAccess } />
       <Route path="/users" component={ RedactorUsersWithAccess } />
+      <Route path="/settings/:userId" component={ AuthorSettingsWithAccess } />
       <Route path="/settings" component={ AuthorSettings } />
       <Route path="/discounts" component={ Discounts } />
       <Route component={ NotFound } />

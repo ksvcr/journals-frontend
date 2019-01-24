@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -24,6 +25,14 @@ class RedactorUsersList extends Component {
     createUserTag(user, tagData);
   };
 
+  handleChangeRole = (roles) => {
+    const { onUpdateRequest } = this.props;
+    // Сейчас API не поддерживает передачу нескольких ролей (с 1 ролью все работает хорошо)
+    // TODO: возможно придется заменить checkbox на radio
+    const role = roles.join(',');
+    onUpdateRequest({ filter: { role } });
+  };
+
   renderBox = (data) => {
     const { removeUserTag } = this.props;
     return (
@@ -36,26 +45,50 @@ class RedactorUsersList extends Component {
     );
   };
 
-  handleChangeRole = (roles) => {
-    const { onUpdateRequest } = this.props;
-    // Сейчас API не поддерживает передачу нескольких ролей (с 1 ролью все работает хорошо)
-    // TODO: возможно придется заменить checkbox на radio
-    const role = roles.join(',');
-    onUpdateRequest({ filter: { role } });
-  };
-
   get roleFilterOptions() {
-    return Object.keys(userRoles.roleMap).map((key) => ({
+    return Object.keys(userRoles.roleMap).slice(0, 2).map((key) => ({
       title: userRoles.getUserRoleTitle(key),
       value: key
     }));
   }
 
+  handleUserMail = (userId) => {
+    // Send message to user
+  };
+
+  handleUserShow = (userId) => {
+    const { push } = this.props;
+    push(`/settings/${userId}`);
+  };
+
+  handleUserBlock = (userId) => {
+
+  };
+
+
+  get toolsMenuItems() {
+    return [
+      {
+        title: 'Написать',
+        handler: this.handleUserMail
+      },
+      {
+        title: 'Войти',
+        handler: this.handleUserShow
+      },
+      {
+        title: 'Заблокировать',
+        handler: this.handleUserBlock
+      }
+    ];
+  }
+
+
   get listProps() {
     const { usersArray } = this.props;
     return {
       data: usersArray,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ [] } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
       head: true,
       box: this.renderBox,
       cells: [
@@ -114,7 +147,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   createUserTag : usersActions.createUserTag,
-  removeUserTag : usersActions.removeUserTag
+  removeUserTag : usersActions.removeUserTag,
+  push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RedactorUsersList);

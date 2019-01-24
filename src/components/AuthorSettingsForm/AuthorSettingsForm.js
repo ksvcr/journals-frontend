@@ -249,16 +249,18 @@ class AuthorSettingsForm extends Component {
 }
 
 AuthorSettingsForm = reduxForm({
-  destroyOnUnmount: true
+  destroyOnUnmount: true,
+  enableReinitialize: true
 })(AuthorSettingsForm);
 
 function mapStateToProps(state, props) {
-  const { formName } = props;
-  const { user } = state;
-
+  const { userId } = props;
+  const { user, users } = state;
+  const initialValues = userId ? users.data[userId] : user.data;
+  const formName = userId ? `author-settings-form-${userId}` : 'author-settings-form';
   return {
     form: formName,
-    initialValues: user.data,
+    initialValues
   };
 }
 
