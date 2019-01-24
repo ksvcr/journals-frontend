@@ -31,14 +31,6 @@ import './assets/save.svg';
 class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
     const { field, onSubmit } = this.props;
-    // Для многотомного и Однотомного изданий принимается массив авторов
-    // const multiAuthorsFields = ['SourceMultiVolumeBook', 'SourceElectronic'];
-    // if (!!~multiAuthorsFields.indexOf(formData.resourcetype)) {
-    //   formData.author = [{ id: 1, initials: 'П. И.', lastname: formData.author }];
-    // }
-
-    formData.author = { initials: formData.initials, lastname: formData.lastname };
-
     onSubmit(field, { ...formData, isValid: true });
   };
 
@@ -61,10 +53,10 @@ class ArticleSourceCreateForm extends Component {
   get thesisCategories() {
     return [{
       title: 'Кандидатская',
-      value: 1,
+      value: '1',
     }, {
       title: 'Докторская',
-      value: 2
+      value: '2'
     }]
   }
 
@@ -78,7 +70,7 @@ class ArticleSourceCreateForm extends Component {
   };
 
   fetchCountries = (value) => {
-    return apiClient.getCountries({ name: value, limit: 5});
+    return apiClient.getCountries({ name: value, limit: 5 });
   };
 
   get specialFields() {
@@ -198,6 +190,8 @@ ArticleSourceCreateForm = reduxForm({
   destroyOnUnmount: false
 })(ArticleSourceCreateForm);
 
+const defaultDate = moment().format('YYYY-MM-DD');
+
 function mapStateToProps(state, props) {
   const { formName, data } = props;
   const { user } = state;
@@ -215,18 +209,18 @@ function mapStateToProps(state, props) {
     resourceType,
     rightholderType,
     initialValues: {
-      language: languagesArray.length ? languagesArray[0].twochar_code : null,
+      language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
-      // defense_country: 132, // Россия
-      defense_date: moment().format('YYYY-MM-DD'),
-      statement_date: moment().format('YYYY-MM-DD'),
-      standart_entry_date: moment().format('YYYY-MM-DD'),
-      adoption_date: moment().format('YYYY-MM-DD'),
-      approval_date: moment().format('YYYY-MM-DD'),
-      patent_application_date: moment().format('YYYY-MM-DD'),
-      publication_date: moment().format('YYYY-MM-DD'),
+      category: '1', // id Категории
+      defense_date: defaultDate,
+      statement_date: defaultDate,
+      standart_entry_date: defaultDate,
+      adoption_date: defaultDate,
+      approval_date: defaultDate,
+      patent_application_date: defaultDate,
+      publication_date: defaultDate,
       ...data
     },
     isCorrector: user.data.role === 'CORRECTOR'
