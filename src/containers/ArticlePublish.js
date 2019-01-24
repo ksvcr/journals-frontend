@@ -60,8 +60,9 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { siteId, articleId, createArticle, editArticle, push } = this.props;
-    const data = serializeArticleData({ ...formData, state_article: 'SENT' });
+    const { siteId, articleId, userRole, createArticle, editArticle, push } = this.props;
+    const state = userRole === 'CORRECTOR' ? 'AWAIT_TRANSLATE' : 'SENT';
+    const data = serializeArticleData({ ...formData, state_article: state });
 
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
@@ -103,20 +104,25 @@ class ArticlePublish extends Component {
                            articleStatus === 'REVISION' ||
                            articleStatus === 'AWAIT_REDACTOR';
     const isEdit = articleId !== undefined;
+    const editText = userRole === 'CORRECTOR' ? 'Правка статьи' : 'Редактировать статью';
+    const isShowSiteChange = userRole === 'AUTHOR';
+    const isShowArticleInfo = Boolean(~['REDACTOR', 'CORRECTOR'].indexOf(userRole)) && isEdit;
 
     return isFulfilled && (
       <React.Fragment>
-        <ArticleTopTools>
-          <CancelLink />
-          <PreviewLink href="/article/new" />
-        </ArticleTopTools>
+        { !isEdit &&
+          <ArticleTopTools>
+            <CancelLink />
+            <PreviewLink href="/article/new" />
+          </ArticleTopTools>
+        }
 
         <h1 className="page__title">
-          { isEdit ? 'Опубликовать статью' : 'Редактировать статью' }
+          { isEdit ? editText : 'Опубликовать статью' }
         </h1>
 
         <div className="page__tools">
-          { userRole === 'AUTHOR' &&
+          { isShowSiteChange &&
             <form className="form">
               <div className="form__field">
                 <label htmlFor="sites-list" className="form__label">Для журнала</label>
@@ -125,9 +131,8 @@ class ArticlePublish extends Component {
             </form>
           }
 
-          { isEdit && userRole === 'REDACTOR' &&
-            <ArticleInfo id={ articleId } specData={ this.articleInfo }
-                         tags={ articleData.tags } />
+          { isShowArticleInfo &&
+            <ArticleInfo id={ articleId } />
           }
         </div>
 
@@ -155,7 +160,6 @@ function mapStateToProps(state, props) {
   const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled && sites.isFulfilled;
   return {
     siteId: sites.current,
-    sitesData: sites.data,
     userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),

@@ -6,7 +6,6 @@ import Page from '~/containers/Page';
 import RoleAccess from '~/containers/RoleAccess';
 import Articles from '~/containers/Articles';
 import ArticlePublish from '~/containers/ArticlePublish';
-import ArticleCorrect from '~/containers/ArticleCorrect';
 import ArticlePreview from '~/containers/ArticlePreview';
 import ArticleTranslate from '~/containers/ArticleTranslate';
 import AuthorSettings from '~/containers/AuthorSettings';
@@ -20,7 +19,7 @@ const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 
 const ReviewCreateWithAccess = RoleAccess(ReviewCreate, ['REVIEWER', 'REDACTOR']);
 const ArticlesForReviewWithAccess = RoleAccess(ArticlesForReview, ['REVIEWER', 'REDACTOR']);
 const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR']);
-const ArticleCorrectWithAccess = RoleAccess(ArticleCorrect, ['CORRECTOR']);
+const ArticleCorrectWithAccess = RoleAccess(ArticlePublish, ['CORRECTOR']);
 
 const routes = () => (
   <Page>
