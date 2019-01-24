@@ -1,65 +1,72 @@
 import React, {Component} from 'react';
-import {Field} from 'redux-form';
+import { connect } from 'react-redux';
+import {Field, getFormValues, reduxForm} from 'redux-form';
 
-import ToggleItem from '~/components/ToggleItem/ToggleItem';
+import FieldHint from '~/components/FieldHint/FieldHint';
 import TextField from '~/components/TextField/TextField';
 
+import './reviews-dialog.scss';
 
 class ReviewsDialog extends Component {
-  renderList = () => {
-    const newArray = this.reviewsArray;
-
-    return newArray.map((array, index) => {
-      return array.map((item, i) => (
-        <ToggleItem key={ i } title={ index+1 + ' рецензент' }>
-          <div className="reviews-dialog__comment">
-            { item.comment_for_author }
-          </div>          
-          <div className="reviews-dialog__answer">
-            <form action="">
-              <div className="form__field">
-                <label htmlFor="" className="form__label">
-                  ваш ответ (будет опубликован вместе со статьей)
-                </label>
-                {/*<Field name="" id="" textarea minRows={ 2 } component={ TextField }*/}
-                       {/*placeholder="Введите аннотацию" />*/}
-              </div>
-              <button>Ответить</button>
-            </form>
-          </div>
-        </ToggleItem>
-      ));
-    });
+  handleSubmit = (event) => {
+    const { onSubmit, formValues, item } = this.props;
+    const { id } = item;
+    event.preventDefault();
+    console.log(formValues);
+    onSubmit(id, formValues);
   };
 
-  get reviewsArray() {
-    const { reviews } = this.props;
-    let newArray = [];
-
-    this.reviewersIdsArray.forEach((id) => {
-      const reviewsByAuthor = reviews.filter(review => review.reviewer === id);
-      newArray.push(reviewsByAuthor);
-    });
-
-    return newArray;
-  }
-
-  get reviewersIdsArray() {
-    const { reviews } = this.props;
-    let reviewers = [];
-    reviews.map(item => reviewers.push(item.reviewer));
-    //get unique values
-    reviewers = reviewers.filter((v, i, a) => a.indexOf(v) === i);
-    return reviewers;
-  }
-
   render() {
+    const { item } = this.props;
+
     return (
-      <div className="reviews-dialog">
-        { this.renderList() }
-      </div>
+      <form className="reviews-dialog" onSubmit={ this.handleSubmit }>
+        <div className="reviews-dialog__comment">
+          { item.comment_for_author }
+        </div>
+        <div className="reviews-dialog__answer">
+          <div className="form__field">
+            <label htmlFor="author_answer" className="form__label">
+              ваш ответ (будет опубликован вместе со статьей)
+              <FieldHint text={'Когда статья будет опубликована в журнале, в ее составе ' +
+              'будет текст рецензии и ваш ответ на нее'} />
+            </label>
+            <Field name="author_answer" id="author_answer" textarea minRows={ 5 } component={ TextField }
+                   placeholder="Введите Ваш ответ" />
+          </div>
+          <button className="reviews-dialog__button" type="submit">Ответить</button>
+        </div>
+      </form>
     );
   }
 }
 
-export default ReviewsDialog;
+ReviewsDialog = reduxForm({
+  destroyOnUnmount: false
+})(ReviewsDialog);
+
+function mapStateToProps(state, props) {
+  const { formName } = props;
+  const formValues = getFormValues(formName)(state);
+
+  return {
+    form: formName,
+    formValues,
+    initialValues: getInitialValues(props),
+  };
+}
+
+function getInitialValues(props) {
+  const { item } = props;
+  const { article, reviewer, review_round } = item;
+
+  const initialValues = {
+    article,
+    reviewer,
+    review_round,
+  };
+
+  return initialValues;
+}
+
+export default connect(mapStateToProps)(ReviewsDialog);

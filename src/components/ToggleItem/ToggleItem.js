@@ -16,6 +16,10 @@ class ToggleItem extends Component {
     this.setState({ isOpen: !isOpen });
   };
 
+  handleConentClick = (event) => {
+    event.stopPropagation();
+  };
+
   render() {
     const { title, className } = this.props;
     const { isOpen } = this.state;
@@ -31,7 +35,7 @@ class ToggleItem extends Component {
           </div>
           <Icon name="arrow" className="toggle-item__arrow" />
         </div>
-        <div className="toggle-item__content">
+        <div className="toggle-item__content" onClick={ this.handleConentClick }>
           { this.props.children }
         </div>
       </div>

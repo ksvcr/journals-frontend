@@ -10,6 +10,7 @@ import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 
+import * as articlesActions from '../../store/articles/actions';
 import * as validate from '~/utils/validate';
 
 import './review-create-form.scss';
@@ -62,6 +63,12 @@ class ReviewCreateForm extends Component {
     change('recommendation', value);
   };
 
+  handleEditReview = ({articleId, reviewId, data}) => {
+    const { editArticleReview } = this.props;
+    const { review_round, reviewer } =  this.props;
+    return editArticleReview(articleId, reviewId, data);
+  };
+
   render() {
     const { articleData, handleSubmit, recommendation, currentUserId } = this.props;
     const reviews = articleData && articleData.reviews.filter((item) => item.reviewer === currentUserId);
@@ -78,8 +85,8 @@ class ReviewCreateForm extends Component {
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
         </div>
 
-        { recommendation === 2 &&
-          <ReviewsHistory reviews={ reviews } />
+        { recommendation === 2 && reviews.length > 0 &&
+          <ReviewsHistory reviews={ reviews } onSubmit={ this.handleEditReview }/>
         }
 
         <div className="form__field">
@@ -136,6 +143,11 @@ function mapStateToProps(state, props) {
   };
 }
 
+const mapDispatchToProps = {
+  editArticleReview: articlesActions.editArticleReview
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(ReviewCreateForm);

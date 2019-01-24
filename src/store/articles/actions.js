@@ -1,6 +1,6 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
-  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW,
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
   CREATE_ARTICLE_TRANSLATION
 } from './constants';
 import apiClient from '~/services/apiClient';
@@ -153,12 +153,22 @@ export function inviteArticleReviewer(articleId, data) {
 
 export function createArticleReview(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.createArticleReview(articleId, data);;
+    const payload = apiClient.createArticleReview(articleId, data);
     return dispatch({
       type: CREATE_ARTICLE_REVIEW,
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function editArticleReview(articleId, reviewId, data) {
+  return (dispatch) => {
+    const payload = apiClient.editArticleReview(articleId, reviewId, data);
+    return dispatch({
+      type: EDIT_ARTICLE_REVIEW,
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function acceptArticleReviewInvite(articleId) {

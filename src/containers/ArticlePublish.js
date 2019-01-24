@@ -7,7 +7,7 @@ import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import CancelLink from '~/components/CancelLink/CancelLink';
 import PreviewLink from '~/components/PreviewLink/PreviewLink';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
-import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';
+import ReviewsDialogList from '~/components/ReviewsDialogList/ReviewsDialogList';
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 
 import * as languagesActions from '~/store/languages/actions';
@@ -81,6 +81,12 @@ class ArticlePublish extends Component {
     }
   };
 
+  handleEditArticleReview = (reviewId, formData) => {
+    const { articleId, editArticleReview } = this.props;
+    console.log(articleId, reviewId, formData);
+    editArticleReview(articleId, reviewId, formData);
+  };
+
   get articleInfo() {
     const { articleData, sitesData } = this.props;
     return [
@@ -127,7 +133,8 @@ class ArticlePublish extends Component {
 
         {
           isStatusRework &&
-            <ReviewsDialog reviews={ articleData.reviews }/>
+            <ReviewsDialogList articleId={ articleId } reviews={ articleData.reviews }
+                               onSubmit={ this.handleEditArticleReview }/>
         }
 
         <ArticleForm id={ articleId }
@@ -167,6 +174,7 @@ const mapDispatchToProps = {
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,
+  editArticleReview: articlesActions.editArticleReview
 };
 
 export default connect(
