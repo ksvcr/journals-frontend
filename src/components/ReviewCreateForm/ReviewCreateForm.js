@@ -10,7 +10,6 @@ import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 
-import * as articlesActions from '../../store/articles/actions';
 import * as validate from '~/utils/validate';
 
 import './review-create-form.scss';
@@ -49,10 +48,11 @@ class ReviewCreateForm extends Component {
   }
 
   get commentForAuthorLabel() {
-    const { recommendation } = this.props;
+    const { reviews, recommendation } = this.props;
     let label = 'Текст рецензии';
+    const review_round = reviews.length + 1;
     if (recommendation !== 1) {
-      label = 'Замечания после первого раунда рецензирования';
+      label = `Замечания после ${review_round} раунда рецензирования`;
     }
     return label;
   }
@@ -63,15 +63,8 @@ class ReviewCreateForm extends Component {
     change('recommendation', value);
   };
 
-  handleEditReview = ({articleId, reviewId, data}) => {
-    const { editArticleReview } = this.props;
-    const { review_round, reviewer } =  this.props;
-    return editArticleReview(articleId, reviewId, data);
-  };
-
   render() {
-    const { articleData, handleSubmit, recommendation, currentUserId } = this.props;
-    const reviews = articleData && articleData.reviews.filter((item) => item.reviewer === currentUserId);
+    const { articleData, handleSubmit, recommendation, reviews } = this.props;
 
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
@@ -86,7 +79,7 @@ class ReviewCreateForm extends Component {
         </div>
 
         { recommendation === 2 && reviews.length > 0 &&
-          <ReviewsHistory reviews={ reviews } onSubmit={ this.handleEditReview }/>
+          <ReviewsHistory reviews={ reviews } />
         }
 
         <div className="form__field">
@@ -127,7 +120,7 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles, user } = state;
+  const { articles } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
@@ -136,18 +129,12 @@ function mapStateToProps(state, props) {
     push,
     articleData,
     recommendation,
-    currentUserId: user.data.id,
     initialValues: {
       recommendation: 1
     }
   };
 }
 
-const mapDispatchToProps = {
-  editArticleReview: articlesActions.editArticleReview
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(ReviewCreateForm);

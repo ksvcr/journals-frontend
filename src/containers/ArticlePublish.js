@@ -84,7 +84,6 @@ class ArticlePublish extends Component {
 
   handleEditArticleReview = (reviewId, formData) => {
     const { articleId, editArticleReview } = this.props;
-    console.log(articleId, reviewId, formData);
     editArticleReview(articleId, reviewId, formData);
   };
 
@@ -101,8 +100,7 @@ class ArticlePublish extends Component {
   render() {
     const { articleId, isFulfilled, articleStatus, userRole, articleData } = this.props;
     const isStatusRework = articleStatus === 'PRELIMINARY_REVISION' ||
-                           articleStatus === 'REVISION' ||
-                           articleStatus === 'AWAIT_REDACTOR';
+                           articleStatus === 'REVISION';
     const isEdit = articleId !== undefined;
     const editText = userRole === 'CORRECTOR' ? 'Правка статьи' : 'Редактировать статью';
     const isShowSiteChange = userRole === 'AUTHOR';

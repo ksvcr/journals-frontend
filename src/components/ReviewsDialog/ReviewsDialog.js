@@ -9,34 +9,40 @@ import './reviews-dialog.scss';
 
 class ReviewsDialog extends Component {
   handleSubmit = (event) => {
-    const { onSubmit, formValues, item } = this.props;
-    const { id } = item;
+    const { onSubmit, formValues } = this.props;
+    const { id } = this.props.item;
     event.preventDefault();
-    console.log(formValues);
     onSubmit(id, formValues);
   };
 
   render() {
     const { item } = this.props;
+    const isAnswered = item.author_answer;
 
     return (
-      <form className="reviews-dialog" onSubmit={ this.handleSubmit }>
+      <div className="reviews-dialog">
         <div className="reviews-dialog__comment">
           { item.comment_for_author }
         </div>
-        <div className="reviews-dialog__answer">
-          <div className="form__field">
-            <label htmlFor="author_answer" className="form__label">
-              ваш ответ (будет опубликован вместе со статьей)
-              <FieldHint text={'Когда статья будет опубликована в журнале, в ее составе ' +
-              'будет текст рецензии и ваш ответ на нее'} />
-            </label>
-            <Field name="author_answer" id="author_answer" textarea minRows={ 5 } component={ TextField }
-                   placeholder="Введите Ваш ответ" />
-          </div>
-          <button className="reviews-dialog__button" type="submit">Ответить</button>
-        </div>
-      </form>
+        {
+          isAnswered ?
+          <div className="reviews-dialog__comment">
+            <b>Ваш ответ:</b> { item.author_answer }
+          </div> :
+          <form className="reviews-dialog__answer" onSubmit={ this.handleSubmit }>
+            <div className="form__field">
+              <label htmlFor="author_answer" className="form__label">
+                ваш ответ (будет опубликован вместе со статьей)
+                <FieldHint text={'Когда статья будет опубликована в журнале, в ее составе ' +
+                'будет текст рецензии и ваш ответ на нее'} />
+              </label>
+              <Field name="author_answer" id="author_answer" textarea minRows={ 5 } component={ TextField }
+                     placeholder="Введите Ваш ответ" />
+            </div>
+            <button className="reviews-dialog__button" type="submit">Ответить</button>
+          </form>
+        }
+      </div>
     );
   }
 }
@@ -57,8 +63,7 @@ function mapStateToProps(state, props) {
 }
 
 function getInitialValues(props) {
-  const { item } = props;
-  const { article, reviewer, review_round } = item;
+  const { article, reviewer, review_round } = props.item;
 
   const initialValues = {
     article,

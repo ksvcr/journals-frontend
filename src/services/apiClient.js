@@ -96,7 +96,7 @@ const apiClient = {
 
   createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data }),
   editArticleReview: (articleId, reviewId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/`, {method: 'post', data})
+    return fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/`, { method: 'put', data })
   },
 };
 

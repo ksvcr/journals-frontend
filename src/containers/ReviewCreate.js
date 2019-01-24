@@ -20,8 +20,7 @@ class ReviewCreate extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, currentUserId, createArticleReview, push, reviews } = this.props;
-    const reviewsFromCurrentUser = reviews.filter((item) => item.reviewer === currentUserId);
+    const { articleId, currentUserId, createArticleReview, push, reviewsFromCurrentUser } = this.props;
     const review_round = reviewsFromCurrentUser.length + 1;
 
     const data = { ...formData,
@@ -34,14 +33,14 @@ class ReviewCreate extends Component {
   };
 
   render() {
-    const { articleId } = this.props;
+    const { articleId, reviewsFromCurrentUser } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
           Новая рецензия
         </h1>
 
-        <ReviewCreateForm id={ articleId } onSubmit={ this.handleSubmit } />
+        <ReviewCreateForm id={ articleId } onSubmit={ this.handleSubmit } reviews={ reviewsFromCurrentUser }/>
       </React.Fragment>
     )
   }
@@ -52,11 +51,13 @@ function mapStateToProps(state, props) {
   const { user, articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
+  const currentUserId = user.data.id;
   const reviews = articles.data[articleId] ? articles.data[articleId].reviews : [];
+  const reviewsFromCurrentUser = reviews.filter((item) => item.reviewer === currentUserId);
   return {
     articleId,
-    currentUserId: user.data.id,
-    reviews
+    currentUserId,
+    reviewsFromCurrentUser
   };
 }
 
