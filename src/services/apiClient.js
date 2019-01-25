@@ -27,8 +27,10 @@ const apiClient = {
 
   createSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
-  editSources: (articleId, data) =>
-    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/update`, { method: 'put', data }),
+  editSource: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/update/`, { method: 'put', data }),
+  removeSource: (articleId, sourceId) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${sourceId}/update/`, { method: 'delete' }),
 
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';

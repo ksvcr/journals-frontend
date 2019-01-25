@@ -31,7 +31,7 @@ import './assets/save.svg';
 class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
     const { field, onSubmit } = this.props;
-    onSubmit(field, { ...formData, isValid: true });
+    onSubmit(field, formData);
   };
 
   get rubricsOptions() {
@@ -186,9 +186,7 @@ class ArticleSourceCreateForm extends Component {
   }
 }
 
-ArticleSourceCreateForm = reduxForm({
-  destroyOnUnmount: false
-})(ArticleSourceCreateForm);
+ArticleSourceCreateForm = reduxForm()(ArticleSourceCreateForm);
 
 const defaultDate = moment().format('YYYY-MM-DD');
 
