@@ -6,15 +6,15 @@ import { push } from 'connected-react-router';
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
-import CheckboxFilter from '~/components/CheckboxFilter/CheckboxFilter';
+import ListChecker from '~/components/ListChecker/ListChecker';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersArray } from '~/store/users/selector';
 
 import * as userRoles from '~/services/userRoles';
+import apiClient from '~/services/apiClient';
 
 import './redactor-users-list.scss';
-import apiClient from '~/services/apiClient';
 
 class RedactorUsersList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
@@ -26,12 +26,10 @@ class RedactorUsersList extends Component {
     createUserTag(user, tagData);
   };
 
-  handleChangeRole = (roles) => {
+  handleChangeRole = (name, data) => {
     const { onUpdateRequest } = this.props;
-    // Сейчас API не поддерживает передачу нескольких ролей (с 1 ролью все работает хорошо)
-    // TODO: возможно придется заменить checkbox на radio
-    const role = roles.join(',');
-    onUpdateRequest({ filter: { role } });
+
+    onUpdateRequest({ filter: { [name]: data.join() } });
   };
 
   renderBox = (data) => {
@@ -48,7 +46,7 @@ class RedactorUsersList extends Component {
 
   get roleFilterOptions() {
     return Object.keys(userRoles.roleMap).slice(0, 2).map((key) => ({
-      title: userRoles.getUserRoleTitle(key),
+      label: userRoles.getUserRoleTitle(key),
       value: key
     }));
   }
@@ -109,7 +107,7 @@ class RedactorUsersList extends Component {
           },
           isMain: true,
           head: () => 'Роль',
-          headToolTip: () => <CheckboxFilter onChange={ this.handleChangeRole } options={ this.roleFilterOptions } />,
+          headToolTip: () => <ListChecker name="role" onChange={ this.handleChangeRole } data={ this.roleFilterOptions } />,
           render: ({ role }) => (
             <div className="redactor-users-list__role">
               { userRoles.getUserRoleTitle(role) }
