@@ -2,7 +2,7 @@
   margin: 50px 0 40px;
 
   &__content {
-    padding: 48px 0 70px;
+    padding: 16px 0 21px;
   }
 
   &__review {
@@ -10,14 +10,14 @@
     border: 2px solid #E3E3E3;
     box-sizing: border-box;
     border-radius: 6px;
-    padding: 44px;
+    padding: 37px 44px 52px;
   }
 
   &__answer {
     margin-top: 22px;
     background: #F6F6F6;
     border-radius: 6px;
-    padding: 44px;
+    padding: 37px 44px 52px;
   }
 
   &__title {
@@ -31,5 +31,16 @@
     line-height: 32px;
     font-size: 16px;
     color: #131313;
+    margin-top: 17px;
+  }
+
+  &__author {
+    background: #DEDDDD;
+    border-radius: 6px;
+    padding: 3px 6px;
+    font-size: 12px;
+    color: #262422;
+    display: inline-block;
+    margin: 7px 0 0 -6px;
   }
 }

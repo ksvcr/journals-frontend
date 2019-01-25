@@ -64,7 +64,7 @@ class ReviewCreateForm extends Component {
   };
 
   render() {
-    const { articleData, handleSubmit, recommendation, reviews } = this.props;
+    const { articleData, handleSubmit, recommendation, reviews, author } = this.props;
 
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
@@ -79,7 +79,7 @@ class ReviewCreateForm extends Component {
         </div>
 
         { recommendation === 2 && reviews.length > 0 &&
-          <ReviewsHistory reviews={ reviews } />
+          <ReviewsHistory reviews={ reviews } author={ author }/>
         }
 
         <div className="form__field">
@@ -120,10 +120,11 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles } = state;
+  const { articles, users } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
+  const author = users.data[articleData.author.user];
 
   return {
     push,
@@ -131,7 +132,8 @@ function mapStateToProps(state, props) {
     recommendation,
     initialValues: {
       recommendation: 1
-    }
+    },
+    author
   };
 }
 
