@@ -60,13 +60,22 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { siteId, articleId, userRole, createArticle, editArticle, push } = this.props;
+    const { siteId, articleId, userId, userRole, createArticle, editArticle, push } = this.props;
     const data = serializeArticleData(formData);
 
+    if (!data.conflict_interest) {
+      delete data.conflict_interest;
+    }
+
     if (articleId !== undefined) {
+      if (userId===data.author.user && data.state_article==='REVISION') {
+        data.state_article = 'MODIFIED';
+      } else if (userRole === 'CORRECTOR') {
+        data.state_article = 'AWAIT_TRANSLATE';
+      }
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
-      data.state_article = userRole === 'CORRECTOR' ? 'AWAIT_TRANSLATE' : 'SENT';
+      data.state_article = 'SENT';
       createArticle(siteId, data).then(() => { push('/'); });
     }
   };
@@ -159,6 +168,7 @@ function mapStateToProps(state, props) {
   const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled && sites.isFulfilled;
   return {
     siteId: sites.current,
+    userId: user.data.id,
     userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
