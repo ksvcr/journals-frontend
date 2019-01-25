@@ -6,10 +6,16 @@ import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 import InterestList from '~/components/InterestList/InterestList';
 import TagEditor from '~/components/TagEditor/TagEditor';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
+import Select from '~/components/Select/Select';
+import Checkbox from '~/components/Checkbox/Checkbox';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
+
 import { getUsersArray } from '~/store/users/selector';
+
+import getNoun from '~/utils/getNoun';
 
 import './redactor-reviewer-list.scss';
 import './assets/arrow.svg'
@@ -29,6 +35,16 @@ class RedactorReviewerList extends Component {
     const { currentUserId, createUserTag } = this.props;
     const tagData = { text, user, tag_author: currentUserId };
     createUserTag(user, tagData);
+  };
+
+  handleSearchChange = ({ search_query }) => {
+    const { fetchUsers } = this.props;
+    const data = {
+      role: 'REVIEWER',
+      search: search_query
+    };
+
+    fetchUsers(data);
   };
 
   get listProps() {
@@ -93,9 +109,64 @@ class RedactorReviewerList extends Component {
     );
   };
 
+  get countText() {
+    const { usersArray } = this.props;
+    const count = usersArray.length;
+    return getNoun(
+      count,
+      `Найден ${count} рецензент:`,
+      `Найдено ${count} рецензента:`,
+      `Найдено ${count} рецензентов:`
+    );
+  }
+
+  get selectTagsProps() {
+    // TODO: Добавить список тегов
+    return {
+      name: 'tags',
+      options: [],
+      onChange: (event) => {}
+    };
+  }
+
+  renderSearchBox = () => {
+    return (
+      <div className="redactor-reviewer-list__search-box">
+        <SearchPanel onChange={ this.handleSearchChange } />
+        <div className="form">
+          <div className="form__row">
+            <div className="form__col form__col_6">
+              <div className="form__field">
+                <label className="form__label">Искать по:</label>
+                <Select { ...this.selectTagsProps } />
+              </div>
+            </div>
+            <div className="form__col form__col_6 form__field form__field_inline">
+              <label className="form__label" />
+              <Checkbox name="strict">
+                Точное соответствие
+              </Checkbox>
+            </div>
+          </div>
+        </div>
+        <span className="redactor-reviewer-list__count">
+          { this.countText }
+        </span>
+      </div>
+    );
+  }
+
   render() {
+    const { onClose } = this.props;
     return (
       <div className="redactor-reviewer-list">
+        <Button onClick={ onClose } type="button"
+                className="button_small button_transparent redactor-reviewer-list__cancel">
+          Отмена
+        </Button>
+
+        { this.renderSearchBox() }
+
         <List { ...this.listProps } />
       </div>
     );
@@ -104,7 +175,6 @@ class RedactorReviewerList extends Component {
 
 function mapStateToProps(state) {
   const { user } = state;
-
   return {
     currentUserId: user.data.id,
     usersArray: getUsersArray(state)
@@ -113,8 +183,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   inviteArticleReviewer: articlesActions.inviteArticleReviewer,
-  createUserTag : usersActions.createUserTag,
-  removeUserTag : usersActions.removeUserTag
+  createUserTag: usersActions.createUserTag,
+  removeUserTag: usersActions.removeUserTag,
+  fetchUsers: usersActions.fetchUsers
 };
 
 export default connect(
