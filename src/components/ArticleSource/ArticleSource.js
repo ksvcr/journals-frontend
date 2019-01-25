@@ -21,7 +21,7 @@ class ArticleSource extends Component {
      }
      return `${result} ${item}`;
    }, '');
-   return `${lastname} ${initials} ${params}`;
+    return `${lastname} ${initials} ${params}`;
   }
 
   handleRemove = () => {

@@ -20,14 +20,17 @@ const apiClient = {
   },
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
 
-  createUserTag: (userId, data) => {
-    return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
-  },
-  removeUserTag: (userId, id) => {
-    return fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' });
-  },
+  createUserTag: (userId, data) =>
+    fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data }),
+  removeUserTag: (userId, id) =>
+    fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' }),
 
-  createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
+  createSources: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
+  editSource: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/update/`, { method: 'put', data }),
+  removeSource: (articleId, sourceId) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${sourceId}/update/`, { method: 'delete' }),
 
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
@@ -41,19 +44,14 @@ const apiClient = {
   editArticle: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
-  lockArticle: (articleId) => {
-    return fetchInstance.request(`/articles/${articleId}/lock/`);
-  },
-  createArticleAttachment: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data });
-  },
+  lockArticle: (articleId) => fetchInstance.request(`/articles/${articleId}/lock/`),
+  createArticleAttachment: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
 
-  createBlocks: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
-  },
-  editBlocks: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data });
-  },
+  createBlocks: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
+  editBlocks: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
 
   createFinancingSources: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
   getFinancingSource: (id) => {

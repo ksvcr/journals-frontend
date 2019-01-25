@@ -6,6 +6,8 @@ import {
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
+import differenceBy from 'lodash/differenceBy';
+
 export function fetchArticles(siteId, params={}) {
   return (dispatch) => {
     const flatParams = getFlatParams(params);
@@ -31,7 +33,7 @@ export function fetchArticle(id) {
 export function createArticle(siteId, data) {
   return (dispatch) => {
     let { content_blocks, sources, financing_sources, ...articleData } = data;
-    // Источников финансирования
+    // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
     const payload = financingPromise.then((financingResponse=[]) => {
       if (financingResponse.length) {
@@ -74,16 +76,18 @@ export function createArticle(siteId, data) {
 }
 
 export function editArticle(id, data) {
-  return (dispatch) => {
-    let { content_blocks, financing_sources, ...articleData } = data;
+  return (dispatch, state) => {
+    const prevArticleData = state().articles.data[id];
+    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    // Источники финансирования
     let financingPromises = [];
 
     if (financing_sources) {
-      const newFinancingArray = financing_sources.filter(item => item.id === undefined);
-      const oldFinancingArray = financing_sources.filter(item => item.id !== undefined);
+      const createSourcesArray = financing_sources.filter(item => item.id === undefined);
+      const editSourcesArray = financing_sources.filter(item => item.id !== undefined);
 
-      const createFinancingPromise = apiClient.createFinancingSources(newFinancingArray);
-      const editFinancingPromises = oldFinancingArray.map(item => apiClient.editFinancingSource(item.id, item));
+      const createFinancingPromise = apiClient.createFinancingSources(createSourcesArray);
+      const editFinancingPromises = editSourcesArray.map(item => apiClient.editFinancingSource(item.id, item));
       financingPromises = [createFinancingPromise, ...editFinancingPromises];
     }
 
@@ -95,9 +99,22 @@ export function editArticle(id, data) {
       }
 
       return apiClient.lockArticle(id).then(() => {
-        const editPromises = [apiClient.editArticle(id, articleData)];
+        let editPromises = [apiClient.editArticle(id, articleData)];
+        // Контент-блоки
         if (content_blocks) {
           editPromises.push(apiClient.editBlocks(id, content_blocks));
+        }
+
+        // Список литературы
+        if (sources) {
+          const createSourcesArray = sources.filter(item => item.id === undefined);
+          const editSourcesArray = sources.filter(item => item.id !== undefined);
+          const removedSourcesArray = differenceBy(prevArticleData.sources, editSourcesArray, 'id');
+          
+          const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
+          const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
+          const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));
+          editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises ]
         }
 
         return Promise.all(editPromises);
