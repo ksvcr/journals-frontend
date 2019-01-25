@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import classNames from 'classnames';
-import { debounce } from 'throttle-debounce';
+import debounce from 'lodash/debounce';
 
 import './searchable-select.scss';
 
@@ -55,14 +55,14 @@ class SearchableSelect extends Component {
           classNamePrefix="searchable-select"
           cacheOptions
           value={ selectedOption }
-          placeholder={placeholder}
-          noOptionsMessage={this.noOptionsMessage}
-          loadingMessage={this.loadingMessage}
-          getOptionValue={this.getOptionValue}
-          getOptionLabel={this.getOptionLabel}
-          defaultOptions={defaultOptions}
-          loadOptions={ debounce(500, this.getOptions) }
-          onChange={this.handleChange}
+          placeholder={ placeholder }
+          noOptionsMessage={ this.noOptionsMessage }
+          loadingMessage={ this.loadingMessage }
+          getOptionValue={ this.getOptionValue }
+          getOptionLabel={ this.getOptionLabel }
+          defaultOptions={ defaultOptions }
+          loadOptions={ debounce(this.getOptions, 500) }
+          onChange={ this.handleChange }
         />
         { hasError &&
           <div className="searchable-select-wrapper__error">

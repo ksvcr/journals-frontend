@@ -60,23 +60,24 @@ class ArticlePublish extends Component {
 
   handleSubmit = (formData) => {
     const { siteId, articleId, userRole, createArticle, editArticle, push } = this.props;
-    const state = userRole === 'CORRECTOR' ? 'AWAIT_TRANSLATE' : 'SENT';
-    const data = serializeArticleData({ ...formData, state_article: state });
+    const data = serializeArticleData(formData);
 
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
+      data.state_article = userRole === 'CORRECTOR' ? 'AWAIT_TRANSLATE' : 'SENT';
       createArticle(siteId, data).then(() => { push('/'); });
     }
   };
 
   handleDraftSubmit = (formData) => {
     const { articleId, siteId, createArticle, editArticle, push } = this.props;
-    const data = serializeArticleData({ ...formData, state_article: 'DRAFT' });
+    const data = serializeArticleData(formData);
 
     if (articleId !== undefined) {
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
+      data.state_article = 'DRAFT';
       createArticle(siteId, data).then(() => { push('/'); });
     }
   };
