@@ -109,8 +109,9 @@ export function editArticle(id, data) {
         if (sources) {
           const createSourcesArray = sources.filter(item => item.id === undefined);
           const editSourcesArray = sources.filter(item => item.id !== undefined);
-          const removedSourcesArray = differenceBy(prevArticleData.sources, editSourcesArray, 'id');
-          
+          const hasRemoved = prevArticleData.sources.length > editSourcesArray.length;
+          const removedSourcesArray = hasRemoved ? differenceBy(prevArticleData.sources, editSourcesArray, 'id') : [];
+
           const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
           const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
           const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));

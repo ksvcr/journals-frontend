@@ -63,9 +63,12 @@ class ArticlePublish extends Component {
     const data = serializeArticleData(formData);
 
     if (articleId !== undefined) {
+      if (userRole === 'CORRECTOR') {
+        data.state_article = 'AWAIT_TRANSLATE';
+      }
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
-      data.state_article = userRole === 'CORRECTOR' ? 'AWAIT_TRANSLATE' : 'SENT';
+      data.state_article = 'SENT';
       createArticle(siteId, data).then(() => { push('/'); });
     }
   };
