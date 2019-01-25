@@ -92,7 +92,10 @@ const apiClient = {
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
 
-  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data })
+  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data }),
+  editArticleReview: (articleId, reviewId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/`, { method: 'put', data })
+  },
 };
 
 export default apiClient;
