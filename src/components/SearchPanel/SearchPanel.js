@@ -64,9 +64,11 @@ class SearchPanel extends Component {
   render() {
     return (
       <div className="search-panel">
-         <div className="search-panel__params">
-           { this.renderParams() }
-         </div>
+        { this.targets.length > 0 &&
+          <div className="search-panel__params">
+            { this.renderParams() }
+          </div>
+        }
         <div className="search-panel__field">
           <TextField placeholder="Поиск" className="text-field_search" icon="search"
                      onChange={ this.handleSearchChange } />

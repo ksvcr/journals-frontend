@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ToggleItem from '~/components/ToggleItem/ToggleItem';
+import Collapse from '~/components/Collapse/Collapse';
 import FieldHint from '~/components/FieldHint/FieldHint';
 
 import './reviews-history.scss';
@@ -11,7 +11,7 @@ class ReviewsHistory extends Component {
     const authorName = `${author.last_name} ${author.first_name} ${author.middle_name}`;
 
     return reviews.map((item, index) => (
-      <ToggleItem key={ index } title={ item.review_round + ` раунд рецензирования` }>
+      <Collapse key={ index } title={ item.review_round + ` раунд рецензирования` }>
         <div className="reviews-history__content">
           <div className="reviews-history__review">
             <div className="reviews-history__title">
@@ -36,7 +36,7 @@ class ReviewsHistory extends Component {
             </div>
           }
         </div>
-      </ToggleItem>
+      </Collapse>
     ));
   };
 

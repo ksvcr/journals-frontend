@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import ToggleItem from '~/components/ToggleItem/ToggleItem';
+import Collapse from '~/components/Collapse/Collapse';
 import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';
 
 import './reviews-dialog-list.scss';
@@ -10,10 +10,10 @@ class ReviewsDialogList extends Component {
     const { reviews } = this.props;
 
     return reviews.map((item, i) => (
-      <ToggleItem key={ i } title={ i+1 + ' рецензент' }>
+      <Collapse key={ i } title={ i+1 + ' рецензент' }>
         <ReviewsDialog formName={ `reviews-dialog-${item.id}` }
                        onSubmit={ this.handleEditReview } item={ item } />
-      </ToggleItem>
+      </Collapse>
     ));
   };
 

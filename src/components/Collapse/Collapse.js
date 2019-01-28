@@ -1,55 +1,58 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import Icon from '~/components/Icon/Icon';
+
+import './assets/arrow.svg';
+import './collapse.scss';
 
 class Collapse extends Component {
   state = {
-    expanded: {}
+    isOpen: false
   };
 
-  handleExpand = (event) => {
-    const { index } = event.currentTarget.dataset;
-    this.setState((state) => {
-      const expanded = {
-        ...state.expanded,
-        [index]: !state.expanded[index]
-      };
-      return { expanded };
-    });
+  handleToggle = () => {
+    const { isOpen } = this.state;
+    this.setState({ isOpen: !isOpen });
   };
 
-  renderItems = () => {
-    const { items } = this.props;
-    const { expanded } = this.state;
-    return items.map((item, index) => {
-      const isActive = expanded[index];
-      const isLast = index === items.length - 1;
-      return (
-        <div key={ index } className="collapse__item">
-          <div className="collapse__title" data-index={ index } onClick={ this.handleExpand }>
-            { item.title({ isActive, isLast }) }
-          </div>
+  get customHeadProps() {
+    const { isOpen } = this.state;
 
-          { isActive &&
-            <div className="collapse__box">
-              { item.box }
-            </div>
-          }
-        </div>
-      );
-    });
-  };
+    return {
+      isOpen,
+      onClick: this.handleToggle
+    };
+  }
 
   render() {
+    const { title, customHead, children } = this.props;
+    const { isOpen } = this.state;
+
+    const collapseClasses = classNames('collapse', { 'collapse_opened': isOpen });
+
     return (
-      <div className="collapse">
-        { this.renderItems() }
+      <div className={ collapseClasses }>
+        { customHead ?
+          customHead(this.customHeadProps) :
+          (
+            <div className="collapse__head" onClick={ this.handleToggle }>
+              <div className="collapse__title">
+                { title }
+              </div>
+              <Icon name="arrow" className="collapse__arrow"/>
+            </div>
+          )
+        }
+
+        { isOpen &&
+          <div className="collapse__content">
+            { children }
+          </div>
+        }
       </div>
     );
   }
 }
-
-Collapse.propTypes = {
-  items: PropTypes.array
-};
 
 export default Collapse;

@@ -6,13 +6,11 @@ import './redactor-collapse-button.scss';
 
 class RedactorCollapseButton extends Component {
   render() {
-    const { isActive, isLast, children } = this.props;
+    const { children, isOpen, onClick } = this.props;
     const buttonClasses = classNames('redactor-collapse-button',
-      { 'redactor-collapse-button_active' : isActive,
-        'redactor-collapse-button_last' : isLast
-      });
+      { 'redactor-collapse-button_active' : isOpen });
     return (
-      <button type="button" className={ buttonClasses }>
+      <button type="button" className={ buttonClasses } onClick={ onClick }>
         { children }
       </button>
     );
@@ -20,8 +18,7 @@ class RedactorCollapseButton extends Component {
 }
 
 RedactorCollapseButton.propTypes = {
-  isActive: PropTypes.bool,
-  isLast: PropTypes.bool
+  isOpen: PropTypes.bool
 };
 
 export default RedactorCollapseButton;

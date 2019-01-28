@@ -4,6 +4,10 @@
     box-sizing: border-box;
   }
 
+  .list__placeholder {
+    padding: 18px 25px;
+  }
+
   &__choose-wrapper {
     text-align: right;
   }
@@ -24,5 +28,28 @@
 
   &__box {
     padding-bottom: 25px;
+  }
+
+  &__cancel {
+    color: $orange-color;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  &__search-box {
+    padding: 0 25px 16px 25px;
+  }
+
+  &__search-form {
+    padding: 20px 0;
+  }
+
+  &__count {
+    opacity: .5;
+    padding: 8px 0;
+    font-size: 12px;
   }
 }

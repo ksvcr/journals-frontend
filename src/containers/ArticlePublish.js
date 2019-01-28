@@ -68,7 +68,7 @@ class ArticlePublish extends Component {
     }
 
     if (articleId !== undefined) {
-      if (userId===data.author.user && data.state_article==='REVISION') {
+      if (userId === data.author.user && data.state_article === 'REVISION') {
         data.state_article = 'MODIFIED';
       } else if (userRole === 'CORRECTOR') {
         data.state_article = 'AWAIT_TRANSLATE';
