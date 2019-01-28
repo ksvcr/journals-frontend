@@ -35,7 +35,7 @@ class CorrectorArticles extends Component {
         title: 'Искать в авторах'
       },
       {
-        value: 'number',
+        value: 'doi',
         title: 'Номер'
       }
     ];
