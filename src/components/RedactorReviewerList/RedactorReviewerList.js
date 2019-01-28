@@ -130,22 +130,28 @@ class RedactorReviewerList extends Component {
   }
 
   renderSearchBox = () => {
+    const { onClose } = this.props;
     return (
       <div className="redactor-reviewer-list__search-box">
+        <button onClick={ onClose } type="button"
+                className="redactor-reviewer-list__cancel">
+          Отмена
+        </button>
         <SearchPanel onChange={ this.handleSearchChange } />
-        <div className="form">
-          <div className="form__row">
-            <div className="form__col form__col_6">
-              <div className="form__field">
-                <label className="form__label">Искать по:</label>
-                <Select { ...this.selectTagsProps } />
+        <div className="redactor-reviewer-list__search-form form">
+          <div className="form__field">
+            <label className="form__label">Искать по:</label>
+            <div className="form__row">
+              <div className="form__col form__col_6">
+                <div className="form__field">
+                  <Select { ...this.selectTagsProps } />
+                </div>
               </div>
-            </div>
-            <div className="form__col form__col_6 form__field form__field_inline">
-              <label className="form__label" />
-              <Checkbox name="strict">
-                Точное соответствие
-              </Checkbox>
+              <div className="form__col form__col_6">
+                <Checkbox name="strict">
+                  Точное соответствие
+                </Checkbox>
+              </div>
             </div>
           </div>
         </div>
@@ -157,14 +163,8 @@ class RedactorReviewerList extends Component {
   }
 
   render() {
-    const { onClose } = this.props;
     return (
       <div className="redactor-reviewer-list">
-        <Button onClick={ onClose } type="button"
-                className="button_small button_transparent redactor-reviewer-list__cancel">
-          Отмена
-        </Button>
-
         { this.renderSearchBox() }
 
         <List { ...this.listProps } />
