@@ -38,6 +38,11 @@ class RedactorDecision extends Component {
             color: 'green'
           },
           {
+            title: 'Доработать',
+            value: 'REVISION',
+            color: 'orange'
+          },
+          {
             title: 'Отклонить',
             value: 'DISAPPROVED',
             color: 'red'

@@ -48,26 +48,27 @@ class ReviewCreateForm extends Component {
   }
 
   get commentForAuthorLabel() {
-    const { recommendation } = this.props;
+    const { reviews, recommendation } = this.props;
     let label = 'Текст рецензии';
+    const review_round = reviews.length + 1;
     if (recommendation !== 1) {
-      label = 'Замечания после первого раунда рецензирования';
+      label = `Замечания после ${review_round} раунда рецензирования`;
     }
     return label;
   }
 
   handleRecommendationChange = (value) => {
     const { change } = this.props;
+    value = parseInt(value, 10);
     change('recommendation', value);
   };
 
   render() {
-    const { articleData, handleSubmit, recommendation } = this.props;
+    const { articleData, handleSubmit, recommendation, reviews, author } = this.props;
+
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
         <h2 className="page__title">{ articleData.title }</h2>
-
-        <ReviewsHistory reviews={ articleData.reviews } />
 
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
@@ -76,6 +77,10 @@ class ReviewCreateForm extends Component {
           <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
         </div>
+
+        { recommendation === 2 && reviews.length > 0 &&
+          <ReviewsHistory reviews={ reviews } author={ author }/>
+        }
 
         <div className="form__field">
           <label htmlFor="comment_for_author" className="form__label">
@@ -115,10 +120,11 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles } = state;
+  const { articles, users } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
+  const author = users.data[articleData.author.user];
 
   return {
     push,
@@ -126,7 +132,8 @@ function mapStateToProps(state, props) {
     recommendation,
     initialValues: {
       recommendation: 1
-    }
+    },
+    author
   };
 }
 
