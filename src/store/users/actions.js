@@ -1,13 +1,17 @@
 import { FETCH_USERS, FETCH_USER, SEARCH_USERS,
-         CREATE_USER, INSERT_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
+         CREATE_USER, INSERT_USER, UPDATE_USER,
+         CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
 import apiClient from '~/services/apiClient';
+import getFlatParams from '~/services/getFlatParams';
 
 export function fetchUsers(params) {
   return (dispatch) => {
-    const payload = apiClient.getUsers(null, params);
+    const flatParams = getFlatParams(params);
+    const payload = apiClient.getUsers(null, flatParams);
     return dispatch({
       type: FETCH_USERS,
-      payload
+      payload,
+      meta: params
     }).catch(error => console.error(error));
   }
 }
@@ -17,6 +21,16 @@ export function fetchUser(id) {
     const payload = apiClient.getUsers(id);
     return dispatch({
       type: FETCH_USER,
+      payload
+    }).catch(error => console.error(error));
+  }
+}
+
+export function updateUser(id, data) {
+  return (dispatch) => {
+    const payload = apiClient.updateUser(id, data);
+    return dispatch({
+      type: UPDATE_USER,
       payload
     }).catch(error => console.error(error));
   }
