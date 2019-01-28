@@ -1,11 +1,10 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, sources, blocks, ...rest } = data;
+  const { authors = [], has_financing, financing_sources, blocks, ...rest } = data;
 
   const serializedData = {
     ...rest,
     text_to_title: data.title,
-    article_type: 1,
-    slug: `slug-${new Date().getTime()}`
+    article_type: 1
   };
 
   if (has_financing && financing_sources) {
@@ -38,10 +37,6 @@ export function serializeArticleData(data = {}) {
       ordered: index,
       content: item.content
     }));
-  }
-
-  if (sources) {
-    serializedData.sources = sources.filter(item => item.isValid)
   }
 
   return serializedData;

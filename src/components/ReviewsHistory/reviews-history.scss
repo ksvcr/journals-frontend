@@ -1,25 +1,8 @@
 .reviews-history {
-  $root: &;
-  border-top: 1px solid #e8e7e4;
-  padding: 15px 0;
-  margin-bottom: 40px;
-
-  &__round {
-    font-size: 12px;
-    text-align: center;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #192A3E;
-    font-weight: 600;
-  }
+  margin: 50px 0 40px;
 
   &__content {
-    padding: 48px 0 70px;
-    display: none;
-    
-    #{$root}__item_opened & {
-      display: block;
-    }
+    padding: 16px 0 21px;
   }
 
   &__review {
@@ -27,14 +10,14 @@
     border: 2px solid #E3E3E3;
     box-sizing: border-box;
     border-radius: 6px;
-    padding: 44px;
+    padding: 37px 44px 52px;
   }
 
   &__answer {
     margin-top: 22px;
     background: #F6F6F6;
     border-radius: 6px;
-    padding: 44px;
+    padding: 37px 44px 52px;
   }
 
   &__title {
@@ -48,22 +31,16 @@
     line-height: 32px;
     font-size: 16px;
     color: #131313;
+    margin-top: 17px;
   }
 
-  &__head {
-    position: relative;
-  }
-
-  &__arrow {
-    width: 8px;
-    height: 12px;
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: rotate(-90deg) translate(50%, -100%);
-
-    #{$root}__item_opened & {
-      transform: rotate(90deg) translate(-50%, 100%);
-    }
+  &__author {
+    background: #DEDDDD;
+    border-radius: 6px;
+    padding: 3px 6px;
+    font-size: 12px;
+    color: #262422;
+    display: inline-block;
+    margin: 7px 0 0 -6px;
   }
 }

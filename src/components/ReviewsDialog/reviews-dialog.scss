@@ -1,0 +1,24 @@
+.reviews-dialog {
+  &__comment {
+    line-height: 24px;
+    font-size: 16px;
+  }
+
+  &__answer {
+    margin-top: 36px;
+  }
+
+  &__button {
+    border: 0;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    outline: 0;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: underline;
+    color: $link-color;
+    margin-top: 14px;
+    cursor: pointer;
+  }
+}

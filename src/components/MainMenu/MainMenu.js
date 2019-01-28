@@ -67,7 +67,11 @@ class MainMenu extends Component {
         title: 'Пользователи',
         href: '/users'
       },
-      ...this.defaultItems
+      ...this.defaultItems,
+      {
+        title: 'Статьи на рецензию',
+        href: '/articles-for-review'
+      }
     ];
   }
 
