@@ -13,8 +13,11 @@ class ReviewsDialog extends Component {
   handleSubmit = (event) => {
     const { onSubmit, formValues } = this.props;
     const { id } = this.props.item;
+    const isAnswered = event.target.author_answer.value;
     event.preventDefault();
-    onSubmit(id, formValues);
+    if (isAnswered) {
+      onSubmit(id, formValues);
+    }
   };
 
   render() {
