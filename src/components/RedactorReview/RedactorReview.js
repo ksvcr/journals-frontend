@@ -24,6 +24,12 @@ class RedactorReview extends Component {
     });
   };
 
+  handleReviewerListClose = () => {
+    this.setState({
+      isShowReviewerList: false
+    });
+  };
+
   handleSelfInvite = () => {
     const { articleId, currentUserId, inviteArticleReviewer } = this.props;
     inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId });
@@ -48,7 +54,7 @@ class RedactorReview extends Component {
         </div>
 
         { isShowReviewerList &&
-          <RedactorReviewerList articleId={ articleId } />
+          <RedactorReviewerList onClose={ this.handleReviewerListClose } articleId={ articleId } />
         }
 
         <Collapse customHead={ (props) => <RedactorCollapseButton { ...props }>Рецензенты</RedactorCollapseButton> }>
