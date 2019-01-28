@@ -9,7 +9,12 @@ import './assets/cancel.svg';
 class ArticleSource extends Component {
   getTitle(parts, lang) {
    const { data } = this.props;
-   const { lastname, initials } = data.author;
+   let resultString = '';
+   if (data.author) {
+     const { lastname, initials } = data.author;
+     resultString = `${lastname} ${initials} `;
+   }
+
    let params = parts.filter(key => data[key]).reduce((result, key) => {
      let item = data[key];
      if (key === 'page_count') {
@@ -21,7 +26,8 @@ class ArticleSource extends Component {
      }
      return `${result} ${item}`;
    }, '');
-    return `${lastname} ${initials} ${params}`;
+
+   return resultString + params;
   }
 
   handleRemove = () => {

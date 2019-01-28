@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import Button from '~/components/Button/Button';
 import ArticleCommonTranslateForm from '~/components/ArticleCommonTranslateForm/ArticleCommonTranslateForm';
+import ArticleSourcesTranslateForm from '~/components/ArticleSourcesTranslateForm/ArticleSourcesTranslateForm';
 
 import './article-translate-form.scss';
 import './assets/save.svg';
@@ -26,6 +27,10 @@ class ArticleTranslateForm extends Component {
       {
         title: 'Общие сведения',
         component: <ArticleCommonTranslateForm { ...this.formProps } />
+      },
+      {
+        title: 'Список литературы',
+        component: <ArticleSourcesTranslateForm { ...this.formProps } />
       }
     ];
   }
