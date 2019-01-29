@@ -5,7 +5,7 @@ import TextField from '~/components/TextField/TextField';
 import Numeric from '~/components/Numeric/Numeric';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const AddressForm = ({ field, loadCountries }) => {
+const AddressForm = ({ field, countriesArray, countriesData }) => {
   return (
     <React.Fragment>
       <div className="form__row">
@@ -22,8 +22,10 @@ const AddressForm = ({ field, loadCountries }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_country` } className="form__label">Страну</label>
             <Field className="text-field_white" name={ `${field}.mail_address_country` } id={ `${field}.mail_address_country` }
-                   component={(props) => <SearchableSelect placeholder="Выберите страну" { ...props }
-                                                           onLoadOptions={ loadCountries } /> } />
+                   format={ value => value ? { name: countriesData[value].name, id: value } : '' }
+                   normalize={ value => value.id }
+                   component={(props) => <SearchableSelect placeholder="Выберите страну"
+                                                           options={ countriesArray } { ...props } /> } />
           </div>
         </div>
         <div className="form__col form__col_4">

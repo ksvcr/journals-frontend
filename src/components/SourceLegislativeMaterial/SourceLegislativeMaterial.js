@@ -8,7 +8,7 @@ import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const SourceLegislativeMaterial = ({ loadCountries }) => {
+const SourceLegislativeMaterial = ({ countriesData, countriesArray }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -52,9 +52,11 @@ const SourceLegislativeMaterial = ({ loadCountries }) => {
             <label htmlFor="country" className="form__label">
               Страна <ReqMark />
             </label>
-            <Field name="country" id="country" className="select_white" validate={ [validate.required] }
-                   component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
-                                                          onLoadOptions={ loadCountries } /> } />
+            <Field name="country" id="country"
+                   format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                   normalize={ value => value.id }
+                   component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                          options={ countriesArray } { ...props } /> }  />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue" className="form__label">

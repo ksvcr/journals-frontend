@@ -15,6 +15,7 @@ import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
+import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 
@@ -39,9 +40,11 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, push, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
+    const { articleId, siteId, push, fetchArticle, fetchRubrics,
+            fetchCategories, fetchCountries, fetchUser } = this.props;
     const promises = [
       fetchRubrics(siteId),
+      fetchCountries(),
       fetchCategories(siteId)
     ];
 
@@ -149,13 +152,14 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, languages, rubrics, categories, user } = state;
+  const { sites, articles, languages, rubrics, categories, user, countries } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
   const articleData = articleId && articles.data[articleId];
   const articleStatus = articleData && articleData.state_article;
 
-  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled && sites.isFulfilled;
+  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && countries.isFulfilled &&
+                            categories.isFulfilled && sites.isFulfilled;
   return {
     siteId: sites.current,
     userId: user.data.id,
@@ -177,7 +181,8 @@ const mapDispatchToProps = {
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,
-  editArticleReview: articlesActions.editArticleReview
+  editArticleReview: articlesActions.editArticleReview,
+  fetchCountries: countriesActions.fetchCountries
 };
 
 export default connect(

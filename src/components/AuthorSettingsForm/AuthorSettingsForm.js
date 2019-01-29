@@ -7,17 +7,13 @@ import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-import apiClient from '~/services/apiClient';
+import { roleMap, getUserRoleTitle } from '~/services/userRoles';
+import { getCountriesArray } from '~/store/countries/selector';
 import * as validate from '~/utils/validate';
 
 import './author-settings-form.scss';
-import { roleMap, getUserRoleTitle } from '~/services/userRoles';
 
 class AuthorSettingsForm extends Component {
-  fetchCountries = (value) => {
-    return apiClient.getCountries({ name: value, limit: 5});
-  };
-
   renderRoleFields = () => {
     const { userData } = this.props;
     const { role } = userData;
@@ -37,7 +33,7 @@ class AuthorSettingsForm extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, countriesArray, countriesData } = this.props;
     return (
       <form className="author-settings-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
@@ -111,8 +107,10 @@ class AuthorSettingsForm extends Component {
                 Cтрана
               </label>
               <Field name="country" id="country"
-                    component={(props) => <SearchableSelect placeholder="Выберите страну" { ...props }
-                                                            onLoadOptions={ this.fetchCountries } /> } />
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
@@ -130,8 +128,10 @@ class AuthorSettingsForm extends Component {
                 Страна по английски
               </label>
               <Field name="country_en" id="country_en"
-                    component={(props) => <SearchableSelect placeholder="Выберите страну" { ...props }
-                                                            onLoadOptions={ this.fetchCountries } /> } />
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city_en" className="form__label">
@@ -192,8 +192,10 @@ class AuthorSettingsForm extends Component {
                 Страна
               </label>
               <Field name="mail_address_country" id="mail_address_country"
-                     component={ props => <SearchableSelect placeholder="Выберите страну" { ...props }
-                                                            onLoadOptions={ this.fetchCountries } /> }  />
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -275,12 +277,16 @@ AuthorSettingsForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { userId } = props;
-  const { user, users } = state;
+  const { user, users, countries } = state;
   const initialValues = userId ? users.data[userId] : user.data;
   const formName = userId ? `author-settings-form-${userId}` : 'author-settings-form';
+  const countriesArray = getCountriesArray(state);
+
   return {
     form: formName,
     userData: user.data,
+    countriesArray,
+    countriesData: countries.data,
     initialValues
   };
 }

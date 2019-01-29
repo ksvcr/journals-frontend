@@ -5,15 +5,24 @@ import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsFo
 
 import * as userActions from '~/store/user/actions';
 import * as usersActions from '~/store/users/actions';
+import * as countriesActions from '~/store/countries/actions';
 
 class AuthorSettings extends Component {
   componentDidMount() {
-    const { fetchUser, userId } = this.props;
+    this.handleInitialRequest();
+  }
+
+  handleInitialRequest = () => {
+    const { fetchCountries, fetchUser, userId } = this.props;
+    const promises = [
+      fetchCountries()
+    ];
 
     if (userId) {
-      fetchUser(userId);
+      promises.push(fetchUser(userId));
     }
-  }
+    return Promise.all(promises);
+  };
 
   handleSubmit = (data) => {
     const { updateCurrentUser, updateUser, userId } = this.props;
@@ -47,7 +56,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   updateCurrentUser: userActions.updateCurrentUser,
   fetchUser: usersActions.fetchUser,
-  updateUser: usersActions.updateUser
+  updateUser: usersActions.updateUser,
+  fetchCountries: countriesActions.fetchCountries
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

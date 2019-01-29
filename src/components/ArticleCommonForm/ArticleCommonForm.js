@@ -17,7 +17,7 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCategoriesArray, getRootCategoriesArray } from '~/store/categories/selector';
-import apiClient from '~/services/apiClient';
+import { getCountriesArray } from '~/store/countries/selector';
 
 import * as validate from '~/utils/validate';
 
@@ -97,10 +97,6 @@ class ArticleCommonForm extends Component {
     }
   };
 
-  fetchCountries = (value) => {
-    return apiClient.getCountries({ name: value, limit: 5});
-  };
-
   handleFieldToggle = (event) => {
     const { checked, name } = event.target;
     this.setState(prevState => (
@@ -125,6 +121,7 @@ class ArticleCommonForm extends Component {
   };
 
   renderAddressList = (props) => {
+    const { countriesArray, countriesData } = this.props;
     const initialValues = {
       count: 1
     };
@@ -132,7 +129,8 @@ class ArticleCommonForm extends Component {
     return (
       <FieldSetList legend="Адрес" addText="Добавить адрес"
                     initialValues={ initialValues } { ...props }>
-        { field => <AddressForm field={ field } loadCountries={ this.fetchCountries } /> }
+        { field => <AddressForm field={ field } countriesData={ countriesData }
+                                countriesArray={ countriesArray } /> }
       </FieldSetList>
     );
   };
@@ -308,7 +306,7 @@ class ArticleCommonForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-  const { user } = state;
+  const { user, countries } = state;
   const formSelector = formValueSelector(formName);
 
   let rootCategory = formSelector(state, 'root_category');
@@ -322,6 +320,7 @@ function mapStateToProps(state, props) {
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
+  const countriesArray = getCountriesArray(state);
 
   return {
     userData: user.data,
@@ -333,6 +332,8 @@ function mapStateToProps(state, props) {
     categoriesArray,
     rubricsArray,
     languagesArray,
+    countriesArray,
+    countriesData: countries.data
   };
 }
 
