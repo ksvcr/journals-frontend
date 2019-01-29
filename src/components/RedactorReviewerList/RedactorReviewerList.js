@@ -59,7 +59,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '25%'
           },
-          isMain: true,
           head: () => 'ФИО',
           render: this.renderName
         },
@@ -67,7 +66,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '30%'
           },
-          isMain: true,
           head: () => 'Научные интересы',
           render: ({ sphere_scientific_interests }) => <InterestList data={ sphere_scientific_interests } />
         },
@@ -75,7 +73,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '15%'
           },
-          isMain: true,
           head: () => 'Рецензий в мес.',
           render: ({ count_reviews_month }) => count_reviews_month
         },
@@ -83,7 +80,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '30%'
           },
-          isMain: true,
           render: (data) =>
             <div className="redactor-reviewer-list__choose-wrapper">
               <Button type="button" className="button_small redactor-reviewer-list__choose"

@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import List from '~/components/List/List';
+
 import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 import { getReviewInvitesArray } from '~/store/reviewInvites/selector';
+import InterestList from '~/components/InterestList/InterestList';
+import Button from '~/components/Button/Button';
+import Icon from '~/components/Icon/Icon';
 
 class InvitedReviewersList extends Component {
   componentDidMount() {
@@ -10,10 +15,27 @@ class InvitedReviewersList extends Component {
     fetchReviewInvites({ article: articleId });
   }
 
+  get listProps() {
+    const { reviewInvitesArray } = this.props;
+
+    return {
+      data: reviewInvitesArray,
+      box: this.renderBox,
+      cells: [
+        {
+          style: {
+            width: '25%'
+          },
+          render: (data) => data.reviewer
+        }
+      ]
+    };
+  }
+
   render() {
     return (
       <div className="invited-reviewers-list">
-        Список приглашенных рецензентов
+        <List { ...this.listProps } />
       </div>
     );
   }
