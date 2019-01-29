@@ -10,3 +10,11 @@ export const getUsersArray = createSelector(
     return entityNormalize.toArray(users.data, users.ids);
   }
 );
+
+export const getUsersParams = createSelector(
+  usersSelector,
+  users => {
+    const { paginate, filter, search, ordering } = users;
+    return { paginate, filter, search, ordering };
+  }
+);
