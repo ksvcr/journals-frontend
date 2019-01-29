@@ -5,6 +5,7 @@ import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsFo
 
 import * as userActions from '~/store/user/actions';
 import * as usersActions from '~/store/users/actions';
+import AuthorSitesList from '~/components/AuthorSitesList/AuthorSitesList';
 
 class AuthorSettings extends Component {
   componentDidMount() {
@@ -30,7 +31,13 @@ class AuthorSettings extends Component {
     return (
       <React.Fragment>
         <h1 className="page__title">Настройки</h1>
+
+        <div className="page__tools">
+          <AuthorSitesList userId={ userId } />
+        </div>
+
         <AuthorSettingsForm userId={ userId } onSubmit={ this.handleSubmit } />
+
       </React.Fragment>
     );
   }
