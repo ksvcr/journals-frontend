@@ -7,6 +7,8 @@ import * as userActions from '~/store/user/actions';
 import * as usersActions from '~/store/users/actions';
 import AuthorSitesList from '~/components/AuthorSitesList/AuthorSitesList';
 
+const FORM_NAME = 'author-settings-form';
+
 class AuthorSettings extends Component {
   componentDidMount() {
     const { fetchUser, userId } = this.props;
@@ -27,16 +29,16 @@ class AuthorSettings extends Component {
   };
 
   render() {
-    const { userId } = this.props;
+    const { userId, form } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">Настройки</h1>
 
         <div className="page__tools">
-          <AuthorSitesList userId={ userId } />
+          <AuthorSitesList form={ form } userId={ userId } />
         </div>
 
-        <AuthorSettingsForm userId={ userId } onSubmit={ this.handleSubmit } />
+        <AuthorSettingsForm form={ form } userId={ userId } onSubmit={ this.handleSubmit } />
 
       </React.Fragment>
     );
@@ -45,10 +47,13 @@ class AuthorSettings extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
+  const { userId } = match.params;
+  const form = userId ? `${FORM_NAME}-${userId}` : FORM_NAME;
 
   return {
-    userId: match.params.userId
-  }
+    userId: match.params.userId,
+    form
+  };
 }
 
 const mapDispatchToProps = {

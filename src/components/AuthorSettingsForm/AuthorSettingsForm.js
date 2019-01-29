@@ -277,9 +277,7 @@ function mapStateToProps(state, props) {
   const { userId } = props;
   const { user, users } = state;
   const initialValues = userId ? users.data[userId] : user.data;
-  const formName = userId ? `author-settings-form-${userId}` : 'author-settings-form';
   return {
-    form: formName,
     userData: user.data,
     initialValues
   };
