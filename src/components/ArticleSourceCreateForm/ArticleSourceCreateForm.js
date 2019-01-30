@@ -19,6 +19,7 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
+import { getLawtypesArray } from '~/store/lawtypes/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -73,6 +74,14 @@ class ArticleSourceCreateForm extends Component {
     return apiClient.getCountries({ name: value, limit: 5 });
   };
 
+  get lawtypesOptions() {
+    const { lawtypes } = this.props;
+    return lawtypes.map(item => ({
+      title: item.name,
+      value: item.id
+    }));
+  }
+
   get specialFields() {
     const { resourceType, rightholderType } = this.props;
     switch (resourceType) {
@@ -94,7 +103,8 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial loadCountries={ this.fetchCountries } />;
+        return <SourceLegislativeMaterial loadCountries={ this.fetchCountries }
+                                          lawTypesOptions={ this.lawtypesOptions } />;
 
       case 'SourceStandart':
         return <SourceStandart />;
@@ -200,18 +210,21 @@ function mapStateToProps(state, props) {
   const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
   const rightholderTypes = getRightholderTypes();
   const sourceTypes = getSourceTypes();
+  const lawtypes = getLawtypesArray(state);
+
   return {
     form: formName,
     languagesArray,
     rubricsArray,
     resourceType,
     rightholderType,
+    lawtypes,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
-      category: '1', // id Категории
+      category: '1',
       defense_date: defaultDate,
       statement_date: defaultDate,
       standart_entry_date: defaultDate,

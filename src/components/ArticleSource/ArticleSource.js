@@ -41,7 +41,7 @@ class ArticleSource extends Component {
   };
 
   render() {
-    const { index } = this.props;
+    const { index, onRemove } = this.props;
     return (
       <div className="article-source">
         <div className="article-source__box">
@@ -60,10 +60,13 @@ class ArticleSource extends Component {
             <Icon name="edit" className="article-source__icon article-source__icon_edit" />
             Редактировать
           </button>
-          <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
-            <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
-            Удалить
-          </button>
+
+          { onRemove &&
+            <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
+              <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
+              Удалить
+            </button>
+          }
         </div>
       </div>
     );
