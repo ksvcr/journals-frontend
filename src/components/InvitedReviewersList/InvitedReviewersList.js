@@ -3,30 +3,22 @@ import { connect } from 'react-redux';
 
 import List from '~/components/List/List';
 
-import * as reviewInvitesActions from '~/store/reviewInvites/actions';
-import { getReviewInvitesArray } from '~/store/reviewInvites/selector';
-import InterestList from '~/components/InterestList/InterestList';
-import Button from '~/components/Button/Button';
-import Icon from '~/components/Icon/Icon';
+import './invited-reviewers-list.scss';
 
 class InvitedReviewersList extends Component {
-  componentDidMount() {
-    const { fetchReviewInvites, articleId } = this.props;
-    fetchReviewInvites({ article: articleId });
-  }
-
   get listProps() {
-    const { reviewInvitesArray } = this.props;
+    const { articleData } = this.props;
+    const { reviewInvites=[] } = articleData;
 
     return {
-      data: reviewInvitesArray,
+      data: reviewInvites,
       box: this.renderBox,
       cells: [
         {
           style: {
             width: '25%'
           },
-          render: (data) => data.reviewer
+          render: data => data.reviewer
         }
       ]
     };
@@ -41,17 +33,14 @@ class InvitedReviewersList extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const { articles } = state;
+  const { articleId } = props;
   return {
-    reviewInvitesArray: getReviewInvitesArray(state)
+    articleData: articles.data[articleId]
   };
 }
 
-const mapDispatchToProps = {
-  fetchReviewInvites: reviewInvitesActions.fetchReviewInvites,
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(InvitedReviewersList);

@@ -25,10 +25,12 @@ class RedactorReviewerList extends Component {
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
   handleChoose = (event) => {
-    const { articleId, inviteArticleReviewer } = this.props;
+    const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: id });
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: id }).then(() => {
+      return fetchArticleReviewInvites({ article: articleId });
+    });
   };
 
   handleTagAdd = (user, text) => {
@@ -181,7 +183,8 @@ const mapDispatchToProps = {
   inviteArticleReviewer: articlesActions.inviteArticleReviewer,
   createUserTag: usersActions.createUserTag,
   removeUserTag: usersActions.removeUserTag,
-  fetchUsers: usersActions.fetchUsers
+  fetchUsers: usersActions.fetchUsers,
+  fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
 export default connect(

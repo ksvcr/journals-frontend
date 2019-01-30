@@ -49,7 +49,8 @@ class RedactorActions extends Component {
         { 'redactor-actions__tab-item_active': index === actionIndex });
       return (
         <li key={ index } className={ tabItemClasses }>
-          <button type="button" className="redactor-actions__tab" data-index={ index } onClick={ this.handleTabToggle }>
+          <button type="button" className="redactor-actions__tab" data-index={ index }
+                  onClick={ this.handleTabToggle }>
             { item.title }
           </button>
         </li>

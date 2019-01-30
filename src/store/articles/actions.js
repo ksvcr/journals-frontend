@@ -1,7 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION
+  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -203,6 +203,17 @@ export function createArticleTranslation(articleId, data) {
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function fetchArticleReviewInvites(params) {
+  return (dispatch) => {
+    const payload = apiClient.getReviewInvites(params);
+    return dispatch({
+      type: FETCH_ARTICLE_REVIEW_INVITES,
+      meta: params,
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function resetArticles() {
