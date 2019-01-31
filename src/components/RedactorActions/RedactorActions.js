@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
+
+import isShowDecision from '~/services/isShowDecision';
+
 import './redactor-actions.scss';
 
 class RedactorActions extends Component {
@@ -13,8 +16,6 @@ class RedactorActions extends Component {
 
   get actions() {
     const { articleId, articleState } = this.props;
-    const statusesForDecision = ['AWAIT_REDACTOR', 'AWAIT_PAYMENT', 'AWAIT_PUBLICATION'];
-    const isShowDecision = ~statusesForDecision.indexOf(articleState);
 
     const actions = [
       {
@@ -23,10 +24,12 @@ class RedactorActions extends Component {
       }
     ];
 
-    if (isShowDecision) {
+    if (isShowDecision(articleState)) {
       actions.push({
         title: 'Решение',
-        component: <RedactorDecision articleId={ articleId } />
+        component: <div className="redactor-actions__decision">
+          <RedactorDecision articleId={ articleId } />
+        </div>
       });
     }
 

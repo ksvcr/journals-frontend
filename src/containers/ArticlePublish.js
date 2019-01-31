@@ -42,21 +42,25 @@ class ArticlePublish extends Component {
   handleRequest = () => {
     const { articleId, siteId, push, fetchArticle, fetchRubrics,
             fetchCategories, fetchCountries, fetchUser } = this.props;
+
+    const isEdit = articleId !== undefined;
+
     const promises = [
-      fetchRubrics(siteId),
-      fetchCountries(),
-      fetchCategories(siteId)
+      fetchCountries()
     ];
 
-    if (articleId !== undefined) {
+    if (isEdit) {
       promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
         const userIds = articleData.collaborators.map(item => item.user);
         if (articleData.author) {
           userIds.push(articleData.author.user);
         }
         const userPromises = userIds.map(id => fetchUser(id));
-        return Promise.all(userPromises);
+        return Promise.all([ ...userPromises, fetchRubrics(articleData.site), fetchCategories(articleData.site)]);
       }).catch(() =>{ push('/') }));
+    } else {
+      promises.push(fetchRubrics(siteId));
+      promises.push(fetchCategories(siteId));
     }
 
     return Promise.all(promises);
@@ -157,15 +161,15 @@ function mapStateToProps(state, props) {
   articleId = articleId ? parseInt(articleId, 10) : articleId;
   const articleData = articleId && articles.data[articleId];
   const articleStatus = articleData && articleData.state_article;
-
+  const isEdit = articleId !== undefined;
   const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && countries.isFulfilled &&
                             categories.isFulfilled && sites.isFulfilled;
   return {
-    siteId: sites.current,
+    siteId: isEdit && articleData ? articleData.site : sites.current,
     userId: user.data.id,
     userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
-    isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
+    isFulfilled: (isFulfilledCommon && !isEdit) || (isFulfilledCommon && articles.isFulfilled),
     articleId,
     articleData,
     articleStatus
