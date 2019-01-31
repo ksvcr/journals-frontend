@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import ArticleSpec from '~/components/ArticleSpec/ArticleSpec';
 import TagEditor from '~/components/TagEditor/TagEditor';
@@ -68,6 +69,10 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
+};
+
+ArticleInfo.propTypes = {
+  id: PropTypes.number.isRequired
 };
 
 export default connect(

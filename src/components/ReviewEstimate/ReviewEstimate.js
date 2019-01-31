@@ -74,7 +74,7 @@ class ReviewEstimate extends Component {
             ...radioCellStyle
           },
           head: () => 'Не согласен',
-          render: this.renderEstimateRadio('1')
+          render: this.renderEstimateRadio(1)
         },
         {
           style: {
@@ -82,7 +82,7 @@ class ReviewEstimate extends Component {
             ...radioCellStyle
           },
           head: () => 'Скорее не согласен',
-          render: this.renderEstimateRadio('2')
+          render: this.renderEstimateRadio(2)
         },
         {
           style: {
@@ -90,7 +90,7 @@ class ReviewEstimate extends Component {
             ...radioCellStyle
           },
           head: () => 'Нейтрален',
-          render: this.renderEstimateRadio('3')
+          render: this.renderEstimateRadio(3)
         },
         {
           style: {
@@ -98,7 +98,7 @@ class ReviewEstimate extends Component {
             ...radioCellStyle
           },
           head: () => 'Скорее согласен',
-          render: this.renderEstimateRadio('4')
+          render: this.renderEstimateRadio(4)
         },
         {
           style: {
@@ -106,7 +106,7 @@ class ReviewEstimate extends Component {
             ...radioCellStyle
           },
           head: () => 'Согласен',
-          render: this.renderEstimateRadio('5')
+          render: this.renderEstimateRadio(5)
         }
       ]
     };
@@ -123,10 +123,10 @@ class ReviewEstimate extends Component {
 
 ReviewEstimate.propTypes = {
   values: PropTypes.shape({
-    estimate_actual_problem: PropTypes.string,
-    estimate_sci_style: PropTypes.string,
-    estimate_methods_conformity: PropTypes.string,
-    estimate_sci_novelty: PropTypes.string,
+    estimate_actual_problem: PropTypes.number,
+    estimate_sci_style: PropTypes.number,
+    estimate_methods_conformity: PropTypes.number,
+    estimate_sci_novelty: PropTypes.number,
   }),
   disabled: PropTypes.bool,
   onChange: PropTypes.func

@@ -12,6 +12,7 @@ import users from './users/reducer';
 import reviewInvites from './reviewInvites/reducer';
 import discounts from './discounts/reducer';
 import countries from './countries/reducer';
+import reviews from './reviews/reducer';
 
 export default combineReducers({
   form: formReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
   users,
   reviewInvites,
   discounts,
-  countries
+  countries,
+  reviews
 });
