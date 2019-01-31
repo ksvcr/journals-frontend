@@ -4,6 +4,8 @@ import nanoid from 'nanoid';
 
 import ArticleSourceTranslateItem from '~/components/ArticleSourceTranslateItem/ArticleSourceTranslateItem';
 
+import * as articlesActions from '~/store/articles/actions';
+
 class ArticleSourcesTranslateForm extends Component {
   renderList = () => {
     const { articleData } = this.props;
@@ -46,6 +48,10 @@ function mapStateToProps(state, props) {
     articleData: state.articles.data[id],
   };
 }
+
+const mapDispatchToProps = {
+  editArticleSource: articlesActions.editArticleSource
+};
 
 export default connect(
   mapStateToProps,
