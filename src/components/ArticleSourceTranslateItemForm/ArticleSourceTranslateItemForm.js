@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
@@ -20,76 +21,62 @@ class ArticleSourceTranslateItemForm extends Component {
   };
 
   getFields = (status) => {
-    const standartParams = [{name: 'author', nestedName: 'lastname', label: 'Фамилия автора'},
-      {name: 'author', nestedName: 'initials', label: 'Инициалы автора'},
-      {name: 'original_name', label: 'Название'}];
-    const issuesParams = [{ name: 'issue', label: 'Издательство' },
-      { name: 'issue_city', label: 'Город издания'}];
+    const standartParams = [{name: 'second_name', original: 'original_name', label: 'Название'}];
 
     switch (status) {
       case 'SourceThesis':
-        return [ ...standartParams, {
-          name: 'defense_city',
-          label: 'Город защиты'
-        }];
+      case 'SourceOneVolumeBook':
+      case 'SourceStandart':
+        return [ ...standartParams ];
 
       case 'SourceArticleSerialEdition':
         return [ ...standartParams, {
-          name: 'issue_title',
+          name: 'issue_english_title',
+          original: 'issue_title',
           label: 'Название издания'
         }];
 
-      case 'SourceOneVolumeBook':
-        return [ ...standartParams, ...issuesParams ];
-
       case 'SourceMultiVolumeBook':
         return [ ...standartParams, {
-          name: 'original_part_name',
+          name: 'second_part_name',
+          original: 'original_part_name',
           label: 'Название части/тома оригинальное'
-        }, ...issuesParams ];
+        }];
 
       case 'SourceElectronic':
         return [ ...standartParams, {
-          name: 'original_source_name',
+          name: 'second_source_name',
+          original: 'original_source_name',
           label: 'Название источника оригинальное'
         }];
 
       case 'SourceLegislativeMaterial':
-        return [{
-          name: 'original_name',
-          label: 'Название оригинальное'
-        }, {
-          name: 'adopted_authority',
+        return [ ...standartParams, {
+          name: 'adopted_authority_translate',
+          original: 'adopted_authority',
           label: 'Принявший орган'
         }, {
-          name: 'approval_authority',
+          name: 'approval_authority_translate',
+          original: 'approval_authority',
           label: 'Одобривший орган'
-        }, ...issuesParams ];
-
-      case 'SourceStandart':
-        return [{
-          name: 'original_name',
-          label: 'Название оригинальное'
-        }, ...issuesParams ];
+        }];
 
       case 'SourcePatent':
         return [{
-          name: 'patent_classifier',
-          label: 'Патентный классификатор'
-        }, {
-          name: 'invention_title',
+          name: 'second_invention_title',
+          original: 'invention_title',
           label: 'Название изобретения'
         }, {
-          name: 'author',
-          label: 'Автор'
-        }, {
-          name: 'person_name',
+          name: 'person_name_translate',
+          original: 'person_name',
           label: 'ФИО персоны'
         }, {
-          name: 'organization_name',
+          name: 'organization_name_translate',
+          original: 'organization_name',
           label: 'Название организации'
         }, {
-          name: 'publication_place',
+          name: 'publication_place_translate',
+          original: 'publication_place',
           label: ' Где опубликован патент'
         }];
 
@@ -98,26 +85,23 @@ class ArticleSourceTranslateItemForm extends Component {
     }
   };
 
-  renderFields = (source, number) => {
+  renderFields = (source) => {
     const fields = this.getFields(source.resourcetype);
 
     return fields.map((field, index) => {
       let fieldName = field.name;
-      let fieldValue = source[fieldName];
+      let fieldValue = source[field.original];
 
-      if (field.nestedName) {
-        fieldValue = source[field.name][field.nestedName];
-        fieldName = `${field.name}.${field.nestedName}`;
-      }
+      console.log(source[fieldName]);
 
       return (
         <div className="form__field" key={ index }>
-          <label htmlFor={ `sources[${number}].${fieldName}` } className="form__label">
+          <label htmlFor={ fieldName } className="form__label">
             { field.label } <ReqMark />
           </label>
 
           <TextField className="text-field_preview text-field_dark" textarea value={ fieldValue } readOnly />
-          <Field name={ `sources[${number}].${fieldName}` } id={ `sources[${number}].${fieldName}` }
+          <Field name={ fieldName } id={ fieldName } value={ source[fieldName] }
                  textarea component={ TextField } className="text-field_white"
                  placeholder="Введите перевод" validate={ [validate.required] } />
         </div>
@@ -125,22 +109,45 @@ class ArticleSourceTranslateItemForm extends Component {
     })
   };
 
-  render() {
-    const { item, index, onSubmit } = this.props;
-    return (
-      <FieldSet fieldsTitle={ this.getResourceTypeName(item.resourcetype) }
-                legend={`Источник №${index + 1}`} key={ item.id }>
-        { this.renderFields(item, index) }
+  handleSubmit = (formData) => {
+    const { onSubmit } = this.props;
+    onSubmit(formData);
+  };
 
-        <div className="form__field">
-          <Button type="submit" onClick={ onSubmit }>
-            <Icon name="save" className="article-source-create-form__save-icon" />
-            Сохранить
-          </Button>
-        </div>
+  render() {
+    const { data, index, handleSubmit } = this.props;
+    return (
+      <FieldSet fieldsTitle={ this.getResourceTypeName(data.resourcetype) }
+                legend={`Источник №${index + 1}`}>
+        <form onSubmit={ handleSubmit(this.handleSubmit) }>
+          { this.renderFields(data) }
+
+          <div className="form__field">
+            <Button type="submit">
+              <Icon name="save" className="article-source-create-form__save-icon" />
+              Сохранить
+            </Button>
+          </div>
+        </form>
       </FieldSet>
     );
   }
 }
 
-export default ArticleSourceTranslateItemForm;
+ArticleSourceTranslateItemForm = reduxForm()(ArticleSourceTranslateItemForm);
+
+function mapStateToProps(state, props) {
+  const { formName, data } = props;
+  const formSelector = formValueSelector(formName);
+  const resourceType = formSelector(state, 'resourcetype');
+
+  return {
+    form: formName,
+    resourceType,
+    initialValues: {
+      ...data
+    },
+  };
+}
+
+export default connect(mapStateToProps)(ArticleSourceTranslateItemForm);

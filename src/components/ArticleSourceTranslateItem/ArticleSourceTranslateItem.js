@@ -10,17 +10,19 @@ class ArticleSourceTranslateItem extends Component {
     this.setState({ isEdit: true });
   };
 
-  handleSubmit = () => {
-    console.log('submit');
+  handleSubmit = (formData) => {
+    const { onSubmit } = this.props;
     this.setState({ isEdit: false });
+    onSubmit(formData);
   };
 
   render() {
     const { isEdit } = this.state;
-    const { field, index } = this.props;
+    const { field, index, hash } = this.props;
     return isEdit
-      ? <ArticleSourceTranslateItemForm item={ field } index={ index }
-                                        onSubmit={ this.handleSubmit } />
+      ? <ArticleSourceTranslateItemForm formName={ `source-translate[${hash}]` }
+                                        data={ field } index={ index }
+                                        onSubmit={ this.handleSubmit }/>
       : <ArticleSource index={ index } data={ field }
                        onEdit={ this.handleEdit }
                        isTraslate={ true } />;

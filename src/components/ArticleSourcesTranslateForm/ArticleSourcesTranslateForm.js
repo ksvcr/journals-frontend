@@ -1,30 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import nanoid from 'nanoid';
 
 import ArticleSourceTranslateItem from '~/components/ArticleSourceTranslateItem/ArticleSourceTranslateItem';
 
 class ArticleSourcesTranslateForm extends Component {
-  renderSourceList = () => {
+  renderList = () => {
     const { articleData } = this.props;
 
-    return articleData.sources.map((field, index) =>
-      <ArticleSourceTranslateItem field={ field } index={ index } key={ index }/>);
+    return articleData.sources.map((source, index) => {
+      const hash = nanoid();
+      return (
+        <ArticleSourceTranslateItem field={ source } index={ index } key={ index }
+                                    hash={ hash } onSubmit={ this.handleSubmit }/>
+      );
+    })
+  };
+
+  handleSubmit = (formData) => {
+    const { id, editArticleSource } = this.props;
+    return editArticleSource(id, formData);
   };
 
   render() {
     const { articleData } = this.props;
+
     return (
       <div  className="article-common-translate-form">
         <h2 className="page__title">Список литературы</h2>
-
-        { articleData.sources.length > 0 &&
+        {
+          articleData.sources.length > 0 &&
           <div className="form__field">
-            <div className="article-source-list">
-              { this.renderSourceList() }
-            </div>
+            { this.renderList() }
           </div>
         }
-
       </div>
     );
   }

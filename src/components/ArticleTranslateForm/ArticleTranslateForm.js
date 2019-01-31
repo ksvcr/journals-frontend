@@ -18,7 +18,7 @@ class ArticleTranslateForm extends Component {
     const { id } = this.props;
     return {
       id,
-      formName: FORM_NAME
+      formName: FORM_NAME,
     };
   }
 
