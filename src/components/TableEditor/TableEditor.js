@@ -60,12 +60,10 @@ class TableEditor extends Component {
       return row;
     });
 
-    setTimeout(() => {
-      this.setState({
-        rows: newRows,
-        showTable: true
-      });
-    }, 0);
+    this.setState({
+      rows: newRows,
+      showTable: true
+    });
   };
 
   addRow = () => {
@@ -78,12 +76,10 @@ class TableEditor extends Component {
     }
     const newRows = [ ...rows, newRow ];
 
-    setTimeout(() => {
-      this.setState({
-        rows: newRows,
-        showTable: true
-      });
-    }, 0);
+    this.setState({
+      rows: newRows,
+      showTable: true
+    });
   };
 
   handleMetaChange = (id, formData) => {

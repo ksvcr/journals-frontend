@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorReviewerList';
 import RedactorReviewTools from '~/components/RedactorReviewTools/RedactorReviewTools';
 import RedactorReviewStatus from '~/components/RedactorReviewStatus/RedactorReviewStatus';
+import InvitedReviewersList from '~/components/InvitedReviewersList/InvitedReviewersList';
+import RedactorCollapseButton from '~/components/RedactorCollapseButton/RedactorCollapseButton';
+import Collapse from '~/components/Collapse/Collapse';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -15,15 +18,41 @@ class RedactorReview extends Component {
     isShowReviewerList: false
   };
 
+  get invitesCount() {
+    const { articleData } = this.props;
+    return articleData.reviewInvites ? articleData.reviewInvites.length : 0;
+  }
+
+  componentDidMount() {
+    const { fetchArticleReviewInvites, articleId } = this.props;
+    fetchArticleReviewInvites({ article: articleId });
+  }
+
   handleReviewerAdd = () => {
     this.setState({
       isShowReviewerList: true
     });
   };
 
+  handleReviewerListClose = () => {
+    this.setState({
+      isShowReviewerList: false
+    });
+  };
+
   handleSelfInvite = () => {
-    const { articleId, currentUserId, inviteArticleReviewer } = this.props;
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId });
+    const { articleId, currentUserId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId }).then(() => {
+      return fetchArticleReviewInvites({ article: articleId });
+    });
+  };
+
+  renderCollapseButton = (props) => {
+    return (
+      <RedactorCollapseButton { ...props }>
+        { `Рецензенты (${this.invitesCount})` }
+      </RedactorCollapseButton>
+    );
   };
 
   render() {
@@ -43,8 +72,15 @@ class RedactorReview extends Component {
             </div>
           }
         </div>
+
         { isShowReviewerList &&
-          <RedactorReviewerList articleId={ articleId } />
+          <RedactorReviewerList onClose={ this.handleReviewerListClose } articleId={ articleId } />
+        }
+
+        { this.invitesCount > 0 &&
+          <Collapse customHead={ this.renderCollapseButton }>
+            <InvitedReviewersList articleId={ articleId } />
+          </Collapse>
         }
       </div>
     );
@@ -65,7 +101,8 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-  inviteArticleReviewer: articlesActions.inviteArticleReviewer
+  inviteArticleReviewer: articlesActions.inviteArticleReviewer,
+  fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
 export default connect(

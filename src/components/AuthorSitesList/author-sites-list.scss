@@ -1,0 +1,88 @@
+.author-sites-list {
+  $root: &;
+
+  &__header {
+    font-size: 18px;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    margin: 12px 20px 12px 0;
+    padding: 10px 8px 10px 20px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: center;
+    border-radius: 36px;
+    border: 1px solid $orange-color;
+  }
+
+  &__remove {
+    font-size: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    opacity: 0;
+    transition: opacity .2s;
+    margin-left: 8px;
+
+    #{$root}__item:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__remove-icon {
+    width: 9px;
+    height: 9px;
+    fill: $orange-color;
+  }
+
+  &__actions {
+    padding: 18px 0;
+
+    & > .form {
+      padding: 20px 0;
+    }
+  }
+
+  &__add {
+    background: transparent;
+    outline: none;
+    border: 0;
+    cursor: pointer;
+    color: $link-color;
+    font-size: 18px;
+
+    &:hover {
+      color: $orange-color;
+      transition: all .2s;
+
+      #{$root}__add-icon {
+        fill: $orange-color;
+        border-color: $orange-color;
+        transition: all .2s;
+      }
+    }
+  }
+
+  &__add-icon {
+    fill: $link-color;
+    width: 7px;
+    height: 7px;
+    padding: 4px;
+    border-radius: 50%;
+    border: 1px solid $link-color;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+}

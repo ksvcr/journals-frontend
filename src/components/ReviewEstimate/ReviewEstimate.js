@@ -9,7 +9,8 @@ import './review-estimate.scss';
 class ReviewEstimate extends Component {
   handleRadioCheck = (event) => {
     const { onChange } = this.props;
-    const { name, value } = event.target;
+    let { name, value } = event.target;
+    value = parseInt(value, 10);
     onChange && onChange(name, value);
   };
 
@@ -125,7 +126,7 @@ ReviewEstimate.propTypes = {
     estimate_actual_problem: PropTypes.string,
     estimate_sci_style: PropTypes.string,
     estimate_methods_conformity: PropTypes.string,
-    estimate_sci_novelty: PropTypes.string
+    estimate_sci_novelty: PropTypes.string,
   }),
   disabled: PropTypes.bool,
   onChange: PropTypes.func

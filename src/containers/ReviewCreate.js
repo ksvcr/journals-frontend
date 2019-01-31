@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
 
 import * as articlesActions from '~/store/articles/actions';
+import * as usersActions from '~/store/users/actions';
 
 class ReviewCreate extends Component {
   componentDidMount() {
@@ -12,32 +13,42 @@ class ReviewCreate extends Component {
   }
 
   handleInitialRequest = () => {
-    const { articleId, fetchArticle } = this.props;
+    const { articleId, fetchArticle, fetchUser } = this.props;
 
-    return Promise.all([
-      fetchArticle(articleId)
-    ]);
+    const promises = [];
+
+    if (articleId !== undefined) {
+      promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
+        const authorId = articleData.author.user;
+        return fetchUser(authorId);
+      }));
+    }
+
+    return Promise.all(promises);
   };
 
   handleSubmit = (formData) => {
-    const { articleId, currentUserId, createArticleReview, push } = this.props;
+    const { articleId, currentUserId, createArticleReview, push, reviewsFromCurrentUser } = this.props;
+    const review_round = reviewsFromCurrentUser.length + 1;
+
     const data = { ...formData,
       article: articleId,
       reviewer: currentUserId,
-      review_round: 1
+      review_round
     };
+
     createArticleReview(articleId, data).then(() => { push('/'); });
   };
 
   render() {
-    const { articleId } = this.props;
+    const { articleId, reviewsFromCurrentUser } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
           Новая рецензия
         </h1>
 
-        <ReviewCreateForm id={ articleId } onSubmit={ this.handleSubmit } />
+        <ReviewCreateForm id={ articleId } onSubmit={ this.handleSubmit } reviews={ reviewsFromCurrentUser }/>
       </React.Fragment>
     )
   }
@@ -45,19 +56,24 @@ class ReviewCreate extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { user } = state;
+  const { user, articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
+  const currentUserId = user.data.id;
+  const reviews = articles.data[articleId] ? articles.data[articleId].reviews : [];
+  const reviewsFromCurrentUser = reviews.filter((item) => item.reviewer === currentUserId);
   return {
     articleId,
-    currentUserId: user.data.id,
+    currentUserId,
+    reviewsFromCurrentUser,
   };
 }
 
 const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
-  createArticleReview: articlesActions.createArticleReview
+  createArticleReview: articlesActions.createArticleReview,
+  fetchUser: usersActions.fetchUser
 };
 
 export default connect(

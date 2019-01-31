@@ -1,0 +1,32 @@
+.collapse {
+  $root: &;
+  border-top: 1px solid #e8e7e4;
+
+  &__title {
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #192A3E;
+    font-weight: 600;
+  }
+
+  &__head {
+    position: relative;
+    cursor: pointer;
+    padding: 15px 0;
+  }
+
+  &__arrow {
+    width: 8px;
+    height: 12px;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: rotate(-90deg) translate(50%, -100%);
+
+    #{$root}_opened & {
+      transform: rotate(90deg) translate(-50%, 100%);
+    }
+  }
+}

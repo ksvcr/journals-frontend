@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import * as articlesActions from '~/store/articles/actions';
 
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
@@ -26,16 +27,50 @@ class RedactorDecision extends Component {
   };
 
   get options() {
-    return [
-      {
-        title: 'Принять',
-        value: 'AWAIT_PAYMENT'
-      },
-      {
-        title: 'Отклонить',
-        value: 'DISAPPROVED'
-      }
-    ];
+    const { articleState } = this.props;
+
+    switch (articleState) {
+      case 'AWAIT_REDACTOR':
+        return [
+          {
+            title: 'Принять',
+            value: 'AWAIT_PAYMENT',
+            color: 'green'
+          },
+          {
+            title: 'Доработать',
+            value: 'REVISION',
+            color: 'orange'
+          },
+          {
+            title: 'Отклонить',
+            value: 'DISAPPROVED',
+            color: 'red'
+          }
+        ];
+
+      // После оплаты статья отправляется на вычитку корректору
+      case 'AWAIT_PAYMENT':
+        return [
+          {
+            title: 'Подтвердить оплату',
+            value: 'AWAIT_PROOFREADING',
+            color: 'green'
+          }
+        ];
+
+      case 'AWAIT_PUBLICATION':
+        return [
+          {
+            title: 'Опубликовать',
+            value: 'PUBLISHED',
+            color: 'green'
+          }
+        ];
+
+      default:
+        return [];
+    }
   }
 
   render() {
@@ -43,15 +78,19 @@ class RedactorDecision extends Component {
     const { articleId } = this.props;
     return (
       <div className="redactor-decision">
-        <div className="redactor-decision__switch">
-          <MultiSwitch options={ this.options } name={ `decision-${articleId}` } value={ decision }
-                       onChange={ this.handleChange } />
-        </div>
-        <div className="redactor-decision__bottom">
-          <Button type="button" className="button_orange" onClick={ this.handleSave }>
-            Отправить
-          </Button>
-        </div>
+        { this.options.length > 0 &&
+          <div className="redactor-decision__switch">
+            <MultiSwitch options={ this.options } name={ `decision-${articleId}` } value={ decision }
+                         onChange={ this.handleChange } />
+          </div>
+        }
+        { decision &&
+          <div className="redactor-decision__bottom">
+            <Button type="button" className="button_orange" onClick={ this.handleSave }>
+              Отправить
+            </Button>
+          </div>
+        }
       </div>
     );
   }
@@ -61,11 +100,20 @@ RedactorDecision.propTypes = {
   articleId: PropTypes.number
 };
 
+function mapStateToProps(state, props) {
+  const { articles } = state;
+  const { articleId } = props;
+
+  return {
+    articleState: articles.data[articleId].state_article
+  };
+}
+
 const mapDispatchToProps = {
   editArticle: articlesActions.editArticle
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(RedactorDecision);

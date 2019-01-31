@@ -1,6 +1,6 @@
-import qs from 'qs';
+import getCookies from "./getCookies";
 
 export default function hasToken() {
-  const parsedCookies = qs.parse(document.cookie);
-  return parsedCookies.hasOwnProperty('csrftoken');
+  const cookies = getCookies();
+  return cookies.hasOwnProperty('csrftoken');
 }

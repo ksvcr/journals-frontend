@@ -1,5 +1,5 @@
 import { FETCH_USERS, FETCH_USER, SEARCH_USERS,
-        CREATE_USER, INSERT_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
+        CREATE_USER, INSERT_USER, UPDATE_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -8,7 +8,12 @@ const initialState = {
   isRejected: false,
   data: {},
   ids: [],
-  searchData: {}
+  searchData: {},
+  total: 0,
+  paginate: {
+    limit: 5,
+    offset: 0,
+  }
 };
 
 function users(state = initialState, action) {
@@ -16,15 +21,18 @@ function users(state = initialState, action) {
     case `${FETCH_USERS}_PENDING`:
     case `${SEARCH_USERS}_PENDING`:
     case `${CREATE_USER}_PENDING`:
-    case `${FETCH_USER}_PENDING`:   
+    case `${FETCH_USER}_PENDING`:
+    case `${UPDATE_USER}_PENDING`:
       return { ...state,
-        isPending: true
+        isPending: true,
+        ...action.meta
       };
 
     case `${FETCH_USERS}_REJECTED`:
     case `${SEARCH_USERS}_REJECTED`:
     case `${CREATE_USER}_REJECTED`:
     case `${FETCH_USER}_REJECTED`:
+    case `${UPDATE_USER}_REJECTED`:
       return { ...state,
         isRejected: true,
         isPending: false,
@@ -37,10 +45,12 @@ function users(state = initialState, action) {
       return { ...state,
         isPending: false,
         isFulfilled: true,
+        total: action.payload.count,
         ...entity
       };
 
     case `${FETCH_USER}_FULFILLED`:
+    case `${UPDATE_USER}_FULFILLED`:
       return { ...state,
         isPending: false,
         isFulfilled: true,

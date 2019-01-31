@@ -7,6 +7,7 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import TagEditor from '~/components/TagEditor/TagEditor';
+import TranslateDirection from '~/components/TranslateDirection/TranslateDirection';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -52,6 +53,11 @@ class TranslatorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
+  handleSortChange = (ordering) => {
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ ordering });
+  };
+
   get listProps() {
     const { articlesArray, sitesData } = this.props;
 
@@ -64,7 +70,7 @@ class TranslatorArticleList extends Component {
       cells: [
         {
           style: {
-            width: '30%'
+            width: '26%'
           },
           isMain: true,
           head: () => 'Название',
@@ -90,6 +96,13 @@ class TranslatorArticleList extends Component {
           sort: 'date_send_to_review',
           head: () => 'Отправлена',
           render: (data) => formatDate.toString(data.date_send_to_review)
+        },
+        {
+          style: {
+            width: '12%'
+          },
+          head: () => 'Перевод',
+          render: (data) => <TranslateDirection language={data.language}/>
         },
         {
           style: {

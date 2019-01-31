@@ -43,11 +43,9 @@ class ContentBlock extends Component {
 
     onEdit(isEditable ? null : index);
 
-    setTimeout(()=> {
-      if (this.input) {
-        this.input.focus();
-      }
-    }, 0)
+    if (this.input) {
+      this.input.focus();
+    }
   };
 
   render() {

@@ -1,9 +1,12 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
-  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION
+  FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
+  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
+
+import differenceBy from 'lodash/differenceBy';
 
 export function fetchArticles(siteId, params={}) {
   return (dispatch) => {
@@ -30,20 +33,23 @@ export function fetchArticle(id) {
 export function createArticle(siteId, data) {
   return (dispatch) => {
     let { content_blocks, sources, financing_sources, ...articleData } = data;
+    // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
     const payload = financingPromise.then((financingResponse=[]) => {
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
+      // Статья
       return apiClient.createArticle(siteId, articleData).then((articleResponse) => {
         const articleId = articleResponse.id;
         return apiClient.lockArticle(articleId).then(() => {
           const resourcePromises = [];
+          // Контент-блоки
           if (content_blocks) {
             content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
             resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
           }
-
+          // Список литературы
           if (sources) {
             resourcePromises.push(apiClient.createSources(articleId, sources));
           }
@@ -70,29 +76,48 @@ export function createArticle(siteId, data) {
 }
 
 export function editArticle(id, data) {
-  return (dispatch) => {
-    let { content_blocks, financing_sources, ...articleData } = data;
-    let financingPromises = [Promise.resolve()];
+  return (dispatch, state) => {
+    const prevArticleData = state().articles.data[id];
+    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    // Источники финансирования
+    let financingPromises = [];
 
     if (financing_sources) {
-      const newFinancingArray = financing_sources.filter(item => item.id === undefined);
-      const oldFinancingArray = financing_sources.filter(item => item.id !== undefined);
+      const createSourcesArray = financing_sources.filter(item => item.id === undefined);
+      const editSourcesArray = financing_sources.filter(item => item.id !== undefined);
 
-      const createFinancingPromise = apiClient.createFinancingSources(newFinancingArray);
-      const editFinancingPromises = oldFinancingArray.map(item => apiClient.editFinancingSource(item.id, item));
+      const createFinancingPromise = apiClient.createFinancingSources(createSourcesArray);
+      const editFinancingPromises = editSourcesArray.map(item => apiClient.editFinancingSource(item.id, item));
       financingPromises = [createFinancingPromise, ...editFinancingPromises];
     }
 
-    const payload = Promise.all(financingPromises).then(([ createFinancingResponse=[], ...editFinancingResponse ]) => {
+    const payload = Promise.all(financingPromises).then(
+      ([ createFinancingResponse=[], ...editFinancingResponse ]) => {
       const financingResponse = [ ...createFinancingResponse, ...editFinancingResponse ];
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
+
       return apiClient.lockArticle(id).then(() => {
-        const editPromises = [apiClient.editArticle(id, articleData)];
+        let editPromises = [apiClient.editArticle(id, articleData)];
+        // Контент-блоки
         if (content_blocks) {
           editPromises.push(apiClient.editBlocks(id, content_blocks));
         }
+
+        // Список литературы
+        if (sources) {
+          const createSourcesArray = sources.filter(item => item.id === undefined);
+          const editSourcesArray = sources.filter(item => item.id !== undefined);
+          const hasRemoved = prevArticleData.sources.length > editSourcesArray.length;
+          const removedSourcesArray = hasRemoved ? differenceBy(prevArticleData.sources, editSourcesArray, 'id') : [];
+
+          const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
+          const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
+          const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));
+          editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises ]
+        }
+
         return Promise.all(editPromises);
       })
     });
@@ -138,12 +163,22 @@ export function inviteArticleReviewer(articleId, data) {
 
 export function createArticleReview(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.createArticleReview(articleId, data);;
+    const payload = apiClient.createArticleReview(articleId, data);
     return dispatch({
       type: CREATE_ARTICLE_REVIEW,
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function editArticleReview(articleId, reviewId, data) {
+  return (dispatch) => {
+    const payload = apiClient.editArticleReview(articleId, reviewId, data);
+    return dispatch({
+      type: EDIT_ARTICLE_REVIEW,
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function acceptArticleReviewInvite(articleId) {
@@ -159,12 +194,26 @@ export function acceptArticleReviewInvite(articleId) {
 
 export function createArticleTranslation(articleId, data) {
   return (dispatch) => {
-    const payload = apiClient.createArticleTranslation(articleId, data);
+    const payload = apiClient.lockArticle(articleId).then(() =>
+      apiClient.createArticleTranslation(articleId, data)
+    );
+
     return dispatch({
       type: CREATE_ARTICLE_TRANSLATION,
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function fetchArticleReviewInvites(params) {
+  return (dispatch) => {
+    const payload = apiClient.getReviewInvites(params);
+    return dispatch({
+      type: FETCH_ARTICLE_REVIEW_INVITES,
+      meta: params,
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function resetArticles() {

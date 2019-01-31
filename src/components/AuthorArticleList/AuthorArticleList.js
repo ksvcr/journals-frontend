@@ -61,18 +61,12 @@ class AuthorArticleList extends Component {
 
   handleEdit = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}/edit/`);
-    }, 0);
+    push(`/article/${id}/edit/`);
   };
 
   handlePreview = (id) => {
     const { push } = this.props;
-
-    setTimeout(() => {
-      push(`/article/${id}`);
-    }, 0);
+    push(`/article/${id}`);
   };
 
   handlePaymentClose = () => {
@@ -129,7 +123,7 @@ class AuthorArticleList extends Component {
           sort: 'stage_article',
           head: () => 'Этап',
           render: (data) =>
-            getArticleStageTitle(data.stage)
+            getArticleStageTitle(data.stage_article)
         },
         {
           style: {

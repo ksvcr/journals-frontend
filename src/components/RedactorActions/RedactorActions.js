@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
@@ -11,17 +12,25 @@ class RedactorActions extends Component {
   };
 
   get actions() {
-    const { articleId } = this.props;
-    return [
+    const { articleId, articleState } = this.props;
+    const statusesForDecision = ['AWAIT_REDACTOR', 'AWAIT_PAYMENT', 'AWAIT_PUBLICATION'];
+    const isShowDecision = ~statusesForDecision.indexOf(articleState);
+
+    const actions = [
       {
         title: 'Рецензировать',
         component: <RedactorReview articleId={ articleId } />
-      },
-      {
-        title: 'Решение',
-        component: <RedactorDecision articleId={ articleId } />
       }
     ];
+
+    if (isShowDecision) {
+      actions.push({
+        title: 'Решение',
+        component: <RedactorDecision articleId={ articleId } />
+      });
+    }
+
+    return actions;
   }
 
   handleTabToggle = (event) => {
@@ -40,7 +49,8 @@ class RedactorActions extends Component {
         { 'redactor-actions__tab-item_active': index === actionIndex });
       return (
         <li key={ index } className={ tabItemClasses }>
-          <button type="button" className="redactor-actions__tab" data-index={ index } onClick={ this.handleTabToggle }>
+          <button type="button" className="redactor-actions__tab" data-index={ index }
+                  onClick={ this.handleTabToggle }>
             { item.title }
           </button>
         </li>
@@ -72,4 +82,15 @@ class RedactorActions extends Component {
   }
 }
 
-export default RedactorActions;
+function mapStateToProps(state, props) {
+  const { articles } = state;
+  const { articleId } = props;
+
+  return {
+    articleState: articles.data[articleId] && articles.data[articleId].state_article
+  };
+}
+
+export default connect(
+  mapStateToProps
+)(RedactorActions);

@@ -7,14 +7,23 @@ import TextField from '~/components/TextField/TextField';
 import Button from '~/components/Button/Button';
 import Select from '~/components/Select/Select';
 import Icon from '~/components/Icon/Icon';
+import Radio from '~/components/Radio/Radio';
 import SourceThesisFields from '~/components/SourceThesisFields/SourceThesisFields';
 import SourceArticleSerialEditionFields from '~/components/SourceArticleSerialEditionFields/SourceArticleSerialEditionFields';
 import SourceOneVolumeBookFields from '~/components/SourceOneVolumeBookFields/SourceOneVolumeBookFields';
+import SourceMultiVolumeBookFields from '~/components/SourceMultiVolumeBookFields/SourceMultiVolumeBookFields';
+import SourceElectronic from '~/components/SourceElectronic/SourceElectronic';
+import SourceLegislativeMaterial from '~/components/SourceLegislativeMaterial/SourceLegislativeMaterial';
+import SourceStandart from '~/components/SourceStandart/SourceStandart';
+import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
+import { getCountriesArray } from '~/store/countries/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
+import getRightholderTypes from '~/services/getRightholderTypes';
+import apiClient from '~/services/apiClient';
 import * as validate from '~/utils/validate';
 
 import './article-source-create-form.scss';
@@ -23,7 +32,7 @@ import './assets/save.svg';
 class ArticleSourceCreateForm extends Component {
   handleSubmit = (formData) => {
     const { field, onSubmit } = this.props;
-    onSubmit(field, { ...formData, isValid: true });
+    onSubmit(field, formData);
   };
 
   get rubricsOptions() {
@@ -42,11 +51,37 @@ class ArticleSourceCreateForm extends Component {
     }));
   }
 
+  get thesisCategories() {
+    return [{
+      title: 'Кандидатская',
+      value: '1',
+    }, {
+      title: 'Докторская',
+      value: '2'
+    }]
+  }
+
+  renderThesisCategories = () => {
+    return this.thesisCategories.map((item, index) => (
+      <Field key={ index } name="category" value={ item.value }
+             type="radio" component={ Radio }>
+        { item.title }
+      </Field>
+    ));
+  };
+
+  fetchCountries = (value) => {
+    return apiClient.getCountries({ name: value, limit: 5 });
+  };
+
   get specialFields() {
-    const { resourceType } = this.props;
+    const { resourceType, rightholderType, countriesArray, countriesData } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
-        return <SourceThesisFields rubricsOptions={ this.rubricsOptions } />;
+        return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
+                                   languagesOptions={ this.languagesOptions }
+                                   countriesArray={ countriesArray }
+                                   countriesData={ countriesData } />;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -54,33 +89,67 @@ class ArticleSourceCreateForm extends Component {
       case 'SourceOneVolumeBook':
         return <SourceOneVolumeBookFields />;
 
+      case 'SourceMultiVolumeBook':
+        return <SourceMultiVolumeBookFields />;
+
+      case 'SourceElectronic':
+        return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
+
+      case 'SourceLegislativeMaterial':
+        return <SourceLegislativeMaterial countriesArray={ countriesArray }
+                                          countriesData={ countriesData } />;
+
+      case 'SourceStandart':
+        return <SourceStandart />;
+
+      case 'SourcePatent':
+        return <SourcePatent rightholderType={ rightholderType }
+                             rightholderOptions={ getRightholderTypes() }
+                             countriesArray={ countriesArray }
+                             countriesData={ countriesData } />;
+
       default:
         return null;
     }
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, resourceType, isCorrector } = this.props;
     return (
       <form className="article-source-create-form form" onSubmit={ handleSubmit(this.handleSubmit) }>
-        <div className="form__field">
-          <div className="form__row">
-            <div className="form__col form__col_6">
-              <label htmlFor="resourcetype" className="form__label">
-                Тип источника
-              </label>
-              <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
-                     component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
+        {
+          !isCorrector &&
+          (
+            <div className="form__field">
+              <div className="form__row">
+                <div className="form__col form__col_6">
+                  <label htmlFor="resourcetype" className="form__label">
+                    Тип источника
+                  </label>
+                  <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
+                        component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
+                </div>
+                { resourceType === 'SourceThesis' ?
+                  <div className="form__col form__col_6">
+                    <label htmlFor="category" className="form__label">
+                      Тип диссертации
+                    </label>
+                    <div className="form__box form__box_radios">
+                      { this.renderThesisCategories() }
+                    </div>
+                  </div> :
+                  <div className="form__col form__col_6">
+                    <label htmlFor="source_language" className="form__label">
+                      Язык оригинала
+                    </label>
+                    <Field name="language" id="source_language" className="select_white"
+                          component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+                  </div>
+                }
+              </div>
             </div>
-            <div className="form__col form__col_6">
-              <label htmlFor="source_language" className="form__label">
-                Язык оригинала
-              </label>
-              <Field name="language" id="source_language" className="select_white"
-                     component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
-            </div>
-          </div>
-        </div>
+          )
+        }
 
         { this.specialFields }
 
@@ -121,33 +190,48 @@ class ArticleSourceCreateForm extends Component {
   }
 }
 
-ArticleSourceCreateForm = reduxForm({
-  destroyOnUnmount: false
-})(ArticleSourceCreateForm);
+ArticleSourceCreateForm = reduxForm()(ArticleSourceCreateForm);
+
+const defaultDate = moment().format('YYYY-MM-DD');
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
+  const { user, countries } = state;
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
+  const countriesArray = getCountriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const resourceType = formSelector(state, 'resourcetype');
+  const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
+  const rightholderTypes = getRightholderTypes();
   const sourceTypes = getSourceTypes();
   return {
     form: formName,
     languagesArray,
     rubricsArray,
     resourceType,
+    rightholderType,
+    countriesArray,
+    countriesData: countries.data,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
-      defense_country: 132, // Россия
-      defense_date: moment().format('YYYY-MM-DD'),
-      statement_date: moment().format('YYYY-MM-DD'),
+      rightholder: rightholderTypes[0].value,
+      category: '1', // id Категории
+      defense_date: defaultDate,
+      statement_date: defaultDate,
+      standart_entry_date: defaultDate,
+      adoption_date: defaultDate,
+      approval_date: defaultDate,
+      patent_application_date: defaultDate,
+      publication_date: defaultDate,
       ...data
-    }
+    },
+    isCorrector: user.data.role === 'CORRECTOR'
   };
 }
+
 
 export default connect(mapStateToProps)(ArticleSourceCreateForm);
 

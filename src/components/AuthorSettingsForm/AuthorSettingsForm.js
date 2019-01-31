@@ -2,17 +2,38 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
-import * as validate from '~/utils/validate';
-
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+
+import { roleMap, getUserRoleTitle } from '~/services/userRoles';
+import { getCountriesArray } from '~/store/countries/selector';
+import * as validate from '~/utils/validate';
 
 import './author-settings-form.scss';
 
 class AuthorSettingsForm extends Component {
+  renderRoleFields = () => {
+    const { userData } = this.props;
+    const { role } = userData;
+    const isDisabled = Boolean(~['CORRECTOR', 'TRANSLATOR'].indexOf(role)) && this.isCurrentUser;
+    const isFullAccess = Boolean(~['CORRECTOR', 'TRANSLATOR', 'REDACTOR'].indexOf(role));
+    const roles = isFullAccess ? Object.keys(roleMap) : ['AUTHOR', 'REVIEWER'];
+    return roles.map((item) => (
+      <Field disabled={ isDisabled } key={ item } name="role" value={ item }
+             type="radio" component={ Radio }>
+        { getUserRoleTitle(item) }
+      </Field>
+    ));
+  };
+
+  get isCurrentUser() {
+    return !this.props.userId;
+  }
+
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, countriesArray, countriesData } = this.props;
     return (
       <form className="author-settings-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
@@ -86,7 +107,10 @@ class AuthorSettingsForm extends Component {
                 Cтрана
               </label>
               <Field name="country" id="country"
-                    component={ TextField } placeholder="Введите страну" />
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
@@ -104,7 +128,10 @@ class AuthorSettingsForm extends Component {
                 Страна по английски
               </label>
               <Field name="country_en" id="country_en"
-                    component={ TextField } placeholder="Введите страну" />
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city_en" className="form__label">
@@ -164,8 +191,11 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="mail_address_country" className="form__label">
                 Страна
               </label>
-              <Field name="mail_address_country" id="mail_address_country" component={ TextField }
-                     placeholder="Введите страну" />
+              <Field name="mail_address_country" id="mail_address_country"
+                     format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     component={ props => <SearchableSelect placeholder="Выберите страну"
+                                                            options={ countriesArray } { ...props } /> }  />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -221,14 +251,15 @@ class AuthorSettingsForm extends Component {
 
         <hr className="page__divider" />
 
-        <h2 className="form__subtitle">Вы зарегистрированы как:</h2>
+        <h2 className="form__subtitle">
+          {
+            this.isCurrentUser ?
+            'Вы зарегистрированы как:' :
+            'Пользователь зарегистрирован как:'
+          }
+        </h2>
         <div className="author-settings-form__role form__field form__field_inline">
-          <Field name="role" value="AUTHOR" type="radio" component={ Radio }>
-            Автор
-          </Field>
-          <Field name="role" value="REVIEWER" type="radio" component={ Radio }>
-            Автор и рецензент
-          </Field>
+          { this.renderRoleFields() }
         </div>
 
         <div className="form__field">
@@ -240,16 +271,22 @@ class AuthorSettingsForm extends Component {
 }
 
 AuthorSettingsForm = reduxForm({
-  destroyOnUnmount: true
+  destroyOnUnmount: true,
+  enableReinitialize: true
 })(AuthorSettingsForm);
 
 function mapStateToProps(state, props) {
-  const { formName } = props;
-  const { user } = state;
+  const { userId } = props;
+  const { user, users, countries } = state;
+  const initialValues = userId ? users.data[userId] : user.data;
+
+  const countriesArray = getCountriesArray(state);
 
   return {
-    form: formName,
-    initialValues: user.data
+    userData: user.data,
+    countriesArray,
+    countriesData: countries.data,
+    initialValues
   };
 }
 

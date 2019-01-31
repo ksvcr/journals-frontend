@@ -7,6 +7,7 @@ const fetchInstance = new fetchService({
 const apiClient = {
   getSites: () => fetchInstance.request(`/sites/`),
   getLanguages: () => fetchInstance.request(`/languages/`),
+  getCountries: (params) => fetchInstance.request(`/countries/`, { params }),
   getRubrics: (siteId) => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
 
@@ -17,17 +18,21 @@ const apiClient = {
     const tail = userId !== null ? `${userId}/` : '';
     return fetchInstance.request(`/users/${tail}`, { params });
   },
+  updateUser: (userId, data) => fetchInstance.request(`/users/${userId}/`, { method: 'put', data }),
   createUser: (data) => fetchInstance.request(`/users/auth/register/`, { method: 'post', data }),
-  updateUserRole: (id, data) => fetchInstance.request(`/users/${id}/role`, { method: 'put', data }),
+  lockUser: (data) => fetchInstance.request('/users/lock/', { method: 'post', data }),
 
-  createUserTag: (userId, data) => {
-    return fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data });
-  },
-  removeUserTag: (userId, id) => {
-    return fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' });
-  },
+  createUserTag: (userId, data) =>
+    fetchInstance.request(`/users/${userId}/tags/`, { method: 'post', data }),
+  removeUserTag: (userId, id) =>
+    fetchInstance.request(`/users/${userId}/tags/${id}/`, { method: 'delete' }),
 
-  createSources: (articleId, data) => fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
+  createSources: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
+  editSource: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/`, { method: 'put', data }),
+  removeSource: (articleId, sourceId) =>
+    fetchInstance.request(`/articles/${articleId}/sources/${sourceId}/`, { method: 'delete' }),
 
   getArticles: (siteId=null, articleId=null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
@@ -41,19 +46,14 @@ const apiClient = {
   editArticle: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
-  lockArticle: (articleId) => {
-    return fetchInstance.request(`/articles/${articleId}/lock/`);
-  },
-  createArticleAttachment: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data });
-  },
+  lockArticle: (articleId) => fetchInstance.request(`/articles/${articleId}/lock/`),
+  createArticleAttachment: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
 
-  createBlocks: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data });
-  },
-  editBlocks: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data });
-  },
+  createBlocks: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
+  editBlocks: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
 
   createFinancingSources: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
   getFinancingSource: (id) => {
@@ -65,15 +65,23 @@ const apiClient = {
   deleteFinancingSource: (id) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
   },
+  getArticleTags: (articleId, params) => {
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { params });
+  },
   createArticleTag: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/create/`, { method: 'post', data });
+    return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
   },
   removeArticleTag: (articleId, id) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/${id}/update/`, { method: 'delete' });
+    return fetchInstance.request(`/articles/${articleId}/tags/${id}/`, { method: 'delete' });
   },
   createInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'post', data });
   },
+
+  getLawtypes: () => {
+    return fetchInstance.request(`/lawtypes/`);
+  },
+
   editInviteArticleReviewer: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/invite/`, { method: 'put', data });
   },
@@ -83,11 +91,13 @@ const apiClient = {
   createArticleTranslation: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/translations/`, { method: 'post', data });
   },
-
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
 
-  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data })
+  createArticleReview: (articleId, data) => fetchInstance.request(`/articles/${articleId}/reviews/`, { method: 'post', data }),
+  editArticleReview: (articleId, reviewId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/`, { method: 'put', data })
+  },
 };
 
 export default apiClient;
