@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { isInvalid, reduxForm } from 'redux-form';
+import { getFormValues, isInvalid, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import Button from '~/components/Button/Button';
 import ArticleCommonTranslateForm from '~/components/ArticleCommonTranslateForm/ArticleCommonTranslateForm';
 import ArticleSourcesTranslateForm from '~/components/ArticleSourcesTranslateForm/ArticleSourcesTranslateForm';
+
+import { deserializeArticleData } from '~/services/articleFormat';
 
 import './article-translate-form.scss';
 import './assets/save.svg';
@@ -15,10 +17,11 @@ const FORM_NAME = 'article-translate';
 
 class ArticleTranslateForm extends Component {
   get formProps() {
-    const { id } = this.props;
+    const { id, isTranslator } = this.props;
     return {
       id,
       formName: FORM_NAME,
+      isTranslator
     };
   }
 
@@ -63,11 +66,16 @@ ArticleTranslateForm = reduxForm({
   enableReinitialize: true
 })(ArticleTranslateForm);
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const { user } = state;
   const isInvalidForm = isInvalid(FORM_NAME)(state);
+  const formValues = getFormValues(FORM_NAME)(state);
 
   return {
-    isInvalidForm
+    isInvalidForm,
+    formValues,
+    initialValues: getInitialValues(state, props),
+    isTranslator: user.data.role === 'TRANSLATOR'
   };
 }
 
@@ -75,6 +83,18 @@ ArticleTranslateForm.propTypes = {
   id: PropTypes.number,
   onSubmit: PropTypes.func
 };
+
+function getInitialValues(state, props) {
+  const { articles } = state;
+  const { id } = props;
+  const data = deserializeArticleData(articles.data[id]);
+
+  const initialValues = {
+    ...data
+  };
+
+  return initialValues;
+}
 
 export default connect(
   mapStateToProps,

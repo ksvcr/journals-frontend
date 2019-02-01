@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
-import FieldSet from '~/components/FieldSet/FieldSet';
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 
-import getSourceTypes from '~/services/getSourceTypes';
 import * as validate from '~/utils/validate';
 
 class ArticleSourceTranslateItemForm extends Component {
-  state = { isEdit: false };
-
-  getResourceTypeName = (status) => {
-    const resourceTypes = getSourceTypes();
-    const currentType = resourceTypes.find(item => item.value === status);
-    return currentType.title;
-  };
-
   getFields = (status) => {
     const standartParams = [{name: 'second_name', original: 'original_name', label: 'Название'}];
 
@@ -92,8 +82,6 @@ class ArticleSourceTranslateItemForm extends Component {
       let fieldName = field.name;
       let fieldValue = source[field.original];
 
-      console.log(source[fieldName]);
-
       return (
         <div className="form__field" key={ index }>
           <label htmlFor={ fieldName } className="form__label">
@@ -110,26 +98,23 @@ class ArticleSourceTranslateItemForm extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { onSubmit } = this.props;
-    onSubmit(formData);
+    const { field, onSubmit } = this.props;
+    onSubmit(field, formData);
   };
 
   render() {
-    const { data, index, handleSubmit } = this.props;
+    const { data, handleSubmit } = this.props;
     return (
-      <FieldSet fieldsTitle={ this.getResourceTypeName(data.resourcetype) }
-                legend={`Источник №${index + 1}`}>
-        <form onSubmit={ handleSubmit(this.handleSubmit) }>
-          { this.renderFields(data) }
+      <form onSubmit={ handleSubmit(this.handleSubmit) }>
+        { this.renderFields(data) }
 
-          <div className="form__field">
-            <Button type="submit">
-              <Icon name="save" className="article-source-create-form__save-icon" />
-              Сохранить
-            </Button>
-          </div>
-        </form>
-      </FieldSet>
+        <div className="form__field">
+          <Button type="submit">
+            <Icon name="save" className="article-source-create-form__save-icon" />
+            Сохранить
+          </Button>
+        </div>
+      </form>
     );
   }
 }
@@ -138,12 +123,9 @@ ArticleSourceTranslateItemForm = reduxForm()(ArticleSourceTranslateItemForm);
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
-  const formSelector = formValueSelector(formName);
-  const resourceType = formSelector(state, 'resourcetype');
 
   return {
     form: formName,
-    resourceType,
     initialValues: {
       ...data
     },
