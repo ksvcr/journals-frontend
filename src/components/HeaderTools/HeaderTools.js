@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Menu from '~/components/Menu/Menu';
 import Button from '~/components/Button/Button';
+
+import i18n from '~/services/i18n';
 
 import './header-tools.scss';
 
@@ -11,18 +14,20 @@ class HeaderTools extends Component {
     return [
       {
         title: 'Rus',
-        href: '/rus'
+        handler: () => i18n.changeLanguage('ru')
       },
       {
         title: 'Eng',
-        href: '/eng'
+        handler: () => i18n.changeLanguage('en')
       }
     ];
   };
 
   get journalLink() {
+    const { t } = this.props;
+
     return [{
-      title: 'Наши журналы',
+      title: t('our_journals'),
       href: '/journals'
     }];
   };
@@ -34,6 +39,7 @@ class HeaderTools extends Component {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <div className="header-tools">
         <div className="header-tools__item">
@@ -45,7 +51,7 @@ class HeaderTools extends Component {
         { this.hasPublishAccess &&
           <div className="header-tools__item header-tools__item_right">
             <Button type="link" href="/article">
-              Опубликовать статью
+              { t('publish_article') }
             </Button>
           </div>
         }
@@ -60,6 +66,8 @@ function mapStateToProps(state) {
     userRole: user.data.role
   };
 }
+
+HeaderTools = withNamespaces()(HeaderTools);
 
 export default connect(
   mapStateToProps
