@@ -204,7 +204,8 @@ export function createArticleTranslation(id, data) {
       delete data.sources;
 
       const createTranslationPromise = apiClient.createArticleTranslation(id, data);
-      return Promise.all([ ...editSourcePromises, createTranslationPromise ]);
+      const editArticlePromise = apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' });
+      return Promise.all([ ...editSourcePromises, createTranslationPromise, editArticlePromise ]);
     });
 
     return dispatch({
