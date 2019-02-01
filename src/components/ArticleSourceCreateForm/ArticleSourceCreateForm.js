@@ -20,6 +20,7 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLawtypesArray } from '~/store/lawtypes/selector';
+import { getCountriesArray } from '~/store/countries/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -83,12 +84,13 @@ class ArticleSourceCreateForm extends Component {
   }
 
   get specialFields() {
-    const { resourceType, rightholderType } = this.props;
+    const { resourceType, rightholderType, countriesArray, countriesData } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
                                    languagesOptions={ this.languagesOptions }
-                                   loadCountries={ this.fetchCountries } />;
+                                   countriesArray={ countriesArray }
+                                   countriesData={ countriesData } />;
 
       case 'SourceArticleSerialEdition':
         return <SourceArticleSerialEditionFields />;
@@ -103,8 +105,9 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial loadCountries={ this.fetchCountries }
-                                          lawTypesOptions={ this.lawtypesOptions } />;
+        return <SourceLegislativeMaterial countriesArray={ countriesArray }
+                                          countriesData={ countriesData }
+                                          lawTypesOptions={ this.lawtypesOptions }/>;
 
       case 'SourceStandart':
         return <SourceStandart />;
@@ -112,7 +115,8 @@ class ArticleSourceCreateForm extends Component {
       case 'SourcePatent':
         return <SourcePatent rightholderType={ rightholderType }
                              rightholderOptions={ getRightholderTypes() }
-                             loadCountries={ this.fetchCountries }/>;
+                             countriesArray={ countriesArray }
+                             countriesData={ countriesData } />;
 
       default:
         return null;
@@ -202,9 +206,10 @@ const defaultDate = moment().format('YYYY-MM-DD');
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
-  const { user } = state;
+  const { user, countries } = state;
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
+  const countriesArray = getCountriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const resourceType = formSelector(state, 'resourcetype');
   const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
@@ -219,6 +224,8 @@ function mapStateToProps(state, props) {
     resourceType,
     rightholderType,
     lawtypes,
+    countriesArray,
+    countriesData: countries.data,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,
       rubric: rubricsArray.length ? rubricsArray[0].id : null,

@@ -105,7 +105,6 @@ class RedactorUsersList extends Component {
           style: {
             width: '25%'
           },
-          isMain: true,
           head: () => 'Роль',
           headToolTip: () => <ListChecker name="role" onChange={ this.handleChangeRole } data={ this.roleFilterOptions } />,
           render: ({ role }) => (
@@ -119,7 +118,6 @@ class RedactorUsersList extends Component {
             width: '30%',
             textAlign: 'right'
           },
-          isMain: true,
           head: () => 'Категории наук',
           render: (data) => null
         }

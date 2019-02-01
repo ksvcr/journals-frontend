@@ -49,7 +49,7 @@ class RedactorDecision extends Component {
           }
         ];
 
-      // После оплаты статья отправляется на вычитку
+      // После оплаты статья отправляется на вычитку корректору
       case 'AWAIT_PAYMENT':
         return [
           {

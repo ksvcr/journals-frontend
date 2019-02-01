@@ -60,10 +60,6 @@ class MainMenu extends Component {
         href: '/'
       },
       {
-        title: 'Выпуски',
-        href: '/releases'
-      },
-      {
         title: 'Пользователи',
         href: '/users'
       },

@@ -10,7 +10,7 @@ class ArticleSource extends Component {
   getTitle(parts, lang) {
    const { data } = this.props;
    let resultString = '';
-   if (data.author) {
+   if (data.author && lang === 'ru') {
      const { lastname, initials } = data.author;
      resultString = `${lastname} ${initials} `;
    }
@@ -52,7 +52,7 @@ class ArticleSource extends Component {
             { this.getTitle(['original_name', 'page_count'], 'ru') }
           </div>
           <div className="article-source__text">
-            { this.getTitle(['original_name', 'page_count'], 'en') }
+            { this.getTitle(['second_name', 'page_count'], 'en') }
           </div>
         </div>
         <div className="article-source__tools">

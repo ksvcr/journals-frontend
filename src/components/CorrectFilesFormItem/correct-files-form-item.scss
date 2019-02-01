@@ -20,10 +20,10 @@
 
   &__name {
     cursor: pointer;
-    color: #2E73FB;
+    color: $link-color;
     font-size: 18px;
     line-height: normal;
-    box-shadow: 0 1px 0 #2E73FB;
+    box-shadow: 0 1px 0 $link-color;
   }
 
   &__info {
@@ -44,11 +44,11 @@
     text-decoration: none;
 
     &:hover #{$root}__download-icon {
-      fill: #FDAF39;
+      fill: $orange-color;
     }
 
     &:hover #{$root}__name {
-      color: #FDAF39;
+      color: $orange-color;
       box-shadow: none;
     }
   }
@@ -56,7 +56,7 @@
   &__download-icon {
     width: 17px;
     height: 18px;
-    fill: #2E73FB;
+    fill: $link-color;
     margin-right: 6px;
   }
 

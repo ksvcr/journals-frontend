@@ -25,10 +25,12 @@ class RedactorReviewerList extends Component {
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
   handleChoose = (event) => {
-    const { articleId, inviteArticleReviewer } = this.props;
+    const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: id });
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: id }).then(() => {
+      return fetchArticleReviewInvites({ article: articleId });
+    });
   };
 
   handleTagAdd = (user, text) => {
@@ -59,7 +61,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '25%'
           },
-          isMain: true,
           head: () => 'ФИО',
           render: this.renderName
         },
@@ -67,7 +68,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '30%'
           },
-          isMain: true,
           head: () => 'Научные интересы',
           render: ({ sphere_scientific_interests }) => <InterestList data={ sphere_scientific_interests } />
         },
@@ -75,7 +75,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '15%'
           },
-          isMain: true,
           head: () => 'Рецензий в мес.',
           render: ({ count_reviews_month }) => count_reviews_month
         },
@@ -83,7 +82,6 @@ class RedactorReviewerList extends Component {
           style: {
             width: '30%'
           },
-          isMain: true,
           render: (data) =>
             <div className="redactor-reviewer-list__choose-wrapper">
               <Button type="button" className="button_small redactor-reviewer-list__choose"
@@ -185,7 +183,8 @@ const mapDispatchToProps = {
   inviteArticleReviewer: articlesActions.inviteArticleReviewer,
   createUserTag: usersActions.createUserTag,
   removeUserTag: usersActions.removeUserTag,
-  fetchUsers: usersActions.fetchUsers
+  fetchUsers: usersActions.fetchUsers,
+  fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
 export default connect(

@@ -1,7 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION, EDIT_ARTICLE_SOURCE
+  CREATE_ARTICLE_TRANSLATION, EDIT_ARTICLE_SOURCE,FETCH_ARTICLE_REVIEW_INVITES
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -192,17 +192,37 @@ export function acceptArticleReviewInvite(articleId) {
   }
 }
 
-export function createArticleTranslation(articleId, data) {
+export function createArticleTranslation(id, data) {
   return (dispatch) => {
-    const payload = apiClient.lockArticle(articleId).then(() =>
-      apiClient.createArticleTranslation(articleId, data)
-    );
+    const payload = apiClient.lockArticle(id).then(() =>{
+      let editSourcePromises = [];
+
+      if (data.sources) {
+        editSourcePromises = data.sources.map(item => apiClient.editSource(id, item));
+      }
+
+      delete data.sources;
+
+      const createTranslationPromise = apiClient.createArticleTranslation(id, data);
+      return Promise.all([ ...editSourcePromises, createTranslationPromise ]);
+    });
 
     return dispatch({
       type: CREATE_ARTICLE_TRANSLATION,
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function fetchArticleReviewInvites(params) {
+  return (dispatch) => {
+    const payload = apiClient.getReviewInvites(params);
+    return dispatch({
+      type: FETCH_ARTICLE_REVIEW_INVITES,
+      meta: params,
+      payload
+    }).catch(error => console.error(error));
+  }
 }
 
 export function resetArticles() {

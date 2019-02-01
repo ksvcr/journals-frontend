@@ -90,7 +90,7 @@ function getInitialValues(state, props) {
   const data = deserializeArticleData(articles.data[id]);
 
   const initialValues = {
-    ...data
+    sources: data.sources
   };
 
   return initialValues;

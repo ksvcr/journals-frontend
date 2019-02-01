@@ -1,68 +1,54 @@
 import React, { Component } from 'react';
-import AsyncSelect from 'react-select/lib/Async';
+import Select, { components } from 'react-select';
 import classNames from 'classnames';
-import debounce from 'lodash/debounce';
 
 import './searchable-select.scss';
 
-class SearchableSelect extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedOption: props.defaultValue,
-    };
-  }
+// onMouseMove, onMouseOver тормозят на больших списках
+const Option = ({ children, ...props }) => {
+  const { onMouseMove, onMouseOver, ...rest } = props.innerProps;
+  const newProps = Object.assign(props, { innerProps: rest });
+  return (
+    <components.Option
+      {...newProps}
+    >
+      {children}
+    </components.Option>
+  );
+};
 
+class SearchableSelect extends Component {
   handleChange = (selectedOption) => {
     const { input } = this.props;
-
-    this.setState({
-      selectedOption: selectedOption
-    });
-    input.onChange(selectedOption.id);
-  };
-
-  getOptions = (inputValue, callback) => {
-    const { onLoadOptions } = this.props;
-
-    if (!inputValue) {
-      return [];
-    }
-
-    return onLoadOptions(inputValue)
-      .then(response => {
-        callback(response.results);
-      });
+    input.onChange(selectedOption);
   };
 
   getOptionValue = (option) => option.id;
   getOptionLabel = (option) => option.name;
   noOptionsMessage = () => 'Ничего не найдено';
-  loadingMessage = () => 'Поиск...';
 
   render() {
-    const { meta, id, required, defaultOptions, placeholder } = this.props;
-    const { selectedOption } = this.state;
+    const { input, meta, id, options, required, placeholder } = this.props;
     const hasError = meta && meta.submitFailed && meta.error;
     const classes = classNames('searchable-select-wrapper searchable-select-wrapper_white',
       { 'searchable-select-wrapper_error': hasError });
-
     return (
       <React.Fragment>
-        <AsyncSelect
+        <Select
           id={ id } required={ required }
+          components={{
+            Option
+          }}
           className={ classes }
           classNamePrefix="searchable-select"
-          cacheOptions
-          value={ selectedOption }
+          value={ input.value }
           placeholder={ placeholder }
           noOptionsMessage={ this.noOptionsMessage }
-          loadingMessage={ this.loadingMessage }
           getOptionValue={ this.getOptionValue }
           getOptionLabel={ this.getOptionLabel }
-          defaultOptions={ defaultOptions }
-          loadOptions={ debounce(this.getOptions, 500) }
+          options={ options }
           onChange={ this.handleChange }
+          onBlur={() => input.onBlur(input.value)}
         />
         { hasError &&
           <div className="searchable-select-wrapper__error">

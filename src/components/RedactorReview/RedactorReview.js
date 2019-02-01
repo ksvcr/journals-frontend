@@ -18,6 +18,16 @@ class RedactorReview extends Component {
     isShowReviewerList: false
   };
 
+  get invitesCount() {
+    const { articleData } = this.props;
+    return articleData.reviewInvites ? articleData.reviewInvites.length : 0;
+  }
+
+  componentDidMount() {
+    const { fetchArticleReviewInvites, articleId } = this.props;
+    fetchArticleReviewInvites({ article: articleId });
+  }
+
   handleReviewerAdd = () => {
     this.setState({
       isShowReviewerList: true
@@ -31,8 +41,18 @@ class RedactorReview extends Component {
   };
 
   handleSelfInvite = () => {
-    const { articleId, currentUserId, inviteArticleReviewer } = this.props;
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId });
+    const { articleId, currentUserId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId }).then(() => {
+      return fetchArticleReviewInvites({ article: articleId });
+    });
+  };
+
+  renderCollapseButton = (props) => {
+    return (
+      <RedactorCollapseButton { ...props }>
+        { `Рецензенты (${this.invitesCount})` }
+      </RedactorCollapseButton>
+    );
   };
 
   render() {
@@ -57,9 +77,11 @@ class RedactorReview extends Component {
           <RedactorReviewerList onClose={ this.handleReviewerListClose } articleId={ articleId } />
         }
 
-        <Collapse customHead={ (props) => <RedactorCollapseButton { ...props }>Рецензенты</RedactorCollapseButton> }>
-          <InvitedReviewersList articleId={ articleId } />
-        </Collapse>
+        { this.invitesCount > 0 &&
+          <Collapse customHead={ this.renderCollapseButton }>
+            <InvitedReviewersList articleId={ articleId } />
+          </Collapse>
+        }
       </div>
     );
   }
@@ -79,7 +101,8 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-  inviteArticleReviewer: articlesActions.inviteArticleReviewer
+  inviteArticleReviewer: articlesActions.inviteArticleReviewer,
+  fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
 export default connect(

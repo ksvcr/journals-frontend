@@ -6,14 +6,27 @@ import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsFo
 import * as userActions from '~/store/user/actions';
 import * as usersActions from '~/store/users/actions';
 
+import * as countriesActions from '~/store/countries/actions';
+import AuthorSitesList from '~/components/AuthorSitesList/AuthorSitesList';
+
+const FORM_NAME = 'author-settings-form';
+
 class AuthorSettings extends Component {
   componentDidMount() {
-    const { fetchUser, userId } = this.props;
+    this.handleInitialRequest();
+  }
+
+  handleInitialRequest = () => {
+    const { fetchCountries, fetchUser, userId } = this.props;
+    const promises = [
+      fetchCountries()
+    ];
 
     if (userId) {
-      fetchUser(userId);
+      promises.push(fetchUser(userId));
     }
-  }
+    return Promise.all(promises);
+  };
 
   handleSubmit = (data) => {
     const { updateCurrentUser, updateUser, userId } = this.props;
@@ -26,11 +39,17 @@ class AuthorSettings extends Component {
   };
 
   render() {
-    const { userId } = this.props;
+    const { userId, form } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">Настройки</h1>
-        <AuthorSettingsForm userId={ userId } onSubmit={ this.handleSubmit } />
+
+        <div className="page__tools">
+          <AuthorSitesList form={ form } userId={ userId } />
+        </div>
+
+        <AuthorSettingsForm form={ form } userId={ userId } onSubmit={ this.handleSubmit } />
+
       </React.Fragment>
     );
   }
@@ -38,16 +57,20 @@ class AuthorSettings extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
+  const { userId } = match.params;
+  const form = userId ? `${FORM_NAME}-${userId}` : FORM_NAME;
 
   return {
-    userId: match.params.userId
-  }
+    userId: match.params.userId,
+    form
+  };
 }
 
 const mapDispatchToProps = {
   updateCurrentUser: userActions.updateCurrentUser,
   fetchUser: usersActions.fetchUser,
-  updateUser: usersActions.updateUser
+  updateUser: usersActions.updateUser,
+  fetchCountries: countriesActions.fetchCountries
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

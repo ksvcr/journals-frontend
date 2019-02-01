@@ -1,4 +1,4 @@
-import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG,
+import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
          REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 import {ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE} from '~/store/articles/constants';
@@ -105,6 +105,16 @@ function articles(state = initialState, action) {
           [ action.meta.articleId ]: {
             ...state.data[action.meta.articleId],
             ...action.meta.data
+          }
+        }
+      };
+
+    case `${FETCH_ARTICLE_REVIEW_INVITES}_FULFILLED`:
+      return { ...state,
+        data : { ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            reviewInvites: action.payload.results
           }
         }
       };

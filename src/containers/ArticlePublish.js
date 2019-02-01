@@ -16,6 +16,7 @@ import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
+import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 
@@ -41,21 +42,27 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, push, fetchArticle, fetchRubrics, fetchCategories, fetchUser } = this.props;
+    const { articleId, siteId, push, fetchArticle, fetchRubrics,
+            fetchCategories, fetchCountries, fetchUser } = this.props;
+
+    const isEdit = articleId !== undefined;
+
     const promises = [
-      fetchRubrics(siteId),
-      fetchCategories(siteId)
+      fetchCountries()
     ];
 
-    if (articleId !== undefined) {
+    if (isEdit) {
       promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
         const userIds = articleData.collaborators.map(item => item.user);
         if (articleData.author) {
           userIds.push(articleData.author.user);
         }
         const userPromises = userIds.map(id => fetchUser(id));
-        return Promise.all(userPromises);
+        return Promise.all([ ...userPromises, fetchRubrics(articleData.site), fetchCategories(articleData.site)]);
       }).catch(() =>{ push('/') }));
+    } else {
+      promises.push(fetchRubrics(siteId));
+      promises.push(fetchCategories(siteId));
     }
 
     return Promise.all(promises);
@@ -151,19 +158,20 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, languages, rubrics, categories, user } = state;
+  const { sites, articles, languages, rubrics, categories, user, countries } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
   const articleData = articleId && articles.data[articleId];
   const articleStatus = articleData && articleData.state_article;
-
-  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && categories.isFulfilled && sites.isFulfilled;
+  const isEdit = articleId !== undefined;
+  const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && countries.isFulfilled &&
+                            categories.isFulfilled && sites.isFulfilled;
   return {
-    siteId: sites.current,
+    siteId: isEdit && articleData ? articleData.site : sites.current,
     userId: user.data.id,
     userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
-    isFulfilled: (isFulfilledCommon && articleId === undefined) || (isFulfilledCommon && articles.isFulfilled),
+    isFulfilled: (isFulfilledCommon && !isEdit) || (isFulfilledCommon && articles.isFulfilled),
     articleId,
     articleData,
     articleStatus
@@ -180,7 +188,8 @@ const mapDispatchToProps = {
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
-  fetchLawtypes: lawtypesActions.fetchLawtypes
+  fetchLawtypes: lawtypesActions.fetchLawtypes,
+  fetchCountries: countriesActions.fetchCountries
 };
 
 export default connect(

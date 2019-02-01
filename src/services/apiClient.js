@@ -98,6 +98,11 @@ const apiClient = {
   editArticleReview: (articleId, reviewId, data) => {
     return fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/`, { method: 'put', data })
   },
+
+  getReviews: (articleId=null, reviewId=null, params) => {
+    const tail = reviewId  !== null ? `reviews/${reviewId}/` : '';
+    return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
+  }
 };
 
 export default apiClient;
