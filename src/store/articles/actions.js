@@ -1,7 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION, EDIT_ARTICLE_SOURCE,FETCH_ARTICLE_REVIEW_INVITES
+  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -229,14 +229,4 @@ export function resetArticles() {
   return {
     type: RESET_ARTICLES
   };
-}
-
-export function editArticleSource(articleId, data) {
-  return (dispatch) => {
-    const payload = apiClient.editSource(articleId, data);
-    return dispatch({
-      type: EDIT_ARTICLE_SOURCE,
-      payload
-    }).catch(error => console.error(error));
-  }
 }
