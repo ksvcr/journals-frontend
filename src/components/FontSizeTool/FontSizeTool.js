@@ -21,7 +21,7 @@ class FontSizeTool extends Component {
     const { value:fontSize } = target;
     const newState = styles.fontSize.add(getEditorState(), `${ fontSize }px`);
     setEditorState(newState);
-  }
+  };
 
   render() {
     return (

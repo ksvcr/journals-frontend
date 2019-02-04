@@ -158,7 +158,7 @@ class RedactorReviewerList extends Component {
         </span>
       </div>
     );
-  }
+  };
 
   render() {
     return (
