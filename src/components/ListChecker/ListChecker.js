@@ -27,7 +27,7 @@ class ListChecker extends Component {
         </div>
       )
     });
-  }
+  };
 
   handleChange = (event) => {
     const { value } = event.target;
