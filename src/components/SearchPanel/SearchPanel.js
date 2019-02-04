@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import Radio from '~/components/Radio/Radio';
 import TextField from '~/components/TextField/TextField';
@@ -51,8 +52,8 @@ class SearchPanel extends Component {
   };
 
   get targets() {
-    const { targets, hasDefaultTarget } = this.props;
-    return hasDefaultTarget ? [{ value: 'all', title: 'Искать везде' }, ...targets ] : targets;
+    const { targets, hasDefaultTarget, t } = this.props;
+    return hasDefaultTarget ? [{ value: 'all', title: t('search_everywhere') }, ...targets ] : targets;
   }
 
   renderParams = () => {
@@ -66,8 +67,9 @@ class SearchPanel extends Component {
   };
 
   get inputProps() {
+    const { t } = this.props;
     return {
-      placeholder: 'Поиск'
+      placeholder: t('search')
     };
   }
 
@@ -101,5 +103,7 @@ SearchPanel.defaultProps = {
   initialTarget: 'all',
   targets: []
 };
+
+SearchPanel = withNamespaces()(SearchPanel);
 
 export default SearchPanel;

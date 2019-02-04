@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
@@ -20,27 +21,35 @@ class AuthorArticles extends Component {
   };
 
   get searchTargets() {
+    const { t } = this.props;
     return [
       {
         value: 'title',
-        title: 'Искать в заголовках'
+        title: t('search_in_title')
       }
     ];
   }
 
   render() {
+    const { t } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Мои статьи</h1>
+        <h1 className="page__title">
+          { t('my_articles') }
+        </h1>
 
         <div className="page__tools">
           <form className="form">
             <div className="form__field">
-              <label htmlFor="sites-list" className="form__label">Для журнала</label>
+              <label htmlFor="sites-list" className="form__label">
+                { t('for_journals') }
+              </label>
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
             </div>
             <div className="form__field">
-              <label className="form__label">Поиск статьи</label>
+              <label className="form__label">
+                { t('article_search') }
+              </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
           </form>
@@ -63,6 +72,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   fetchArticles: articlesActions.fetchArticles
 };
+
+AuthorArticles = withNamespaces()(AuthorArticles);
 
 export default connect(
   mapStateToProps,

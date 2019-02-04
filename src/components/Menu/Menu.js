@@ -10,9 +10,17 @@ class Menu extends Component {
     const { items } = this.props;
     return items.map((item, index) => (
       <li className="menu__item" key={ `item-${index}` }>
-        <NavLink to={ item.href ? item.href : '/' } className="menu__link" exact activeClassName="menu__link_active">
-          { item.title }
-        </NavLink>
+
+        { item.href ?
+          <NavLink to={ item.href } className="menu__link"
+                   exact activeClassName="menu__link_active">
+            { item.title }
+          </NavLink> :
+          <button type="button" className="menu__link" onClick={ item.handler }>
+            { item.title }
+          </button>
+        }
+
       </li>
     ));
   };

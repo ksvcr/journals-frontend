@@ -7,6 +7,8 @@ import { ConnectedRouter } from 'connected-react-router'
 import store from './store/index';
 import Routes from './routes';
 
+import './services/i18n';
+
 const historyConfig = {};
 
 if (process.env.PUBLIC_URL) {
