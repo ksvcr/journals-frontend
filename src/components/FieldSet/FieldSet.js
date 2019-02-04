@@ -23,7 +23,7 @@ class FieldSet extends Component {
   };
 
   render() {
-    const { legend, index, isLast, children, onMove, onRemove } = this.props;
+    const { legend, fieldsTitle, index, isLast, children, onMove, onRemove } = this.props;
     return (
       <fieldset className="field-set">
         <div className="field-set__tools">
@@ -44,7 +44,12 @@ class FieldSet extends Component {
             </button>
           }
         </div>
-        <legend className="field-set__legend"> { legend } </legend>
+        <legend className="field-set__legend-box">
+          <div className="field-set__legend"> { legend } </div>
+          { fieldsTitle &&
+            <div className="field-set__title">{ fieldsTitle }</div>
+          }
+        </legend>
         <div className="field-set__holder">
           { children }
         </div>

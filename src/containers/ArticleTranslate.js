@@ -59,7 +59,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   fetchArticle: articlesActions.fetchArticle,
-  createArticleTranslation: articlesActions.createArticleTranslation
+  createArticleTranslation: articlesActions.createArticleTranslation,
 };
 
 export default connect(

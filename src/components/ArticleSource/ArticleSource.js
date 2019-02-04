@@ -9,7 +9,12 @@ import './assets/cancel.svg';
 class ArticleSource extends Component {
   getTitle(parts, lang) {
    const { data } = this.props;
-   const { lastname, initials } = data.author;
+   let resultString = '';
+   if (data.author && lang === 'ru') {
+     const { lastname, initials } = data.author;
+     resultString = `${lastname} ${initials} `;
+   }
+
    let params = parts.filter(key => data[key]).reduce((result, key) => {
      let item = data[key];
      if (key === 'page_count') {
@@ -21,7 +26,8 @@ class ArticleSource extends Component {
      }
      return `${result} ${item}`;
    }, '');
-    return `${lastname} ${initials} ${params}`;
+
+   return resultString + params;
   }
 
   handleRemove = () => {
@@ -35,7 +41,7 @@ class ArticleSource extends Component {
   };
 
   render() {
-    const { index } = this.props;
+    const { index, onRemove } = this.props;
     return (
       <div className="article-source">
         <div className="article-source__box">
@@ -46,7 +52,7 @@ class ArticleSource extends Component {
             { this.getTitle(['original_name', 'page_count'], 'ru') }
           </div>
           <div className="article-source__text">
-            { this.getTitle(['original_name', 'page_count'], 'en') }
+            { this.getTitle(['second_name', 'page_count'], 'en') }
           </div>
         </div>
         <div className="article-source__tools">
@@ -54,10 +60,13 @@ class ArticleSource extends Component {
             <Icon name="edit" className="article-source__icon article-source__icon_edit" />
             Редактировать
           </button>
-          <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
-            <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
-            Удалить
-          </button>
+
+          { onRemove &&
+            <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
+              <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
+              Удалить
+            </button>
+          }
         </div>
       </div>
     );

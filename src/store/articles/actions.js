@@ -191,11 +191,20 @@ export function acceptArticleReviewInvite(articleId) {
   }
 }
 
-export function createArticleTranslation(articleId, data) {
+export function createArticleTranslation(id, data) {
   return (dispatch) => {
-    const payload = apiClient.lockArticle(articleId).then(() =>
-      apiClient.createArticleTranslation(articleId, data)
-    );
+    const payload = apiClient.lockArticle(id).then(() =>{
+      let editSourcePromises = [];
+
+      if (data.sources) {
+        editSourcePromises = data.sources.map(item => apiClient.editSource(id, item));
+      }
+
+      delete data.sources;
+
+      const createTranslationPromise = apiClient.createArticleTranslation(id, data);
+      return Promise.all([ ...editSourcePromises, createTranslationPromise ]);
+    });
 
     return dispatch({
       type: CREATE_ARTICLE_TRANSLATION,

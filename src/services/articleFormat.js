@@ -1,5 +1,5 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, blocks, addresses, sources, ...rest } = data;
+  const { authors = [], has_financing, financing_sources, blocks, ...rest } = data;
 
   const serializedData = {
     ...rest,

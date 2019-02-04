@@ -14,14 +14,14 @@ const SourceArticleSerialEditionFields = () => {
             <label htmlFor="lastname" className="form__label">
               Фамилия автора <ReqMark />
             </label>
-            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
+            <Field name="author[0].lastname" id="lastname" className="text-field_white" component={ TextField }
                    placeholder="Введите фамилию автора" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="initials" className="form__label">
               Инициалы автора <ReqMark />
             </label>
-            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
+            <Field name="author[0].initials" id="initials" className="text-field_white" component={ TextField }
                    placeholder="Введите инициалы автора" validate={ [validate.required] } />
           </div>
         </div>
