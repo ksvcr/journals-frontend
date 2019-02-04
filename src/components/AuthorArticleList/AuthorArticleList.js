@@ -21,12 +21,20 @@ class AuthorArticleList extends Component {
     dateField: 'date_create'
   };
 
-  get toolsMenuItems() {
-    return [
-      {
+  getToolsMenuItems(data) {
+    const { locked_by } = data;
+    const { userId } = this.props;
+    const isLocked = locked_by !== null && locked_by !== userId;
+    let items = [];
+
+    if (!isLocked) {
+      items.push({
         title: 'Редактировать',
         handler: this.handleEdit
-      },
+      });
+    }
+
+    items = [ ...items,
       {
         title: 'Оплатить',
         handler: this.handlePaymentShow
@@ -36,9 +44,10 @@ class AuthorArticleList extends Component {
         type: 'preview',
         icon: 'preview',
         handler: this.handlePreview
-
       }
     ];
+
+    return items;
   };
 
   get dateTitle() {
@@ -93,7 +102,7 @@ class AuthorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
       box: this.renderBox,
       cells: [
         {
@@ -130,6 +139,7 @@ class AuthorArticleList extends Component {
           style: {
             width: '20%'
           },
+          sort: 'state_article',
           head: () => t('state'),
           render: (data) =>
             <StatusLabel status={ data.state_article } />
@@ -166,9 +176,11 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { total, paginate } = state.articles;
+  const { user, articles } = state;
+  const { total, paginate } = articles;
   return {
     articlesArray: getArticlesArray(state),
+    userId: user.data.id,
     total, paginate
   };
 }

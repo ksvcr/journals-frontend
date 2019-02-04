@@ -58,8 +58,9 @@ class Page extends Component {
 }
 
 function mapStateToProps(state) {
+  const { sites, user } = state;
   return {
-    isFulfilled: state.sites.isFulfilled
+    isFulfilled: sites.isFulfilled && user.isFulfilled
   };
 }
 
