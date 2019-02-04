@@ -9,7 +9,8 @@ import * as validate from '~/utils/validate';
 import './preliminary-revision-form.scss';
 
 class PreliminaryRevisionForm extends Component {
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     console.log('submit');
   };
 
