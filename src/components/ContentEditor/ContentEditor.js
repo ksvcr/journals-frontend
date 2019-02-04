@@ -130,6 +130,7 @@ class ContentEditor extends Component {
       <React.Fragment>
         <div className="editor-toolbar__row">
           <FontSizeTool { ...externalProps } />
+          <Separator className="editor-toolbar__separator" />
           <HeadlinesButtons { ...externalProps } />
           <ToolbarStyleSection { ...externalProps } />
           <Separator className="editor-toolbar__separator" />
