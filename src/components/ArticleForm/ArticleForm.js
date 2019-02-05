@@ -132,6 +132,7 @@ function mapStateToProps(state, props) {
   const isInvalidForm = isInvalid(formName)(state);
   const formValues = getFormValues(formName)(state);
   return {
+    id,
     form: formName,
     formValues,
     isInvalidForm,
