@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { reactI18nextModule } from "react-i18next";
 
-import eng_translation from './eng_translation';
+import en_translation from './en_translation';
 import ru_translation from './ru_translation';
 
 const resources = {
@@ -9,7 +9,7 @@ const resources = {
     translation: ru_translation
   },
   en: {
-    translation: eng_translation
+    translation: en_translation
   }
 };
 

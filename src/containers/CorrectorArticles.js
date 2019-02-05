@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {withNamespaces} from 'react-i18next';
 
 import CorrectorArticleList from '~/components/CorrectorArticleList/CorrectorArticleList';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
@@ -25,18 +26,19 @@ class CorrectorArticles extends Component {
   };
 
   get searchTargets() {
+    const {t} = this.props;
     return [
       {
         value: 'title',
-        title: 'Искать в заголовках'
+        title: t('search_in_titles')
       },
       {
         value: 'author',
-        title: 'Искать в авторах'
+        title: t('search_in_authors')
       },
       {
         value: 'doi',
-        title: 'Номер'
+        title: t('number')
       }
     ];
   }
@@ -51,20 +53,27 @@ class CorrectorArticles extends Component {
   }
 
   render() {
+    const {t} = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Мои статьи</h1>
+        <h1 className="page__title">
+          {t('my_articles')}
+        </h1>
 
         <div className="page__tools">
           <div className="form">
             <div className="form__field">
-              <label className="form__label">Поиск статьи</label>
+              <label className="form__label">
+                {t('article_search')}
+              </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <label className="form__label">Теги</label>
+                  <label className="form__label">
+                    {t('tags')}
+                  </label>
                   <Select { ...this.selectTagsProps } />
                 </div>
               </div>
@@ -89,6 +98,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   fetchArticles: articlesActions.fetchArticles
 };
+
+CorrectorArticles = withNamespaces()(CorrectorArticles);
 
 export default connect(
   mapStateToProps,

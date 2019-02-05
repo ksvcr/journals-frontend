@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
+import {withNamespaces} from 'react-i18next';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -52,8 +53,13 @@ class CorrectorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
+  handleSortChange = (ordering) => {
+    const {onUpdateRequest} = this.props;
+    onUpdateRequest({ordering});
+  };
+
   get listProps() {
-    const { articlesArray, sitesData } = this.props;
+    const {t, articlesArray, sitesData} = this.props;
 
     return {
       data: articlesArray,
@@ -67,7 +73,7 @@ class CorrectorArticleList extends Component {
             width: '40%'
           },
           isMain: true,
-          head: () => 'Название',
+          head: () => t('title'),
           render: (data) =>
             data.title || 'Название статьи не указано'
         },
@@ -108,7 +114,7 @@ class CorrectorArticleList extends Component {
           style: {
             width: '15%'
           },
-          head: () => 'Статус',
+          head: () => t('state'),
           render: (data) =>
             <StatusLabel status={ data.state_article } />
         }
@@ -160,6 +166,8 @@ const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };
+
+CorrectorArticleList = withNamespaces()(CorrectorArticleList);
 
 export default connect(
   mapStateToProps,

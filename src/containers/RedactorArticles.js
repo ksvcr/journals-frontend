@@ -33,11 +33,11 @@ class RedactorArticles extends Component {
     return [
       {
         value: 'title',
-        title: t('search_in_title')
+        title: t('search_in_titles')
       },
       {
         value: 'author',
-        title: t('author')
+        title: t('search_in_authors')
       },
       {
         value: 'doi',
@@ -73,7 +73,9 @@ class RedactorArticles extends Component {
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <label className="form__label">Теги</label>
+                  <label className="form__label">
+                    {t('tags')}
+                  </label>
                   <Select { ...this.selectTagsProps } />
                 </div>
               </div>
