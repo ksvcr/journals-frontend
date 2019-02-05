@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, isInvalid, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import nanoid from 'nanoid';
+import {withNamespaces} from 'react-i18next';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
@@ -36,17 +37,17 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    const { userData } = this.props;
+    const {t, userData} = this.props;
 
     switch (userData.role) {
       case 'CORRECTOR':
         return [
           {
-            title: 'Общие сведения',
+            title: t('common_content'),
             component: <ArticleCommonForm { ...this.formProps } />
           },
           {
-            title: 'Текст статьи',
+            title: t('article_text'),
             component: <ArticleContentForm { ...this.formProps } />
           },
           {
@@ -61,7 +62,7 @@ class ArticleForm extends Component {
       default:
         return [
           {
-            title: 'Общие сведения',
+            title: t('common_content'),
             component: <ArticleCommonForm { ...this.formProps } />
           },
           {
@@ -69,7 +70,7 @@ class ArticleForm extends Component {
             component: <ArticleAuthorsForm { ...this.formProps } />
           },
           {
-            title: 'Текст статьи',
+            title: t('article_text'),
             component: <ArticleContentForm { ...this.formProps } />
           },
           {
@@ -212,5 +213,7 @@ ArticleForm.propTypes = {
   onSubmit: PropTypes.func,
   onDraftSubmit: PropTypes.func
 };
+
+ArticleForm = withNamespaces()(ArticleForm);
 
 export default connect(mapStateToProps)(ArticleForm);

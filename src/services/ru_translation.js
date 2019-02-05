@@ -21,7 +21,9 @@ const ru_translation = {
   statistics: 'Статистика',
   users: 'Пользователи',
   articles_for_review: 'Статьи на рецензию',
-  articles_in_work: 'Статьи в работе'
+  articles_in_work: 'Статьи в работе',
+  article_text: 'Текст статьи',
+  common_content: 'Общие сведения'
 };
 
 export default ru_translation;

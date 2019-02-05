@@ -20,7 +20,9 @@ const en_translation = {
   statistics: 'Statistics',
   users: 'Users',
   articles_for_review: 'Articles for review',
-  articles_in_work: 'Articles in work'
+  articles_in_work: 'Articles in work',
+  article_text: 'Article text',
+  common_content: 'Common content'
 };
 
 export default en_translation;
