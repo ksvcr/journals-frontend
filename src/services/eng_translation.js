@@ -11,7 +11,9 @@ const eng_translation = {
   search: 'Search',
   title: 'Title',
   stage: 'Stage',
-  state: 'State'
+  state: 'State',
+  number: 'Number',
+  author: 'Author'
 };
 
 export default eng_translation;

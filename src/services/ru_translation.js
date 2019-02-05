@@ -11,7 +11,9 @@ const ru_translation = {
   search: 'Поиск',
   title: 'Заголовок',
   stage: 'Этап',
-  state: 'Статус'
+  state: 'Статус',
+  number: 'Номер',
+  author: 'Автор'
 };
 
 export default ru_translation;
