@@ -79,7 +79,7 @@ class ReviewCreateForm extends Component {
         </div>
 
         { recommendation === 2 && reviews.length > 0 &&
-          <ReviewsHistory reviews={ reviews } author={ author }/>
+          <ReviewsHistory reviews={ reviews } author={ author } isCollapse={ true }/>
         }
 
         <div className="form__field">

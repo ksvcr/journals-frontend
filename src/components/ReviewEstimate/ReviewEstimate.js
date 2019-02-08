@@ -17,9 +17,11 @@ class ReviewEstimate extends Component {
   renderEstimateRadio = (value) => (data) => {
     const { disabled, values } = this.props;
     const checked = values && values[data.id] === value;
+    const name = values ? `${data.id}-${values.id}` : data.id;
+
     return (
       <div className="review-estimate__radio">
-        <Radio disabled={ disabled } name={ data.id } checked={ checked }
+        <Radio disabled={ disabled } name={ name } checked={ checked }
                value={ value } onChange={ this.handleRadioCheck } />
       </div>
     );
