@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
-import {withNamespaces} from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, isInvalid, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import nanoid from 'nanoid';
-import {withNamespaces} from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
@@ -51,11 +51,11 @@ class ArticleForm extends Component {
             component: <ArticleContentForm { ...this.formProps } />
           },
           {
-            title: 'Файлы к статье',
+            title: t('files_to_article'),
             component: <CorrectFilesForm { ...this.formProps } />
           },
           {
-            title: 'Список литературы',
+            title: t('source_list'),
             component: <ArticleSourcesForm { ...this.formProps } />
           }
         ];
@@ -66,7 +66,7 @@ class ArticleForm extends Component {
             component: <ArticleCommonForm { ...this.formProps } />
           },
           {
-            title: 'Авторы',
+            title: t('authors'),
             component: <ArticleAuthorsForm { ...this.formProps } />
           },
           {
@@ -74,11 +74,11 @@ class ArticleForm extends Component {
             component: <ArticleContentForm { ...this.formProps } />
           },
           {
-            title: 'Файлы к статье',
+            title: t('files_to_article'),
             component: <ArticleFilesForm { ...this.formProps } />
           },
           {
-            title: 'Список литературы',
+            title: t('source_list'),
             component: <ArticleSourcesForm { ...this.formProps } />
           }
         ];
@@ -86,24 +86,29 @@ class ArticleForm extends Component {
   }
 
   handleDraftSubmit = () => {
-    const { formValues, onDraftSubmit } = this.props;
-    onDraftSubmit(formValues);
+    const { formValues, form, onDraftSubmit } = this.props;
+    onDraftSubmit(formValues, form);
   };
 
+  handleSubmit = (formData) => {
+    const { form, onSubmit } = this.props;
+    onSubmit(formData, form);
+  }
+
   renderTools = () => {
-    const { id, articleData, handleSubmit, isInvalidForm } = this.props;
+    const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
     return (
       <React.Fragment>
         { (id === 'new' || isDraft) &&
           <Button onClick={ this.handleDraftSubmit }>
             <Icon name="save" className="article-publish-form__save-icon" />
-            Сохранить как черновик
+            { t('save_as_draft') }
           </Button>
         }
 
-        <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          { id === 'new' || isDraft ? 'Отправить статью' : 'Сохранить статью' }
+        <Button className="button_orange" onClick={ handleSubmit(this.handleSubmit) } disabled={ isInvalidForm } >
+          { id === 'new' || isDraft ? t('send_article') : t('save_article') }
         </Button>
       </React.Fragment>
     );

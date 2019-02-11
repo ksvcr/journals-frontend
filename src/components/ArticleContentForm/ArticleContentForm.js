@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Field, FieldArray, formValueSelector} from 'redux-form';
-import {withNamespaces} from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
@@ -20,11 +20,11 @@ class ArticleContentForm extends Component {
   };
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
     return (
       <div className="article-content-form">
         <h2 className="page__title">
-          {t('article_text')}
+          { t('article_text') }
         </h2>
         <div className="form__field">
           <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
@@ -49,7 +49,6 @@ function mapStateToProps(state, props) {
   const {formName} = props;
   const formSelector = formValueSelector(formName);
   const is_send_as_file = formSelector(state, 'is_send_as_file');
-  console.log(is_send_as_file);
   return {
     is_send_as_file
   };
