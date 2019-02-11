@@ -26,10 +26,12 @@ class ArticleContentForm extends Component {
         <h2 className="page__title">
           {t('article_text')}
         </h2>
-        <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
-               component={Checkbox}>
-          Хочу добавить статью файлом
-        </Field>
+        <div className="form__field">
+          <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
+                component={Checkbox}>
+            Хочу добавить статью файлом
+          </Field>
+        </div>
         <div className="form__field">
           <label htmlFor="article_type" className="form__label">Тип статьи</label>
           <Field name="article_type" id="article_type"
