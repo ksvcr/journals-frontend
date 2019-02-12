@@ -37,7 +37,7 @@ class TableEditor extends Component {
     this.formId = nanoid();
     this.state = {
       meta: {},
-      showTable: true,
+      tableKey: 0,
       rows: entityData.rows || [{}]
     };
   }
@@ -51,34 +51,33 @@ class TableEditor extends Component {
   }
 
   // Переопределяем стандартные методы добавления колонки/строки чтобы изменить текст плейсхолдера
+  // Ресетим internal state при помоши обновления key
   addColumn = () => {
-    // showTable нужен для ремаунта таблицы, так как нужно переопредеоить default state
-    this.setState({ showTable: false });
-    const { rows } = this.state;
-    const newRows = rows.map(row => {
-      row.push(cellData);
-      return row;
-    });
+    this.setState(({ rows, tableKey }) => {
+      const newRows = rows.map(row => {
+        row.push(cellData);
+        return row;
+      });
 
-    this.setState({
-      rows: newRows,
-      showTable: true
+      return {
+        rows: newRows,
+        tableKey: tableKey + 1
+      };
     });
   };
 
   addRow = () => {
-    this.setState({ showTable: false });
-    const { rows } = this.state;
-    const numberOfColumns = rows[0].length;
-    const newRow = [];
-    for (let i = 0; i<=numberOfColumns-1; i++) {
-      newRow.push(cellData);
-    }
-    const newRows = [ ...rows, newRow ];
-
-    this.setState({
-      rows: newRows,
-      showTable: true
+    this.setState(({ rows, tableKey }) => {
+      const numberOfColumns = rows[0].length;
+      const newRow = [];
+      for (let i = 0; i<=numberOfColumns-1; i++) {
+        newRow.push(cellData);
+      }
+      const newRows = [ ...rows, newRow ];
+      return {
+        rows: newRows,
+        tableKey: tableKey + 1
+      };
     });
   };
 
@@ -122,6 +121,7 @@ class TableEditor extends Component {
   }
 
   render() {
+    const { tableKey } = this.state;
     const { blockProps } = this.props;
     const { entityData } = blockProps;
     return (
@@ -152,9 +152,7 @@ class TableEditor extends Component {
           <ReactCSSTransitionGroup transitionName="fade"
                                    transitionEnterTimeout={ 300 }
                                    transitionLeave={ false } >
-            { this.state.showTable &&
-              <Table { ...this.props } blockProps={ this.blockProps } />
-            }
+            <Table { ...this.props } key={ tableKey } blockProps={ this.blockProps } />
           </ReactCSSTransitionGroup>
         </div>
       </div>

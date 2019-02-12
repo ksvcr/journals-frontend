@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, FieldArray } from 'redux-form';
+import {Field, FieldArray, formValueSelector} from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
 
 import getArticleTypes from '~/services/getArticleTypes';
+import Checkbox from '~/components/Checkbox/Checkbox';
 
 class ArticleContentForm extends Component {
   get typeOptions() {
@@ -18,9 +20,18 @@ class ArticleContentForm extends Component {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <div className="article-content-form">
-        <h2 className="page__title">Текст статьи</h2>
+        <h2 className="page__title">
+          { t('article_text') }
+        </h2>
+        <div className="form__field">
+          <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
+                component={Checkbox}>
+            Хочу добавить статью файлом
+          </Field>
+        </div>
         <div className="form__field">
           <label htmlFor="article_type" className="form__label">Тип статьи</label>
           <Field name="article_type" id="article_type"
@@ -34,4 +45,16 @@ class ArticleContentForm extends Component {
   }
 }
 
-export default connect()(ArticleContentForm);
+function mapStateToProps(state, props) {
+  const {formName} = props;
+  const formSelector = formValueSelector(formName);
+  const is_send_as_file = formSelector(state, 'is_send_as_file');
+  return {
+    is_send_as_file
+  };
+}
+
+
+ArticleContentForm = withNamespaces()(ArticleContentForm);
+
+export default connect(mapStateToProps)(ArticleContentForm);

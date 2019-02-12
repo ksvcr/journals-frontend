@@ -11,9 +11,10 @@ import './assets/search.svg';
 class SearchPanel extends Component {
   constructor(props) {
     super(props);
+    const { initialTarget } = this.props;
 
     this.state = {
-      target: props.initialTarget
+      target: initialTarget
     };
   }
 

@@ -9,13 +9,10 @@ import './assets/cancel.svg';
 import './tag-editor.scss';
 
 class TagEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEdit: false,
-      newText: ''
-    };
-  }
+  state = {
+    isEdit: false,
+    newText: ''
+  };
 
   getRef = (ref) => {
     if (ref) {

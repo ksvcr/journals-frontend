@@ -25,18 +25,19 @@ class TranslatorArticles extends Component {
   };
 
   get searchTargets() {
+    const {t} = this.props;
     return [
       {
         value: 'title',
-        title: 'Искать в заголовках'
+        title: t('search_in_titles')
       },
       {
         value: 'author',
-        title: 'Искать в авторах'
+        title: t('search_in_authors')
       },
       {
         value: 'doi',
-        title: 'Номер'
+        title: t('number')
       }
     ];
   }
@@ -51,14 +52,19 @@ class TranslatorArticles extends Component {
   }
 
   render() {
+    const {t} = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Статьи в работе</h1>
+        <h1 className="page__title">
+          {t('articles_in_work')}
+        </h1>
 
         <div className="page__tools">
           <form className="form">
             <div className="form__field">
-              <label className="form__label">Поиск статьи</label>
+              <label className="form__label">
+                {t('article_search')}
+              </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
             <div className="form__row">

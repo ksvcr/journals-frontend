@@ -48,6 +48,6 @@ class AtomicBlock extends Component {
         return null;
     }
   }
-};
+}
 
 export default AtomicBlock;

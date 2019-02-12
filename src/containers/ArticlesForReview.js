@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import ArticlesForReviewList from '~/components/ArticlesForReviewList/ArticlesForReviewList';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
@@ -34,18 +35,22 @@ class ArticlesForReview extends Component {
   };
 
   get searchTargets() {
+    const {t} = this.props;
     return [
       {
         value: 'title',
-        title: 'Искать в заголовках'
+        title: t('search_in_titles')
       }
     ];
   }
 
   render() {
+    const {t} = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Статьи на рецензию</h1>
+        <h1 className="page__title">
+          {t('articles_for_review')}
+        </h1>
 
         <div className="page__tools">
           <form className="form">
@@ -54,7 +59,9 @@ class ArticlesForReview extends Component {
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
             </div>
             <div className="form__field">
-              <label className="form__label">Поиск статьи</label>
+              <label className="form__label">
+                {t('article_search')}
+              </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
           </form>
@@ -79,6 +86,8 @@ const mapDispatchToProps = {
   resetArticles: articlesActions.resetArticles,
   fetchReviewInvites: reviewInvitesActions.fetchReviewInvites,
 };
+
+ArticlesForReview = withNamespaces()(ArticlesForReview);
 
 export default connect(
   mapStateToProps,

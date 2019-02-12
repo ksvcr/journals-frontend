@@ -25,7 +25,7 @@ class AuthorArticles extends Component {
     return [
       {
         value: 'title',
-        title: t('search_in_title')
+        title: t('search_in_titles')
       }
     ];
   }

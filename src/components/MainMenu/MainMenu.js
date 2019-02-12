@@ -19,13 +19,14 @@ class MainMenu extends Component {
   }
 
   get correctorItems() {
+    const {t} = this.props;
     return [
       {
-        title: 'Статьи в работе',
+        title: t('articles_in_work'),
         href: '/'
       },
       {
-        title: 'Статистика',
+        title: t('statistics'),
         href: '/stats'
       },
       ...this.defaultItems
@@ -33,13 +34,14 @@ class MainMenu extends Component {
   }
 
   get authorItems() {
+    const {t} = this.props;
     return [
       {
-        title: 'Мои статьи',
+        title: t('my_articles'),
         href: '/'
       },
       {
-        title: 'Мои скидки',
+        title: t('my_discounts'),
         href: '/discounts'
       },
       ...this.defaultItems
@@ -47,28 +49,30 @@ class MainMenu extends Component {
   }
 
   get reviewerItems() {
+    const {t} = this.props;
     return [
       ...this.authorItems,
       {
-        title: 'Статьи на рецензию',
+        title: t('articles_for_review'),
         href: '/articles-for-review'
       }
     ];
   }
 
   get redactorItems() {
+    const {t} = this.props;
     return [
       {
-        title: 'Мои статьи',
+        title: t('my_articles'),
         href: '/'
       },
       {
-        title: 'Пользователи',
+        title: t('users'),
         href: '/users'
       },
       ...this.defaultItems,
       {
-        title: 'Статьи на рецензию',
+        title: t('articles_for_review'),
         href: '/articles-for-review'
       }
     ];

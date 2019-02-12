@@ -7,8 +7,8 @@ class LinkPrompt extends Component {
     super(props);
     this.state = {
       value: this.props.value
-    };
-  }
+    }
+  };
 
   handleChange = (event) => {
     const { value } = event.target;

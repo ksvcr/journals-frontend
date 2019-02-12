@@ -21,12 +21,13 @@ class FontSizeTool extends Component {
     const { value:fontSize } = target;
     const newState = styles.fontSize.add(getEditorState(), `${ fontSize }px`);
     setEditorState(newState);
-  }
+  };
 
   render() {
     return (
       <div className="font-size-tool">
-        <select className="font-size-tool__select" name="font_size" defaultValue={ DEFAULT_FONT_SIZE } onChange={ this.handleChangeFontSize }>
+        <select className="font-size-tool__select" name="font_size"
+                defaultValue={ DEFAULT_FONT_SIZE } onChange={ this.handleChangeFontSize }>
           { this.renderFontSizes() }
         </select>
       </div>

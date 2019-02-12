@@ -11,6 +11,7 @@ import './preliminary-revision-form.scss';
 class PreliminaryRevisionForm extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
+    // TODO: Ждем апи метод
     console.log('submit');
   };
 

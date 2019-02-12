@@ -47,7 +47,7 @@ class FieldSetList extends PureComponent {
       </div>
     );
   }
-};
+}
 
 FieldSetList.defaultProps = {
   initialValues: {}
