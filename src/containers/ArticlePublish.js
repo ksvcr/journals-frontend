@@ -11,6 +11,7 @@ import ReviewsDialogList from '~/components/ReviewsDialogList/ReviewsDialogList'
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 
 import * as languagesActions from '~/store/languages/actions';
+import * as rolesActions from '~/store/roles/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
@@ -60,24 +61,27 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchRoles } = this.props;
 
     const promises = [
       fetchCountries()
     ];
 
     if (isEdit) {
-      promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
-        const userIds = articleData.collaborators.map(item => item.user);
-        if (articleData.author) {
-          userIds.push(articleData.author.user);
-        }
-        const userPromises = userIds.map(id => fetchUser(id));
-        return Promise.all([ ...userPromises, fetchRubrics(articleData.site), fetchCategories(articleData.site)]);
-      }).catch(() =>{ push('/') }));
+      promises.push(fetchArticle(articleId)
+        .then(({ value:articleData }) => {
+          const userIds = articleData.collaborators.map(item => item.user);
+          if (articleData.author) {
+            userIds.push(articleData.author.user);
+          }
+          const userPromises = userIds.map(id => fetchUser(id));
+          return Promise.all([ ...userPromises, fetchRubrics(articleData.site), fetchCategories(articleData.site)]);
+        })
+        .catch(() =>{ push('/') }));
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
+      promises.push(fetchRoles(siteId));
     }
 
     return Promise.all(promises);
@@ -208,7 +212,8 @@ const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
-  fetchCountries: countriesActions.fetchCountries
+  fetchCountries: countriesActions.fetchCountries,
+  fetchRoles: rolesActions.fetchRoles,
 };
 
 export default connect(

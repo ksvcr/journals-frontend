@@ -21,11 +21,22 @@ export function serializeArticleData(data = {}) {
 
   if (author) {
     serializedData.author = { user: author.id };
+
+    if(author.roles) {
+      serializedData.author.roles = author.roles;
+    }
   }
 
   const collaborators = authors
     .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
-    .map(author => ({ user: author.id }));
+    .map(author => {
+      const collaborator = { user: author.id };
+      if(author.roles) {
+        collaborator.roles = author.roles;
+      }
+
+      return collaborator;
+    });
 
   if (collaborators.length) {
     serializedData.collaborators = collaborators;
@@ -43,12 +54,13 @@ export function serializeArticleData(data = {}) {
 }
 
 export function deserializeArticleData(data = {}) {
-  const { author, collaborators, ...rest } = data; 
+  const { author, collaborators, ...rest } = data;
   const deserializedData = rest;
   if (author && collaborators) {
     deserializedData.authors = [{
-      id: author.user
-    }, ...collaborators.map(item => ({ id: item.user }))];
+      id: author.user,
+      roles: author.roles,
+    }, ...collaborators.map(item => ({ id: item.user, roles: item.roles }))];
   }
   return deserializedData;
 }

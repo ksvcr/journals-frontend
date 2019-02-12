@@ -102,7 +102,11 @@ const apiClient = {
   getReviews: (articleId=null, reviewId=null, params) => {
     const tail = reviewId  !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
-  }
+  },
+
+  getAvailableRoles: (siteId) => {
+    return fetchInstance.request(`sites/${siteId}/author-roles/`);
+  },
 };
 
 export default apiClient;
