@@ -124,7 +124,7 @@ function mapStateToProps(state, props) {
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
-  const author = users.data[articleData.author.user];
+  const author = articleData && users.data[articleData.author.user];
 
   return {
     push,

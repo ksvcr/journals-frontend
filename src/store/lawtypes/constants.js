@@ -1,0 +1,1 @@
+export const FETCH_LAWTYPES = 'FETCH_LAWTYPES';

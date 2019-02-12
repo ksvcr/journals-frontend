@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -85,7 +86,7 @@ class AuthorArticleList extends Component {
   };
 
   get listProps() {
-    const { articlesArray } = this.props;
+    const { t, articlesArray } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -100,7 +101,7 @@ class AuthorArticleList extends Component {
             width: '50%'
           },
           isMain: true,
-          head: () => 'Название',
+          head: () => t('title'),
           render: (data) =>
             data.title || 'Название статьи не указано'
         },
@@ -121,7 +122,7 @@ class AuthorArticleList extends Component {
             width: '13%'
           },
           sort: 'stage_article',
-          head: () => 'Этап',
+          head: () => t('stage'),
           render: (data) =>
             getArticleStageTitle(data.stage_article)
         },
@@ -129,7 +130,7 @@ class AuthorArticleList extends Component {
           style: {
             width: '20%'
           },
-          head: () => 'Статус',
+          head: () => t('state'),
           render: (data) =>
             <StatusLabel status={ data.state_article } />
         }
@@ -175,6 +176,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   push
 };
+
+AuthorArticleList = withNamespaces()(AuthorArticleList);
 
 export default connect(
   mapStateToProps, mapDispatchToProps

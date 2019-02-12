@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import ArticleTranslateForm from '~/components/ArticleTranslateForm/ArticleTranslateForm';
 import * as articlesActions from '~/store/articles/actions';
@@ -21,11 +22,11 @@ class ArticleTranslate extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, articleData, createArticleTranslation } = this.props;
+    const { articleId, articleData, push, createArticleTranslation } = this.props;
     let language_code = articleData.language === 'en' ? 'ru' : 'en';
     const data = { ...formData, language_code };
 
-    createArticleTranslation(articleId, data);
+    createArticleTranslation(articleId, data).then(() => { push('/'); });
   };
 
   render() {
@@ -58,8 +59,9 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
+  push,
   fetchArticle: articlesActions.fetchArticle,
-  createArticleTranslation: articlesActions.createArticleTranslation
+  createArticleTranslation: articlesActions.createArticleTranslation,
 };
 
 export default connect(

@@ -19,6 +19,7 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
+import { getLawtypesArray } from '~/store/lawtypes/selector';
 import { getCountriesArray } from '~/store/countries/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
@@ -74,6 +75,14 @@ class ArticleSourceCreateForm extends Component {
     return apiClient.getCountries({ name: value, limit: 5 });
   };
 
+  get lawtypesOptions() {
+    const { lawtypes } = this.props;
+    return lawtypes.map(item => ({
+      title: item.name,
+      value: item.id
+    }));
+  }
+
   get specialFields() {
     const { resourceType, rightholderType, countriesArray, countriesData } = this.props;
     switch (resourceType) {
@@ -97,7 +106,8 @@ class ArticleSourceCreateForm extends Component {
 
       case 'SourceLegislativeMaterial':
         return <SourceLegislativeMaterial countriesArray={ countriesArray }
-                                          countriesData={ countriesData } />;
+                                          countriesData={ countriesData }
+                                          lawTypesOptions={ this.lawtypesOptions }/>;
 
       case 'SourceStandart':
         return <SourceStandart />;
@@ -205,12 +215,15 @@ function mapStateToProps(state, props) {
   const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
   const rightholderTypes = getRightholderTypes();
   const sourceTypes = getSourceTypes();
+  const lawtypes = getLawtypesArray(state);
+
   return {
     form: formName,
     languagesArray,
     rubricsArray,
     resourceType,
     rightholderType,
+    lawtypes,
     countriesArray,
     countriesData: countries.data,
     initialValues: {
@@ -218,7 +231,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
-      category: '1', // id Категории
+      category: '1',
       defense_date: defaultDate,
       statement_date: defaultDate,
       standart_entry_date: defaultDate,

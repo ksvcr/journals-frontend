@@ -7,8 +7,9 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import Select from '~/components/Select/Select';
 
-const SourceLegislativeMaterial = ({ countriesData, countriesArray }) => {
+const SourceLegislativeMaterial = ({ countriesData, countriesArray, lawTypesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -77,14 +78,21 @@ const SourceLegislativeMaterial = ({ countriesData, countriesArray }) => {
 
       <div className="form__field">
         <div className="form__row">
-          <div className="form__col form__col_6">
+          <div className="form__col form__col_4">
+            <label htmlFor="category" className="form__label">
+              Тип закона <ReqMark />
+            </label>
+            <Field name="category" id="category" className="select_white"
+                   component={ props => <Select options={ lawTypesOptions } { ...props } /> } />
+          </div>
+          <div className="form__col form__col_4">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
                    placeholder="Введите название" validate={ [validate.required] } />
           </div>
-          <div className="form__col form__col_6">
+          <div className="form__col form__col_4">
             <label htmlFor="issue_number" className="form__label">
               Номер издания
             </label>

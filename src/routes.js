@@ -14,6 +14,7 @@ import ReviewCreate from '~/containers/ReviewCreate';
 import Discounts from '~/containers/Discounts';
 import NotFound from '~/containers/NotFound';
 import RedactorUsers from '~/containers/RedactorUsers';
+import ReviewPreview from '~/containers/ReviewPreview';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
 const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
@@ -31,7 +32,8 @@ const routes = () => (
       <Route exact path="/article" component={ ArticlePublishWithAccess } />
       <Route exact path="/article/:articleId" component={ ArticlePreview } />
       <Route path="/article/:articleId/edit" component={ ArticleEditWithAccess } />
-      <Route path="/article/:articleId/review" component={ ReviewCreateWithAccess } />
+      <Route exact path="/article/:articleId/review" component={ ReviewCreateWithAccess } />
+      <Route path="/article/:articleId/review/:reviewId" component={ ReviewPreview } />
       <Route path="/article/:articleId/translate" component={ ArticleTranslateWithAccess } />
       <Route path="/article/:articleId/correct" component={ ArticleCorrectWithAccess }/>
       <Route path="/articles-for-review" component={ ArticlesForReviewWithAccess } />

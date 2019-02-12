@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Menu from '~/components/Menu/Menu';
 
@@ -7,9 +8,11 @@ import './main-menu.scss';
 
 class MainMenu extends Component {
   get defaultItems() {
+    const { t } = this.props;
+
     return [
       {
-        title: 'Настройки',
+        title: t('settings'),
         href: '/settings'
       }
     ];
@@ -105,6 +108,8 @@ function mapStateToProps(state) {
     pathname: router.location.pathname
   };
 }
+
+MainMenu = withNamespaces()(MainMenu);
 
 export default connect(
   mapStateToProps,

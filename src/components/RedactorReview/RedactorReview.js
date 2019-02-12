@@ -6,6 +6,7 @@ import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorRevi
 import RedactorReviewTools from '~/components/RedactorReviewTools/RedactorReviewTools';
 import RedactorReviewStatus from '~/components/RedactorReviewStatus/RedactorReviewStatus';
 import InvitedReviewersList from '~/components/InvitedReviewersList/InvitedReviewersList';
+import PreliminaryRevisionForm from '~/components/PreliminaryRevisionForm/PreliminaryRevisionForm';
 import RedactorCollapseButton from '~/components/RedactorCollapseButton/RedactorCollapseButton';
 import Collapse from '~/components/Collapse/Collapse';
 
@@ -55,6 +56,14 @@ class RedactorReview extends Component {
     );
   };
 
+  renderCollapsePreliminaryButton = (props) => {
+    return (
+      <RedactorCollapseButton {...props}>
+        Предварительная доработка
+      </RedactorCollapseButton>
+    )
+  };
+
   render() {
     const { articleData, articleId } = this.props;
     const { isShowReviewerList } = this.state;
@@ -76,6 +85,10 @@ class RedactorReview extends Component {
         { isShowReviewerList &&
           <RedactorReviewerList onClose={ this.handleReviewerListClose } articleId={ articleId } />
         }
+
+        <Collapse customHead={ this.renderCollapsePreliminaryButton }>
+          <PreliminaryRevisionForm />
+        </Collapse>
 
         { this.invitesCount > 0 &&
           <Collapse customHead={ this.renderCollapseButton }>
