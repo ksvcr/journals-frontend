@@ -95,9 +95,7 @@ class Content extends Component {
             data.sources &&
             <div className="content__literature">
               <h3>Список литературы</h3>
-              <ul className="content__list">
-                { this.renderSourcesList() }
-              </ul>
+              <ul>{ this.renderSourcesList() }</ul>
             </div>
           }
           {
