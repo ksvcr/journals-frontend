@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { reset } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
@@ -56,7 +58,7 @@ class ArticlePublish extends Component {
       }, 60000);
     }
 
-    return Promise.all(promises);
+    return Promise.all(promises).catch(error => console.error(error));
   };
 
   handleRequest = () => {
@@ -87,9 +89,9 @@ class ArticlePublish extends Component {
     return Promise.all(promises);
   };
 
-  handleSubmit = (formData) => {
+  handleSubmit = (formData, formName) => {
     const { siteId, articleId, userId, isEdit, userRole,
-            createArticle, editArticle, push } = this.props;
+            createArticle, editArticle, push, reset } = this.props;
     const data = serializeArticleData(formData);
 
     if (!data.conflict_interest) {
@@ -104,23 +106,35 @@ class ArticlePublish extends Component {
         // Корректировка
         data.state_article = 'AWAIT_TRANSLATE';
       }
-      editArticle(articleId, data).then(() => { push('/'); });
+      editArticle(articleId, data).then(() => {
+        reset(formName);
+        push('/');
+      });
     } else {
       // Отправить
       data.state_article = 'SENT';
-      createArticle(siteId, data).then(() => { push('/'); });
+      createArticle(siteId, data).then(() => {
+        reset(formName);        
+        push('/');
+      });
     }
   };
 
-  handleDraftSubmit = (formData) => {
-    const { articleId, siteId, createArticle, editArticle, push } = this.props;
+  handleDraftSubmit = (formData, formName) => {
+    const { articleId, siteId, createArticle, editArticle, push, reset } = this.props;
     const data = serializeArticleData(formData);
 
     if (articleId !== undefined) {
-      editArticle(articleId, data).then(() => { push('/'); });
+      editArticle(articleId, data).then(() => {
+        reset(formName);
+        push('/');
+      });
     } else {
       data.state_article = 'DRAFT';
-      createArticle(siteId, data).then(() => { push('/'); });
+      createArticle(siteId, data).then(() => {
+        reset(formName);
+        push('/');
+      });
     }
   };
 
@@ -130,10 +144,10 @@ class ArticlePublish extends Component {
   };
 
   render() {
-    const { articleId, isFulfilled, articleStatus, userRole, articleData, isEdit } = this.props;
+    const { articleId, isFulfilled, articleStatus, userRole, articleData, isEdit, t } = this.props;
     const isStatusRework = articleStatus === 'PRELIMINARY_REVISION' ||
                            articleStatus === 'REVISION';
-    const editText = userRole === 'CORRECTOR' ? 'Правка статьи' : 'Редактировать статью';
+    const editText = userRole === 'CORRECTOR' ? t('correct_article') : t('edit_article');
     const isShowSiteChange = userRole === 'AUTHOR';
     const isShowArticleInfo = Boolean(~['REDACTOR', 'CORRECTOR'].indexOf(userRole)) && isEdit;
 
@@ -147,14 +161,16 @@ class ArticlePublish extends Component {
         }
 
         <h1 className="page__title">
-          { isEdit ? editText : 'Опубликовать статью' }
+          { isEdit ? editText : t('publish_article') }
         </h1>
 
         <div className="page__tools">
           { isShowSiteChange &&
             <form className="form">
               <div className="form__field">
-                <label htmlFor="sites-list" className="form__label">Для журнала</label>
+                <label htmlFor="sites-list" className="form__label">
+                  { t('for_journals') }
+                </label>
                 <SiteSelect id="sites-list" onChange={ this.handleRequest } />
               </div>
             </form>
@@ -203,6 +219,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   push,
+  reset,
   fetchArticle: articlesActions.fetchArticle,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
@@ -215,6 +232,8 @@ const mapDispatchToProps = {
   fetchCountries: countriesActions.fetchCountries,
   fetchRoles: rolesActions.fetchRoles,
 };
+
+ArticlePublish = withNamespaces()(ArticlePublish);
 
 export default connect(
   mapStateToProps,

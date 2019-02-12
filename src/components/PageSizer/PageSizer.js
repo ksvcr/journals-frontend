@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 
@@ -14,11 +15,11 @@ class PageSizer extends Component {
   };
 
   render() {
-    const { sizes, value } = this.props;
+    const { sizes, value, t } = this.props;
     return (
       <div className="page-sizer">
         <div className="page-sizer__text">
-          Показывать по
+          { t('show_by') }
         </div>
         <div className="page-sizer__holder">
           <Select options={ sizes } value={ value } onChange={ this.handleChange } className="select_small" />
@@ -36,5 +37,7 @@ PageSizer.propTypes = {
   sizes: PropTypes.array.isRequired,
   onChange: PropTypes.func
 };
+
+PageSizer = withNamespaces()(PageSizer);
 
 export default PageSizer;

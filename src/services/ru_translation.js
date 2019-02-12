@@ -21,7 +21,19 @@ const ru_translation = {
   statistics: 'Статистика',
   users: 'Пользователи',
   articles_for_review: 'Статьи на рецензию',
-  articles_in_work: 'Статьи в работе'
+  articles_in_work: 'Статьи в работе',
+  article_text: 'Текст статьи',
+  common_content: 'Общие сведения',
+  show_by: 'Показывать по',
+  authors: 'Авторы',
+  source_list: 'Список литературы',
+  files_to_article: 'Файлы к статье',
+  preview: 'Предпросмотр',
+  save_as_draft: 'Сохранить как черновик',
+  send_article: 'Отправить статью',
+  save_article: 'Сохранить статью',
+  edit_article: 'Редактировать статью',
+  correct_article: 'Правка статьи'
 };
 
 export default ru_translation;
