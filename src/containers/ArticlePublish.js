@@ -19,6 +19,7 @@ import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
+import apiClient from '~/services/apiClient';
 
 class ArticlePublish extends Component {
   componentDidMount() {
@@ -26,26 +27,41 @@ class ArticlePublish extends Component {
   }
 
   componentDidUpdate() {
-    const { articleId, notFound, push } = this.props;
-    if (articleId !== undefined && notFound) {
+    const { notFound, push, isEdit } = this.props;
+    if (isEdit && notFound) {
       push('/');
     }
   }
 
+  componentWillUnmount() {
+    if (this.lockInterval) {
+      clearInterval(this.lockInterval);
+    }
+  }
+
   handleInitialRequest = () => {
-    const { fetchLanguages, fetchLawtypes } = this.props;
-    return Promise.all([
+    const { isEdit, articleId, fetchLanguages, fetchLawtypes } = this.props;
+    const promises = [
       fetchLanguages(),
       fetchLawtypes(),
       this.handleRequest()
-    ]);
+    ];
+
+    if (isEdit) {
+      // Блокирование статьи для других пользователей, каждую минуту
+      promises.push(apiClient.lockArticle(articleId));
+      this.lockInterval = setInterval(() => {
+        console.log('lock');
+        apiClient.lockArticle(articleId)
+      }, 60000);
+    }
+
+    return Promise.all(promises);
   };
 
   handleRequest = () => {
-    const { articleId, siteId, push, fetchArticle, fetchRubrics,
+    const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
             fetchCategories, fetchCountries, fetchUser } = this.props;
-
-    const isEdit = articleId !== undefined;
 
     const promises = [
       fetchCountries()
@@ -69,21 +85,25 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { siteId, articleId, userId, userRole, createArticle, editArticle, push } = this.props;
+    const { siteId, articleId, userId, isEdit, userRole,
+            createArticle, editArticle, push } = this.props;
     const data = serializeArticleData(formData);
 
     if (!data.conflict_interest) {
       delete data.conflict_interest;
     }
 
-    if (articleId !== undefined) {
+    if (isEdit) {
       if (userId === data.author.user && data.state_article === 'REVISION') {
+        // Доработка
         data.state_article = 'MODIFIED';
       } else if (userRole === 'CORRECTOR') {
+        // Корректировка
         data.state_article = 'AWAIT_TRANSLATE';
       }
       editArticle(articleId, data).then(() => { push('/'); });
     } else {
+      // Отправить
       data.state_article = 'SENT';
       createArticle(siteId, data).then(() => { push('/'); });
     }
@@ -107,10 +127,9 @@ class ArticlePublish extends Component {
   };
 
   render() {
-    const { articleId, isFulfilled, articleStatus, userRole, articleData } = this.props;
+    const { articleId, isFulfilled, articleStatus, userRole, articleData, isEdit } = this.props;
     const isStatusRework = articleStatus === 'PRELIMINARY_REVISION' ||
                            articleStatus === 'REVISION';
-    const isEdit = articleId !== undefined;
     const editText = userRole === 'CORRECTOR' ? 'Правка статьи' : 'Редактировать статью';
     const isShowSiteChange = userRole === 'AUTHOR';
     const isShowArticleInfo = Boolean(~['REDACTOR', 'CORRECTOR'].indexOf(userRole)) && isEdit;
@@ -167,6 +186,7 @@ function mapStateToProps(state, props) {
   const isFulfilledCommon = languages.isFulfilled && rubrics.isFulfilled && countries.isFulfilled &&
                             categories.isFulfilled && sites.isFulfilled;
   return {
+    isEdit,
     siteId: isEdit && articleData ? articleData.site : sites.current,
     userId: user.data.id,
     userRole: user.data.role,

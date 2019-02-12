@@ -15,9 +15,9 @@ class AuthorArticles extends Component {
     this.handleRequest();
   }
 
-  handleRequest = (params={}) => {
+  handleRequest = () => {
     const { siteId, articlesParams, fetchArticles } = this.props;
-    return fetchArticles(siteId, { ...articlesParams, ...params });
+    return fetchArticles(siteId, { ...articlesParams });
   };
 
   get searchTargets() {

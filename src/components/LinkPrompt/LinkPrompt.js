@@ -3,11 +3,10 @@ import './link-prompt.scss';
 import TextField from '~/components/TextField/TextField';
 
 class LinkPrompt extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: this.props.value
-    };
+  static getDerivedStateFromProps(props) {
+    return {
+      value: props.value
+    }
   }
 
   handleChange = (event) => {
