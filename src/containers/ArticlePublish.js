@@ -51,7 +51,6 @@ class ArticlePublish extends Component {
       // Блокирование статьи для других пользователей, каждую минуту
       promises.push(apiClient.lockArticle(articleId));
       this.lockInterval = setInterval(() => {
-        console.log('lock');
         apiClient.lockArticle(articleId)
       }, 60000);
     }

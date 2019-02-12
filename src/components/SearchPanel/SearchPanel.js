@@ -9,14 +9,13 @@ import './search-panel.scss';
 import './assets/search.svg';
 
 class SearchPanel extends Component {
-  state = {
-    target: null
-  };
+  constructor(props) {
+    super(props);
+    const { initialTarget } = this.props;
 
-  static getDerivedStateFromProps(props) {
-    return {
-      target: props.initialTarget
-    }
+    this.state = {
+      target: initialTarget
+    };
   }
 
   handleParamsChange = (event) => {

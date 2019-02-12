@@ -23,13 +23,13 @@ class AuthorArticleList extends Component {
 
   getToolsMenuItems(data) {
     const { locked_by } = data;
-    const { userId } = this.props;
+    const {t, userId} = this.props;
     const isLocked = locked_by !== null && locked_by !== userId;
     let items = [];
 
     if (!isLocked) {
       items.push({
-        title: 'Редактировать',
+        title: t('edit'),
         handler: this.handleEdit
       });
     }
