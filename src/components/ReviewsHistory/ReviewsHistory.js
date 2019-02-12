@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import Collapse from '~/components/Collapse/Collapse';
 import FieldHint from '~/components/FieldHint/FieldHint';
@@ -37,12 +38,10 @@ class ReviewsHistory extends Component {
       <div className="reviews-history__content">
         {
           !isCollapse && reviewer &&
-          <React.Fragment>
-            <div className="content-reviews__title">Рецензент:</div>
-            <div className="content-reviews__text">
-              { reviewerName }
-            </div>
-          </React.Fragment>
+          <div className="reviews-history__info">
+            <span className="reviews-history__info-title">Рецензент:</span>
+            { reviewerName }
+          </div>
         }
 
         <div className="reviews-history__review">
@@ -62,29 +61,31 @@ class ReviewsHistory extends Component {
             <ReviewEstimate values={ item } disabled={ true } />
           </div>
         }
-        {/*{ item.author_answer &&*/}
-        <div className="reviews-history__answer">
-          <div className="reviews-history__title">
-            Ответ автора
+        { item.author_answer &&
+          <div className="reviews-history__answer">
+            <div className="reviews-history__title">
+              Ответ автора
+            </div>
+            { author &&
+            <div className="reviews-history__author">
+              { authorName }
+            </div>
+            }
+            <div className="reviews-history__text">
+              { item.author_answer }
+            </div>
           </div>
-          { author &&
-          <div className="reviews-history__author">
-            { authorName }
-          </div>
-          }
-          <div className="reviews-history__text">
-            {/*{ item.author_answer }*/}
-            текст ответа автора
-          </div>
-        </div>
-        {/*}*/}
+        }
       </div>
     )
   };
 
   render() {
+    const { className } = this.props;
+    const classes = classNames('reviews-history', className);
+
     return (
-      <div className="reviews-history">
+      <div className={ classes }>
         { this.renderList() }
       </div>
     );

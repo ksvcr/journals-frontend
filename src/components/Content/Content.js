@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Renderer from '~/components/Renderer/Renderer';
-import ContentReviews from '~/components/ContentReviews/ContentReviews';
+import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 
 import './content.scss';
 
@@ -25,8 +25,17 @@ class Content extends Component {
     ));
   };
 
-  render() {
+  renderSourcesList = () => {
     const { data } = this.props;
+    return data.sources.map((item, index) => (
+      <li key={ index }>
+        <p>{ item.author.lastname } { item.author.initials }, { item.original_name }, { item.page_count } c.</p>
+      </li>
+    ));
+  };
+
+  render() {
+    const { data, author } = this.props;
     const { content_blocks=[], financing_sources=[] } = data;
     const reviews = data.reviews.filter((item) => item.recommendation === 1);
 
@@ -79,7 +88,7 @@ class Content extends Component {
             <h3>Конфликт интересов</h3>
             { data.conflict_interest
               ? <p>{ data.conflict_interest }</p>
-              : <p>НеЈ указан</p>
+              : <p>Не указан</p>
             }
           </div>
           {
@@ -87,19 +96,18 @@ class Content extends Component {
             <div className="content__literature">
               <h3>Список литературы</h3>
               <ul className="content__list">
-                { data.sources.map((item, index) => (
-                  <li key={ index }>
-                    <p>{ item.author.lastname } { item.author.initials }, { item.original_name }, { item.page_count } c.</p>
-                  </li>
-                ))}
+                { this.renderSourcesList() }
               </ul>
             </div>
           }
-          <div className="content__reviews">
-            <h3>Рецензия</h3>
-            <ContentReviews reviews={ reviews }
-                            author={ this.props.author } />
-          </div>
+          {
+            reviews &&
+            <div className="content__reviews">
+              <h3>Рецензия</h3>
+              <ReviewsHistory reviews={ reviews } author={ author }
+                              className="reviews-history_publish" />
+            </div>
+          }
         </div>
       </div>
     );
