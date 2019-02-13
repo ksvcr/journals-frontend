@@ -176,6 +176,7 @@ function getInitialValues(state, props) {
       hash: initialAuthorHash
     }],
     article_type: 0,
+    text_files: [],
     content_blocks: [
       {
         title: 'Введение'
