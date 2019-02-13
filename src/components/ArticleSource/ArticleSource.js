@@ -8,26 +8,35 @@ import './assets/cancel.svg';
 
 class ArticleSource extends Component {
   getTitle(parts, lang) {
-   const { data } = this.props;
-   let resultString = '';
-   if (data.author && lang === 'ru') {
-     const { lastname, initials } = data.author;
-     resultString = `${lastname} ${initials} `;
-   }
+    const { data } = this.props;
+    let resultString = '';
 
-   let params = parts.filter(key => data[key]).reduce((result, key) => {
-     let item = data[key];
-     if (key === 'page_count') {
-       if (lang === 'ru') {
+    if (data.author && lang === 'ru') {
+      if(typeof data.author === 'string') {
+        resultString = data.author;
+      } else {
+        const author = Array.isArray(data.author) ? data.author[0] : data.author;
+        const { lastname, initials } = author;
+
+        resultString = `${lastname} ${initials} `;
+      }
+    }
+
+    let params = parts.filter(key => data[key]).reduce((result, key) => {
+      let item = data[key];
+
+      if (key === 'page_count') {
+        if (lang === 'ru') {
          item = `- ${item} с.`
-       } else {
+        } else {
          item = `${item} P`
-       }
-     }
-     return `${result} ${item}`;
-   }, '');
+        }
+      }
 
-   return resultString + params;
+      return `${result} ${item}`;
+    }, '');
+
+    return resultString + params;
   }
 
   handleRemove = () => {
