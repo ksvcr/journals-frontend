@@ -63,15 +63,13 @@ export function createArticle(siteId, data) {
             return Promise.all(attachmentsPromises);
           });
         });
-
-
       });
     });
 
     return dispatch({
       type: CREATE_ARTICLE,
       payload
-    }).catch(error => console.error(error));
+    });
   }
 }
 
@@ -124,7 +122,7 @@ export function editArticle(id, data) {
       type: EDIT_ARTICLE,
       meta: { articleId: id, data: articleData },
       payload
-    }).catch(error => console.error(error));
+    });
   }
 }
 

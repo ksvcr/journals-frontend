@@ -94,6 +94,8 @@ class ArticlePublish extends Component {
       delete data.conflict_interest;
     }
 
+    data.state_article = 'SENT';
+
     if (isEdit) {
       if (userId === data.author.user && data.state_article === 'REVISION') {
         // Доработка
@@ -105,14 +107,12 @@ class ArticlePublish extends Component {
       editArticle(articleId, data).then(() => {
         reset(formName);
         push('/');
-      });
+      }).catch(error => console.error(error));
     } else {
-      // Отправить
-      data.state_article = 'SENT';
       createArticle(siteId, data).then(() => {
         reset(formName);        
         push('/');
-      });
+      }).catch(error => console.error(error));
     }
   };
 
@@ -124,13 +124,13 @@ class ArticlePublish extends Component {
       editArticle(articleId, data).then(() => {
         reset(formName);
         push('/');
-      });
+      }).catch(error => console.error(error));
     } else {
       data.state_article = 'DRAFT';
       createArticle(siteId, data).then(() => {
         reset(formName);
         push('/');
-      });
+      }).catch(error => console.error(error));
     }
   };
 
@@ -140,7 +140,8 @@ class ArticlePublish extends Component {
   };
 
   render() {
-    const { articleId, isFulfilled, articleStatus, userRole, articleData, isEdit, t } = this.props;
+    const { articleId, isFulfilled, articleStatus,
+            userRole, articleData, isEdit, t } = this.props;
     const isStatusRework = articleStatus === 'PRELIMINARY_REVISION' ||
                            articleStatus === 'REVISION';
     const editText = userRole === 'CORRECTOR' ? t('correct_article') : t('edit_article');

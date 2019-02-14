@@ -22,7 +22,7 @@ class PreliminaryRevisionForm extends Component {
           Отправить статью автору для доработки. Замечания к статье:
         </div>
         <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea
-               className="text-field_small" rows={ 6 } validate={ [validate.required] }
+               className="text-field_small" minRows={ 6 } validate={ [validate.required] }
                placeholder="Введите замечания к статье" />
         <div className="preliminary-revision-form__submit">
           <Button className="button_orange" type="submit">
