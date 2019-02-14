@@ -102,7 +102,12 @@ const apiClient = {
   getReviews: (articleId=null, reviewId=null, params) => {
     const tail = reviewId  !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
-  }
+  },
+  createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed`, { method: 'post', data }),
+  editArticlePrinted: (articleId, printedId, data) => {
+    return fetchInstance.request(`article/${articleId}/printed/${printedId}/`, { method: 'put', data })
+  },
+
 };
 
 export default apiClient;

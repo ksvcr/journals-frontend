@@ -93,7 +93,7 @@ class ArticleForm extends Component {
   handleSubmit = (formData) => {
     const { form, onSubmit } = this.props;
     onSubmit(formData, form);
-  }
+  };
 
   renderTools = () => {
     const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;
@@ -166,9 +166,7 @@ function getInitialValues(state, props) {
     financing_sources: [{
       type: financingIds[0]
     }],
-    addresses: [{
-      count: 1
-    }],
+    addresses: [],
     authors: [{
       id: user.data.id,
       isCurrent: true,

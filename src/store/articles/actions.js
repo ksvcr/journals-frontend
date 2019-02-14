@@ -32,7 +32,7 @@ export function fetchArticle(id) {
 
 export function createArticle(siteId, data) {
   return (dispatch) => {
-    let { content_blocks, sources, financing_sources, ...articleData } = data;
+    let { content_blocks, sources, financing_sources, addresses, ...articleData } = data;
     // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
     const payload = financingPromise.then((financingResponse=[]) => {
@@ -52,6 +52,13 @@ export function createArticle(siteId, data) {
           // Список литературы
           if (sources) {
             resourcePromises.push(apiClient.createSources(articleId, sources));
+          }
+
+          //Печатная копия статьи
+          if (addresses) {
+            console.log(addresses);
+            const printedPromises = addresses.map((item) => apiClient.createArticlePrinted(articleId, { ...item, user: data.author.user }));
+            resourcePromises.push(...printedPromises);
           }
 
           return Promise.all(resourcePromises).then(() => {

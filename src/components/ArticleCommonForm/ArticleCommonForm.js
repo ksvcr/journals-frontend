@@ -99,6 +99,14 @@ class ArticleCommonForm extends Component {
 
   handleFieldToggle = (event) => {
     const { checked, name } = event.target;
+
+    if (name === 'addressRadio') {
+      const { formName, change } = this.props;
+      const field = `addresses${checked ? '[0]' : ''}`;
+      const value = checked ? { count : 1 } : [];
+      change(formName, field, value);
+    }
+
     this.setState(prevState => (
       { visibleFields: { ...prevState.visibleFields, [name]: checked } }
     ));
