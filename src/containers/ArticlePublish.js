@@ -110,7 +110,7 @@ class ArticlePublish extends Component {
       // Отправить
       data.state_article = 'SENT';
       createArticle(siteId, data).then(() => {
-        reset(formName);        
+        reset(formName);
         push('/');
       });
     }
@@ -137,6 +137,29 @@ class ArticlePublish extends Component {
   handleEditArticleReview = (reviewId, formData) => {
     const { articleId, editArticleReview } = this.props;
     editArticleReview(articleId, reviewId, formData);
+  };
+
+  handleAutoSave = () => {
+    const { articleId, siteId, createArticle, editArticle, reset } = this.props;
+    let tempArticleId = articleId;
+
+    return function(formData, formName) {
+      const data = serializeArticleData(formData);
+      data.state_article = 'DRAFT';
+
+      console.log(tempArticleId);
+      if (tempArticleId !== undefined) {
+        editArticle(tempArticleId, data).then(() => {
+          console.log('Edit by autosave');
+        })
+      } else {
+        createArticle(siteId, data, (res) => {
+          tempArticleId = res.id;
+        }).then(() => {
+          console.log('Create by autosave');
+        });
+      }
+    }
   };
 
   render() {
@@ -184,7 +207,10 @@ class ArticlePublish extends Component {
         }
 
         <ArticleForm id={ articleId }
-                     onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>
+                     onSubmit={ this.handleSubmit }
+                     onDraftSubmit={ this.handleDraftSubmit }
+                     onAutoSave={ this.handleAutoSave() }
+                     autoSaveTimer={10} />
       </React.Fragment>
     );
   }
