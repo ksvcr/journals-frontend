@@ -140,24 +140,25 @@ class ArticlePublish extends Component {
   };
 
   handleAutoSave = () => {
-    const { articleId, siteId, createArticle, editArticle, reset } = this.props;
-    let tempArticleId = articleId;
+    const { articleId, siteId, createArticle, editArticle, isEdit } = this.props;
+    let tempArticleData = {
+      id: articleId,
+      isEdit,
+    };
 
-    return function(formData, formName) {
+    return (formData, formName) => {
       const data = serializeArticleData(formData);
       data.state_article = 'DRAFT';
 
-      console.log(tempArticleId);
-      if (tempArticleId !== undefined) {
-        editArticle(tempArticleId, data).then(() => {
-          console.log('Edit by autosave');
-        })
+      if (tempArticleData.id !== undefined) {
+        if(!tempArticleData.isEdit) return;
+
+        editArticle(tempArticleData.id, data).then(() => {});
       } else {
         createArticle(siteId, data, (res) => {
-          tempArticleId = res.id;
-        }).then(() => {
-          console.log('Create by autosave');
-        });
+          tempArticleData.id = res.id;
+          tempArticleData.isEdit = true;
+        }).then(() => {});
       }
     }
   };
