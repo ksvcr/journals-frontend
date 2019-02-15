@@ -25,19 +25,28 @@ class RedactorArticleList extends Component {
     dateField: 'date_create'
   };
 
-  get toolsMenuItems() {
-    return [
-      {
-        title: 'Редактировать',
-        handler: this.handleEdit
-      },
-      {
-        title: 'Просмотр',
-        type: 'preview',
-        icon: 'preview',
-        handler: this.handlePreview
-      }
-    ];
+  toolsMenuItems(data) {
+    const tools = [];
+
+    if (data.state_article === 'AWAIT_PUBLICATION') {
+      tools.push({
+        title: 'Посмотреть перевод',
+        handler: this.handleTranslate
+      });
+    }
+
+    tools.push({
+      title: 'Редактировать',
+      handler: this.handleEdit
+    },
+    {
+      title: 'Просмотр',
+      type: 'preview',
+      icon: 'preview',
+      handler: this.handlePreview
+    });
+
+    return tools;
   };
 
   get dateTitle() {
@@ -46,6 +55,11 @@ class RedactorArticleList extends Component {
       'date_send_to_review': 'Отправлена',
       'last_change': 'Изменена'
     };
+  };
+
+  handleTranslate = (id) => {
+    const { push } = this.props;
+    push(`/article/${id}/translate`);
   };
 
   handleSortChange = (ordering) => {
@@ -93,7 +107,7 @@ class RedactorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems(data) } />,
       box: this.renderBox,
       cells: [
         {

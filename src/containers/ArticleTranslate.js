@@ -11,11 +11,14 @@ class ArticleTranslate extends Component {
   }
 
   handleRequest = () => {
-    const { articleId, push, fetchArticle } = this.props;
+    const { articleId, push, fetchArticle, fetchArticleTranslation } = this.props;
     const promises = [];
 
     if (articleId !== undefined) {
-      promises.push(fetchArticle(articleId).catch(() =>{ push('/') }));
+      promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
+        let languageCode = articleData.language === 'en' ? 'ru' : 'en';
+        fetchArticleTranslation(articleId, languageCode);
+      }).catch(() =>{ push('/') }));
     }
 
     return Promise.all(promises);
@@ -62,6 +65,7 @@ const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleTranslation: articlesActions.createArticleTranslation,
+  fetchArticleTranslation: articlesActions.fetchArticleTranslation
 };
 
 export default connect(

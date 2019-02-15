@@ -91,6 +91,10 @@ const apiClient = {
   createArticleTranslation: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/translations/`, { method: 'post', data });
   },
+  getArticleTranslation: (articleId, languageCode=null) => {
+    const tail = languageCode !== null ? `${languageCode}/` : '';
+    return fetchInstance.request(`/articles/${articleId}/translations/${tail}`);
+  },
   getDiscountsInfo: (userId) => fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
   transferBonus: (data) => fetchInstance.request(`users/balance/transfer/`, { method: 'post', data }),
 
