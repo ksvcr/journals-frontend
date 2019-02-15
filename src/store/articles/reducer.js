@@ -1,5 +1,5 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES } from './constants';
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_PRINTED } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 import {ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE} from '~/store/articles/constants';
 
@@ -121,6 +121,31 @@ function articles(state = initialState, action) {
 
     case `${RESET_ARTICLES}`:
       return initialState;
+
+    case `${FETCH_ARTICLE_PRINTED}_FULFILLED`:
+      const newEntity = entityNormalize.toObject(action.payload.results);
+      return { ...state,
+        isPending: false,
+        isFulfilled: true,
+        isRejected: false,
+        ...newEntity
+      };
+
+    case `${FETCH_ARTICLE_PRINTED}_PENDING`:
+      return { ...state,
+        isPending: true,
+        isFulfilled: false,
+        isRejected: false,
+        ...action.meta
+      };
+
+    case `${FETCH_ARTICLE_PRINTED}_REJECTED`:
+      return { ...state,
+        isRejected: true,
+        isPending: false,
+        isFulfilled: false,
+        error: action.payload
+      };
 
     default:
       return state

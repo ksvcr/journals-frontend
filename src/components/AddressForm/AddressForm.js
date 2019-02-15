@@ -9,18 +9,9 @@ const AddressForm = ({ field, countriesArray, countriesData }) => {
   return (
     <React.Fragment>
       <div className="form__row">
-        <div className="form__col form__col_8">
-          <div className="form__field">
-            <label htmlFor={ `${field}.user` } className="form__label">ФИО получателя</label>
-            <Field className="text-field_white" name={ `${field}.user` } id={ `${field}.user` }
-                   component={ TextField } placeholder="Введите ФИО" />
-          </div>
-        </div>
-      </div>
-      <div className="form__row">
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.mail_address_country` } className="form__label">Страну</label>
+            <label htmlFor={ `${field}.mail_address_country` } className="form__label">Страна</label>
             <Field className="text-field_white" name={ `${field}.mail_address_country` } id={ `${field}.mail_address_country` }
                    format={ value => value ? { name: countriesData[value].name, id: value } : '' }
                    normalize={ value => value.id }

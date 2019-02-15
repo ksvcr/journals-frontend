@@ -1,7 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
+  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES, FETCH_ARTICLE_PRINTED
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -56,8 +56,9 @@ export function createArticle(siteId, data) {
 
           //Печатная копия статьи
           if (addresses) {
-            console.log(addresses);
-            const printedPromises = addresses.map((item) => apiClient.createArticlePrinted(articleId, { ...item, user: data.author.user }));
+            const printedPromises = addresses.map((item) => {
+              return apiClient.createArticlePrinted(articleId, { ...item, user: data.author.user, article: articleId });
+            });
             resourcePromises.push(...printedPromises);
           }
 
@@ -85,7 +86,7 @@ export function createArticle(siteId, data) {
 export function editArticle(id, data) {
   return (dispatch, state) => {
     const prevArticleData = state().articles.data[id];
-    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    let { content_blocks, financing_sources, sources, addresses, ...articleData } = data;
     // Источники финансирования
     let financingPromises = [];
 
@@ -122,6 +123,20 @@ export function editArticle(id, data) {
           const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
           const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));
           editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises ]
+        }
+
+        //Печатная копия статьи
+        if (addresses) {
+          const createPrintedArray = addresses.filter(item => item.id === undefined);
+          const editPrintedArray = addresses.filter(item => item.id !== undefined);
+          const editPrintedPromises = editPrintedArray.map((item) => {
+            return apiClient.editArticlePrinted(id, item.id, item);
+          });
+          const createPrintedPromises = createPrintedArray.map((item) => {
+            return apiClient.createArticlePrinted(id, { ...item });
+          });
+          const printedPromises = [...editPrintedPromises, ...createPrintedPromises];
+          editPromises.push(...printedPromises);
         }
 
         return Promise.all(editPromises);
@@ -236,4 +251,14 @@ export function resetArticles() {
   return {
     type: RESET_ARTICLES
   };
+}
+
+export function fetchArticlePrinted(id) {
+  return (dispatch) => {
+    const payload = apiClient.getArticlePrinted(id);
+    return dispatch({
+      type: FETCH_ARTICLE_PRINTED,
+      payload
+    });
+  }
 }

@@ -103,11 +103,14 @@ const apiClient = {
     const tail = reviewId  !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
   },
-  createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed`, { method: 'post', data }),
+  createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed/`, { method: 'post', data }),
   editArticlePrinted: (articleId, printedId, data) => {
     return fetchInstance.request(`article/${articleId}/printed/${printedId}/`, { method: 'put', data })
   },
-
+  getPrinted: (articleId, printedId=null) => {
+    const tail = printedId !== null ? `${printedId}/` : '';
+    return fetchInstance.request(`/articles/${articleId}/printed/${tail}`);
+  },
 };
 
 export default apiClient;

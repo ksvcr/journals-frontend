@@ -19,6 +19,7 @@ import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
+import * as printedActions from '~/store/printed/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 import apiClient from '~/services/apiClient';
@@ -62,10 +63,10 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchPrinted } = this.props;
 
     const promises = [
-      fetchCountries()
+      fetchCountries(),
     ];
 
     if (isEdit) {
@@ -75,7 +76,10 @@ class ArticlePublish extends Component {
           userIds.push(articleData.author.user);
         }
         const userPromises = userIds.map(id => fetchUser(id));
-        return Promise.all([ ...userPromises, fetchRubrics(articleData.site), fetchCategories(articleData.site)]);
+        return Promise.all([ ...userPromises,
+                            fetchRubrics(articleData.site),
+                            fetchCategories(articleData.site),
+                            fetchPrinted(articleId)]);
       }).catch(() =>{ push('/') }));
     } else {
       promises.push(fetchRubrics(siteId));
@@ -225,7 +229,8 @@ const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
-  fetchCountries: countriesActions.fetchCountries
+  fetchCountries: countriesActions.fetchCountries,
+  fetchPrinted: printedActions.fetchPrinted
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);
