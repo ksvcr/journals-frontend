@@ -94,7 +94,7 @@ class ArticleForm extends Component {
   handleSubmit = (formData) => {
     const { form, onSubmit } = this.props;
     onSubmit(formData, form);
-  }
+  };
 
   renderTools = () => {
     const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;

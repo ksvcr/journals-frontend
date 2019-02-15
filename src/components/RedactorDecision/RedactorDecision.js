@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as articlesActions from '~/store/articles/actions';
 
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
+import ReviewApprove from '~/components/ReviewApprove/ReviewApprove';
 import Button from '~/components/Button/Button';
 
 import './redactor-decision.scss';
@@ -13,6 +14,11 @@ class RedactorDecision extends Component {
   state = {
     decision: null
   };
+
+  componentDidMount() {
+    const { fetchArticleReviewInvites, articleId } = this.props;
+    fetchArticleReviewInvites({ article: articleId });
+  }
 
   handleChange = (value) => {
     this.setState({
@@ -69,13 +75,29 @@ class RedactorDecision extends Component {
         ];
 
       default:
-        return [];
+        return [
+        {
+          title: 'Принять',
+          value: 'AWAIT_PAYMENT',
+          color: 'green'
+        },
+        {
+          title: 'Доработать',
+          value: 'REVISION',
+          color: 'orange'
+        },
+        {
+          title: 'Отклонить',
+          value: 'DISAPPROVED',
+          color: 'red'
+        }
+      ];
     }
   }
 
   render() {
     const { decision } = this.state;
-    const { articleId } = this.props;
+    const { articleId, reviews } = this.props;
     return (
       <div className="redactor-decision">
         { this.options.length > 0 &&
@@ -84,6 +106,11 @@ class RedactorDecision extends Component {
                          onChange={ this.handleChange } />
           </div>
         }
+
+        { decision === 'AWAIT_PAYMENT' &&
+          <ReviewApprove articleId={ articleId } />
+        }
+
         { decision &&
           <div className="redactor-decision__bottom">
             <Button type="button" className="button_orange" onClick={ this.handleSave }>
@@ -104,13 +131,16 @@ function mapStateToProps(state, props) {
   const { articles } = state;
   const { articleId } = props;
 
+  const articleData = articles.data[articleId];
+
   return {
-    articleState: articles.data[articleId].state_article
+    articleState: articleData && articleData.state_article
   };
 }
 
 const mapDispatchToProps = {
-  editArticle: articlesActions.editArticle
+  editArticle: articlesActions.editArticle,
+  fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
 export default connect(

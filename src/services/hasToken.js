@@ -1,6 +1,5 @@
-import getCookies from "./getCookies";
+import Cookies from 'js-cookie';
 
 export default function hasToken() {
-  const cookies = getCookies();
-  return cookies.hasOwnProperty('csrftoken');
+  return Cookies.get('csrftoken');
 }
