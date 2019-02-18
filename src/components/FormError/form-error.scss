@@ -1,0 +1,12 @@
+.form-error {
+  padding: 20px 0;
+
+  &__item {
+    text-align: center;
+    color: $red-color;
+
+    & + & {
+      margin-top: 5px;
+    }
+  }
+}

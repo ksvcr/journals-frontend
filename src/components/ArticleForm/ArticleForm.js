@@ -12,6 +12,7 @@ import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentFo
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
 import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
+import FormError from '~/components/FormError/FormError';
 
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
@@ -116,10 +117,14 @@ class ArticleForm extends Component {
   };
 
   render() {
+    const { articlesError, isRejected } = this.props;
     return (
       <div className="article-publish-form">
         <div className="article-publish-form__wizard">
           <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
+          { isRejected &&
+            <FormError data={ articlesError }/>
+          }
         </div>
       </div>
     );
@@ -145,6 +150,8 @@ function mapStateToProps(state, props) {
     isInvalidForm,
     initialValues: getInitialValues(state, props),
     userData: user.data,
+    isRejected: articles.isRejected,
+    articlesError: articles.error,
     articleData: articles.data[id]
   };
 }
@@ -176,6 +183,7 @@ function getInitialValues(state, props) {
       hash: initialAuthorHash
     }],
     article_type: 0,
+    text_files: [],
     content_blocks: [
       {
         title: 'Введение'

@@ -1,7 +1,7 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_PRINTED } from './constants';
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_PRINTED,
+         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
-import {ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE} from '~/store/articles/constants';
 
 const initialState = {
   isPending: false,
@@ -117,6 +117,39 @@ function articles(state = initialState, action) {
             reviewInvites: action.payload.results
           }
         }
+      };
+
+    case `${FETCH_ARTICLE_TRANSLATION}_PENDING`:
+      return { ...state,
+        isPending: true,
+        isFulfilled: false,
+      };
+
+    case `${FETCH_ARTICLE_TRANSLATION}_FULFILLED`:
+      return { ...state,
+        isPending: false,
+        isFulfilled: true,
+        data: { ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            translation: action.payload
+          }
+        }
+      };
+
+    case `${CREATE_ARTICLE}_FULFILLED`:
+    case `${EDIT_ARTICLE}_FULFILLED`:
+      return { ...state,
+        isRejected: false,
+        error: null
+      };
+
+    case `${CREATE_ARTICLE}_REJECTED`:
+    case `${EDIT_ARTICLE}_REJECTED`:
+      return {
+        ...state,
+        isRejected: true,
+        error: action.payload
       };
 
     case `${RESET_ARTICLES}`:
