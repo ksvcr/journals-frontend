@@ -9,9 +9,9 @@ import TextField from '~/components/TextField/TextField';
 import './review-approve.scss';
 
 class ReviewApprove extends Component {
-  handleReviewChange = ({target}) => {
-    const {reviews, formName, change} = this.props;
-    let {value: reviewId} = target;
+  handleReviewChange = ({ target }) => {
+    const { reviews, formName, change } = this.props;
+    let { value: reviewId } = target;
     reviewId = parseInt(reviewId, 10);
     const review = reviews.find(item => reviewId === item.id);
     if (review) {
@@ -27,7 +27,7 @@ class ReviewApprove extends Component {
       return (
         <div className="review-approve__item" key={ review.id }>
           <Field name="review_for_approve" type="radio" value={review.id}
-                 component={Radio} parse={value => parseInt(value, 10)} onChange={this.handleReviewChange}>
+                 component={ Radio } parse={ value => parseInt(value, 10) } onChange={this.handleReviewChange}>
             {`Включить рецензию ${ reviewer.first_name } ${ reviewer.last_name }`}
           </Field>
         </div>
@@ -39,7 +39,7 @@ class ReviewApprove extends Component {
     return (
       <div className="review-approve">
         <div className="review-approve__list">
-          {this.renderItems()}
+          { this.renderItems() }
         </div>
         <div className="review-approve__preview">
           <Field name="comment_for_redactor" textarea minRows={6} component={TextField}/>
@@ -55,7 +55,7 @@ ReviewApprove.propTypes = {
 
 function mapStateToProps(state, props) {
   const { articles } = state;
-  const {articleId, formName} = props;
+  const { articleId, formName } = props;
 
   const articleData = articles.data[articleId];
 

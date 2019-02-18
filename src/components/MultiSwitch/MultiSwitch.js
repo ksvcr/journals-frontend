@@ -8,7 +8,7 @@ class MultiSwitch extends Component {
   state = { color: null };
 
   handleChange = (event) => {
-    const {input = {}} = this.props;
+    const { input = {} } = this.props;
     const { value, dataset } = event.target;
     const { color } = dataset;
     this.setState({ color });
@@ -17,7 +17,7 @@ class MultiSwitch extends Component {
   };
 
   renderOptions = () => {
-    const {options, input = {}} = this.props;
+    const { options, input = {} } = this.props;
     let name = input.name ? input.name : this.props.name;
     let value = input.value ? input.value : this.props.value;
 
