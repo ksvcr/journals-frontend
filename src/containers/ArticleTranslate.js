@@ -25,11 +25,15 @@ class ArticleTranslate extends Component {
   };
 
   handleSubmit = (formData) => {
-    const { articleId, articleData, push, createArticleTranslation } = this.props;
+    const { articleId, articleData, push, createArticleTranslation, editArticleTranslation } = this.props;
     let language_code = articleData.language === 'en' ? 'ru' : 'en';
     const data = { ...formData, language_code };
 
-    createArticleTranslation(articleId, data).then(() => { push('/'); });
+    if (articleData.translation) {
+      editArticleTranslation(articleId, data).then(() => { push('/'); });
+    } else {
+      createArticleTranslation(articleId, data).then(() => { push('/'); });
+    }
   };
 
   render() {
@@ -65,7 +69,8 @@ const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleTranslation: articlesActions.createArticleTranslation,
-  fetchArticleTranslation: articlesActions.fetchArticleTranslation
+  fetchArticleTranslation: articlesActions.fetchArticleTranslation,
+  editArticleTranslation: articlesActions.editArticleTranslation
 };
 
 export default connect(

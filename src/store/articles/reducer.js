@@ -119,8 +119,16 @@ function articles(state = initialState, action) {
         }
       };
 
+    case `${FETCH_ARTICLE_TRANSLATION}_PENDING`:
+      return { ...state,
+        isPending: true,
+        isFulfilled: false,
+      };
+
     case `${FETCH_ARTICLE_TRANSLATION}_FULFILLED`:
       return { ...state,
+        isPending: false,
+        isFulfilled: true,
         data: { ...state.data,
           [ action.meta.article ]: {
             ...state.data[action.meta.article],
