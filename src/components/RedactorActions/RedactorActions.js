@@ -24,8 +24,7 @@ class RedactorActions extends Component {
       }
     ];
 
-    // if (isShowDecision(articleState)) {
-    if (true) {
+    if (isShowDecision(articleState)) {
       actions.push({
         title: 'Решение',
         component: <div className="redactor-actions__decision">

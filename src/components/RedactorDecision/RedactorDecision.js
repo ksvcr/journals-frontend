@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import {reduxForm, Field, formValueSelector} from 'redux-form';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -11,31 +12,24 @@ import Button from '~/components/Button/Button';
 import './redactor-decision.scss';
 
 class RedactorDecision extends Component {
-  state = {
-    decision: null
-  };
-
   componentDidMount() {
     const { fetchArticleReviewInvites, articleId } = this.props;
     fetchArticleReviewInvites({ article: articleId });
   }
 
-  handleChange = (value) => {
-    this.setState({
-      decision: value
-    });
-  };
-
-  handleSave = () => {
-    const { articleId, editArticle } = this.props;
-    const { decision } = this.state;
-    editArticle(articleId, { state_article: decision });
+  handleSubmit = (formData) => {
+    const {articleId, editArticle, editArticleReview} = this.props;
+    const {state_article, review_for_approve, comment_for_redactor} = formData;
+    editArticle(articleId, {state_article});
+    if (review_for_approve) {
+      editArticleReview(articleId, review_for_approve, {is_approved: true, comment_for_redactor});
+    }
   };
 
   get options() {
-    const { articleState } = this.props;
+    const {currentArticleState} = this.props;
 
-    switch (articleState) {
+    switch (currentArticleState) {
       case 'AWAIT_REDACTOR':
         return [
           {
@@ -75,49 +69,36 @@ class RedactorDecision extends Component {
         ];
 
       default:
-        return [
-        {
-          title: 'Принять',
-          value: 'AWAIT_PAYMENT',
-          color: 'green'
-        },
-        {
-          title: 'Доработать',
-          value: 'REVISION',
-          color: 'orange'
-        },
-        {
-          title: 'Отклонить',
-          value: 'DISAPPROVED',
-          color: 'red'
-        }
-      ];
+        return [];
     }
   }
 
   render() {
-    const { decision } = this.state;
-    const { articleId, reviews } = this.props;
+    const {articleId, state_article, handleSubmit, form} = this.props;
     return (
       <div className="redactor-decision">
-        { this.options.length > 0 &&
+        <form className="redactor-decision__form" onSubmit={handleSubmit(this.handleSubmit)}>
+          {this.options.length > 0 &&
           <div className="redactor-decision__switch">
-            <MultiSwitch options={ this.options } name={ `decision-${articleId}` } value={ decision }
-                         onChange={ this.handleChange } />
+            <Field options={this.options} name="state_article"
+                   component={MultiSwitch}/>
           </div>
-        }
+          }
 
-        { decision === 'AWAIT_PAYMENT' &&
-          <ReviewApprove articleId={ articleId } />
-        }
+          {state_article === 'AWAIT_PAYMENT' &&
+          <div className="redactor-decision__reviews">
+            <ReviewApprove formName={form} articleId={articleId}/>
+          </div>
+          }
 
-        { decision &&
+          {state_article &&
           <div className="redactor-decision__bottom">
-            <Button type="button" className="button_orange" onClick={ this.handleSave }>
+            <Button type="submit" className="button_orange">
               Отправить
             </Button>
           </div>
-        }
+          }
+        </form>
       </div>
     );
   }
@@ -127,19 +108,24 @@ RedactorDecision.propTypes = {
   articleId: PropTypes.number
 };
 
+RedactorDecision = reduxForm()(RedactorDecision);
+
 function mapStateToProps(state, props) {
   const { articles } = state;
   const { articleId } = props;
-
   const articleData = articles.data[articleId];
-
+  const formName = `redactor-decision-${articleId}`;
+  const formSelector = formValueSelector(formName);
   return {
-    articleState: articleData && articleData.state_article
+    form: formName,
+    state_article: formSelector(state, 'state_article'),
+    currentArticleState: articleData && articleData.state_article
   };
 }
 
 const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
+  editArticleReview: articlesActions.editArticleReview,
   fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
 
