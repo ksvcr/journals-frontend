@@ -98,8 +98,6 @@ function getInitialValues(state, props) {
     text_to_keywords: translation && translation.text_to_keywords,
     text_to_title: translation && translation.text_to_title,
     thanks_text: translation && translation.thanks_text,
-    // content_blocks: translation && translation.content_blocks,
-    // custom_fields: translation && translation.custom_fields,
   };
 
   return initialValues;
