@@ -86,6 +86,36 @@ class ArticleForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.initAutoSave();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoSaveInterval);
+  }
+
+  initAutoSave = () => {
+    const { onAutoSave, autoSaveTimer, form } = this.props;
+
+    this.autoSaveInterval = setInterval(() => {
+      try {
+        const { formValues } = this.props;
+
+        if(!formValues) {
+          throw new ReferenceError('No form data. Autosave failed');
+        }
+
+        if(!formValues.title) {
+          throw new ReferenceError('No title in form data. Autosave failed');
+        }
+
+        onAutoSave(formValues, form);
+      } catch (e) {
+        console.error(e.message);
+      }
+    }, autoSaveTimer * 1000);
+  };
+
   handleDraftSubmit = () => {
     const { formValues, form, onDraftSubmit } = this.props;
     onDraftSubmit(formValues, form);
@@ -224,7 +254,13 @@ function getInitialValues(state, props) {
 ArticleForm.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
   onSubmit: PropTypes.func,
-  onDraftSubmit: PropTypes.func
+  onDraftSubmit: PropTypes.func,
+  onAutoSave: PropTypes.func,
+  autoSaveTimer: PropTypes.number,
+};
+
+ArticleForm.defaultProps = {
+  autoSaveTimer: 30,
 };
 
 ArticleForm = withNamespaces()(ArticleForm);

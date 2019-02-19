@@ -110,7 +110,7 @@ class ArticlePublish extends Component {
       }).catch(error => console.error(error));
     } else {
       createArticle(siteId, data).then(() => {
-        reset(formName);        
+        reset(formName);
         push('/');
       }).catch(error => console.error(error));
     }
@@ -137,6 +137,30 @@ class ArticlePublish extends Component {
   handleEditArticleReview = (reviewId, formData) => {
     const { articleId, editArticleReview } = this.props;
     editArticleReview(articleId, reviewId, formData);
+  };
+
+  handleAutoSave = () => {
+    const { articleId, siteId, createArticle, editArticle, isEdit } = this.props;
+    let tempArticleData = {
+      id: articleId,
+      isEdit,
+    };
+
+    return (formData, formName) => {
+      const data = serializeArticleData(formData);
+      data.state_article = 'DRAFT';
+
+      if (tempArticleData.id !== undefined) {
+        if(!tempArticleData.isEdit) return;
+
+        editArticle(tempArticleData.id, data).then(() => {});
+      } else {
+        createArticle(siteId, data, (res) => {
+          tempArticleData.id = res.id;
+          tempArticleData.isEdit = true;
+        }).then(() => {});
+      }
+    }
   };
 
   render() {
@@ -185,7 +209,10 @@ class ArticlePublish extends Component {
         }
 
         <ArticleForm id={ articleId }
-                     onSubmit={ this.handleSubmit } onDraftSubmit={ this.handleDraftSubmit }/>
+                     onSubmit={ this.handleSubmit }
+                     onDraftSubmit={ this.handleDraftSubmit }
+                     onAutoSave={ this.handleAutoSave() }
+                     autoSaveTimer={10} />
       </React.Fragment>
     );
   }

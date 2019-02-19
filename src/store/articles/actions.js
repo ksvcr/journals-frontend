@@ -30,25 +30,32 @@ export function fetchArticle(id) {
   }
 }
 
-export function createArticle(siteId, data) {
+export function createArticle(siteId, data, cb) {
   return (dispatch) => {
     let { content_blocks, sources, financing_sources, ...articleData } = data;
     // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
+
     const payload = financingPromise.then((financingResponse=[]) => {
       if (financingResponse.length) {
         articleData.financing_sources = financingResponse.map(item => item.id);
       }
+
       // Статья
       return apiClient.createArticle(siteId, articleData).then((articleResponse) => {
         const articleId = articleResponse.id;
+
+        cb(articleResponse);
+
         return apiClient.lockArticle(articleId).then(() => {
           const resourcePromises = [];
+
           // Контент-блоки
           if (content_blocks) {
             content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
             resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
           }
+
           // Список литературы
           if (sources) {
             resourcePromises.push(apiClient.createSources(articleId, sources));
