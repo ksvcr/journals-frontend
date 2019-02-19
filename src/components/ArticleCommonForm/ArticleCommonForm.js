@@ -155,7 +155,7 @@ class ArticleCommonForm extends Component {
                 </div>
                 <div className="form__col form__col_8">
                   <Field name="need_translation" id="need_translation" type="checkbox"
-                        component={ Checkbox } >
+                         component={Checkbox}>
                     Нужен перевод сопроводительной информации на русский
                   </Field>
                   <FieldHint position={ 'top-end' } text={

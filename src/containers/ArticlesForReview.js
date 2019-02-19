@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {withNamespaces} from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import ArticlesForReviewList from '~/components/ArticlesForReviewList/ArticlesForReviewList';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
@@ -45,11 +45,11 @@ class ArticlesForReview extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
-          {t('articles_for_review')}
+          { t('articles_for_review') }
         </h1>
 
         <div className="page__tools">
@@ -60,7 +60,7 @@ class ArticlesForReview extends Component {
             </div>
             <div className="form__field">
               <label className="form__label">
-                {t('article_search')}
+                { t('article_search') }
               </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>

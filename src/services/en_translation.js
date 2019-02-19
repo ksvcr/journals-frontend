@@ -15,12 +15,25 @@ const en_translation = {
   stage: 'Stage',
   state: 'State',
   number: 'Number',
+  author: 'Author',
   tags: 'Tags',
   edit: 'Edit',
   statistics: 'Statistics',
   users: 'Users',
   articles_for_review: 'Articles for review',
-  articles_in_work: 'Articles in work'
+  articles_in_work: 'Articles in work',
+  article_text: 'Article text',
+  common_content: 'Common content',
+  show_by: 'Show',
+  authors: 'Authors',
+  source_list: 'Source list',
+  files_to_article: 'Files to article',
+  preview: 'Preview',
+  save_as_draft: 'Save as draft',
+  send_article: 'Send article',
+  save_article: 'Save article',
+  edit_article: 'Edit article',
+  correct_article: 'Correct article'
 };
 
 export default en_translation;

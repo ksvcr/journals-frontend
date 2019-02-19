@@ -11,22 +11,29 @@ class ArticleTranslate extends Component {
   }
 
   handleRequest = () => {
-    const { articleId, push, fetchArticle } = this.props;
+    const { articleId, push, fetchArticle, fetchArticleTranslation } = this.props;
     const promises = [];
 
     if (articleId !== undefined) {
-      promises.push(fetchArticle(articleId).catch(() =>{ push('/') }));
+      promises.push(fetchArticle(articleId).then(({ value:articleData }) => {
+        let languageCode = articleData.language === 'en' ? 'ru' : 'en';
+        fetchArticleTranslation(articleId, languageCode);
+      }).catch(() =>{ push('/') }));
     }
 
     return Promise.all(promises);
   };
 
   handleSubmit = (formData) => {
-    const { articleId, articleData, push, createArticleTranslation } = this.props;
+    const { articleId, articleData, push, createArticleTranslation, editArticleTranslation } = this.props;
     let language_code = articleData.language === 'en' ? 'ru' : 'en';
     const data = { ...formData, language_code };
 
-    createArticleTranslation(articleId, data).then(() => { push('/'); });
+    if (articleData.translation) {
+      editArticleTranslation(articleId, data).then(() => { push('/'); });
+    } else {
+      createArticleTranslation(articleId, data).then(() => { push('/'); });
+    }
   };
 
   render() {
@@ -62,6 +69,8 @@ const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleTranslation: articlesActions.createArticleTranslation,
+  fetchArticleTranslation: articlesActions.fetchArticleTranslation,
+  editArticleTranslation: articlesActions.editArticleTranslation
 };
 
 export default connect(

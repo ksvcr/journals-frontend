@@ -79,7 +79,7 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, c
             <label htmlFor="defense_country" className="form__label">
               Страна защиты <ReqMark />
             </label>
-            <Field name="country" id="country"
+            <Field name="defense_country" id="defense_country" validate={ [validate.required] }
                    format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
                    normalize={ value => value.id }
                    component={ props => <SearchableSelect placeholder="Выберите страну"

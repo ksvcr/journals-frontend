@@ -36,8 +36,13 @@ class fetchService {
       console.error('Error', error.message);
     }
 
-    throw new Error(error.message);
+    if (error.response) {
+      throw error.response.data;
+    } else {
+      throw error.message;
+    }
   }
+
 }
 
 export default fetchService;
