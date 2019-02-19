@@ -9,15 +9,14 @@ import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
-
 class AuthorArticles extends Component {
   componentDidMount() {
     this.handleRequest();
   }
 
   handleRequest = (params={}) => {
-    const { siteId, articlesParams, fetchArticles } = this.props;
-    return fetchArticles(siteId, { ...articlesParams, ...params });
+    const { siteId, articlesParams, userId, fetchArticles } = this.props;
+    return fetchArticles(siteId, { ...articlesParams, ...params, author: userId });
   };
 
   get searchTargets() {
@@ -62,8 +61,9 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites } = state;
+  const { sites, user } = state;
   return {
+    userId: user.data.id,
     siteId: sites.current,
     articlesParams: getArticlesParams(state)
   };

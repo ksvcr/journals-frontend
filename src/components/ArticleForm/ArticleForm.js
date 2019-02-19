@@ -38,7 +38,7 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    const {t, userData} = this.props;
+    const { t, userData } = this.props;
 
     switch (userData.role) {
       case 'CORRECTOR':
@@ -86,6 +86,27 @@ class ArticleForm extends Component {
     }
   }
 
+  componentDidMount() {
+    this.initAutoSave();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoSaveInterval);
+  }
+
+  initAutoSave = () => {
+    const { onAutoSave, autoSaveTimer, form, articleData } = this.props;
+    const isDraft = articleData && articleData.state_article === 'DRAFT';
+
+    this.autoSaveInterval = setInterval(() => {
+      const { formValues } = this.props;
+
+      if(formValues && formValues.title && (!articleData || isDraft)) {
+        onAutoSave(formValues, form);
+      }
+    }, autoSaveTimer * 1000);
+  };
+
   handleDraftSubmit = () => {
     const { formValues, form, onDraftSubmit } = this.props;
     onDraftSubmit(formValues, form);
@@ -94,7 +115,7 @@ class ArticleForm extends Component {
   handleSubmit = (formData) => {
     const { form, onSubmit } = this.props;
     onSubmit(formData, form);
-  }
+  };
 
   renderTools = () => {
     const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;
@@ -224,7 +245,13 @@ function getInitialValues(state, props) {
 ArticleForm.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
   onSubmit: PropTypes.func,
-  onDraftSubmit: PropTypes.func
+  onDraftSubmit: PropTypes.func,
+  onAutoSave: PropTypes.func,
+  autoSaveTimer: PropTypes.number,
+};
+
+ArticleForm.defaultProps = {
+  autoSaveTimer: 30,
 };
 
 ArticleForm = withNamespaces()(ArticleForm);

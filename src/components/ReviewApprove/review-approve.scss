@@ -1,0 +1,15 @@
+.review-approve {
+  &__list {
+    display: flex;
+  }
+
+  &__preview {
+    margin-top: 18px;
+  }
+
+  &__item {
+    & + & {
+      margin-left: 20px;
+    }
+  }
+}

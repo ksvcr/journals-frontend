@@ -129,12 +129,14 @@ class ArticleContentForm extends Component {
         </h2>
         <div className="form__field">
           <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
-                component={Checkbox}>
+                component={ Checkbox }>
             Хочу добавить статью файлом (
-            {availableFormat.join(', ')}
+            { availableFormat.join(', ') }
           )
           </Field>
-          <div className="article-content-form__description">При добавлении текста статьи файлом, стоимость размещения увеличится на 30%</div>
+          <div className="article-content-form__description">
+            При добавлении текста статьи файлом, стоимость размещения увеличится на 30%
+          </div>
         </div>
         {is_send_as_file ? (
           <div className="form__field">

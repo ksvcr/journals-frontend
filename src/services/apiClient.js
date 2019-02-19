@@ -1,4 +1,5 @@
 import fetchService from '~/utils/fetchService';
+import Cookies from 'js-cookie';
 
 const fetchInstance = new fetchService({
   baseURL: process.env.REACT_APP_API_URL
@@ -56,17 +57,8 @@ const apiClient = {
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
 
   createFinancingSources: (data) => fetchInstance.request(`/financing/`, { method: 'post', data }),
-  getFinancingSource: (id) => {
-    return fetchInstance.request(`/financing/${id}/`);
-  },
   editFinancingSource: (id, data) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
-  },
-  deleteFinancingSource: (id) => {
-    return fetchInstance.request(`/financing/${id}/`, { method: 'delete' } );
-  },
-  getArticleTags: (articleId, params) => {
-    return fetchInstance.request(`/articles/${articleId}/tags/`, { params });
   },
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
@@ -111,5 +103,11 @@ const apiClient = {
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
   }
 };
+
+fetchInstance.instance.interceptors.response.use(null, (error) => {
+  if (error.config && error.response && error.response.status === 403) {
+    Cookies.remove('csrftoken');
+  }
+});
 
 export default apiClient;

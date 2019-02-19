@@ -18,7 +18,10 @@ class InvitedReviewersList extends Component {
           style: {
             width: '25%'
           },
-          render: data => data.reviewer
+          render: ({ reviewer }) => {
+            const { first_name, last_name } = reviewer;
+            return `${first_name} ${last_name}`;
+          }
         }
       ]
     };
