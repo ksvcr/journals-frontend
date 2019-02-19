@@ -45,7 +45,9 @@ export function createArticle(siteId, data, cb) {
       return apiClient.createArticle(siteId, articleData).then((articleResponse) => {
         const articleId = articleResponse.id;
 
-        cb(articleResponse);
+        if (cb) {
+          cb(articleResponse);
+        }
 
         return apiClient.lockArticle(articleId).then(() => {
           const resourcePromises = [];

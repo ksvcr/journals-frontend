@@ -146,7 +146,7 @@ class ArticlePublish extends Component {
       isEdit,
     };
 
-    return (formData, formName) => {
+    return (formData) => {
       const data = serializeArticleData(formData);
       data.state_article = 'DRAFT';
 

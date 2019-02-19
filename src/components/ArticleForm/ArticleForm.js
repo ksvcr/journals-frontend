@@ -38,7 +38,7 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    const {t, userData} = this.props;
+    const { t, userData } = this.props;
 
     switch (userData.role) {
       case 'CORRECTOR':
@@ -95,23 +95,14 @@ class ArticleForm extends Component {
   }
 
   initAutoSave = () => {
-    const { onAutoSave, autoSaveTimer, form } = this.props;
+    const { onAutoSave, autoSaveTimer, form, articleData } = this.props;
+    const isDraft = articleData && articleData.state_article === 'DRAFT';
 
     this.autoSaveInterval = setInterval(() => {
-      try {
-        const { formValues } = this.props;
+      const { formValues } = this.props;
 
-        if(!formValues) {
-          throw new ReferenceError('No form data. Autosave failed');
-        }
-
-        if(!formValues.title) {
-          throw new ReferenceError('No title in form data. Autosave failed');
-        }
-
+      if(formValues && formValues.title && (!articleData || isDraft)) {
         onAutoSave(formValues, form);
-      } catch (e) {
-        console.error(e.message);
       }
     }, autoSaveTimer * 1000);
   };

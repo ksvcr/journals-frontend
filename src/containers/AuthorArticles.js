@@ -9,7 +9,6 @@ import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
 
-
 class AuthorArticles extends Component {
   componentDidMount() {
     this.handleRequest();
