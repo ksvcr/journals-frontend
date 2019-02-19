@@ -1,7 +1,7 @@
 import {
   CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
   FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
+  CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES
 } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -210,6 +210,41 @@ export function createArticleTranslation(id, data) {
       payload
     }).catch(error => console.error(error));
   };
+}
+
+export function editArticleTranslation(id, data) {
+  return (dispatch) => {
+    const payload = apiClient.lockArticle(id).then(() =>{
+      let editSourcePromises = [];
+
+      if (data.sources) {
+        editSourcePromises = data.sources.map(item => apiClient.editSource(id, item));
+      }
+
+      delete data.sources;
+
+      const editTranslationPromise = apiClient.editArticleTranslation(id, data.language_code, data);
+      const editArticlePromise = apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' });
+      return Promise.all([ ...editSourcePromises, editTranslationPromise, editArticlePromise ]);
+    });
+
+    return dispatch({
+      type: EDIT_ARTICLE_TRANSLATION,
+      payload
+    }).catch(error => console.error(error));
+  };
+}
+
+export function fetchArticleTranslation(id, languageCode=null) {
+ return (dispatch) => {
+   const payload = apiClient.getArticleTranslation(id, languageCode);
+
+   return dispatch({
+     type: FETCH_ARTICLE_TRANSLATION,
+     meta: { article: id },
+     payload
+   }).catch(error => console.error(error));
+ }
 }
 
 export function fetchArticleReviewInvites(params) {

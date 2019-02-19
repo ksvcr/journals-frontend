@@ -1,6 +1,6 @@
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
          REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
-         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE } from './constants';
+         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -115,6 +115,24 @@ function articles(state = initialState, action) {
           [ action.meta.article ]: {
             ...state.data[action.meta.article],
             reviewInvites: action.payload.results
+          }
+        }
+      };
+
+    case `${FETCH_ARTICLE_TRANSLATION}_PENDING`:
+      return { ...state,
+        isPending: true,
+        isFulfilled: false,
+      };
+
+    case `${FETCH_ARTICLE_TRANSLATION}_FULFILLED`:
+      return { ...state,
+        isPending: false,
+        isFulfilled: true,
+        data: { ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            translation: action.payload
           }
         }
       };
