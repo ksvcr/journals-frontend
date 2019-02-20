@@ -1,13 +1,13 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import ToolTip from "~/components/ToolTip/ToolTip";
-import SortChecker from "~/components/SortChecker/SortChecker";
-import PointMenuButton from "~/components/PointMenuButton/PointMenuButton";
+import ToolTip from '~/components/ToolTip/ToolTip';
+import SortChecker from '~/components/SortChecker/SortChecker';
+import PointMenuButton from '~/components/PointMenuButton/PointMenuButton';
 
-import "./list.scss";
+import './list.scss';
 
 class List extends PureComponent {
   state = {
@@ -19,7 +19,7 @@ class List extends PureComponent {
     const { name: field, checked } = event.target;
 
     this.setState({ sort: { [field]: checked } });
-    const sortOrder = checked ? "" : "-";
+    const sortOrder = checked ? '' : '-';
     const sortParam = `${sortOrder}${field}`;
     onSortChange(sortParam);
   };
@@ -49,7 +49,7 @@ class List extends PureComponent {
 
   renderHead = () => {
     return (
-      <div className="list__item list__item_head" key={"list-head"}>
+      <div className="list__item list__item_head" key={'list-head'}>
         <div className="list__row">{this.renderCells(null, true)}</div>
       </div>
     );
@@ -60,7 +60,7 @@ class List extends PureComponent {
     const { sort } = this.state;
 
     const cellItems = cells.map((cell, index) => {
-      const cellClasses = classNames("list__cell", {
+      const cellClasses = classNames('list__cell', {
         list__cell_head: isHead,
         list__cell_main: cell.isMain
       });

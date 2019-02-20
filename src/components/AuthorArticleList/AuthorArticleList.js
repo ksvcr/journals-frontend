@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { push } from "connected-react-router";
-import { withNamespaces } from "react-i18next";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
-import List from "~/components/List/List";
-import DateFilter from "~/components/DateFilter/DateFilter";
-import PaginateLine from "~/components/PaginateLine/PaginateLine";
-import StatusLabel from "~/components/StatusLabel/StatusLabel";
-import ToolsMenu from "~/components/ToolsMenu/ToolsMenu";
-import Payment from "~/components/Payment/Payment";
+import List from '~/components/List/List';
+import DateFilter from '~/components/DateFilter/DateFilter';
+import PaginateLine from '~/components/PaginateLine/PaginateLine';
+import StatusLabel from '~/components/StatusLabel/StatusLabel';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
+import Payment from '~/components/Payment/Payment';
 
-import { getArticlesArray } from "~/store/articles/selector";
+import { getArticlesArray, getArticlesParams } from '~/store/articles/selector';
 
-import * as formatDate from "~/services/formatDate";
-import { getArticleStageTitle } from "~/services/articleStages";
+import * as formatDate from '~/services/formatDate';
+import { getArticleStageTitle } from '~/services/articleStages';
 
 class AuthorArticleList extends Component {
   state = {
     box: null,
-    dateField: "date_create"
+    dateField: 'date_create'
   };
 
   getToolsMenuItems(data) {
@@ -29,7 +29,7 @@ class AuthorArticleList extends Component {
 
     if (!isLocked) {
       items.push({
-        title: t("edit"),
+        title: t('edit'),
         handler: this.handleEdit
       });
     }
@@ -37,13 +37,13 @@ class AuthorArticleList extends Component {
     items = [
       ...items,
       {
-        title: "Оплатить",
+        title: 'Оплатить',
         handler: this.handlePaymentShow
       },
       {
-        title: "Просмотр",
-        type: "preview",
-        icon: "preview",
+        title: 'Просмотр',
+        type: 'preview',
+        icon: 'preview',
         handler: this.handlePreview
       }
     ];
@@ -53,9 +53,9 @@ class AuthorArticleList extends Component {
 
   get dateTitle() {
     return {
-      date_create: "Создана",
-      date_send_to_review: "Отправлена",
-      last_change: "Изменена"
+      date_create: 'Создана',
+      date_send_to_review: 'Отправлена',
+      last_change: 'Изменена'
     };
   }
 
@@ -66,7 +66,7 @@ class AuthorArticleList extends Component {
 
   handlePaymentShow = id => {
     this.setState({
-      box: { id, type: "payment" }
+      box: { id, type: 'payment' }
     });
   };
 
@@ -110,15 +110,15 @@ class AuthorArticleList extends Component {
       cells: [
         {
           style: {
-            width: "50%"
+            width: '50%'
           },
           isMain: true,
-          head: () => t("title"),
-          render: data => data.title || "Название статьи не указано"
+          head: () => t('title'),
+          render: data => data.title || 'Название статьи не указано'
         },
         {
           style: {
-            width: "12%"
+            width: '12%'
           },
           sort: dateField,
           head: () => this.dateTitle[dateField],
@@ -132,18 +132,18 @@ class AuthorArticleList extends Component {
         },
         {
           style: {
-            width: "13%"
+            width: '13%'
           },
-          sort: "stage_article",
-          head: () => t("stage"),
+          sort: 'stage_article',
+          head: () => t('stage'),
           render: data => getArticleStageTitle(data.stage_article)
         },
         {
           style: {
-            width: "20%"
+            width: '20%'
           },
-          sort: "state_article",
-          head: () => t("state"),
+          sort: 'state_article',
+          head: () => t('state'),
           render: data => <StatusLabel status={data.state_article} />
         }
       ]
@@ -153,7 +153,7 @@ class AuthorArticleList extends Component {
   renderBox = data => {
     const { box } = this.state;
     if (box && box.id === data.id) {
-      if (box.type === "payment") {
+      if (box.type === 'payment') {
         return <Payment onClose={this.handlePaymentClose} />;
       }
     }
