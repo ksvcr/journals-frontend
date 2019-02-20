@@ -15,7 +15,6 @@
       "VariableDeclarator": "first",
       "ObjectExpression": "first",
       "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"]
-    }],
-    "prettier/prettier": "error"
+    }]
   }
 }

@@ -86,7 +86,7 @@ class ArticleFilesForm extends Component {
         >
           <FileDropPlaceholder />
         </Dropzone>
-        <ul className="article-files-form__list">{this.renderItems()}</ul>
+        <ul className='article-files-form__list'>{this.renderItems()}</ul>
       </div>
     );
   }
