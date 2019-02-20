@@ -23,7 +23,7 @@ class AuthorArticles extends Component {
     const { t } = this.props;
     return [
       {
-        value: 'title',
+        value: "title",
         title: t('search_in_titles')
       }
     ];

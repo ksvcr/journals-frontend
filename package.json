@@ -168,7 +168,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "eslint --fix"
     }
   },
   "lint-staged": {
