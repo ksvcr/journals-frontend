@@ -115,6 +115,7 @@ export function editArticle(id, data) {
           let editPromises = [apiClient.editArticle(id, articleData)];
           // Контент-блоки
           if (content_blocks) {
+            content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
             editPromises.push(apiClient.editBlocks(id, content_blocks));
           }
 
