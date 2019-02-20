@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import Select from '~/components/Select/Select';
-import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
-import PaginateLine from '~/components/PaginateLine/PaginateLine';
+import SearchPanel from "~/components/SearchPanel/SearchPanel";
+import Select from "~/components/Select/Select";
+import RedactorUsersList from "~/components/RedactorUsersList/RedactorUsersList";
+import PaginateLine from "~/components/PaginateLine/PaginateLine";
 
-import * as usersActions from '~/store/users/actions';
-import { getUsersParams } from '~/store/users/selector';
-import { getSitesArray } from '~/store/sites/selector';
+import * as usersActions from "~/store/users/actions";
+import { getUsersParams } from "~/store/users/selector";
+import { getSitesArray } from "~/store/sites/selector";
 
 class RedactorUsers extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ class RedactorUsers extends Component {
     const data = {
       ...usersParams,
       ...params,
-      search: params.search_query || usersParams.search,
+      search: params.search_query || usersParams.search
     };
     fetchUsers(data);
   };
@@ -28,12 +28,12 @@ class RedactorUsers extends Component {
   get searchTargets() {
     return [
       {
-        value: 'name',
-        title: 'По имени'
+        value: "name",
+        title: "По имени"
       },
       {
-        value: 'science',
-        title: 'По научным данным'
+        value: "science",
+        title: "По научным данным"
       }
     ];
   }
@@ -46,76 +46,85 @@ class RedactorUsers extends Component {
     }));
 
     return {
-      name: 'site',
+      name: "site",
       options,
-      onChange: (event) => {}
-    }
+      onChange: event => {}
+    };
   }
 
   get selectActionProps() {
     return {
-      name: 'action',
-      options: [{
-        title: 'Отправить письмо',
-        value: 'mail'
-      }],
-      onChange: (event) => {}
+      name: "action",
+      options: [
+        {
+          title: "Отправить письмо",
+          value: "mail"
+        }
+      ],
+      onChange: event => {}
     };
   }
 
   get selectTagsProps() {
     return {
-      name: 'tags',
+      name: "tags",
       options: [],
-      onChange: (event) => {}
+      onChange: event => {}
     };
   }
 
-  handlePaginateChange = (paginate) => {
-    this.handleRequest({ paginate })
+  handlePaginateChange = paginate => {
+    this.handleRequest({ paginate });
   };
 
   render() {
     const { total, paginate } = this.props;
     return (
       <React.Fragment>
-         <h1 className="page__title">Пользователи</h1>
-
-         <div className="page__tools">
+        <h1 className="page__title">Пользователи</h1>
+        <div className="page__tools">
           <div className="form">
             <div className="form__field">
               <label className="form__label">Поиск пользователя</label>
-              <SearchPanel hasDefaultTarget={ false } targets={ this.searchTargets }
-                           onChange={ this.handleRequest } initialTarget="name" />
+              <SearchPanel
+                hasDefaultTarget={false}
+                targets={this.searchTargets}
+                onChange={this.handleRequest}
+                initialTarget="name"
+              />
             </div>
             <div className="form__row">
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Журнал</label>
-                  <Select { ...this.selectSiteProps } />
+                  <Select {...this.selectSiteProps} />
                 </div>
               </div>
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Действия</label>
-                  <Select { ...this.selectActionProps } />
+                  <Select {...this.selectActionProps} />
                 </div>
               </div>
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Теги</label>
-                  <Select { ...this.selectTagsProps } />
+                  <Select {...this.selectTagsProps} />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <RedactorUsersList onUpdateRequest={ this.handleRequest } />
+        <RedactorUsersList onUpdateRequest={this.handleRequest} />
 
-        { total > 0 &&
-          <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
-        }
+        {total > 0 && (
+          <PaginateLine
+            onChange={this.handlePaginateChange}
+            total={total}
+            {...paginate}
+          />
+        )}
       </React.Fragment>
     );
   }
@@ -129,11 +138,14 @@ function mapStateToProps(state) {
     total,
     paginate,
     sitesArray: getSitesArray(state)
-  }
+  };
 }
 
 const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedactorUsers);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RedactorUsers);

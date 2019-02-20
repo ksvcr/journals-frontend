@@ -1,14 +1,24 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as formatDate from "~/services/formatDate";
 
-import List from '~/components/List/List';
+import List from "~/components/List/List";
+import TagEditor from "~/components/TagEditor/TagEditor";
 
-import './invited-reviewers-list.scss';
+import * as usersActions from "~/store/users/actions";
+
+import "./invited-reviewers-list.scss";
 
 class InvitedReviewersList extends Component {
+  handleTagAdd = (user, text) => {
+    const { currentUserId, createUserTag } = this.props;
+    const tagData = { text, user, tag_author: currentUserId };
+    createUserTag(tagData);
+  };
+
   get listProps() {
     const { articleData } = this.props;
-    const { reviewInvites=[] } = articleData;
+    const { reviewInvites = [] } = articleData;
 
     return {
       data: reviewInvites,
@@ -16,21 +26,43 @@ class InvitedReviewersList extends Component {
       cells: [
         {
           style: {
-            width: '25%'
+            width: "75%"
           },
           render: ({ reviewer }) => {
             const { first_name, last_name } = reviewer;
             return `${first_name} ${last_name}`;
           }
+        },
+        {
+          style: {
+            width: "25%"
+          },
+          render: data => `До ${formatDate.toString(data.decision_deadline)}`
         }
       ]
     };
   }
 
+  renderBox = ({ reviewer }) => {
+    const { removeUserTag } = this.props;
+    return (
+      <div className="invited-reviewers-list__box">
+        <div className="invited-reviewers-list__tags">
+          <TagEditor
+            entityId={reviewer.id}
+            data={reviewer.tags}
+            onAdd={this.handleTagAdd}
+            onRemove={removeUserTag}
+          />
+        </div>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className="invited-reviewers-list">
-        <List { ...this.listProps } />
+        <List {...this.listProps} />
       </div>
     );
   }
@@ -44,6 +76,12 @@ function mapStateToProps(state, props) {
   };
 }
 
+const mapDispatchToProps = {
+  createUserTag: usersActions.createUserTag,
+  removeUserTag: usersActions.removeUserTag
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(InvitedReviewersList);

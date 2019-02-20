@@ -1,35 +1,50 @@
-import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
-import { merge } from 'immutable';
-import Editor from 'draft-js-plugins-editor';
-import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import createTablePlugin from 'draft-js-table-plugin';
-import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
-import createFocusPlugin from 'draft-js-focus-plugin';
-import createUndoPlugin from 'draft-js-undo-plugin';
+import React, { Component } from "react";
+import {
+  convertToRaw,
+  convertFromRaw,
+  DefaultDraftBlockRenderMap,
+  EditorState
+} from "draft-js";
+import { merge } from "immutable";
+import Editor from "draft-js-plugins-editor";
+import createStaticToolbarPlugin, {
+  Separator
+} from "draft-js-static-toolbar-plugin";
+import createTablePlugin from "draft-js-table-plugin";
+import createEntityPropsPlugin from "draft-js-entity-props-plugin";
+import createFocusPlugin from "draft-js-focus-plugin";
+import createUndoPlugin from "draft-js-undo-plugin";
 
-import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
-import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSection';
-import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
-import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
-import TableTool from '~/components/TableTool/TableTool';
-import AddLinkTool, { linkDecorator } from '~/components/AddLinkTool/AddLinkTool';
-import RemoveLinkTool from '~/components/RemoveLinkTool/RemoveLinkTool';
-import HighlightTool from '~/components/HighlightTool/HighlightTool';
-import ColorTool from '~/components/ColorTool/ColorTool';
-import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
-import ExpandTool from '~/components/ExpandTool/ExpandTool';
-import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
-import TableEditor from '~/components/TableEditor/TableEditor';
-import ContentCounter from '~/components/ContentCounter/ContentCounter';
-import HeadlinesButtons from '~/components/HeadlinesButtons/HeadlinesButtons';
-import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
+import editorWithStyles from "~/components/EditorToolbar/EditorToolbar";
+import ToolbarStyleSection from "~/components/ToolbarStyleSection/ToolbarStyleSection";
+import ToolbarAligmentSection from "~/components/ToolbarAligmentSection/ToolbarAligmentSection";
+import ToolbarCaseSection from "~/components/ToolbarCaseSection/ToolbarCaseSection";
+import TableTool from "~/components/TableTool/TableTool";
+import AddLinkTool, {
+  linkDecorator
+} from "~/components/AddLinkTool/AddLinkTool";
+import RemoveLinkTool from "~/components/RemoveLinkTool/RemoveLinkTool";
+import HighlightTool from "~/components/HighlightTool/HighlightTool";
+import ColorTool from "~/components/ColorTool/ColorTool";
+import ImageMediaTool from "~/components/ImageMediaTool/ImageMediaTool";
+import ExpandTool from "~/components/ExpandTool/ExpandTool";
+import AtomicBlock from "~/components/AtomicBlock/AtomicBlock";
+import TableEditor from "~/components/TableEditor/TableEditor";
+import ContentCounter from "~/components/ContentCounter/ContentCounter";
+import HeadlinesButtons from "~/components/HeadlinesButtons/HeadlinesButtons";
+import FontSizeTool from "~/components/FontSizeTool/FontSizeTool";
 
-import { customStyleFn } from '~/services/editorCustomStyler';
-import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
+import { customStyleFn } from "~/services/editorCustomStyler";
+import {
+  styleMap,
+  blockRenderMap,
+  toolbarClasses,
+  getBlockStyle,
+  undoParams
+} from "~/services/customDraftUtils";
 
-import 'draft-js-table-plugin/lib/plugin.css';
-import './content-editor.scss';
+import "draft-js-table-plugin/lib/plugin.css";
+import "./content-editor.scss";
 
 const decorators = [linkDecorator];
 
@@ -66,7 +81,13 @@ class ContentEditor extends Component {
 
     const { Toolbar } = toolbarPlugin;
     this.toolbar = editorWithStyles(Toolbar);
-    return [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin];
+    return [
+      createEntityPropsPlugin({}),
+      createFocusPlugin({}),
+      tablePlugin,
+      toolbarPlugin,
+      undoPlugin
+    ];
   };
 
   initEditorState = () => {
@@ -80,8 +101,8 @@ class ContentEditor extends Component {
     }
   };
 
-   mediaBlockRenderer = (block) => {
-    if (block.getType() === 'atomic') {
+  mediaBlockRenderer = block => {
+    if (block.getType() === "atomic") {
       return {
         component: AtomicBlock,
         editable: false,
@@ -90,18 +111,17 @@ class ContentEditor extends Component {
         }
       };
     }
-
     return null;
   };
 
-  toggleReadOnly = (isReadOnly) => {
-    const { editorState } = this.state;   
+  toggleReadOnly = isReadOnly => {
+    const { editorState } = this.state;
     const selection = editorState.getSelection();
-    
+
     this.setState({
       isReadOnly,
       editorState: EditorState.forceSelection(editorState, selection)
-     });
+    });
   };
 
   handleExpand = () => {
@@ -110,7 +130,7 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleChange = (editorState) => {
+  handleChange = editorState => {
     this.setState({ editorState });
     this.changeValue(editorState);
   };
@@ -123,37 +143,37 @@ class ContentEditor extends Component {
     onChange(value);
   }
 
-  renderButtons = (externalProps) => {
+  renderButtons = externalProps => {
     const { isExpanded } = this.state;
     const ToolbarUndoSection = this.undoSection;
     return (
       <React.Fragment>
         <div className="editor-toolbar__row">
-          <FontSizeTool { ...externalProps } />
+          <FontSizeTool {...externalProps} />
           <Separator className="editor-toolbar__separator" />
-          <HeadlinesButtons { ...externalProps } />
-          <ToolbarStyleSection { ...externalProps } />
+          <HeadlinesButtons {...externalProps} />
+          <ToolbarStyleSection {...externalProps} />
           <Separator className="editor-toolbar__separator" />
-          <ToolbarAligmentSection { ...externalProps } />
+          <ToolbarAligmentSection {...externalProps} />
           <ToolbarUndoSection />
-          <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
+          <ExpandTool isActive={isExpanded} onClick={this.handleExpand} />
         </div>
 
-        { isExpanded &&
+        {isExpanded && (
           <div className="editor-toolbar__row">
-            <ColorTool { ...externalProps } />
-            <HighlightTool { ...externalProps } />
-            <AddLinkTool  { ...externalProps } />
-            <RemoveLinkTool { ...externalProps } />
+            <ColorTool {...externalProps} />
+            <HighlightTool {...externalProps} />
+            <AddLinkTool {...externalProps} />
+            <RemoveLinkTool {...externalProps} />
             <Separator className="editor-toolbar__separator" />
-            <ToolbarCaseSection { ...externalProps } />
+            <ToolbarCaseSection {...externalProps} />
             <Separator className="editor-toolbar__separator" />
-            <TableTool { ...externalProps } />
-            <ImageMediaTool { ...externalProps } />
+            <TableTool {...externalProps} />
+            <ImageMediaTool {...externalProps} />
           </div>
-        }
+        )}
       </React.Fragment>
-    )
+    );
   };
 
   render() {
@@ -163,22 +183,22 @@ class ContentEditor extends Component {
     return (
       <div className="content-editor">
         <Editor
-          decorators={ decorators }
-          blockRenderMap={ extendedBlockRenderMap }
-          customStyleFn={ customStyleFn }
-          customStyleMap={ styleMap }
-          plugins={ this.plugins }
-          editorState={ editorState }
-          readOnly={ isReadOnly }
-          onChange={ this.handleChange }
-          blockStyleFn={ getBlockStyle }
-          blockRendererFn={ this.mediaBlockRenderer }
-          ref={ (element) => { this.editor = element; } }
+          decorators={decorators}
+          blockRenderMap={extendedBlockRenderMap}
+          customStyleFn={customStyleFn}
+          customStyleMap={styleMap}
+          plugins={this.plugins}
+          editorState={editorState}
+          readOnly={isReadOnly}
+          onChange={this.handleChange}
+          blockStyleFn={getBlockStyle}
+          blockRendererFn={this.mediaBlockRenderer}
+          ref={element => {
+            this.editor = element;
+          }}
         />
-        <ContentCounter editorState={ editorState } />
-        <EditorToolbar>
-          { this.renderButtons }
-        </EditorToolbar>
+        <ContentCounter editorState={editorState} />
+        <EditorToolbar>{this.renderButtons}</EditorToolbar>
       </div>
     );
   }

@@ -1,5 +1,5 @@
-import { FETCH_SITES, SET_CURRENT_SITE } from './constants';
-import * as entityNormalize from '~/utils/entityNormalize';
+import { FETCH_SITES, SET_CURRENT_SITE } from "./constants";
+import * as entityNormalize from "~/utils/entityNormalize";
 
 const initialState = {
   isPending: false,
@@ -13,7 +13,8 @@ const initialState = {
 function sites(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_SITES}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
@@ -21,29 +22,32 @@ function sites(state = initialState, action) {
       const entity = entityNormalize.toObject(action.payload.results);
 
       if (!state.current && action.payload.results[0]) {
-        entity.current = action.payload.results[0].id
+        entity.current = action.payload.results[0].id;
       }
 
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         ...entity
       };
 
     case `${FETCH_SITES}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     case SET_CURRENT_SITE:
-      return { ...state,
+      return {
+        ...state,
         current: action.current
       };
 
     default:
-      return state
+      return state;
   }
 }
 

@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import CancelLink from '~/components/CancelLink/CancelLink';
-import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import DiscountsTransferSelect from '~/components/DiscountsTransferSelect/DiscountsTransferSelect';
-import DiscountsTransferForm from '~/components/DiscountsTransferForm/DiscountsTransferForm';
+import CancelLink from "~/components/CancelLink/CancelLink";
+import SearchPanel from "~/components/SearchPanel/SearchPanel";
+import DiscountsTransferSelect from "~/components/DiscountsTransferSelect/DiscountsTransferSelect";
+import DiscountsTransferForm from "~/components/DiscountsTransferForm/DiscountsTransferForm";
 
-import * as usersActions from '~/store/users/actions';
-import * as discountsActions from '~/store/discounts/actions';
+import * as usersActions from "~/store/users/actions";
+import * as discountsActions from "~/store/discounts/actions";
 
-import getNoun from '~/utils/getNoun';
+import getNoun from "~/utils/getNoun";
 
-import './discounts-transfer.scss';
+import "./discounts-transfer.scss";
 
-const SEARCH_KEY = 'discounts';
+const SEARCH_KEY = "discounts";
 
 class DiscountsTransfer extends Component {
   state = {
     user: null
   };
 
-  handleCancelClick = (event) => {
+  handleCancelClick = event => {
     const { onClose } = this.props;
     event.preventDefault();
     onClose();
@@ -37,16 +37,17 @@ class DiscountsTransfer extends Component {
     dispatch(usersActions.searchUsers(SEARCH_KEY, data));
   };
 
-  handleUserSelect = (id) => {
+  handleUserSelect = id => {
     const { searchResults } = this.props;
     const user = searchResults.find(item => item.id === id);
     this.setState({ user });
   };
 
-  handleTransferSubmit = (formData) => {
+  handleTransferSubmit = formData => {
     const { dispatch } = this.props;
     const { user } = this.state;
-    const bonusCount = formData.bonus_count && parseInt(formData.bonus_count, 10);
+    const bonusCount =
+      formData.bonus_count && parseInt(formData.bonus_count, 10);
     const data = {
       user_id: user.id,
       bonus_count: bonusCount
@@ -61,21 +62,34 @@ class DiscountsTransfer extends Component {
     return (
       <div className="discounts-transfer">
         <div className="discounts-transfer__cancel">
-          <CancelLink onClick={ this.handleCancelClick } />
+          <CancelLink onClick={this.handleCancelClick} />
         </div>
-        {
-          !user ?
+        {!user ? (
           <div className="discounts-transfer__search">
-            <SearchPanel onChange={ this.handleSearchChange } />
+            <SearchPanel onChange={this.handleSearchChange} />
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
-                Найдено { searchResults.length } {getNoun(searchResults.length, 'пользователь', 'пользователя', 'пользователей')}:
+                Найдено {searchResults.length}{" "}
+                {getNoun(
+                  searchResults.length,
+                  "пользователь",
+                  "пользователя",
+                  "пользователей"
+                )}
+                :
               </p>
-              <DiscountsTransferSelect items={ searchResults } onSelect={ this.handleUserSelect } />
+              <DiscountsTransferSelect
+                items={searchResults}
+                onSelect={this.handleUserSelect}
+              />
             </div>
-          </div> :
-          <DiscountsTransferForm user={ user } onSubmit={ this.handleTransferSubmit } />
-        }
+          </div>
+        ) : (
+          <DiscountsTransferForm
+            user={user}
+            onSubmit={this.handleTransferSubmit}
+          />
+        )}
       </div>
     );
   }

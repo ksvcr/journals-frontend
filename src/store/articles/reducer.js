@@ -1,7 +1,17 @@
-import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
-         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
-import * as entityNormalize from '~/utils/entityNormalize';
+import {
+  FETCH_ARTICLES,
+  FETCH_ARTICLE,
+  CREATE_ARTICLE_TAG,
+  FETCH_ARTICLE_REVIEW_INVITES,
+  REMOVE_ARTICLE_TAG,
+  INVITE_ARTICLE_REVIEWER,
+  RESET_ARTICLES,
+  ACCEPT_ARTICLE_REVIEW_INVITE,
+  EDIT_ARTICLE,
+  CREATE_ARTICLE,
+  FETCH_ARTICLE_TRANSLATION
+} from "./constants";
+import * as entityNormalize from "~/utils/entityNormalize";
 
 const initialState = {
   isPending: false,
@@ -12,7 +22,7 @@ const initialState = {
   total: 0,
   paginate: {
     limit: 5,
-    offset: 0,
+    offset: 0
   }
 };
 
@@ -20,7 +30,8 @@ function articles(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_ARTICLES}_PENDING`:
     case `${FETCH_ARTICLE}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true,
         isRejected: false,
         ...action.meta
@@ -28,7 +39,8 @@ function articles(state = initialState, action) {
 
     case `${FETCH_ARTICLES}_REJECTED`:
     case `${FETCH_ARTICLE}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         isFulfilled: false,
@@ -37,7 +49,8 @@ function articles(state = initialState, action) {
 
     case `${FETCH_ARTICLES}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         isRejected: false,
@@ -46,63 +59,77 @@ function articles(state = initialState, action) {
       };
 
     case `${FETCH_ARTICLE}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         isRejected: false,
-        data: { ...state.data,
-          [ action.payload.id ]: action.payload
+        data: {
+          ...state.data,
+          [action.payload.id]: action.payload
         },
-        ids: [ ...state.ids, action.payload.id ]
+        ids: [...state.ids, action.payload.id]
       };
 
     case `${CREATE_ARTICLE_TAG}_FULFILLED`:
       const oldTags = state.data[action.payload.article].tags || [];
-      return { ...state,
-        data: { ...state.data,
-          [ action.payload.article ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.payload.article]: {
             ...state.data[action.payload.article],
-            tags: [ ...oldTags, action.payload]
+            tags: [...oldTags, action.payload]
           }
         }
       };
 
     case `${REMOVE_ARTICLE_TAG}_PENDING`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.articleId ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
-            tags: state.data[action.meta.articleId].tags.filter((item) => item.id !== action.meta.id)
+            tags: state.data[action.meta.articleId].tags.filter(
+              item => item.id !== action.meta.id
+            )
           }
         }
       };
 
     case `${INVITE_ARTICLE_REVIEWER}_PENDING`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.articleId ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
-            stage: 'REVISION',
-            state_article: 'AWAIT_REVIEWER'
+            stage: "REVISION",
+            state_article: "AWAIT_REVIEWER"
           }
         }
       };
 
     case `${ACCEPT_ARTICLE_REVIEW_INVITE}_PENDING`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.articleId ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
-            stage: 'REVISION',
-            state_article: 'AWAIT_REVIEW'
+            stage: "REVISION",
+            state_article: "AWAIT_REVIEW"
           }
         }
       };
 
     case `${EDIT_ARTICLE}_PENDING`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.articleId ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
             ...action.meta.data
           }
@@ -110,9 +137,11 @@ function articles(state = initialState, action) {
       };
 
     case `${FETCH_ARTICLE_REVIEW_INVITES}_FULFILLED`:
-      return { ...state,
-        data : { ...state.data,
-          [ action.meta.article ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.article]: {
             ...state.data[action.meta.article],
             reviewInvites: action.payload.results
           }
@@ -120,9 +149,11 @@ function articles(state = initialState, action) {
       };
 
     case `${FETCH_ARTICLE_TRANSLATION}_FULFILLED`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.article ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.article]: {
             ...state.data[action.meta.article],
             translation: action.payload
           }
@@ -131,7 +162,8 @@ function articles(state = initialState, action) {
 
     case `${CREATE_ARTICLE}_FULFILLED`:
     case `${EDIT_ARTICLE}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: false,
         error: null
       };
@@ -148,7 +180,7 @@ function articles(state = initialState, action) {
       return initialState;
 
     default:
-      return state
+      return state;
   }
 }
 

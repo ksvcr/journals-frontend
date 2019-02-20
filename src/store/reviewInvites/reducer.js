@@ -1,5 +1,5 @@
-import { FETCH_REVIEW_INVITES } from './constants';
-import * as entityNormalize from '~/utils/entityNormalize';
+import { FETCH_REVIEW_INVITES } from "./constants";
+import * as entityNormalize from "~/utils/entityNormalize";
 
 const initialState = {
   isPending: false,
@@ -12,29 +12,35 @@ const initialState = {
 function reviewInvites(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_REVIEW_INVITES}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${FETCH_REVIEW_INVITES}_FULFILLED`:
-      const results = action.payload.results.map(item => ({ ...item, articleId: item.article.id }));
-      const entity = entityNormalize.toObject(results, 'id', 'articleId');
+      const results = action.payload.results.map(item => ({
+        ...item,
+        articleId: item.article.id
+      }));
+      const entity = entityNormalize.toObject(results, "id", "articleId");
 
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         ...entity
       };
 
     case `${FETCH_REVIEW_INVITES}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     default:
-      return state
+      return state;
   }
 }
 

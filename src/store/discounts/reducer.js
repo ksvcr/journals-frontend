@@ -1,4 +1,4 @@
-import { FETCH_DISCOUNTS, TRANSFER_BONUS } from './constants';
+import { FETCH_DISCOUNTS, TRANSFER_BONUS } from "./constants";
 
 const initialState = {
   isPending: false,
@@ -14,13 +14,15 @@ function discounts(state = initialState, action) {
   switch (action.type) {
     case `${TRANSFER_BONUS}_PENDING`:
     case `${FETCH_DISCOUNTS}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${TRANSFER_BONUS}_REJECTED`:
     case `${FETCH_DISCOUNTS}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
@@ -28,7 +30,8 @@ function discounts(state = initialState, action) {
 
     case `${TRANSFER_BONUS}_FULFILLED`:
     case `${FETCH_DISCOUNTS}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         ...action.payload

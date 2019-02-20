@@ -1,3 +1,18 @@
 {
-  "extends": "react-app"
+  "extends": "react-app",
+  "settings": {
+    "react": {
+      "version": "16.8"
+    }
+  },
+  "rules": {
+    "jsx-a11y/href-no-hash": "off",
+    "indent": ["error", 2, {
+      "SwitchCase": 1,
+      "ImportDeclaration": "first",
+      "VariableDeclarator": "first",
+      "ObjectExpression": "first",
+      "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"]
+    }]
+  }
 }

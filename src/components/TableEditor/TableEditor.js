@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
-import { FocusDecorator } from 'draft-js-focus-plugin';
-import { tableCreator } from 'draft-js-table-plugin';
-import Editor from 'draft-js-plugins-editor';
-import { EditorState, genKey } from 'draft-js';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React, { Component } from "react";
+import { FocusDecorator } from "draft-js-focus-plugin";
+import { tableCreator } from "draft-js-table-plugin";
+import Editor from "draft-js-plugins-editor";
+import { EditorState, genKey } from "draft-js";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
-import nanoid from 'nanoid';
-import ToolTip from '~/components/ToolTip/ToolTip';
+import MetaInfoForm from "~/components/MetaInfoForm/MetaInfoForm";
+import nanoid from "nanoid";
+import ToolTip from "~/components/ToolTip/ToolTip";
 
-import './table-editor.scss';
+import "./table-editor.scss";
 
 const Table = FocusDecorator(
-  tableCreator({ theme: { table: 'table-editor__box', even: 'table-editor__even' }, Editor })
+  tableCreator({
+    theme: { table: "table-editor__box", even: "table-editor__even" },
+    Editor
+  })
 );
 
 const cellData = {
@@ -20,8 +23,8 @@ const cellData = {
   blocks: [
     {
       key: genKey(),
-      text: ' ',
-      type: 'unstyled',
+      text: " ",
+      type: "unstyled",
       depth: 0,
       inlineStyleRanges: [],
       entityRanges: []
@@ -70,10 +73,10 @@ class TableEditor extends Component {
     this.setState(({ rows, tableKey }) => {
       const numberOfColumns = rows[0].length;
       const newRow = [];
-      for (let i = 0; i<=numberOfColumns-1; i++) {
+      for (let i = 0; i <= numberOfColumns - 1; i++) {
         newRow.push(cellData);
       }
-      const newRows = [ ...rows, newRow ];
+      const newRows = [...rows, newRow];
       return {
         rows: newRows,
         tableKey: tableKey + 1
@@ -94,10 +97,7 @@ class TableEditor extends Component {
 
     const data = { ...this.entity.getData(), ...this.meta };
 
-    contentState.replaceEntityData(
-      this.entityKey,
-      data
-    );
+    contentState.replaceEntityData(this.entityKey, data);
 
     setEditorState(EditorState.forceSelection(editorState, selection));
   };
@@ -105,18 +105,20 @@ class TableEditor extends Component {
   get initialMeta() {
     const { blockProps } = this.props;
     const { entityData } = blockProps;
-    const { title='Заголовок таблицы', additional, keywords } = entityData;
+    const { title = "Заголовок таблицы", additional, keywords } = entityData;
     return { title, additional, keywords };
   }
 
   get blockProps() {
     const { blockProps } = this.props;
     const { rows } = this.state;
-    return { ...blockProps,
-      entityData: { ...blockProps.entityData,
+    return {
+      ...blockProps,
+      entityData: {
+        ...blockProps.entityData,
         rows,
         numberOfColumns: rows[0].length
-      },
+      }
     };
   }
 
@@ -125,34 +127,55 @@ class TableEditor extends Component {
     const { blockProps } = this.props;
     const { entityData } = blockProps;
     return (
-      <div className="table-editor" contentEditable={ false } readOnly>
-        <div className="table-editor__holder" >
+      <div className="table-editor" contentEditable={false} readOnly>
+        <div className="table-editor__holder">
           <h3 className="table-editor__title">
-            { entityData.title ? entityData.title : 'Заголовок таблицы' }
+            {entityData.title ? entityData.title : "Заголовок таблицы"}
           </h3>
 
-          <div className="table-editor__toolbar" >
-            <button className="table-editor__button" type="button" onClick={ this.addRow }>
+          <div className="table-editor__toolbar">
+            <button
+              className="table-editor__button"
+              type="button"
+              onClick={this.addRow}
+            >
               Добавить строку
             </button>
-            <button className="table-editor__button" type="button" onClick={ this.addColumn }>
+            <button
+              className="table-editor__button"
+              type="button"
+              onClick={this.addColumn}
+            >
               Добавить колонку
             </button>
-            <ToolTip className="tooltip" position="right-start" useContext={ true }
-                     onRequestClose={ this.handleMetaClose }
-                     html={
-                       <MetaInfoForm id={ this.formId }
-                                     onChange={ this.handleMetaChange }
-                                     initialValues={ this.initialMeta } /> } >
+            <ToolTip
+              className="tooltip"
+              position="right-start"
+              useContext={true}
+              onRequestClose={this.handleMetaClose}
+              html={
+                <MetaInfoForm
+                  id={this.formId}
+                  onChange={this.handleMetaChange}
+                  initialValues={this.initialMeta}
+                />
+              }
+            >
               <button className="table-editor__button" type="button">
                 Редактировать мета-данные
               </button>
             </ToolTip>
           </div>
-          <ReactCSSTransitionGroup transitionName="fade"
-                                   transitionEnterTimeout={ 300 }
-                                   transitionLeave={ false } >
-            <Table { ...this.props } key={ tableKey } blockProps={ this.blockProps } />
+          <ReactCSSTransitionGroup
+            transitionName="fade"
+            transitionEnterTimeout={300}
+            transitionLeave={false}
+          >
+            <Table
+              {...this.props}
+              key={tableKey}
+              blockProps={this.blockProps}
+            />
           </ReactCSSTransitionGroup>
         </div>
       </div>
