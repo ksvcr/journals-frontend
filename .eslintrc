@@ -5,14 +5,17 @@
       "version": "16.8"
     }
   },
+  "plugins": ["prettier"],
   "rules": {
     "jsx-a11y/href-no-hash": "off",
+    "quotes": ["error", "single"],
     "indent": ["error", 2, {
       "SwitchCase": 1,
       "ImportDeclaration": "first",
       "VariableDeclarator": "first",
       "ObjectExpression": "first",
       "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"]
-    }]
+    }],
+    "prettier/prettier": "error"
   }
 }
