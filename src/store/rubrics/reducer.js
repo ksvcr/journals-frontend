@@ -1,5 +1,5 @@
-import { FETCH_RUBRICS } from "./constants";
-import * as entityNormalize from "~/utils/entityNormalize";
+import { FETCH_RUBRICS } from './constants';
+import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,

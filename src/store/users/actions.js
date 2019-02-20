@@ -1,15 +1,7 @@
-import {
-  FETCH_USERS,
-  FETCH_USER,
-  SEARCH_USERS,
-  CREATE_USER,
-  INSERT_USER,
-  UPDATE_USER,
-  CREATE_USER_TAG,
-  REMOVE_USER_TAG
-} from "./constants";
-import apiClient from "~/services/apiClient";
-import getFlatParams from "~/services/getFlatParams";
+import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER,
+         INSERT_USER, UPDATE_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
+import apiClient from '~/services/apiClient';
+import getFlatParams from '~/services/getFlatParams';
 
 export function fetchUsers(params) {
   return dispatch => {

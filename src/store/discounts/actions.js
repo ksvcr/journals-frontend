@@ -1,5 +1,5 @@
-import { FETCH_DISCOUNTS, TRANSFER_BONUS } from "./constants";
-import apiClient from "~/services/apiClient";
+import { FETCH_DISCOUNTS, TRANSFER_BONUS } from './constants';
+import apiClient from '~/services/apiClient';
 
 export function fetchDiscounts() {
   return (dispatch, state) => {

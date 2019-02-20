@@ -10,8 +10,8 @@ import {
   EDIT_ARTICLE,
   CREATE_ARTICLE,
   FETCH_ARTICLE_TRANSLATION
-} from "./constants";
-import * as entityNormalize from "~/utils/entityNormalize";
+} from './constants';
+import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
@@ -105,8 +105,8 @@ function articles(state = initialState, action) {
           ...state.data,
           [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
-            stage: "REVISION",
-            state_article: "AWAIT_REVIEWER"
+            stage: 'REVISION',
+            state_article: 'AWAIT_REVIEWER'
           }
         }
       };
@@ -118,8 +118,8 @@ function articles(state = initialState, action) {
           ...state.data,
           [action.meta.articleId]: {
             ...state.data[action.meta.articleId],
-            stage: "REVISION",
-            state_article: "AWAIT_REVIEW"
+            stage: 'REVISION',
+            state_article: 'AWAIT_REVIEW'
           }
         }
       };

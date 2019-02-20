@@ -14,11 +14,11 @@ import {
   FETCH_ARTICLE_TRANSLATION,
   EDIT_ARTICLE_TRANSLATION,
   FETCH_ARTICLE_REVIEW_INVITES
-} from "./constants";
-import apiClient from "~/services/apiClient";
-import getFlatParams from "~/services/getFlatParams";
+} from './constants';
+import apiClient from '~/services/apiClient';
+import getFlatParams from '~/services/getFlatParams';
 
-import differenceBy from "lodash/differenceBy";
+import differenceBy from 'lodash/differenceBy';
 
 export function fetchArticles(siteId, params = {}) {
   return dispatch => {
@@ -159,7 +159,7 @@ export function editArticle(id, data) {
             const hasRemoved =
               prevArticleData.sources.length > editSourcesArray.length;
             const removedSourcesArray = hasRemoved
-              ? differenceBy(prevArticleData.sources, editSourcesArray, "id")
+              ? differenceBy(prevArticleData.sources, editSourcesArray, 'id')
               : [];
             const createSourcesPromise = apiClient.createSources(
               id,
@@ -274,7 +274,7 @@ export function createArticleTranslation(id, data) {
         data
       );
       const editArticlePromise = apiClient.editArticle(id, {
-        state_article: "AWAIT_PUBLICATION"
+        state_article: 'AWAIT_PUBLICATION'
       });
       return Promise.all([
         ...editSourcePromises,
@@ -309,7 +309,7 @@ export function editArticleTranslation(id, data) {
         data
       );
       const editArticlePromise = apiClient.editArticle(id, {
-        state_article: "AWAIT_PUBLICATION"
+        state_article: 'AWAIT_PUBLICATION'
       });
       return Promise.all([
         ...editSourcePromises,

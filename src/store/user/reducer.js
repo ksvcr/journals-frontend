@@ -1,4 +1,4 @@
-import { FETCH_CURRENT_USER, LOGIN, UPDATE_CURRENT_USER } from "./constants";
+import { FETCH_CURRENT_USER, LOGIN, UPDATE_CURRENT_USER } from './constants';
 
 const initialState = {
   isPending: false,

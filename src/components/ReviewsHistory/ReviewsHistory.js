@@ -18,7 +18,7 @@ class ReviewsHistory extends Component {
       return isCollapse ? (
         <Collapse
           key={ index }
-          title={ item.review_round + ` раунд рецензирования` }
+          title={ item.review_round + ' раунд рецензирования' }
         >
           {this.renderItem(item)}
         </Collapse>

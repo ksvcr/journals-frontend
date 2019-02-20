@@ -1,5 +1,5 @@
-import { FETCH_REVIEW_INVITES } from "./constants";
-import * as entityNormalize from "~/utils/entityNormalize";
+import { FETCH_REVIEW_INVITES } from './constants';
+import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
   isPending: false,
@@ -22,7 +22,7 @@ function reviewInvites(state = initialState, action) {
         ...item,
         articleId: item.article.id
       }));
-      const entity = entityNormalize.toObject(results, "id", "articleId");
+      const entity = entityNormalize.toObject(results, 'id', 'articleId');
 
       return {
         ...state,

@@ -14,6 +14,8 @@
       "ObjectExpression": "first",
       "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"]
     }],
+    "quotes": ["error", "single"],
+    "jsx-quotes": ["error", "prefer-double"],
     "react/jsx-curly-spacing": [ 2, {"when": "always"} ],
     "react/jsx-indent-props": [2, "first"]
   }

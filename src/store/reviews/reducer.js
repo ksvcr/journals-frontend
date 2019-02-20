@@ -1,4 +1,4 @@
-import { FETCH_REVIEW } from "./constants";
+import { FETCH_REVIEW } from './constants';
 
 const initialState = {
   isPending: false,

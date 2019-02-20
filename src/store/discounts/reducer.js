@@ -1,4 +1,4 @@
-import { FETCH_DISCOUNTS, TRANSFER_BONUS } from "./constants";
+import { FETCH_DISCOUNTS, TRANSFER_BONUS } from './constants';
 
 const initialState = {
   isPending: false,

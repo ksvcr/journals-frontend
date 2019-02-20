@@ -1,5 +1,5 @@
-import i18n from "i18next";
-import { reactI18nextModule } from "react-i18next";
+import i18n from 'i18next';
+import { reactI18nextModule } from 'react-i18next';
 
 import en_translation from './en_translation';
 import ru_translation from './ru_translation';
