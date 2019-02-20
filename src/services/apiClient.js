@@ -13,6 +13,7 @@ const apiClient = {
   getCategories: (siteId) => fetchInstance.request(`/sites/${siteId}/category/`),
 
   login: (data) => fetchInstance.request(`/users/auth/login/`, { method: 'post', data }),
+  logout: () => fetchInstance.request(`/users/auth/logout`),
   getCurrentUser: () => fetchInstance.request(`/users/me/`),
   updateCurrentUser: (data) => fetchInstance.request(`/users/me/`, { method: 'put', data }),
   getUsers: (userId=null, params) => {
