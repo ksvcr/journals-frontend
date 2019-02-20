@@ -1,33 +1,33 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import {
   change,
   Field,
   FieldArray,
   formValueSelector,
   getFormValues
-} from "redux-form";
-import { withNamespaces } from "react-i18next";
-import nanoid from "nanoid";
-import Dropzone from "react-dropzone";
-import Select from "~/components/Select/Select";
-import ContentBlockList from "~/components/ContentBlockList/ContentBlockList";
-import Checkbox from "~/components/Checkbox/Checkbox";
-import FileDropPlaceholder from "~/components/FileDropPlaceholder/FileDropPlaceholder";
-import ArticleFilesFormItem from "~/components/ArticleFilesFormItem/ArticleFilesFormItem";
-import getArticleTypes from "~/services/getArticleTypes";
-import fileToBase64 from "~/utils/fileToBase64";
-import getFileExtension from "~/utils/getFileExtension";
-import "./article-content-form.scss";
+} from 'redux-form';
+import { withNamespaces } from 'react-i18next';
+import nanoid from 'nanoid';
+import Dropzone from 'react-dropzone';
+import Select from '~/components/Select/Select';
+import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
+import Checkbox from '~/components/Checkbox/Checkbox';
+import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
+import ArticleFilesFormItem from '~/components/ArticleFilesFormItem/ArticleFilesFormItem';
+import getArticleTypes from '~/services/getArticleTypes';
+import fileToBase64 from '~/utils/fileToBase64';
+import getFileExtension from '~/utils/getFileExtension';
+import './article-content-form.scss';
 
-const availableFormat = ["doc", "docx", "rtf"];
+const availableFormat = ['doc', 'docx', 'rtf'];
 const maxAvailableSize = 50 * Math.pow(1024, 2);
 
 class ArticleContentForm extends Component {
   state = {
     hasError: {
       status: false,
-      text: ""
+      text: ''
     }
   };
 
@@ -39,7 +39,7 @@ class ArticleContentForm extends Component {
   }
 
   handleDropFiles = files => {
-    this.setState({ hasError: { status: false, text: "" } });
+    this.setState({ hasError: { status: false, text: '' } });
 
     const { change, formValues, formName } = this.props;
     const newFilesPromises = files.map(file => fileToBase64(file));
@@ -54,7 +54,7 @@ class ArticleContentForm extends Component {
             this.setState({
               hasError: {
                 status: true,
-                text: "Один или несколько файлов имеют недопустимое расширение"
+                text: 'Один или несколько файлов имеют недопустимое расширение'
               }
             });
             return null;
@@ -65,7 +65,7 @@ class ArticleContentForm extends Component {
               hasError: {
                 status: true,
                 text:
-                  "Размер одного из файлов может быть больше максимально допустимого (50мб)"
+                  'Размер одного из файлов может быть больше максимально допустимого (50мб)'
               }
             });
             return null;
@@ -77,13 +77,13 @@ class ArticleContentForm extends Component {
             file_size: file.size,
             type: file.type,
             file: base64,
-            text_to_description: ""
+            text_to_description: ''
           };
         })
         .filter(file => file);
 
       const textFiles = [...formValues.text_files, ...newFiles];
-      change(formName, "text_files", textFiles);
+      change(formName, 'text_files', textFiles);
     });
   };
 
@@ -97,14 +97,14 @@ class ArticleContentForm extends Component {
       return file;
     });
 
-    change(formName, "text_files", newTextFiles);
+    change(formName, 'text_files', newTextFiles);
   };
 
   handleRemoveFile = fileId => {
     const { formValues, formName, change } = this.props;
     const textFiles = formValues.text_files.filter(item => item.id !== fileId);
 
-    change(formName, "text_files", textFiles);
+    change(formName, 'text_files', textFiles);
   };
 
   renderUploadItems = () => {
@@ -115,11 +115,11 @@ class ArticleContentForm extends Component {
       const showDivider = ++index < text_files.length;
 
       return (
-        <Fragment key={index}>
+        <Fragment key={ index }>
           <ArticleFilesFormItem
-            file={item}
-            onChangeDescription={this.handleChangeDescription}
-            onRemove={this.handleRemoveFile}
+            file={ item }
+            onChangeDescription={ this.handleChangeDescription }
+            onRemove={ this.handleRemoveFile }
           />
           {showDivider && <hr className="article-files-form__divider" />}
         </Fragment>
@@ -129,7 +129,7 @@ class ArticleContentForm extends Component {
 
   renderContentBlockList = props => {
     const { formName } = this.props;
-    return <ContentBlockList formName={formName} {...props} />;
+    return <ContentBlockList formName={ formName } { ...props } />;
   };
 
   render() {
@@ -138,15 +138,15 @@ class ArticleContentForm extends Component {
 
     return (
       <div className="article-content-form">
-        <h2 className="page__title">{t("article_text")}</h2>
+        <h2 className="page__title">{t('article_text')}</h2>
         <div className="form__field">
           <Field
             name="is_send_as_file"
             id="is_send_as_file"
             type="checkbox"
-            component={Checkbox}
+            component={ Checkbox }
           >
-            Хочу добавить статью файлом ({availableFormat.join(", ")})
+            Хочу добавить статью файлом ({availableFormat.join(', ')})
           </Field>
           <div className="article-content-form__description">
             При добавлении текста статьи файлом, стоимость размещения увеличится
@@ -160,8 +160,8 @@ class ArticleContentForm extends Component {
             )}
             <Dropzone
               className="article-content-form__dropzone"
-              multiple={true}
-              onDrop={this.handleDropFiles}
+              multiple={ true }
+              onDrop={ this.handleDropFiles }
             >
               <FileDropPlaceholder />
             </Dropzone>
@@ -178,14 +178,14 @@ class ArticleContentForm extends Component {
               <Field
                 name="article_type"
                 id="article_type"
-                component={props => (
-                  <Select options={this.typeOptions} {...props} />
-                )}
+                component={ props => (
+                  <Select options={ this.typeOptions } { ...props } />
+                ) }
               />
             </div>
             <FieldArray
               name="content_blocks"
-              component={this.renderContentBlockList}
+              component={ this.renderContentBlockList }
             />
           </Fragment>
         )}
@@ -197,7 +197,7 @@ class ArticleContentForm extends Component {
 function mapStateToProps(state, props) {
   const { formName } = props;
   const formSelector = formValueSelector(formName);
-  const is_send_as_file = formSelector(state, "is_send_as_file");
+  const is_send_as_file = formSelector(state, 'is_send_as_file');
 
   return {
     formValues: getFormValues(formName)(state),

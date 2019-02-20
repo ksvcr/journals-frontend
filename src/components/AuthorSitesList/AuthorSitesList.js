@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { change, formValueSelector } from "redux-form";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { change, formValueSelector } from 'redux-form';
 
-import Icon from "~/components/Icon/Icon";
-import CancelLink from "~/components/CancelLink/CancelLink";
-import SiteSelect from "~/components/SiteSelect/SiteSelect";
-import Button from "~/components/Button/Button";
+import Icon from '~/components/Icon/Icon';
+import CancelLink from '~/components/CancelLink/CancelLink';
+import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import Button from '~/components/Button/Button';
 
-import "./author-sites-list.scss";
-import "./assets/cancel.svg";
-import "./assets/add.svg";
+import './author-sites-list.scss';
+import './assets/cancel.svg';
+import './assets/add.svg';
 
 class AuthorSitesList extends Component {
   state = {
@@ -20,7 +20,7 @@ class AuthorSitesList extends Component {
     const { change, form, ids } = this.props;
     const { id } = event.currentTarget.dataset;
     const newSites = ids.filter(itemId => itemId.toString() !== id);
-    change(form, "sites", newSites);
+    change(form, 'sites', newSites);
   };
 
   handleAdd = () => {
@@ -29,7 +29,7 @@ class AuthorSitesList extends Component {
 
     if (!exists) {
       this.setState({ openAdd: false });
-      change(form, "sites", [...ids, Number(siteId)]);
+      change(form, 'sites', [...ids, Number(siteId)]);
     }
   };
 
@@ -46,16 +46,16 @@ class AuthorSitesList extends Component {
       const item = sitesData[id];
       return (
         <div
-          key={item.id}
-          data-id={item.id}
+          key={ item.id }
+          data-id={ item.id }
           className="author-sites-list__item"
         >
           {item.name}
           <button
             type="button"
             className="author-sites-list__remove"
-            data-id={item.id}
-            onClick={this.handleRemove}
+            data-id={ item.id }
+            onClick={ this.handleRemove }
           >
             <Icon name="cancel" className="author-sites-list__remove-icon" />
             Удалить журнал
@@ -71,7 +71,7 @@ class AuthorSitesList extends Component {
     return (
       <div className="author-sites-list">
         <p className="author-sites-list__header">
-          Журналы, в которые {userId ? "пользователь может" : "Вы можете"}{" "}
+          Журналы, в которые {userId ? 'пользователь может' : 'Вы можете'}{' '}
           писать статьи:
         </p>
 
@@ -80,7 +80,7 @@ class AuthorSitesList extends Component {
         <div className="author-sites-list__actions">
           {!openAdd ? (
             <button
-              onClick={this.handleAddOpen}
+              onClick={ this.handleAddOpen }
               type="button"
               className="author-sites-list__add"
             >
@@ -89,7 +89,7 @@ class AuthorSitesList extends Component {
             </button>
           ) : (
             <React.Fragment>
-              <CancelLink onClick={this.handleCancelClick} />
+              <CancelLink onClick={ this.handleCancelClick } />
 
               <div className="form">
                 <div className="form__field form__field_small">
@@ -100,7 +100,7 @@ class AuthorSitesList extends Component {
                 </div>
                 <div className="form__field form__field_small">
                   <Button
-                    onClick={this.handleAdd}
+                    onClick={ this.handleAdd }
                     type="button"
                     className="button_small"
                   >
@@ -122,7 +122,7 @@ function mapStateToProps(state, props) {
   const { form } = props;
   const { sites } = state;
   const selector = formValueSelector(form);
-  const ids = selector(state, "sites") || [];
+  const ids = selector(state, 'sites') || [];
 
   return {
     ids,

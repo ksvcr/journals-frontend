@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Icon from "~/components/Icon/Icon";
+import Icon from '~/components/Icon/Icon';
 
-import "./article-source.scss";
-import "./assets/edit.svg";
-import "./assets/cancel.svg";
+import './article-source.scss';
+import './assets/edit.svg';
+import './assets/cancel.svg';
 
 class ArticleSource extends Component {
   getTitle(parts, lang) {
     const { data } = this.props;
-    let resultString = "";
+    let resultString = '';
 
-    if (data.author && lang === "ru") {
-      if (typeof data.author === "string") {
+    if (data.author && lang === 'ru') {
+      if (typeof data.author === 'string') {
         resultString = data.author;
       } else {
         const author = Array.isArray(data.author)
@@ -29,8 +29,8 @@ class ArticleSource extends Component {
       .reduce((result, key) => {
         let item = data[key];
 
-        if (key === "page_count") {
-          if (lang === "ru") {
+        if (key === 'page_count') {
+          if (lang === 'ru') {
             item = `- ${item} с.`;
           } else {
             item = `${item} P`;
@@ -38,7 +38,7 @@ class ArticleSource extends Component {
         }
 
         return `${result} ${item}`;
-      }, "");
+      }, '');
 
     return resultString + params;
   }
@@ -62,17 +62,17 @@ class ArticleSource extends Component {
             {`Источник №${index + 1}`}
           </div>
           <div className="article-source__title">
-            {this.getTitle(["original_name", "page_count"], "ru")}
+            {this.getTitle(['original_name', 'page_count'], 'ru')}
           </div>
           <div className="article-source__text">
-            {this.getTitle(["second_name", "page_count"], "en")}
+            {this.getTitle(['second_name', 'page_count'], 'en')}
           </div>
         </div>
         <div className="article-source__tools">
           <button
             className="article-source__tool"
             type="button"
-            onClick={this.handleEdit}
+            onClick={ this.handleEdit }
           >
             <Icon
               name="edit"
@@ -85,7 +85,7 @@ class ArticleSource extends Component {
             <button
               className="article-source__tool"
               type="button"
-              onClick={this.handleRemove}
+              onClick={ this.handleRemove }
             >
               <Icon
                 name="cancel"

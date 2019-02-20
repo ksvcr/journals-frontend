@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import SearchPanel from "~/components/SearchPanel/SearchPanel";
-import Select from "~/components/Select/Select";
-import RedactorUsersList from "~/components/RedactorUsersList/RedactorUsersList";
-import PaginateLine from "~/components/PaginateLine/PaginateLine";
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
+import Select from '~/components/Select/Select';
+import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
+import PaginateLine from '~/components/PaginateLine/PaginateLine';
 
-import * as usersActions from "~/store/users/actions";
-import { getUsersParams } from "~/store/users/selector";
-import { getSitesArray } from "~/store/sites/selector";
+import * as usersActions from '~/store/users/actions';
+import { getUsersParams } from '~/store/users/selector';
+import { getSitesArray } from '~/store/sites/selector';
 
 class RedactorUsers extends Component {
   componentDidMount() {
@@ -28,12 +28,12 @@ class RedactorUsers extends Component {
   get searchTargets() {
     return [
       {
-        value: "name",
-        title: "По имени"
+        value: 'name',
+        title: 'По имени'
       },
       {
-        value: "science",
-        title: "По научным данным"
+        value: 'science',
+        title: 'По научным данным'
       }
     ];
   }
@@ -46,7 +46,7 @@ class RedactorUsers extends Component {
     }));
 
     return {
-      name: "site",
+      name: 'site',
       options,
       onChange: event => {}
     };
@@ -54,11 +54,11 @@ class RedactorUsers extends Component {
 
   get selectActionProps() {
     return {
-      name: "action",
+      name: 'action',
       options: [
         {
-          title: "Отправить письмо",
-          value: "mail"
+          title: 'Отправить письмо',
+          value: 'mail'
         }
       ],
       onChange: event => {}
@@ -67,7 +67,7 @@ class RedactorUsers extends Component {
 
   get selectTagsProps() {
     return {
-      name: "tags",
+      name: 'tags',
       options: [],
       onChange: event => {}
     };
@@ -87,9 +87,9 @@ class RedactorUsers extends Component {
             <div className="form__field">
               <label className="form__label">Поиск пользователя</label>
               <SearchPanel
-                hasDefaultTarget={false}
-                targets={this.searchTargets}
-                onChange={this.handleRequest}
+                hasDefaultTarget={ false }
+                targets={ this.searchTargets }
+                onChange={ this.handleRequest }
                 initialTarget="name"
               />
             </div>
@@ -97,32 +97,32 @@ class RedactorUsers extends Component {
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Журнал</label>
-                  <Select {...this.selectSiteProps} />
+                  <Select { ...this.selectSiteProps } />
                 </div>
               </div>
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Действия</label>
-                  <Select {...this.selectActionProps} />
+                  <Select { ...this.selectActionProps } />
                 </div>
               </div>
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label className="form__label">Теги</label>
-                  <Select {...this.selectTagsProps} />
+                  <Select { ...this.selectTagsProps } />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <RedactorUsersList onUpdateRequest={this.handleRequest} />
+        <RedactorUsersList onUpdateRequest={ this.handleRequest } />
 
         {total > 0 && (
           <PaginateLine
-            onChange={this.handlePaginateChange}
-            total={total}
-            {...paginate}
+            onChange={ this.handlePaginateChange }
+            total={ total }
+            { ...paginate }
           />
         )}
       </React.Fragment>

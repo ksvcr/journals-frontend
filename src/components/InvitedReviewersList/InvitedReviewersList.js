@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as formatDate from "~/services/formatDate";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as formatDate from '~/services/formatDate';
 
-import List from "~/components/List/List";
-import TagEditor from "~/components/TagEditor/TagEditor";
+import List from '~/components/List/List';
+import TagEditor from '~/components/TagEditor/TagEditor';
 
-import * as usersActions from "~/store/users/actions";
+import * as usersActions from '~/store/users/actions';
 
-import "./invited-reviewers-list.scss";
+import './invited-reviewers-list.scss';
 
 class InvitedReviewersList extends Component {
   handleTagAdd = (user, text) => {
@@ -26,7 +26,7 @@ class InvitedReviewersList extends Component {
       cells: [
         {
           style: {
-            width: "75%"
+            width: '75%'
           },
           render: ({ reviewer }) => {
             const { first_name, last_name } = reviewer;
@@ -35,7 +35,7 @@ class InvitedReviewersList extends Component {
         },
         {
           style: {
-            width: "25%"
+            width: '25%'
           },
           render: data => `До ${formatDate.toString(data.decision_deadline)}`
         }
@@ -49,10 +49,10 @@ class InvitedReviewersList extends Component {
       <div className="invited-reviewers-list__box">
         <div className="invited-reviewers-list__tags">
           <TagEditor
-            entityId={reviewer.id}
-            data={reviewer.tags}
-            onAdd={this.handleTagAdd}
-            onRemove={removeUserTag}
+            entityId={ reviewer.id }
+            data={ reviewer.tags }
+            onAdd={ this.handleTagAdd }
+            onRemove={ removeUserTag }
           />
         </div>
       </div>
@@ -62,7 +62,7 @@ class InvitedReviewersList extends Component {
   render() {
     return (
       <div className="invited-reviewers-list">
-        <List {...this.listProps} />
+        <List { ...this.listProps } />
       </div>
     );
   }

@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { FocusDecorator } from "draft-js-focus-plugin";
-import { tableCreator } from "draft-js-table-plugin";
-import Editor from "draft-js-plugins-editor";
-import { EditorState, genKey } from "draft-js";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import React, { Component } from 'react';
+import { FocusDecorator } from 'draft-js-focus-plugin';
+import { tableCreator } from 'draft-js-table-plugin';
+import Editor from 'draft-js-plugins-editor';
+import { EditorState, genKey } from 'draft-js';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import MetaInfoForm from "~/components/MetaInfoForm/MetaInfoForm";
-import nanoid from "nanoid";
-import ToolTip from "~/components/ToolTip/ToolTip";
+import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
+import nanoid from 'nanoid';
+import ToolTip from '~/components/ToolTip/ToolTip';
 
-import "./table-editor.scss";
+import './table-editor.scss';
 
 const Table = FocusDecorator(
   tableCreator({
-    theme: { table: "table-editor__box", even: "table-editor__even" },
+    theme: { table: 'table-editor__box', even: 'table-editor__even' },
     Editor
   })
 );
@@ -23,8 +23,8 @@ const cellData = {
   blocks: [
     {
       key: genKey(),
-      text: " ",
-      type: "unstyled",
+      text: ' ',
+      type: 'unstyled',
       depth: 0,
       inlineStyleRanges: [],
       entityRanges: []
@@ -105,7 +105,7 @@ class TableEditor extends Component {
   get initialMeta() {
     const { blockProps } = this.props;
     const { entityData } = blockProps;
-    const { title = "Заголовок таблицы", additional, keywords } = entityData;
+    const { title = 'Заголовок таблицы', additional, keywords } = entityData;
     return { title, additional, keywords };
   }
 
@@ -127,37 +127,37 @@ class TableEditor extends Component {
     const { blockProps } = this.props;
     const { entityData } = blockProps;
     return (
-      <div className="table-editor" contentEditable={false} readOnly>
+      <div className="table-editor" contentEditable={ false } readOnly>
         <div className="table-editor__holder">
           <h3 className="table-editor__title">
-            {entityData.title ? entityData.title : "Заголовок таблицы"}
+            {entityData.title ? entityData.title : 'Заголовок таблицы'}
           </h3>
 
           <div className="table-editor__toolbar">
             <button
               className="table-editor__button"
               type="button"
-              onClick={this.addRow}
+              onClick={ this.addRow }
             >
               Добавить строку
             </button>
             <button
               className="table-editor__button"
               type="button"
-              onClick={this.addColumn}
+              onClick={ this.addColumn }
             >
               Добавить колонку
             </button>
             <ToolTip
               className="tooltip"
               position="right-start"
-              useContext={true}
-              onRequestClose={this.handleMetaClose}
+              useContext={ true }
+              onRequestClose={ this.handleMetaClose }
               html={
                 <MetaInfoForm
-                  id={this.formId}
-                  onChange={this.handleMetaChange}
-                  initialValues={this.initialMeta}
+                  id={ this.formId }
+                  onChange={ this.handleMetaChange }
+                  initialValues={ this.initialMeta }
                 />
               }
             >
@@ -168,13 +168,13 @@ class TableEditor extends Component {
           </div>
           <ReactCSSTransitionGroup
             transitionName="fade"
-            transitionEnterTimeout={300}
-            transitionLeave={false}
+            transitionEnterTimeout={ 300 }
+            transitionLeave={ false }
           >
             <Table
-              {...this.props}
-              key={tableKey}
-              blockProps={this.blockProps}
+              { ...this.props }
+              key={ tableKey }
+              blockProps={ this.blockProps }
             />
           </ReactCSSTransitionGroup>
         </div>

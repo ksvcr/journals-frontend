@@ -104,7 +104,7 @@ class AuthorArticleList extends Component {
       onSortChange: this.handleSortChange,
       head: true,
       menuTooltip: data => (
-        <ToolsMenu id={data.id} items={this.getToolsMenuItems(data)} />
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
       ),
       box: this.renderBox,
       cells: [
@@ -124,8 +124,8 @@ class AuthorArticleList extends Component {
           head: () => this.dateTitle[dateField],
           headToolTip: () => (
             <DateFilter
-              field={dateField}
-              onChange={this.handleDateFilterChange}
+              field={ dateField }
+              onChange={ this.handleDateFilterChange }
             />
           ),
           render: data => formatDate.toString(data[dateField])
@@ -144,7 +144,7 @@ class AuthorArticleList extends Component {
           },
           sort: 'state_article',
           head: () => t('state'),
-          render: data => <StatusLabel status={data.state_article} />
+          render: data => <StatusLabel status={ data.state_article } />
         }
       ]
     };
@@ -154,7 +154,7 @@ class AuthorArticleList extends Component {
     const { box } = this.state;
     if (box && box.id === data.id) {
       if (box.type === 'payment') {
-        return <Payment onClose={this.handlePaymentClose} />;
+        return <Payment onClose={ this.handlePaymentClose } />;
       }
     }
 
@@ -166,14 +166,14 @@ class AuthorArticleList extends Component {
     return (
       <div className="author-article-list">
         <div className="author-article-list__holder">
-          <List {...this.listProps} />
+          <List { ...this.listProps } />
         </div>
 
         {total > 0 && (
           <PaginateLine
-            onChange={this.handlePaginateChange}
-            total={total}
-            {...paginate}
+            onChange={ this.handlePaginateChange }
+            total={ total }
+            { ...paginate }
           />
         )}
       </div>

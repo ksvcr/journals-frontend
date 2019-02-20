@@ -32,7 +32,7 @@ class List extends PureComponent {
   renderItem = data => {
     const { box } = this.props;
     return (
-      <div className="list__item" key={data.id}>
+      <div className="list__item" key={ data.id }>
         {this.renderRow(data)}
         {box && <div className="list__box">{box(data)}</div>}
       </div>
@@ -49,7 +49,7 @@ class List extends PureComponent {
 
   renderHead = () => {
     return (
-      <div className="list__item list__item_head" key={'list-head'}>
+      <div className="list__item list__item_head" key={ 'list-head' }>
         <div className="list__row">{this.renderCells(null, true)}</div>
       </div>
     );
@@ -74,11 +74,11 @@ class List extends PureComponent {
 
       if (isHead && cell.headToolTip) {
         return (
-          <div className={cellClasses} key={index} style={cell.style}>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             <ToolTip
               className="tooltip"
               position="bottom-start"
-              html={cell.headToolTip()}
+              html={ cell.headToolTip() }
             >
               <button type="button" className="list__expand-button">
                 {render}
@@ -86,22 +86,22 @@ class List extends PureComponent {
             </ToolTip>
             {cell.sort && (
               <SortChecker
-                name={sortField}
-                checked={sortValue}
-                isActive={isActiveSort}
-                onChange={this.handleSort}
+                name={ sortField }
+                checked={ sortValue }
+                isActive={ isActiveSort }
+                onChange={ this.handleSort }
               />
             )}
           </div>
         );
       } else if (isHead && cell.sort) {
         return (
-          <div className={cellClasses} key={index} style={cell.style}>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             <SortChecker
-              name={sortField}
-              checked={sortValue}
-              isActive={isActiveSort}
-              onChange={this.handleSort}
+              name={ sortField }
+              checked={ sortValue }
+              isActive={ isActiveSort }
+              onChange={ this.handleSort }
             >
               {render}
             </SortChecker>
@@ -109,7 +109,7 @@ class List extends PureComponent {
         );
       } else {
         return (
-          <div className={cellClasses} key={index} style={cell.style}>
+          <div className={ cellClasses } key={ index } style={ cell.style }>
             {render}
           </div>
         );
@@ -122,8 +122,8 @@ class List extends PureComponent {
           <ToolTip
             className="tooltip"
             position="right-start"
-            offset={-5}
-            html={menuTooltip(data)}
+            offset={ -5 }
+            html={ menuTooltip(data) }
           >
             <PointMenuButton />
           </ToolTip>
@@ -142,8 +142,8 @@ class List extends PureComponent {
           {head && this.renderHead()}
           <ReactCSSTransitionGroup
             transitionName="fade"
-            transitionEnterTimeout={400}
-            transitionLeave={false}
+            transitionEnterTimeout={ 400 }
+            transitionLeave={ false }
           >
             {this.renderItems()}
           </ReactCSSTransitionGroup>

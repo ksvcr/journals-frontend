@@ -1,28 +1,28 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Renderer from "~/components/Renderer/Renderer";
-import ReviewsHistory from "~/components/ReviewsHistory/ReviewsHistory";
+import Renderer from '~/components/Renderer/Renderer';
+import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 
-import "./content.scss";
+import './content.scss';
 
 class Content extends Component {
   renderBlocks = blocks => {
     return blocks.map((item, index) => (
-      <div className="content__block" key={index}>
+      <div className="content__block" key={ index }>
         <h2 className="content__title">{`${index + 1}. ${item.title}`}</h2>
-        <Renderer raw={item.content} />
+        <Renderer raw={ item.content } />
       </div>
     ));
   };
 
   renderFinancingSources = sources => {
     return sources.map((item, index) => (
-      <li key={index}>
+      <li key={ index }>
         <p>
           {item.organization +
-            ", " +
+            ', ' +
             item.grant_name +
-            ", " +
+            ', ' +
             item.grant_number}
         </p>
       </li>
@@ -32,9 +32,9 @@ class Content extends Component {
   renderSourcesList = () => {
     const { data } = this.props;
     return data.sources.map((item, index) => (
-      <li key={index}>
+      <li key={ index }>
         <p>
-          {item.author.lastname} {item.author.initials}, {item.original_name},{" "}
+          {item.author.lastname} {item.author.initials}, {item.original_name},{' '}
           {item.page_count} c.
         </p>
       </li>
@@ -76,7 +76,7 @@ class Content extends Component {
               <ul> {this.renderFinancingSources(financing_sources)} </ul>
             ) : (
               <p>
-                {" "}
+                {' '}
                 Авторы не получали финансовой поддержки для проведения
                 исследования, написания и публикации статьи
               </p>
@@ -104,8 +104,8 @@ class Content extends Component {
             <div className="content__reviews">
               <h3>Рецензия</h3>
               <ReviewsHistory
-                reviews={reviews}
-                author={author}
+                reviews={ reviews }
+                author={ author }
                 className="reviews-history_publish"
               />
             </div>

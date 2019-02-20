@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import CancelLink from "~/components/CancelLink/CancelLink";
-import SearchPanel from "~/components/SearchPanel/SearchPanel";
-import DiscountsTransferSelect from "~/components/DiscountsTransferSelect/DiscountsTransferSelect";
-import DiscountsTransferForm from "~/components/DiscountsTransferForm/DiscountsTransferForm";
+import CancelLink from '~/components/CancelLink/CancelLink';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
+import DiscountsTransferSelect from '~/components/DiscountsTransferSelect/DiscountsTransferSelect';
+import DiscountsTransferForm from '~/components/DiscountsTransferForm/DiscountsTransferForm';
 
-import * as usersActions from "~/store/users/actions";
-import * as discountsActions from "~/store/discounts/actions";
+import * as usersActions from '~/store/users/actions';
+import * as discountsActions from '~/store/discounts/actions';
 
-import getNoun from "~/utils/getNoun";
+import getNoun from '~/utils/getNoun';
 
-import "./discounts-transfer.scss";
+import './discounts-transfer.scss';
 
-const SEARCH_KEY = "discounts";
+const SEARCH_KEY = 'discounts';
 
 class DiscountsTransfer extends Component {
   state = {
@@ -62,32 +62,32 @@ class DiscountsTransfer extends Component {
     return (
       <div className="discounts-transfer">
         <div className="discounts-transfer__cancel">
-          <CancelLink onClick={this.handleCancelClick} />
+          <CancelLink onClick={ this.handleCancelClick } />
         </div>
         {!user ? (
           <div className="discounts-transfer__search">
-            <SearchPanel onChange={this.handleSearchChange} />
+            <SearchPanel onChange={ this.handleSearchChange } />
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
-                Найдено {searchResults.length}{" "}
+                Найдено {searchResults.length}{' '}
                 {getNoun(
                   searchResults.length,
-                  "пользователь",
-                  "пользователя",
-                  "пользователей"
+                  'пользователь',
+                  'пользователя',
+                  'пользователей'
                 )}
                 :
               </p>
               <DiscountsTransferSelect
-                items={searchResults}
-                onSelect={this.handleUserSelect}
+                items={ searchResults }
+                onSelect={ this.handleUserSelect }
               />
             </div>
           </div>
         ) : (
           <DiscountsTransferForm
-            user={user}
-            onSubmit={this.handleTransferSubmit}
+            user={ user }
+            onSubmit={ this.handleTransferSubmit }
           />
         )}
       </div>

@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import classNames from "classnames";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 
-import Collapse from "~/components/Collapse/Collapse";
-import FieldHint from "~/components/FieldHint/FieldHint";
-import ReviewEstimate from "~/components/ReviewEstimate/ReviewEstimate";
+import Collapse from '~/components/Collapse/Collapse';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 
-import { getUsersArray } from "../../store/users/selector";
+import { getUsersArray } from '../../store/users/selector';
 
-import "./reviews-history.scss";
+import './reviews-history.scss';
 
 class ReviewsHistory extends Component {
   renderList = () => {
@@ -17,13 +17,13 @@ class ReviewsHistory extends Component {
     return reviews.map((item, index) => {
       return isCollapse ? (
         <Collapse
-          key={index}
-          title={item.review_round + ` раунд рецензирования`}
+          key={ index }
+          title={ item.review_round + ` раунд рецензирования` }
         >
           {this.renderItem(item)}
         </Collapse>
       ) : (
-        <React.Fragment key={index}>{this.renderItem(item)}</React.Fragment>
+        <React.Fragment key={ index }>{this.renderItem(item)}</React.Fragment>
       );
     });
   };
@@ -51,14 +51,14 @@ class ReviewsHistory extends Component {
           <div className="reviews-history__title">
             Текст рецензии
             {isCollapse && (
-              <FieldHint text={"Будет опубликован вместе с текстом статьи"} />
+              <FieldHint text={ 'Будет опубликован вместе с текстом статьи' } />
             )}
           </div>
           <div className="reviews-history__text">{item.comment_for_author}</div>
         </div>
         {!isCollapse && (
           <div className="reviews-history__table">
-            <ReviewEstimate values={item} disabled={true} />
+            <ReviewEstimate values={ item } disabled={ true } />
           </div>
         )}
         {item.author_answer && (
@@ -76,9 +76,9 @@ class ReviewsHistory extends Component {
 
   render() {
     const { className } = this.props;
-    const classes = classNames("reviews-history", className);
+    const classes = classNames('reviews-history', className);
 
-    return <div className={classes}>{this.renderList()}</div>;
+    return <div className={ classes }>{this.renderList()}</div>;
   }
 }
 

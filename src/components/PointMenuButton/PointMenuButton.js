@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import classNames from "classnames";
+import React, { Component } from 'react';
+import classNames from 'classnames';
 
-import "./point-menu-button.scss";
+import './point-menu-button.scss';
 
 class PointMenuButton extends Component {
   handleClick = () => {
@@ -12,13 +12,13 @@ class PointMenuButton extends Component {
   };
 
   render() {
-    const buttonClasses = classNames("point-menu-button", this.props.className);
+    const buttonClasses = classNames('point-menu-button', this.props.className);
 
     return (
       <button
         type="button"
-        className={buttonClasses}
-        onClick={this.handleClick}
+        className={ buttonClasses }
+        onClick={ this.handleClick }
       >
         <span className="point-menu-button__holder">
           <i className="point-menu-button__icon" />

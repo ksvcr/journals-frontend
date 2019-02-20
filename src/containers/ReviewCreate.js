@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { push } from "connected-react-router";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
-import ReviewCreateForm from "~/components/ReviewCreateForm/ReviewCreateForm";
+import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
 
-import * as articlesActions from "~/store/articles/actions";
-import * as usersActions from "~/store/users/actions";
+import * as articlesActions from '~/store/articles/actions';
+import * as usersActions from '~/store/users/actions';
 
 class ReviewCreate extends Component {
   componentDidMount() {
@@ -47,7 +47,7 @@ class ReviewCreate extends Component {
     };
 
     createArticleReview(articleId, data).then(() => {
-      push("/");
+      push('/');
     });
   };
 
@@ -58,9 +58,9 @@ class ReviewCreate extends Component {
         <h1 className="page__title">Новая рецензия</h1>
 
         <ReviewCreateForm
-          id={articleId}
-          onSubmit={this.handleSubmit}
-          reviews={reviewsFromCurrentUser}
+          id={ articleId }
+          onSubmit={ this.handleSubmit }
+          reviews={ reviewsFromCurrentUser }
         />
       </React.Fragment>
     );

@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { push } from "connected-react-router";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
-import List from "~/components/List/List";
-import ToolsMenu from "~/components/ToolsMenu/ToolsMenu";
-import TagEditor from "~/components/TagEditor/TagEditor";
-import ListChecker from "~/components/ListChecker/ListChecker";
+import List from '~/components/List/List';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
+import TagEditor from '~/components/TagEditor/TagEditor';
+import ListChecker from '~/components/ListChecker/ListChecker';
 
-import * as usersActions from "~/store/users/actions";
-import { getUsersArray } from "~/store/users/selector";
+import * as usersActions from '~/store/users/actions';
+import { getUsersArray } from '~/store/users/selector';
 
-import * as userRoles from "~/services/userRoles";
-import apiClient from "~/services/apiClient";
+import * as userRoles from '~/services/userRoles';
+import apiClient from '~/services/apiClient';
 
-import "./redactor-users-list.scss";
+import './redactor-users-list.scss';
 
 class RedactorUsersList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
-    `${last_name} ${first_name} ${middle_name || ""}`;
+    `${last_name} ${first_name} ${middle_name || ''}`;
 
   handleTagAdd = (user, text) => {
     const { currentUserId, createUserTag } = this.props;
@@ -38,10 +38,10 @@ class RedactorUsersList extends Component {
       <div className="redactor-users-list__box">
         <div className="redactor-users-list__tags">
           <TagEditor
-            entityId={data.id}
-            data={data.tags}
-            onAdd={this.handleTagAdd}
-            onRemove={removeUserTag}
+            entityId={ data.id }
+            data={ data.tags }
+            onAdd={ this.handleTagAdd }
+            onRemove={ removeUserTag }
           />
         </div>
       </div>
@@ -75,15 +75,15 @@ class RedactorUsersList extends Component {
   get toolsMenuItems() {
     return [
       {
-        title: "Написать",
+        title: 'Написать',
         handler: this.handleUserMail
       },
       {
-        title: "Войти",
+        title: 'Войти',
         handler: this.handleUserShow
       },
       {
-        title: "Заблокировать",
+        title: 'Заблокировать',
         handler: this.handleUserLock
       }
     ];
@@ -94,29 +94,29 @@ class RedactorUsersList extends Component {
     return {
       data: usersArray,
       menuTooltip: data => (
-        <ToolsMenu id={data.id} items={this.toolsMenuItems} />
+        <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />
       ),
       head: true,
       box: this.renderBox,
       cells: [
         {
           style: {
-            width: "45%"
+            width: '45%'
           },
           isMain: true,
-          head: () => "Имя",
+          head: () => 'Имя',
           render: this.renderName
         },
         {
           style: {
-            width: "25%"
+            width: '25%'
           },
-          head: () => "Роль",
+          head: () => 'Роль',
           headToolTip: () => (
             <ListChecker
               name="role"
-              onChange={this.handleChangeRole}
-              data={this.roleFilterOptions}
+              onChange={ this.handleChangeRole }
+              data={ this.roleFilterOptions }
             />
           ),
           render: ({ role }) => (
@@ -127,10 +127,10 @@ class RedactorUsersList extends Component {
         },
         {
           style: {
-            width: "30%",
-            textAlign: "right"
+            width: '30%',
+            textAlign: 'right'
           },
-          head: () => "Категории наук",
+          head: () => 'Категории наук',
           render: data => null
         }
       ]
@@ -138,7 +138,7 @@ class RedactorUsersList extends Component {
   }
 
   render() {
-    return <List {...this.listProps} />;
+    return <List { ...this.listProps } />;
   }
 }
 

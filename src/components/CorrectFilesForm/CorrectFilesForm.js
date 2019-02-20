@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { change, getFormValues } from "redux-form";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { change, getFormValues } from 'redux-form';
 
-import CorrectFilesFormItem from "~/components/CorrectFilesFormItem/CorrectFilesFormItem";
+import CorrectFilesFormItem from '~/components/CorrectFilesFormItem/CorrectFilesFormItem';
 
-import "./correct-files-form.scss";
+import './correct-files-form.scss';
 
 class CorrectFilesForm extends Component {
   handleChangeDescription = (fileId, description) => {
@@ -16,7 +16,7 @@ class CorrectFilesForm extends Component {
 
       return file;
     });
-    change(formName, "attachments", newAttachments);
+    change(formName, 'attachments', newAttachments);
   };
 
   renderItems = () => {
@@ -25,10 +25,10 @@ class CorrectFilesForm extends Component {
     return attachments.map((item, index) => {
       const showDivider = ++index < attachments.length;
       return (
-        <React.Fragment key={index}>
+        <React.Fragment key={ index }>
           <CorrectFilesFormItem
-            file={item}
-            onChangeDescription={this.handleChangeDescription}
+            file={ item }
+            onChangeDescription={ this.handleChangeDescription }
           />
           {showDivider && <hr className="correct-files-form__divider" />}
         </React.Fragment>

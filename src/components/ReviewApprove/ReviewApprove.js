@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Field, change} from 'redux-form';
+import { Field, change } from 'redux-form';
 
 import Radio from '~/components/Radio/Radio';
 import TextField from '~/components/TextField/TextField';
@@ -26,9 +26,15 @@ class ReviewApprove extends Component {
       const { reviewer } = invite;
       return (
         <div className="review-approve__item" key={ review.id }>
-          <Field name="review_for_approve" type="radio" value={review.id}
-                 component={ Radio } parse={ value => parseInt(value, 10) } onChange={this.handleReviewChange}>
-            {`Включить рецензию ${ reviewer.first_name } ${ reviewer.last_name }`}
+          <Field
+            name="review_for_approve"
+            type="radio"
+            value={ review.id }
+            component={ Radio }
+            parse={ value => parseInt(value, 10) }
+            onChange={ this.handleReviewChange }
+          >
+            {`Включить рецензию ${reviewer.first_name} ${reviewer.last_name}`}
           </Field>
         </div>
       );
@@ -38,11 +44,14 @@ class ReviewApprove extends Component {
   render() {
     return (
       <div className="review-approve">
-        <div className="review-approve__list">
-          { this.renderItems() }
-        </div>
+        <div className="review-approve__list">{this.renderItems()}</div>
         <div className="review-approve__preview">
-          <Field name="comment_for_redactor" textarea minRows={6} component={TextField}/>
+          <Field
+            name="comment_for_redactor"
+            textarea
+            minRows={ 6 }
+            component={ TextField }
+          />
         </div>
       </div>
     );
@@ -61,7 +70,8 @@ function mapStateToProps(state, props) {
 
   return {
     formName,
-    reviewInvites: articleData && articleData.reviewInvites ? articleData.reviewInvites : [],
+    reviewInvites:
+      articleData && articleData.reviewInvites ? articleData.reviewInvites : [],
     reviews: articleData && articleData.reviews ? articleData.reviews : []
   };
 }

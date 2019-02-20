@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import List from "~/components/List/List";
-import Button from "~/components/Button/Button";
-import Icon from "~/components/Icon/Icon";
-import InterestList from "~/components/InterestList/InterestList";
-import TagEditor from "~/components/TagEditor/TagEditor";
-import SearchPanel from "~/components/SearchPanel/SearchPanel";
-import Select from "~/components/Select/Select";
-import Checkbox from "~/components/Checkbox/Checkbox";
+import List from '~/components/List/List';
+import Button from '~/components/Button/Button';
+import Icon from '~/components/Icon/Icon';
+import InterestList from '~/components/InterestList/InterestList';
+import TagEditor from '~/components/TagEditor/TagEditor';
+import SearchPanel from '~/components/SearchPanel/SearchPanel';
+import Select from '~/components/Select/Select';
+import Checkbox from '~/components/Checkbox/Checkbox';
 
-import * as articlesActions from "~/store/articles/actions";
-import * as usersActions from "~/store/users/actions";
+import * as articlesActions from '~/store/articles/actions';
+import * as usersActions from '~/store/users/actions';
 
-import { getUsersArray } from "~/store/users/selector";
+import { getUsersArray } from '~/store/users/selector';
 
-import getNoun from "~/utils/getNoun";
+import getNoun from '~/utils/getNoun';
 
-import "./redactor-reviewer-list.scss";
-import "./assets/arrow.svg";
+import './redactor-reviewer-list.scss';
+import './assets/arrow.svg';
 
 class RedactorReviewerList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
@@ -48,7 +48,7 @@ class RedactorReviewerList extends Component {
   handleSearchChange = ({ search_query }) => {
     const { fetchUsers } = this.props;
     const data = {
-      role: "REVIEWER",
+      role: 'REVIEWER',
       search: search_query
     };
 
@@ -65,38 +65,38 @@ class RedactorReviewerList extends Component {
       cells: [
         {
           style: {
-            width: "25%"
+            width: '25%'
           },
-          head: () => "ФИО",
+          head: () => 'ФИО',
           render: this.renderName
         },
         {
           style: {
-            width: "30%"
+            width: '30%'
           },
-          head: () => "Научные интересы",
+          head: () => 'Научные интересы',
           render: ({ sphere_scientific_interests }) => (
-            <InterestList data={sphere_scientific_interests} />
+            <InterestList data={ sphere_scientific_interests } />
           )
         },
         {
           style: {
-            width: "15%"
+            width: '15%'
           },
-          head: () => "Рецензий в мес.",
+          head: () => 'Рецензий в мес.',
           render: ({ count_reviews_month }) => count_reviews_month
         },
         {
           style: {
-            width: "30%"
+            width: '30%'
           },
           render: data => (
             <div className="redactor-reviewer-list__choose-wrapper">
               <Button
                 type="button"
                 className="button_small redactor-reviewer-list__choose"
-                data-id={data.id}
-                onClick={this.handleChoose}
+                data-id={ data.id }
+                onClick={ this.handleChoose }
               >
                 Выбрать
                 <Icon
@@ -117,10 +117,10 @@ class RedactorReviewerList extends Component {
       <div className="redactor-reviewer-list__box">
         <div className="redactor-reviewer-list__tags">
           <TagEditor
-            entityId={data.id}
-            data={data.tags}
-            onAdd={this.handleTagAdd}
-            onRemove={removeUserTag}
+            entityId={ data.id }
+            data={ data.tags }
+            onAdd={ this.handleTagAdd }
+            onRemove={ removeUserTag }
           />
         </div>
       </div>
@@ -141,7 +141,7 @@ class RedactorReviewerList extends Component {
   get selectTagsProps() {
     // TODO: Добавить список тегов
     return {
-      name: "tags",
+      name: 'tags',
       options: [],
       onChange: event => {}
     };
@@ -152,20 +152,20 @@ class RedactorReviewerList extends Component {
     return (
       <div className="redactor-reviewer-list__search-box">
         <button
-          onClick={onClose}
+          onClick={ onClose }
           type="button"
           className="redactor-reviewer-list__cancel"
         >
           Отмена
         </button>
-        <SearchPanel onChange={this.handleSearchChange} />
+        <SearchPanel onChange={ this.handleSearchChange } />
         <div className="redactor-reviewer-list__search-form form">
           <div className="form__field">
             <label className="form__label">Искать по:</label>
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <Select {...this.selectTagsProps} />
+                  <Select { ...this.selectTagsProps } />
                 </div>
               </div>
               <div className="form__col form__col_6">
@@ -184,7 +184,7 @@ class RedactorReviewerList extends Component {
       <div className="redactor-reviewer-list">
         {this.renderSearchBox()}
 
-        <List {...this.listProps} />
+        <List { ...this.listProps } />
       </div>
     );
   }
