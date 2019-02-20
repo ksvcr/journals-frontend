@@ -14,16 +14,20 @@ class AuthorArticles extends Component {
     this.handleRequest();
   }
 
-  handleRequest = (params={}) => {
+  handleRequest = (params = {}) => {
     const { siteId, articlesParams, userId, fetchArticles } = this.props;
-    return fetchArticles(siteId, { ...articlesParams, ...params, author: userId });
+    return fetchArticles(siteId, {
+      ...articlesParams,
+      ...params,
+      author: userId
+    });
   };
 
   get searchTargets() {
     const { t } = this.props;
     return [
       {
-        value: "title",
+        value: 'title',
         title: t('search_in_titles')
       }
     ];
@@ -33,23 +37,22 @@ class AuthorArticles extends Component {
     const { t } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">
-          { t("my_articles") }
-        </h1>
+        <h1 className="page__title">{t('my_articles')}</h1>
 
         <div className="page__tools">
           <form className="form">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">
-                { t("for_journals") }
+                {t('for_journals')}
               </label>
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
             </div>
             <div className="form__field">
-              <label className="form__label">
-                { t("article_search") }
-              </label>
-              <SearchPanel targets={this.searchTargets} onChange={ this.handleRequest } />
+              <label className="form__label">{t('article_search')}</label>
+              <SearchPanel
+                targets={ this.searchTargets }
+                onChange={ this.handleRequest }
+              />
             </div>
           </form>
         </div>
