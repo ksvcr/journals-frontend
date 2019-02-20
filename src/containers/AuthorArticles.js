@@ -41,7 +41,7 @@ class AuthorArticles extends Component {
           <form className="form">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">
-                { t('for_journals') }
+                { t("for_journals") }
               </label>
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
             </div>
