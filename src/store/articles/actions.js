@@ -1,20 +1,7 @@
-import {
-  CREATE_ARTICLE,
-  FETCH_ARTICLES,
-  INVITE_ARTICLE_REVIEWER,
-  RESET_ARTICLES,
-  ACCEPT_ARTICLE_REVIEW_INVITE,
-  FETCH_ARTICLE,
-  EDIT_ARTICLE,
-  CREATE_ARTICLE_TAG,
-  REMOVE_ARTICLE_TAG,
-  CREATE_ARTICLE_REVIEW,
-  EDIT_ARTICLE_REVIEW,
-  CREATE_ARTICLE_TRANSLATION,
-  FETCH_ARTICLE_TRANSLATION,
-  EDIT_ARTICLE_TRANSLATION,
-  FETCH_ARTICLE_REVIEW_INVITES
-} from './constants';
+import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
+         ACCEPT_ARTICLE_REVIEW_INVITE, FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG,
+         REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION,
+         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -46,9 +33,7 @@ export function createArticle(siteId, data, cb) {
   return dispatch => {
     let { content_blocks, sources, financing_sources, ...articleData } = data;
     // Источники финансирования
-    const financingPromise = financing_sources
-      ? apiClient.createFinancingSources(financing_sources)
-      : Promise.resolve();
+    const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
 
     const payload = financingPromise.then((financingResponse = []) => {
       if (financingResponse.length) {
@@ -70,13 +55,8 @@ export function createArticle(siteId, data, cb) {
 
             // Контент-блоки
             if (content_blocks) {
-              content_blocks = content_blocks.map((item, index) => ({
-                ...item,
-                ordered: index
-              }));
-              resourcePromises.push(
-                apiClient.createBlocks(articleId, content_blocks)
-              );
+              content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
+              resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
             }
 
             // Список литературы
@@ -113,19 +93,11 @@ export function editArticle(id, data) {
     let financingPromises = [];
 
     if (financing_sources) {
-      const createSourcesArray = financing_sources.filter(
-        item => item.id === undefined
-      );
-      const editSourcesArray = financing_sources.filter(
-        item => item.id !== undefined
-      );
+      const createSourcesArray = financing_sources.filter(item => item.id === undefined);
+      const editSourcesArray = financing_sources.filter(item => item.id !== undefined);
 
-      const createFinancingPromise = apiClient.createFinancingSources(
-        createSourcesArray
-      );
-      const editFinancingPromises = editSourcesArray.map(item =>
-        apiClient.editFinancingSource(item.id, item)
-      );
+      const createFinancingPromise = apiClient.createFinancingSources(createSourcesArray);
+      const editFinancingPromises = editSourcesArray.map(item => apiClient.editFinancingSource(item.id, item));
       financingPromises = [createFinancingPromise, ...editFinancingPromises];
     }
 
@@ -136,9 +108,7 @@ export function editArticle(id, data) {
           ...editFinancingResponse
         ];
         if (financingResponse.length) {
-          articleData.financing_sources = financingResponse.map(
-            item => item.id
-          );
+          articleData.financing_sources = financingResponse.map(item => item.id);
         }
 
         return apiClient.lockArticle(id).then(() => {
@@ -150,33 +120,14 @@ export function editArticle(id, data) {
 
           // Список литературы
           if (sources) {
-            const createSourcesArray = sources.filter(
-              item => item.id === undefined
-            );
-            const editSourcesArray = sources.filter(
-              item => item.id !== undefined
-            );
-            const hasRemoved =
-              prevArticleData.sources.length > editSourcesArray.length;
-            const removedSourcesArray = hasRemoved
-              ? differenceBy(prevArticleData.sources, editSourcesArray, 'id')
-              : [];
-            const createSourcesPromise = apiClient.createSources(
-              id,
-              createSourcesArray
-            );
-            const editSourcesPromises = editSourcesArray.map(item =>
-              apiClient.editSource(id, item)
-            );
-            const removeSourcesPromises = removedSourcesArray.map(item =>
-              apiClient.removeSource(id, item.id)
-            );
-            editPromises = [
-              ...editPromises,
-              createSourcesPromise,
-              ...editSourcesPromises,
-              ...removeSourcesPromises
-            ];
+            const createSourcesArray = sources.filter(item => item.id === undefined);
+            const editSourcesArray = sources.filter(item => item.id !== undefined);
+            const hasRemoved = prevArticleData.sources.length > editSourcesArray.length;
+            const removedSourcesArray = hasRemoved ? differenceBy(prevArticleData.sources, editSourcesArray, 'id') : [];
+            const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
+            const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
+            const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));
+            editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises];
           }
 
           return Promise.all(editPromises);

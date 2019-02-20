@@ -95,16 +95,16 @@ class ArticleForm extends Component {
   }
 
   initAutoSave = () => {
-    const { onAutoSave, autoSaveTimer, form, articleData } = this.props;
+    const { onAutoSave, articleData } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
-
+    // Автоматическое сохранение
     this.autoSaveInterval = setInterval(() => {
       const { formValues } = this.props;
 
       if(formValues && formValues.title && (!articleData || isDraft)) {
-        onAutoSave(formValues, form);
+        onAutoSave(formValues);
       }
-    }, autoSaveTimer * 1000);
+    }, 10000);
   };
 
   handleDraftSubmit = () => {
