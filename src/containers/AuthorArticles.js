@@ -49,7 +49,7 @@ class AuthorArticles extends Component {
               <label className="form__label">
                 { t('article_search') }
               </label>
-              <SearchPanel targets={this.searchTargets} onChange={ this.handleRequest } />
+              <SearchPanel targets={this.searchTargets} onChange={this.handleRequest} />
             </div>
           </form>
         </div>
