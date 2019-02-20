@@ -117,7 +117,6 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "precommit": "lint-staged",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
@@ -165,6 +164,11 @@
       "target": "https://journals.green.jetstyle.ru",
       "secure": false,
       "changeOrigin": true
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
