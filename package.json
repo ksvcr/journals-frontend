@@ -91,7 +91,6 @@
     "eslint-plugin-flowtype": "^2.50.3",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
@@ -104,8 +103,6 @@
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
     "postcss-scss": "^2.0.0",
-    "prettier": "1.16.4",
-    "pretty-quick": "^1.10.0",
     "react-hot-loader": "^4.3.4",
     "react-test-renderer": "^16.6.0",
     "sass-loader": "^7.0.3",
@@ -174,10 +171,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "pretty-quick --staged",
-      "eslint src/ --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"]
   }
 }

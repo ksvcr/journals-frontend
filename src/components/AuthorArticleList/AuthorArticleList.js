@@ -10,7 +10,7 @@ import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
 
-import { getArticlesArray, getArticlesParams } from '~/store/articles/selector';
+import { getArticlesArray } from '~/store/articles/selector';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';

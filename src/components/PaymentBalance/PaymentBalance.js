@@ -16,7 +16,7 @@ const PaymentBalance = ({ balance, ...rest }) => {
           Списать для оплаты статьи (руб)
         </label>
         <TextField id="payment_value" type="number"
-                    className="payment-balance__input text-field_small" { ...rest } />
+                   className="payment-balance__input text-field_small" { ...rest } />
       </div>
     </div>
   );

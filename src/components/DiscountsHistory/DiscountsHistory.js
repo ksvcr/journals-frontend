@@ -29,7 +29,7 @@ class DiscountsHistory extends Component {
   renderTabs = () => {
     return this.tabs.map((item, index) => (
       <Tab key={ index } className="discounts-history__tab"
-      selectedClassName="discounts-history__tab_selected">
+           selectedClassName="discounts-history__tab_selected">
         { item.title }
       </Tab>
     ));
@@ -54,7 +54,7 @@ class DiscountsHistory extends Component {
     return (
       <div className="discounts-history">
         <Tabs selectedIndex={ tabIndex } onSelect={ this.handleTabIndexChange }
-          selectedTabPanelClassName="discounts-history__panel_selected">
+              selectedTabPanelClassName="discounts-history__panel_selected">
           <TabList className="discounts-history__tab-list">
             { this.renderTabs() }
           </TabList>
