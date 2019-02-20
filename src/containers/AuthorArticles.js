@@ -34,7 +34,7 @@ class AuthorArticles extends Component {
     return (
       <React.Fragment>
         <h1 className="page__title">
-          { t('my_articles') }
+          { t("my_articles") }
         </h1>
 
         <div className="page__tools">
@@ -47,7 +47,7 @@ class AuthorArticles extends Component {
             </div>
             <div className="form__field">
               <label className="form__label">
-                { t('article_search') }
+                { t("article_search") }
               </label>
               <SearchPanel targets={this.searchTargets} onChange={ this.handleRequest } />
             </div>
