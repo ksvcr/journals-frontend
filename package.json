@@ -168,7 +168,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "echo 333"
     }
   }
 }
