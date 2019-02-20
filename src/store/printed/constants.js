@@ -1,1 +1,0 @@
-export const FETCH_PRINTED = 'FETCH_PRINTED';

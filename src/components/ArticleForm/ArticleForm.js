@@ -23,7 +23,6 @@ import './assets/save.svg';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRootCategoriesArray } from '~/store/categories/selector';
-import { getPrintedArray } from '~/store/printed/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -164,7 +163,6 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-  const printedArray = getPrintedArray(state);
 
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
@@ -175,7 +173,6 @@ function getInitialValues(state, props) {
     financing_sources: [{
       type: financingIds[0]
     }],
-    addresses: printedArray || [],
     authors: [{
       id: user.data.id,
       isCurrent: true,

@@ -155,29 +155,22 @@ function articles(state = initialState, action) {
     case `${RESET_ARTICLES}`:
       return initialState;
 
-    case `${FETCH_ARTICLE_PRINTED}_FULFILLED`:
-      const newEntity = entityNormalize.toObject(action.payload.results);
-      return { ...state,
-        isPending: false,
-        isFulfilled: true,
-        isRejected: false,
-        ...newEntity
-      };
-
     case `${FETCH_ARTICLE_PRINTED}_PENDING`:
       return { ...state,
         isPending: true,
         isFulfilled: false,
-        isRejected: false,
-        ...action.meta
       };
 
-    case `${FETCH_ARTICLE_PRINTED}_REJECTED`:
+    case `${FETCH_ARTICLE_PRINTED}_FULFILLED`:
       return { ...state,
-        isRejected: true,
         isPending: false,
-        isFulfilled: false,
-        error: action.payload
+        isFulfilled: true,
+        data: { ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            printed: action.payload.results
+          }
+        }
       };
 
     default:

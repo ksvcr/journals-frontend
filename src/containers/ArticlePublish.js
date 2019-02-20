@@ -19,7 +19,6 @@ import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
-import * as printedActions from '~/store/printed/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 import apiClient from '~/services/apiClient';
@@ -63,7 +62,7 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser, fetchPrinted } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchArticlePrinted } = this.props;
 
     const promises = [
       fetchCountries(),
@@ -78,9 +77,9 @@ class ArticlePublish extends Component {
         const userPromises = userIds.map(id => fetchUser(id));
         return Promise.all([ ...userPromises,
                             fetchRubrics(articleData.site),
-                            fetchCategories(articleData.site),
-                            fetchPrinted(articleId)]);
+                            fetchCategories(articleData.site)]);
       }).catch(() =>{ push('/') }));
+      promises.push(fetchArticlePrinted(articleId));
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
@@ -231,7 +230,7 @@ const mapDispatchToProps = {
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
   fetchCountries: countriesActions.fetchCountries,
-  fetchPrinted: printedActions.fetchPrinted
+  fetchArticlePrinted: articlesActions.fetchArticlePrinted
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);

@@ -22,13 +22,16 @@ import { getCountriesArray } from '~/store/countries/selector';
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
-  state = {
-    visibleFields: {
-      conflicts: true,
-      addressRadio: false,
-      addressList: false
-    }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibleFields: {
+        conflicts: true,
+        addressRadio: Boolean(props.isPrinted),
+        addressList: props.isPrinted || false
+      }
+    };
+  }
 
   componentDidUpdate(prevProps) {
     this.setInitialCategory(prevProps.rootCategory);
@@ -136,7 +139,7 @@ class ArticleCommonForm extends Component {
 
     return (
       <FieldSetList legend="Адрес" addText="Добавить адрес"
-                    initialValues={ initialValues } { ...props }>
+                    initialValues={ initialValues} { ...props }>
         { field => <AddressForm field={ field } countriesData={ countriesData }
                                 countriesArray={ countriesArray } /> }
       </FieldSetList>
@@ -303,7 +306,7 @@ class ArticleCommonForm extends Component {
           }
 
           { visibleFields.addressList &&
-            <FieldArray name="addresses"
+            <FieldArray name="printed"
                         component={ this.renderAddressList } />
           }
         </div>
@@ -324,6 +327,7 @@ function mapStateToProps(state, props) {
 
   const hasFinancing = formSelector(state, 'has_financing');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
+  const isPrinted = formSelector(state, 'printed');
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
@@ -342,6 +346,7 @@ function mapStateToProps(state, props) {
     languagesArray,
     countriesArray,
     countriesData: countries.data,
+    isPrinted
   };
 }
 
