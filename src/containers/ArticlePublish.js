@@ -20,7 +20,7 @@ import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
 
-import { serializeArticleData } from '~/services/articleFormat';
+import { serializeArticleData } from "~/services/articleFormat";
 import apiClient from '~/services/apiClient';
 
 class ArticlePublish extends Component {
