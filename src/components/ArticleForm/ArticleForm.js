@@ -223,6 +223,7 @@ function getInitialValues(state, props) {
       },
     ],
     attachments: data.file_atachments || [],
+    list_literature_file: data.list_literature_file,
     ...data
   };
 
