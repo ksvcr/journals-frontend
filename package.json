@@ -116,7 +116,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 333"
+      "pre-commit": "echo 333111"
     }
   },
   "scripts": {
