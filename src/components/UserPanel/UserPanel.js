@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import Cookies from 'js-cookie';
 
 import Icon from '~/components/Icon/Icon';
@@ -8,14 +7,15 @@ import Icon from '~/components/Icon/Icon';
 import * as userActions from '../../store/user/actions';
 
 import './user-panel.scss';
+import './assets/logout.svg';
 
 class UserPanel extends Component {
   handleLogout = () => {
     const { logout } = this.props;
-    
+
     logout().then(() => {
       Cookies.remove('csrftoken');
-      push('/');
+      window.location.replace('/');
     });
   };
 
@@ -27,7 +27,7 @@ class UserPanel extends Component {
       <div className="user-panel">
         { `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.` }
         <button className="user-panel__logout" onClick={ this.handleLogout }>
-          <Icon name="arrow" className="user-panel__icon" />
+          <Icon name="logout" className="user-panel__icon" />
         </button>
       </div>
     ) : null;
@@ -39,13 +39,12 @@ function mapStateToProps(state) {
 
   return {
     isFulfilled: user.isFulfilled,
-    user: user.data
+    user: user.data,
   };
 }
 
 const mapDispatchToProps = {
   logout: userActions.logout,
-  push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPanel);
