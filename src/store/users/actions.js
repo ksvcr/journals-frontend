@@ -73,17 +73,18 @@ export function createUserTag(data) {
     const payload = apiClient.createUserTag(data);
     return dispatch({
       type: CREATE_USER_TAG,
+      meta: data,
       payload
     }).catch(error => console.error(error));
   };
 }
 
-export function removeUserTag(userId, id) {
+export function removeUserTag(userId, id, data={}) {
   return dispatch => {
     const payload = apiClient.removeUserTag(id);
     return dispatch({
       type: REMOVE_USER_TAG,
-      meta: { userId, id },
+      meta: { userId, id, ...data },
       payload
     }).catch(error => console.error(error));
   };

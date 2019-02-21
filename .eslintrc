@@ -12,7 +12,8 @@
       "ImportDeclaration": "first",
       "VariableDeclarator": "first",
       "ObjectExpression": "first",
-      "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"]
+      "ignoredNodes": ["JSXAttribute", "JSXSpreadAttribute"],
+      "ignoreComments": true
     }],
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-double"],

@@ -43,9 +43,10 @@ class InvitedReviewersList extends Component {
     };
   }
 
-  renderBox = ({ reviewer }) => {
-    const { removeUserTag } = this.props;
-    return (
+  renderBox = (data) => {
+    const { reviewers, removeUserTag } = this.props;
+    const reviewer = reviewers[data.reviewer.id];
+    return reviewer && (
       <div className="invited-reviewers-list__box">
         <div className="invited-reviewers-list__tags">
           <TagEditor
@@ -69,9 +70,11 @@ class InvitedReviewersList extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { articles } = state;
+  const { articles, user } = state;
   const { articleId } = props;
   return {
+    currentUserId: user.data.id,
+    reviewers: articles.reviewers,
     articleData: articles.data[articleId]
   };
 }

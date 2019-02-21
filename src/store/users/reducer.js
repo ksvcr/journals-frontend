@@ -122,9 +122,8 @@ function users(state = initialState, action) {
           ...state.data,
           [action.meta.userId]: {
             ...state.data[action.meta.userId],
-            tags: state.data[action.meta.userId].tags.filter(
-              item => item.id !== action.meta.id
-            )
+            tags: state.data[action.meta.userId] ?
+              state.data[action.meta.userId].tags.filter(item => item.id !== action.meta.id) : []
           }
         }
       };

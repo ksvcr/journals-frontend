@@ -1,6 +1,8 @@
+import uniqBy from 'lodash/uniqBy';
 import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
          REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
          EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
+import { CREATE_USER_TAG, REMOVE_USER_TAG } from '~/store/users/constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -10,6 +12,7 @@ const initialState = {
   data: {},
   ids: [],
   total: 0,
+  reviewers: {},
   paginate: {
     limit: 5,
     offset: 0
@@ -127,13 +130,44 @@ function articles(state = initialState, action) {
       };
 
     case `${FETCH_ARTICLE_REVIEW_INVITES}_FULFILLED`:
+      const invitedReviewers = uniqBy(action.payload.results, item => item.reviewer.id).map(item => item.reviewer);
+      const invitedReviewersData = entityNormalize.toObject(invitedReviewers).data;
       return {
         ...state,
-        data: {
+        reviewers: invitedReviewersData,
+        data : {
           ...state.data,
-          [action.meta.article]: {
+          [ action.meta.article ]: {
             ...state.data[action.meta.article],
             reviewInvites: action.payload.results
+          }
+        }
+      };
+
+    case `${CREATE_USER_TAG}_FULFILLED`:
+      const oldReviewerTags = (state.reviewers[action.meta.user] &&
+                               state.reviewers[action.meta.user].tags) || [];
+      return {
+        ...state,
+        reviewers: {
+          ...state.reviewers,
+          [action.meta.user]: {
+            ...state.reviewers[action.meta.user],
+            tags: [...oldReviewerTags, action.payload]
+          }
+        }
+      };
+
+    case `${REMOVE_USER_TAG}_PENDING`:
+      return {
+        ...state,
+        reviewers: {
+          ...state.reviewers,
+          [action.meta.userId]: {
+            ...state.reviewers[action.meta.userId],
+            tags: state.reviewers[action.meta.userId].tags.filter(
+              item => item.id !== action.meta.id
+            )
           }
         }
       };
