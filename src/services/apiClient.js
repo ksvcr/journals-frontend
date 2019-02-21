@@ -12,11 +12,10 @@ const apiClient = {
   getRubrics: siteId => fetchInstance.request(`/sites/${siteId}/rubrics/`),
   getCategories: siteId => fetchInstance.request(`/sites/${siteId}/category/`),
 
-  login: data =>
-    fetchInstance.request('/users/auth/login/', { method: 'post', data }),
+  login: (data) => fetchInstance.request('/users/auth/login/', { method: 'post', data }),
+  logout: () => fetchInstance.request('/users/auth/logout'),
   getCurrentUser: () => fetchInstance.request('/users/me/'),
-  updateCurrentUser: data =>
-    fetchInstance.request('/users/me/', { method: 'put', data }),
+  updateCurrentUser: (data) => fetchInstance.request('/users/me/', { method: 'put', data }),
   getUsers: (userId = null, params) => {
     const tail = userId !== null ? `${userId}/` : '';
     return fetchInstance.request(`/users/${tail}`, { params });
