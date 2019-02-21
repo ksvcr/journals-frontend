@@ -11,7 +11,7 @@ export function toObject(entry, keyField='id', mapField=null) {
     if (mapField) {
       mapObject[item[mapField]] = item.id;
     }
-    return {...list, [item[keyField]]: item};
+    return { ...list, [item[keyField]]: item };
   }, {});
 
   const obj = { data, ids };

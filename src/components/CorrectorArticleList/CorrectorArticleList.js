@@ -54,12 +54,12 @@ class CorrectorArticleList extends Component {
   };
 
   handleSortChange = (ordering) => {
-    const {onUpdateRequest} = this.props;
-    onUpdateRequest({ordering});
+    const { onUpdateRequest } = this.props;
+    onUpdateRequest({ ordering });
   };
 
   get listProps() {
-    const {t, articlesArray, sitesData} = this.props;
+    const { t, articlesArray, sitesData } = this.props;
 
     return {
       data: articlesArray,

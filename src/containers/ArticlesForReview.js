@@ -35,7 +35,7 @@ class ArticlesForReview extends Component {
   };
 
   get searchTargets() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         value: 'title',

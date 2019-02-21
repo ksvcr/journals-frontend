@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as formatDate from '~/services/formatDate';
 
 import List from '~/components/List/List';
 import TagEditor from '~/components/TagEditor/TagEditor';
+import DeadlineEditor from '~/components/DeadlineEditor/DeadlineEditor';
 
 import * as usersActions from '~/store/users/actions';
 
@@ -37,7 +37,7 @@ class InvitedReviewersList extends Component {
           style: {
             width: '25%'
           },
-          render: data => `До ${formatDate.toString(data.decision_deadline)}`
+          render: data => <DeadlineEditor date={ data.decision_deadline } />
         }
       ]
     };

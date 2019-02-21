@@ -1,0 +1,35 @@
+.deadline-editor {
+  $root: &;
+
+  color: $red-color;
+
+  &__holder {
+    white-space: nowrap;
+  }
+
+  &__value {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  &__edit-icon {
+    width: 13px;
+    height: 12px;
+    fill: #c4c4c4;
+
+    #{$root}__edit-button:hover & {
+      fill: $orange-color;
+    }
+  }
+
+  &__edit-button {
+    vertical-align: middle;
+    display: inline-block;
+    background: transparent;
+    border: 0;
+    padding: 5px;
+    cursor: pointer;
+    margin-left: 3px;
+    outline: 0;
+  }
+}
