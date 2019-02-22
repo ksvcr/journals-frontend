@@ -162,6 +162,7 @@ const apiClient = {
 fetchInstance.instance.interceptors.response.use(null, error => {
   if (error.config && error.response && error.response.status === 403) {
     Cookies.remove('csrftoken');
+    window.location.replace('/');
   }
 });
 
