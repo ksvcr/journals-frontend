@@ -171,6 +171,7 @@
     }
   },
   "lint-staged": {
-    "*.(js|scss)": ["eslint --fix", "stylelint --fix ", "git add"]
+    "*.js": ["eslint --fix", "git add"],
+    "*.scss": ["stylelint --syntax scss --fix", "git add"]
   }
 }
