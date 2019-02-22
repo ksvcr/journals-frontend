@@ -16,6 +16,10 @@ class InvitedReviewersList extends Component {
     createUserTag(tagData);
   };
 
+  handleDeadlineChange = (date) => {
+    console.log(date);
+  };
+
   get listProps() {
     const { articleData } = this.props;
     const { reviewInvites = [] } = articleData;
@@ -37,7 +41,8 @@ class InvitedReviewersList extends Component {
           style: {
             width: '25%'
           },
-          render: data => <DeadlineEditor date={ data.decision_deadline } />
+          render: data => <DeadlineEditor date={ data.decision_deadline }
+                                          onChange={ this.handleDeadlineChange } />
         }
       ]
     };

@@ -21,7 +21,7 @@ class RedactorReview extends Component {
 
   get invitesCount() {
     const { articleData } = this.props;
-    return articleData.reviewInvites ? articleData.reviewInvites.length : 0;
+    return articleData && articleData.reviewInvites ? articleData.reviewInvites.length : 0;
   }
 
   componentDidMount() {
