@@ -20,7 +20,7 @@ class ReviewCreate extends Component {
     if (articleId !== undefined) {
       promises.push(
         fetchArticle(articleId).then(({ value: articleData }) => {
-          const authorId = articleData.author.user;
+          const authorId = articleData.author.user.id;
           return fetchUser(authorId);
         })
       );

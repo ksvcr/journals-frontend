@@ -72,9 +72,9 @@ class ArticlePublish extends Component {
       promises.push(
         fetchArticle(articleId)
           .then(({ value: articleData }) => {
-            const userIds = articleData.collaborators.map(item => item.user);
+            const userIds = articleData.collaborators.map(item => item.user.id);
             if (articleData.author) {
-              userIds.push(articleData.author.user);
+              userIds.push(articleData.author.user.id);
             }
             const userPromises = userIds.map(id => fetchUser(id));
             return Promise.all([

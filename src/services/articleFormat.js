@@ -24,7 +24,7 @@ export function serializeArticleData(data = {}) {
   }
 
   const collaborators = authors
-    .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
+    .filter(author => author.id !== undefined && author.id !== serializedData.author.user.id)
     .map(author => ({ user: author.id }));
 
   if (collaborators.length) {
@@ -47,8 +47,8 @@ export function deserializeArticleData(data = {}) {
   const deserializedData = rest;
   if (author && collaborators) {
     deserializedData.authors = [{
-      id: author.user
-    }, ...collaborators.map(item => ({ id: item.user }))];
+      id: author.user.id
+    }, ...collaborators.map(item => ({ id: item.user.id }))];
   }
   return deserializedData;
 }

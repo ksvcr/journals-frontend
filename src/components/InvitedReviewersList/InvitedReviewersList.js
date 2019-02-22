@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import DeadlineEditor from '~/components/DeadlineEditor/DeadlineEditor';
+import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 
 import * as usersActions from '~/store/users/actions';
 
@@ -20,12 +22,44 @@ class InvitedReviewersList extends Component {
     console.log(date);
   };
 
+  getToolsMenuItems(data) {
+    const hasReview = data.reviews && data.reviews.length;
+
+    let items = [
+      {
+        title: 'Отменить',
+        handler: id => console.log(`Cancel ${id}`)
+      }
+    ];
+
+    if (hasReview) {
+      items.push({
+        title: 'Просмотр рецензии',
+        type: 'preview',
+        icon: 'preview',
+        handler: this.handleReviewPreview.bind(null, data)
+      });
+    }
+
+    return items;
+  }
+
+  handleReviewPreview = (data) => {
+    const { push } = this.props;
+    const articleId = data.article.id;
+    const reviewId = data.reviews[data.reviews.length-1].id;
+    push(`/article/${articleId}/review/${reviewId}`);
+  };
+
   get listProps() {
     const { articleData } = this.props;
     const { reviewInvites = [] } = articleData;
 
     return {
       data: reviewInvites,
+      menuTooltip: data => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      ),
       box: this.renderBox,
       cells: [
         {
@@ -84,6 +118,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
+  push,
   createUserTag: usersActions.createUserTag,
   removeUserTag: usersActions.removeUserTag
 };
