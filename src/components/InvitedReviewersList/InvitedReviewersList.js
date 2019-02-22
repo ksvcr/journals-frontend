@@ -54,11 +54,10 @@ class InvitedReviewersList extends Component {
     return reviewer && (
       <div className="invited-reviewers-list__box">
         <div className="invited-reviewers-list__tags">
-          <TagEditor
-            entityId={ reviewer.id }
-            data={ reviewer.tags }
-            onAdd={ this.handleTagAdd }
-            onRemove={ removeUserTag }
+          <TagEditor entityId={ reviewer.id }
+                     data={ reviewer.tags }
+                     onAdd={ this.handleTagAdd }
+                     onRemove={ removeUserTag }
           />
         </div>
       </div>
