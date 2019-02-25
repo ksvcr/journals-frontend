@@ -1,6 +1,7 @@
 .review-approve {
-  &__list {
-    display: flex;
+  &__item {
+    display: inline-block;
+    vertical-align: middle;
   }
 
   &__preview {

@@ -14,7 +14,7 @@ import './article-files-form.scss';
 class ArticleFilesForm extends Component {
   handleDropFiles = files => {
     const newFilesPromises = files.map(file => fileToBase64(file));
-    Promise.all(newFilesPromises).then((result) => {
+    Promise.all(newFilesPromises).then(result => {
       const newFiles = result.map((base64, index) => {
         const file = files[index];
         return {
@@ -24,11 +24,11 @@ class ArticleFilesForm extends Component {
           type: file.type,
           file: base64,
           text_to_description: ''
-        }
+        };
       });
 
       const { change, formValues, formName } = this.props;
-      const attachments = [ ...formValues.attachments, ...newFiles ];
+      const attachments = [...formValues.attachments, ...newFiles];
       change(formName, 'attachments', attachments);
     });
   };
@@ -47,7 +47,9 @@ class ArticleFilesForm extends Component {
 
   handleRemoveFile = fileId => {
     const { formValues, formName, change } = this.props;
-    const attachments = formValues.attachments.filter(item => item.id !== fileId);
+    const attachments = formValues.attachments.filter(
+      item => item.id !== fileId
+    );
     change(formName, 'attachments', attachments);
   };
 
@@ -58,17 +60,15 @@ class ArticleFilesForm extends Component {
       const showDivider = ++index < attachments.length;
       return (
         <React.Fragment key={ index }>
-            <ArticleFilesFormItem
-              file={ item }
-              onChangeDescription={ this.handleChangeDescription }
-              onRemove={ this.handleRemoveFile } />
-            {
-              showDivider &&
-              <hr className="article-files-form__divider" />
-            }
+          <ArticleFilesFormItem
+            file={ item }
+            onChangeDescription={ this.handleChangeDescription }
+            onRemove={ this.handleRemoveFile }
+          />
+          {showDivider && <hr className="article-files-form__divider" />}
         </React.Fragment>
       );
-    })
+    });
   };
 
   render() {
@@ -76,17 +76,17 @@ class ArticleFilesForm extends Component {
       <div className="article-files-form">
         <h2 className="page__title">Файлы к статье</h2>
         <p className="article-files-form__description">
-          Вы можете выбрать несколько файлов. Для каждого из них нужно будет заполнить описание
+          Вы можете выбрать несколько файлов. Для каждого из них нужно будет
+          заполнить описание
         </p>
         <Dropzone
           className="article-files-form__dropzone"
           multiple={ true }
-          onDrop={ this.handleDropFiles }>
-            <FileDropPlaceholder />
+          onDrop={ this.handleDropFiles }
+        >
+          <FileDropPlaceholder />
         </Dropzone>
-        <ul className="article-files-form__list">
-          { this.renderItems() }
-        </ul>
+        <ul className="article-files-form__list">{this.renderItems()}</ul>
       </div>
     );
   }
@@ -104,4 +104,7 @@ const mapDispatchToProps = {
   change
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleFilesForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArticleFilesForm);

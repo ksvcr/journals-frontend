@@ -56,7 +56,7 @@ class ArticleFilesFormItem extends Component {
         <div className="form__field">
           <label htmlFor="file_description" className="form__label">Описание файла</label>
           <TextField id="file_description" placeholder="Введите описание"
-                      onChange={ this.handleDescriptionChange } value={ file.text_to_description } />
+                     onChange={ this.handleDescriptionChange } value={ file.text_to_description } />
         </div>
       </li>
     );

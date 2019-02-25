@@ -14,9 +14,9 @@ class List extends PureComponent {
     sort: {}
   };
 
-  handleSort = (event) => {
+  handleSort = event => {
     const { onSortChange } = this.props;
-    const { name:field, checked } = event.target;
+    const { name: field, checked } = event.target;
 
     this.setState({ sort: { [field]: checked } });
     const sortOrder = checked ? '' : '-';
@@ -29,40 +29,28 @@ class List extends PureComponent {
     return data.length ? data.map(this.renderItem) : this.renderPlaceholder();
   };
 
-  renderItem = (data) => {
+  renderItem = data => {
     const { box } = this.props;
     return (
       <div className="list__item" key={ data.id }>
-        { this.renderRow(data) }
-        { box &&
-          <div className="list__box">
-            { box(data) }
-          </div>
-        }
+        {this.renderRow(data)}
+        {box && <div className="list__box">{box(data)}</div>}
       </div>
     );
   };
 
   renderPlaceholder = () => {
-    return (
-      <div className="list__placeholder"> Нет записей </div>
-    );
+    return <div className="list__placeholder"> Нет записей </div>;
   };
 
-  renderRow = (data) => {
-    return (
-      <div className="list__row">
-        { this.renderCells(data) }
-      </div>
-    );
+  renderRow = data => {
+    return <div className="list__row">{this.renderCells(data)}</div>;
   };
 
   renderHead = () => {
     return (
       <div className="list__item list__item_head" key={ 'list-head' }>
-        <div className="list__row">
-          { this.renderCells(null, true) }
-        </div>
+        <div className="list__row">{this.renderCells(null, true)}</div>
       </div>
     );
   };
@@ -72,9 +60,9 @@ class List extends PureComponent {
     const { sort } = this.state;
 
     const cellItems = cells.map((cell, index) => {
-      const cellClasses = classNames('list__cell',
-        { 'list__cell_head': isHead,
-          'list__cell_main': cell.isMain
+      const cellClasses = classNames('list__cell', {
+        list__cell_head: isHead,
+        list__cell_main: cell.isMain
       });
 
       const headRender = cell.head ? cell.head() : null;
@@ -87,23 +75,34 @@ class List extends PureComponent {
       if (isHead && cell.headToolTip) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            <ToolTip className="tooltip" position="bottom-start"
-                     html={ cell.headToolTip() }>
+            <ToolTip className="tooltip"
+                     position="bottom-start"
+                     useContext
+                     interactive
+                     html={ cell.headToolTip() } >
               <button type="button" className="list__expand-button">
-                { render }
+                {render}
               </button>
             </ToolTip>
-            { cell.sort &&
-              <SortChecker name={ sortField } checked={ sortValue }
-                           isActive={ isActiveSort } onChange={ this.handleSort } />
-            }
+            {cell.sort && (
+              <SortChecker
+                name={ sortField }
+                checked={ sortValue }
+                isActive={ isActiveSort }
+                onChange={ this.handleSort }
+              />
+            )}
           </div>
         );
       } else if (isHead && cell.sort) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            <SortChecker name={ sortField } checked={ sortValue }
-                         isActive={ isActiveSort } onChange={ this.handleSort } >
+            <SortChecker
+              name={ sortField }
+              checked={ sortValue }
+              isActive={ isActiveSort }
+              onChange={ this.handleSort }
+            >
               { render }
             </SortChecker>
           </div>
@@ -118,14 +117,19 @@ class List extends PureComponent {
     });
 
     if (!isHead && menuTooltip) {
-      cellItems.push((
+      cellItems.push(
         <div className="list__menu-button" key="menu-cell">
-          <ToolTip className="tooltip" position="right-start"
-                   offset={ -5 } html={ menuTooltip(data) }>
+          <ToolTip
+            className="tooltip"
+            position="right-start"
+            offset={ -5 }
+            useContext
+            html={ menuTooltip(data) }
+          >
             <PointMenuButton />
           </ToolTip>
         </div>
-      ));
+      );
     }
 
     return cellItems;
@@ -136,11 +140,11 @@ class List extends PureComponent {
     return (
       <div className="list">
         <div className="list__holder">
-          { head && this.renderHead() }
+          {head && this.renderHead()}
           <ReactCSSTransitionGroup transitionName="fade"
                                    transitionEnterTimeout={ 400 }
-                                   transitionLeave={ false }>
-            { this.renderItems() }
+                                   transitionLeave={ false } >
+            {this.renderItems()}
           </ReactCSSTransitionGroup>
         </div>
       </div>

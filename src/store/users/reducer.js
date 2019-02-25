@@ -1,5 +1,5 @@
-import { FETCH_USERS, FETCH_USER, SEARCH_USERS,
-        CREATE_USER, INSERT_USER, UPDATE_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
+import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER,
+         INSERT_USER, UPDATE_USER, CREATE_USER_TAG, REMOVE_USER_TAG } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
   total: 0,
   paginate: {
     limit: 5,
-    offset: 0,
+    offset: 0
   }
 };
 
@@ -23,7 +23,8 @@ function users(state = initialState, action) {
     case `${CREATE_USER}_PENDING`:
     case `${FETCH_USER}_PENDING`:
     case `${UPDATE_USER}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true,
         ...action.meta
       };
@@ -33,7 +34,8 @@ function users(state = initialState, action) {
     case `${CREATE_USER}_REJECTED`:
     case `${FETCH_USER}_REJECTED`:
     case `${UPDATE_USER}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
@@ -42,7 +44,8 @@ function users(state = initialState, action) {
     case `${FETCH_USERS}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
 
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         total: action.payload.count,
@@ -51,69 +54,82 @@ function users(state = initialState, action) {
 
     case `${FETCH_USER}_FULFILLED`:
     case `${UPDATE_USER}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
-        data: { ...state.data,
-          [ action.payload.id ]: action.payload
+        data: {
+          ...state.data,
+          [action.payload.id]: action.payload
         },
-        ids: [ ...state.ids, action.payload.id ]
+        ids: [...state.ids, action.payload.id]
       };
 
     case `${SEARCH_USERS}_FULFILLED`:
       const { key } = action.meta;
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         searchData: {
           ...state.searchData,
-          [ key ]: action.payload.results
+          [key]: action.payload.results
         }
       };
 
     case `${CREATE_USER}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         data: {
           ...state.data,
-          [ action.payload.id ]: action.payload
+          [action.payload.id]: action.payload
         },
-        ids: [ ...state.ids, action.payload.id ]
+        ids: [...state.ids, action.payload.id]
       };
 
     case INSERT_USER:
-      return { ...state,
+      return {
+        ...state,
         data: {
           ...state.data,
-          [ action.payload.id ]: action.payload
+          [action.payload.id]: action.payload
         },
-        ids: [ ...state.ids, action.payload.id ]
+        ids: [...state.ids, action.payload.id]
       };
 
     case `${CREATE_USER_TAG}_FULFILLED`:
-      const oldTags = state.data[action.payload.user].tags || [];
-      return { ...state,
-        data: { ...state.data,
-          [ action.payload.user ]: {
+      const oldTags =
+        (state.data[action.payload.user] &&
+          state.data[action.payload.user].tags) ||
+        [];
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.payload.user]: {
             ...state.data[action.payload.user],
-            tags: [ ...oldTags, action.payload]
+            tags: [...oldTags, action.payload]
           }
         }
       };
 
     case `${REMOVE_USER_TAG}_PENDING`:
-      return { ...state,
-        data: { ...state.data,
-          [ action.meta.userId ]: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.userId]: {
             ...state.data[action.meta.userId],
-            tags: state.data[action.meta.userId].tags.filter((item) => item.id !== action.meta.id)
+            tags: state.data[action.meta.userId] ?
+              state.data[action.meta.userId].tags.filter(item => item.id !== action.meta.id) : []
           }
         }
       };
 
     default:
-      return state
+      return state;
   }
 }
 

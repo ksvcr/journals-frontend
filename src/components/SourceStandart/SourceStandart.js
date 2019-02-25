@@ -5,7 +5,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import * as validate from '~/utils/validate';
-import moment from "moment";
+import moment from 'moment';
 
 const SourceStandart = () => {
   return (

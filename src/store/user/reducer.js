@@ -12,14 +12,16 @@ function user(state = initialState, action) {
     case `${LOGIN}_PENDING`:
     case `${FETCH_CURRENT_USER}_PENDING`:
     case `${UPDATE_CURRENT_USER}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${LOGIN}_FULFILLED`:
     case `${FETCH_CURRENT_USER}_FULFILLED`:
     case `${UPDATE_CURRENT_USER}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         data: action.payload
@@ -28,14 +30,15 @@ function user(state = initialState, action) {
     case `${LOGIN}_REJECTED`:
     case `${FETCH_CURRENT_USER}_REJECTED`:
     case `${UPDATE_CURRENT_USER}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     default:
-      return state
+      return state;
   }
 }
 

@@ -16,7 +16,7 @@ class AuthorSitesList extends Component {
     openAdd: false
   };
 
-  handleRemove = (event) => {
+  handleRemove = event => {
     const { change, form, ids } = this.props;
     const { id } = event.currentTarget.dataset;
     const newSites = ids.filter(itemId => itemId.toString() !== id);
@@ -29,26 +29,34 @@ class AuthorSitesList extends Component {
 
     if (!exists) {
       this.setState({ openAdd: false });
-      change(form, 'sites', [ ...ids, Number(siteId) ]);
+      change(form, 'sites', [...ids, Number(siteId)]);
     }
   };
 
   handleAddOpen = () => this.setState({ openAdd: true });
 
-  handleCancelClick = (event) => {
+  handleCancelClick = event => {
     event.preventDefault();
     this.setState({ openAdd: false });
   };
 
   renderItems = () => {
     const { ids, sitesData } = this.props;
-    return ids.map((id) => {
+    return ids.map(id => {
       const item = sitesData[id];
       return (
-        <div key={ item.id } data-id={ item.id } className="author-sites-list__item">
-          { item.name }
-          <button type="button" className="author-sites-list__remove"
-                  data-id={ item.id } onClick={ this.handleRemove }>
+        <div
+          key={ item.id }
+          data-id={ item.id }
+          className="author-sites-list__item"
+        >
+          {item.name}
+          <button
+            type="button"
+            className="author-sites-list__remove"
+            data-id={ item.id }
+            onClick={ this.handleRemove }
+          >
             <Icon name="cancel" className="author-sites-list__remove-icon" />
             Удалить журнал
           </button>
@@ -63,41 +71,48 @@ class AuthorSitesList extends Component {
     return (
       <div className="author-sites-list">
         <p className="author-sites-list__header">
-          Журналы, в которые { userId ? 'пользователь может' : 'Вы можете' } писать статьи:
+          Журналы, в которые {userId ? 'пользователь может' : 'Вы можете'}{' '}
+          писать статьи:
         </p>
 
-        <div className="author-sites-list__content">
-          { this.renderItems() }
-        </div>
+        <div className="author-sites-list__content">{this.renderItems()}</div>
 
         <div className="author-sites-list__actions">
-          {
-            !openAdd ?
-            <button onClick={ this.handleAddOpen } type="button" className="author-sites-list__add">
+          {!openAdd ? (
+            <button
+              onClick={ this.handleAddOpen }
+              type="button"
+              className="author-sites-list__add"
+            >
               <Icon name="add" className="author-sites-list__add-icon" />
               Добавить другие журналы
-            </button> :
+            </button>
+          ) : (
             <React.Fragment>
               <CancelLink onClick={ this.handleCancelClick } />
 
               <div className="form">
                 <div className="form__field form__field_small">
-                  <label htmlFor="sites-list" className="form__label">Выберите журнал:</label>
+                  <label htmlFor="sites-list" className="form__label">
+                    Выберите журнал:
+                  </label>
                   <SiteSelect id="sites-list" />
                 </div>
                 <div className="form__field form__field_small">
-                  <Button onClick={ this.handleAdd } type="button" className="button_small">
+                  <Button
+                    onClick={ this.handleAdd }
+                    type="button"
+                    className="button_small"
+                  >
                     Добавить
                   </Button>
                 </div>
               </div>
-
             </React.Fragment>
-          }
+          )}
         </div>
 
         <hr className="page__divider" />
-
       </div>
     );
   }
@@ -120,4 +135,7 @@ const mapDispatchToProps = {
   change
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthorSitesList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthorSitesList);

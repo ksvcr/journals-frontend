@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
+import {
+  convertToRaw,
+  convertFromRaw,
+  DefaultDraftBlockRenderMap,
+  EditorState
+} from 'draft-js';
 import { merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
-import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import createStaticToolbarPlugin, {
+  Separator
+} from 'draft-js-static-toolbar-plugin';
 import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
@@ -13,7 +20,9 @@ import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSe
 import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
 import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
 import TableTool from '~/components/TableTool/TableTool';
-import AddLinkTool, { linkDecorator } from '~/components/AddLinkTool/AddLinkTool';
+import AddLinkTool, {
+  linkDecorator
+} from '~/components/AddLinkTool/AddLinkTool';
 import RemoveLinkTool from '~/components/RemoveLinkTool/RemoveLinkTool';
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ColorTool from '~/components/ColorTool/ColorTool';
@@ -26,7 +35,13 @@ import HeadlinesButtons from '~/components/HeadlinesButtons/HeadlinesButtons';
 import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
-import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
+import {
+  styleMap,
+  blockRenderMap,
+  toolbarClasses,
+  getBlockStyle,
+  undoParams
+} from '~/services/customDraftUtils';
 
 import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
@@ -66,7 +81,13 @@ class ContentEditor extends Component {
 
     const { Toolbar } = toolbarPlugin;
     this.toolbar = editorWithStyles(Toolbar);
-    return [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin];
+    return [
+      createEntityPropsPlugin({}),
+      createFocusPlugin({}),
+      tablePlugin,
+      toolbarPlugin,
+      undoPlugin
+    ];
   };
 
   initEditorState = () => {
@@ -80,7 +101,7 @@ class ContentEditor extends Component {
     }
   };
 
-   mediaBlockRenderer = (block) => {
+  mediaBlockRenderer = block => {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
@@ -90,18 +111,17 @@ class ContentEditor extends Component {
         }
       };
     }
-
     return null;
   };
 
-  toggleReadOnly = (isReadOnly) => {
-    const { editorState } = this.state;   
+  toggleReadOnly = isReadOnly => {
+    const { editorState } = this.state;
     const selection = editorState.getSelection();
-    
+
     this.setState({
       isReadOnly,
       editorState: EditorState.forceSelection(editorState, selection)
-     });
+    });
   };
 
   handleExpand = () => {
@@ -110,7 +130,7 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleChange = (editorState) => {
+  handleChange = editorState => {
     this.setState({ editorState });
     this.changeValue(editorState);
   };
@@ -123,7 +143,7 @@ class ContentEditor extends Component {
     onChange(value);
   }
 
-  renderButtons = (externalProps) => {
+  renderButtons = externalProps => {
     const { isExpanded } = this.state;
     const ToolbarUndoSection = this.undoSection;
     return (
@@ -139,11 +159,11 @@ class ContentEditor extends Component {
           <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
         </div>
 
-        { isExpanded &&
+        {isExpanded && (
           <div className="editor-toolbar__row">
             <ColorTool { ...externalProps } />
             <HighlightTool { ...externalProps } />
-            <AddLinkTool  { ...externalProps } />
+            <AddLinkTool { ...externalProps } />
             <RemoveLinkTool { ...externalProps } />
             <Separator className="editor-toolbar__separator" />
             <ToolbarCaseSection { ...externalProps } />
@@ -151,9 +171,9 @@ class ContentEditor extends Component {
             <TableTool { ...externalProps } />
             <ImageMediaTool { ...externalProps } />
           </div>
-        }
+        )}
       </React.Fragment>
-    )
+    );
   };
 
   render() {
@@ -173,12 +193,12 @@ class ContentEditor extends Component {
           onChange={ this.handleChange }
           blockStyleFn={ getBlockStyle }
           blockRendererFn={ this.mediaBlockRenderer }
-          ref={ (element) => { this.editor = element; } }
+          ref={ element => {
+            this.editor = element;
+          } }
         />
         <ContentCounter editorState={ editorState } />
-        <EditorToolbar>
-          { this.renderButtons }
-        </EditorToolbar>
+        <EditorToolbar>{this.renderButtons}</EditorToolbar>
       </div>
     );
   }

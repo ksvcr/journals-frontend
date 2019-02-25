@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -23,7 +22,7 @@ class RedactorUsersList extends Component {
   handleTagAdd = (user, text) => {
     const { currentUserId, createUserTag } = this.props;
     const tagData = { text, user, tag_author: currentUserId };
-    createUserTag(user, tagData);
+    createUserTag(tagData);
   };
 
   handleChangeRole = (name, data) => {
@@ -32,64 +31,57 @@ class RedactorUsersList extends Component {
     onUpdateRequest({ filter: { [name]: data.join() } });
   };
 
-  renderBox = (data) => {
+  renderBox = data => {
     const { removeUserTag } = this.props;
     return (
       <div className="redactor-users-list__box">
         <div className="redactor-users-list__tags">
-          <TagEditor entityId={ data.id } data={ data.tags }
-                      onAdd={ this.handleTagAdd } onRemove={ removeUserTag } />
+          <TagEditor
+            entityId={ data.id }
+            data={ data.tags }
+            onAdd={ this.handleTagAdd }
+            onRemove={ removeUserTag }
+          />
         </div>
       </div>
     );
   };
 
   get roleFilterOptions() {
-    return Object.keys(userRoles.roleMap).slice(0, 2).map((key) => ({
-      label: userRoles.getUserRoleTitle(key),
-      value: key
-    }));
+    return Object.keys(userRoles.roleMap)
+      .slice(0, 2)
+      .map(key => ({
+        label: userRoles.getUserRoleTitle(key),
+        value: key
+      }));
   }
 
-  handleUserMail = (userId) => {
-    // Send message to user
-  };
-
-  handleUserShow = (userId) => {
-    const { push } = this.props;
-    push(`/settings/${userId}`);
-  };
-
-  handleUserLock = (userId) => {
+  handleUserLock = userId => {
     const { usersData } = this.props;
     const { email } = usersData[userId];
     return apiClient.lockUser({ email });
   };
 
-
-  get toolsMenuItems() {
+  getToolsMenuItems = (data) => {
     return [
       {
-        title: 'Написать',
-        handler: this.handleUserMail
-      },
-      {
         title: 'Войти',
-        handler: this.handleUserShow
+        link: `/settings/${data.id}`
       },
       {
         title: 'Заблокировать',
         handler: this.handleUserLock
       }
     ];
-  }
-
+  };
 
   get listProps() {
     const { usersArray } = this.props;
     return {
       data: usersArray,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: data => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      ),
       head: true,
       box: this.renderBox,
       cells: [
@@ -106,10 +98,16 @@ class RedactorUsersList extends Component {
             width: '25%'
           },
           head: () => 'Роль',
-          headToolTip: () => <ListChecker name="role" onChange={ this.handleChangeRole } data={ this.roleFilterOptions } />,
+          headToolTip: () => (
+            <ListChecker
+              name="role"
+              onChange={ this.handleChangeRole }
+              data={ this.roleFilterOptions }
+            />
+          ),
           render: ({ role }) => (
             <div className="redactor-users-list__role">
-              { userRoles.getUserRoleTitle(role) }
+              {userRoles.getUserRoleTitle(role)}
             </div>
           )
         },
@@ -119,16 +117,14 @@ class RedactorUsersList extends Component {
             textAlign: 'right'
           },
           head: () => 'Категории наук',
-          render: (data) => null
+          render: data => null
         }
       ]
     };
   }
 
   render() {
-    return (
-      <List { ...this.listProps } />
-    );
+    return <List { ...this.listProps } />;
   }
 }
 
@@ -142,13 +138,15 @@ function mapStateToProps(state) {
     currentUserId: user.data.id,
     usersData: users.data,
     usersArray: getUsersArray(state)
-  }
+  };
 }
 
 const mapDispatchToProps = {
-  createUserTag : usersActions.createUserTag,
-  removeUserTag : usersActions.removeUserTag,
-  push
+  createUserTag: usersActions.createUserTag,
+  removeUserTag: usersActions.removeUserTag
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedactorUsersList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RedactorUsersList);

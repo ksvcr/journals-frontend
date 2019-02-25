@@ -20,7 +20,7 @@ class ImageMediaEditor extends Component {
       return fileToBase64(file);
     });
 
-    Promise.all(newImagesPromises).then((result) => {
+    Promise.all(newImagesPromises).then(result => {
       const newImages = result.map((base64, index) => {
         const file = files[index];
         return {
@@ -29,24 +29,27 @@ class ImageMediaEditor extends Component {
           title: file.name,
           size: file.size,
           type: file.type,
-          preview: base64,
-        }
+          preview: base64
+        };
       });
 
-      const newData = { ...data,
-        images: [ ...data.images, ...newImages ] };
+      const newData = {
+        ...data,
+        images: [...data.images, ...newImages]
+      };
       onChange(newData);
     });
   };
 
   handleSubmit = (id, formData) => {
     const { data, onChange } = this.props;
-    const newData = { ...data,
+    const newData = {
+      ...data,
       images: data.images.map(item => {
-        if (item.id !== id ) {
+        if (item.id !== id) {
           return item;
         }
-        return { ...item, ...formData }
+        return { ...item, ...formData };
       })
     };
 
@@ -56,39 +59,49 @@ class ImageMediaEditor extends Component {
   renderImageItems = () => {
     const { data, onInteract, onCancelInteract } = this.props;
     return data.images.map(item => (
-      <div className="image-media-editor__item"  key={ item.id }>
-        <ToolTip className="tooltip" position="right-start" useContext={ true }
-                 onShow={ onInteract } onRequestClose={ onCancelInteract }
-                 html={ <MetaInfoForm id={ item.id }
-                                      onChange={ this.handleSubmit }
-                                      initialValues={ item } /> }>
-          <button type="button" className="image-media-editor__button" >
+      <div className="image-media-editor__item" key={ item.id }>
+        <ToolTip
+          className="tooltip"
+          position="right-start"
+          useContext={ true }
+          onShow={ onInteract }
+          onRequestClose={ onCancelInteract }
+          html={
+            <MetaInfoForm
+              id={ item.id }
+              onChange={ this.handleSubmit }
+              initialValues={ item }
+            />
+          }
+        >
+          <button type="button" className="image-media-editor__button">
             <div className="image-media-editor__view">
-              <img className="image-media-editor__image" src={ item.preview } alt=""/>
+              <img
+                className="image-media-editor__image"
+                src={ item.preview }
+                alt=""
+              />
               <div className="image-media-editor__box">
                 <Icon name="edit" className="image-media-editor__edit-icon" />
                 Редактировать
               </div>
             </div>
             <div className="image-media-editor__info">
-              <div className="image-media-editor__title">
-                { item.title }
-              </div>
+              <div className="image-media-editor__title">{item.title}</div>
               <div className="image-media-editor__size">
-                { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
+                {`${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}`}
               </div>
             </div>
           </button>
         </ToolTip>
       </div>
-
-    ))
+    ));
   };
-  
+
   render() {
     const { data, onInteract, onCancelInteract } = this.props;
     return (
-      <div className="image-media-editor" >
+      <div className="image-media-editor">
         <Dropzone
           className="image-media-editor__dropzone"
           accept="image/*"
@@ -100,13 +113,13 @@ class ImageMediaEditor extends Component {
           <ImageDropPlaceholder />
         </Dropzone>
 
-        { data.images.length > 0 &&
+        {data.images.length > 0 && (
           <div className="image-media-editor__holder">
             <div className="image-media-editor__list">
-              { this.renderImageItems() }
+              {this.renderImageItems()}
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }

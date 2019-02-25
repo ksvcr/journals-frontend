@@ -15,10 +15,14 @@ class PointMenuButton extends Component {
     const buttonClasses = classNames('point-menu-button', this.props.className);
 
     return (
-      <button type="button" className={ buttonClasses } onClick={ this.handleClick } >
-      <span className="point-menu-button__holder">
-        <i className="point-menu-button__icon" />
-      </span>
+      <button
+        type="button"
+        className={ buttonClasses }
+        onClick={ this.handleClick }
+      >
+        <span className="point-menu-button__holder">
+          <i className="point-menu-button__icon" />
+        </span>
       </button>
     );
   }

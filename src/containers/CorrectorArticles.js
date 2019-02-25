@@ -26,7 +26,7 @@ class CorrectorArticles extends Component {
   };
 
   get searchTargets() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         value: 'title',
@@ -53,7 +53,7 @@ class CorrectorArticles extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">

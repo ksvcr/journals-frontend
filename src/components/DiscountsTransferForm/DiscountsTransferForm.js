@@ -35,7 +35,7 @@ class DiscountsTransferForm extends Component {
                 Cумма для перевода (руб.)
               </label>
               <Field name="bonus_count" id="bonus_count" type="number"
-                      component={ TextField } placeholder="Введите сумму" validate={ [validate.required] } />
+                     component={ TextField } placeholder="Введите сумму" validate={ [validate.required] } />
             </div>
             <div className="discounts-transfer-form__submit">
               <Button className="button_orange" type="submit">
