@@ -29,7 +29,7 @@ class AuthorArticleList extends Component {
     if (!isLocked) {
       items.push({
         title: t('edit'),
-        handler: `/article/${data.id}/edit/`
+        link: `/article/${data.id}/edit/`
       });
     }
 
@@ -43,7 +43,7 @@ class AuthorArticleList extends Component {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: `/article/${data.id}`
+        link: `/article/${data.id}`
       }
     ];
 

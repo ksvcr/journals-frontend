@@ -34,7 +34,7 @@ class ArticlesForReviewList extends Component {
     if (data.state_article === 'AWAIT_REVIEW') {
       tools.push({
         title: 'Написать рецензию',
-        handler: `/article/${data.id}/review`
+        link: `/article/${data.id}/review`
       });
     }
 
@@ -42,7 +42,7 @@ class ArticlesForReviewList extends Component {
       title: 'Просмотр',
       type: 'preview',
       icon: 'preview',
-      handler: `/article/${data.id}`
+      link: `/article/${data.id}`
     });
 
     return tools;

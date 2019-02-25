@@ -66,14 +66,14 @@ class RedactorUsersList extends Component {
     return [
       {
         title: 'Войти',
-        handler: `/settings/${data.id}`
+        link: `/settings/${data.id}`
       },
       {
         title: 'Заблокировать',
         handler: this.handleUserLock
       }
     ];
-  }
+  };
 
   get listProps() {
     const { usersArray } = this.props;

@@ -20,7 +20,7 @@ class CorrectorArticleList extends Component {
     return [
       {
         title: 'Править',
-        handler: `/article/${data.id}/correct`
+        link: `/article/${data.id}/correct`
       },
       {
         title: 'Просмотр',

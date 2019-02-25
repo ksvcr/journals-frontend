@@ -20,13 +20,13 @@ class TranslatorArticleList extends Component {
     return [
       {
         title: 'Перевести',
-        handler: `/article/${data.id}/translate`
+        link: `/article/${data.id}/translate`
       },
       {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: `/article/${data.id}`
+        link: `/article/${data.id}`
       }
     ];
   }
