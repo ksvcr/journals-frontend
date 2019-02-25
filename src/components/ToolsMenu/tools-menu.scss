@@ -26,6 +26,9 @@
     text-align: left;
     cursor: pointer;
     transition: color .2s;
+    display: block;
+    text-decoration: none;
+    color: inherit;
 
     #{$root}__item_preview & {
       color: $blue-color;

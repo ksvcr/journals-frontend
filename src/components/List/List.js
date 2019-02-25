@@ -75,11 +75,11 @@ class List extends PureComponent {
       if (isHead && cell.headToolTip) {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            <ToolTip
-              className="tooltip"
-              position="bottom-start"
-              html={ cell.headToolTip() }
-            >
+            <ToolTip className="tooltip"
+                     position="bottom-start"
+                     useContext
+                     interactive
+                     html={ cell.headToolTip() } >
               <button type="button" className="list__expand-button">
                 {render}
               </button>
@@ -103,14 +103,14 @@ class List extends PureComponent {
               isActive={ isActiveSort }
               onChange={ this.handleSort }
             >
-              {render}
+              { render }
             </SortChecker>
           </div>
         );
       } else {
         return (
           <div className={ cellClasses } key={ index } style={ cell.style }>
-            {render}
+            { render }
           </div>
         );
       }
@@ -123,6 +123,7 @@ class List extends PureComponent {
             className="tooltip"
             position="right-start"
             offset={ -5 }
+            useContext
             html={ menuTooltip(data) }
           >
             <PointMenuButton />
@@ -140,11 +141,9 @@ class List extends PureComponent {
       <div className="list">
         <div className="list__holder">
           {head && this.renderHead()}
-          <ReactCSSTransitionGroup
-            transitionName="fade"
-            transitionEnterTimeout={ 400 }
-            transitionLeave={ false }
-          >
+          <ReactCSSTransitionGroup transitionName="fade"
+                                   transitionEnterTimeout={ 400 }
+                                   transitionLeave={ false } >
             {this.renderItems()}
           </ReactCSSTransitionGroup>
         </div>

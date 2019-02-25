@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
@@ -30,7 +29,7 @@ class AuthorArticleList extends Component {
     if (!isLocked) {
       items.push({
         title: t('edit'),
-        handler: this.handleEdit
+        handler: `/article/${data.id}/edit/`
       });
     }
 
@@ -44,7 +43,7 @@ class AuthorArticleList extends Component {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: this.handlePreview
+        handler: `/article/${data.id}`
       }
     ];
 
@@ -68,16 +67,6 @@ class AuthorArticleList extends Component {
     this.setState({
       box: { id, type: 'payment' }
     });
-  };
-
-  handleEdit = id => {
-    const { push } = this.props;
-    push(`/article/${id}/edit/`);
-  };
-
-  handlePreview = id => {
-    const { push } = this.props;
-    push(`/article/${id}`);
   };
 
   handlePaymentClose = () => {
@@ -192,13 +181,8 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  push
-};
-
 AuthorArticleList = withNamespaces()(AuthorArticleList);
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(AuthorArticleList);

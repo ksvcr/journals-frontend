@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import TagEditor from '~/components/TagEditor/TagEditor';
@@ -33,23 +32,18 @@ class InvitedReviewersList extends Component {
     ];
 
     if (hasReview) {
+      const articleId = data.article.id;
+      const reviewId = data.reviews[data.reviews.length-1].id;
       items.push({
         title: 'Просмотр рецензии',
         type: 'preview',
         icon: 'preview',
-        handler: this.handleReviewPreview.bind(null, data)
+        link: `/article/${articleId}/review/${reviewId}`
       });
     }
 
     return items;
   }
-
-  handleReviewPreview = (data) => {
-    const { push } = this.props;
-    const articleId = data.article.id;
-    const reviewId = data.reviews[data.reviews.length-1].id;
-    push(`/article/${articleId}/review/${reviewId}`);
-  };
 
   get listProps() {
     const { articleData } = this.props;
@@ -118,7 +112,6 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-  push,
   createUserTag: usersActions.createUserTag,
   removeUserTag: usersActions.removeUserTag
 };

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -25,25 +24,25 @@ class RedactorArticleList extends Component {
     dateField: 'date_create'
   };
 
-  toolsMenuItems(data) {
+  getToolsMenuItems = (data) => {
     const tools = [];
 
     if (data.state_article === 'AWAIT_PUBLICATION') {
       tools.push({
         title: 'Посмотреть перевод',
-        handler: this.handleTranslate
+        link: `/article/${data.id}/translate`
       });
     }
 
     tools.push({
       title: 'Редактировать',
-      handler: this.handleEdit
+      link: `/article/${data.id}/edit`
     },
     {
       title: 'Просмотр',
       type: 'preview',
       icon: 'preview',
-      handler: this.handlePreview
+      link: `/article/${data.id}`
     });
 
     return tools;
@@ -57,24 +56,9 @@ class RedactorArticleList extends Component {
     };
   };
 
-  handleTranslate = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/translate`);
-  };
-
   handleSortChange = (ordering) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
-  };
-
-  handleEdit = (id) => {
-    const { push } = this.props;
-    push(`article/${id}/edit`);
-  };
-
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
   };
 
   handleDateFilterChange = (field, range) => {
@@ -107,7 +91,7 @@ class RedactorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems(data) } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
       box: this.renderBox,
       cells: [
         {
@@ -213,7 +197,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push,
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };

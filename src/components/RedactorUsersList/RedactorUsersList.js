@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -57,30 +56,17 @@ class RedactorUsersList extends Component {
       }));
   }
 
-  handleUserMail = userId => {
-    // Send message to user
-  };
-
-  handleUserShow = userId => {
-    const { push } = this.props;
-    push(`/settings/${userId}`);
-  };
-
   handleUserLock = userId => {
     const { usersData } = this.props;
     const { email } = usersData[userId];
     return apiClient.lockUser({ email });
   };
 
-  get toolsMenuItems() {
+  getToolsMenuItems = (data) => {
     return [
       {
-        title: 'Написать',
-        handler: this.handleUserMail
-      },
-      {
         title: 'Войти',
-        handler: this.handleUserShow
+        handler: `/settings/${data.id}`
       },
       {
         title: 'Заблокировать',
@@ -94,7 +80,7 @@ class RedactorUsersList extends Component {
     return {
       data: usersArray,
       menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
       ),
       head: true,
       box: this.renderBox,
@@ -157,8 +143,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   createUserTag: usersActions.createUserTag,
-  removeUserTag: usersActions.removeUserTag,
-  push
+  removeUserTag: usersActions.removeUserTag
 };
 
 export default connect(

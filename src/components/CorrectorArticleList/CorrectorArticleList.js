@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
@@ -17,29 +16,19 @@ import * as formatDate from '~/services/formatDate';
 import './corrector-article-list.scss';
 
 class CorrectorArticleList extends Component {
-  get toolsMenuItems() {
+  getToolsMenuItems(data) {
     return [
       {
         title: 'Править',
-        handler: this.handleCorrect
+        handler: `/article/${data.id}/correct`
       },
       {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: this.handlePreview
+        link: `/article/${data.id}`
       }
     ];
-  };
-
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
-  };
-
-  handleCorrect = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/correct`);
   };
 
   handlePaginateChange = (paginate) => {
@@ -65,7 +54,7 @@ class CorrectorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
       box: this.renderBox,
       cells: [
         {
@@ -162,7 +151,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push,
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };

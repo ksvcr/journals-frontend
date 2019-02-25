@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -17,30 +16,20 @@ import * as formatDate from '~/services/formatDate';
 import './translator-article-list.scss';
 
 class TranslatorArticleList extends Component {
-  get toolsMenuItems() {
+  getToolsMenuItems = (data) => {
     return [
       {
         title: 'Перевести',
-        handler: this.handleTranslate
+        handler: `/article/${data.id}/translate`
       },
       {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: this.handlePreview
+        handler: `/article/${data.id}`
       }
     ];
   }
-
-  handlePreview = id => {
-    const { push } = this.props;
-    push(`/article/${id}`);
-  };
-
-  handleTranslate = id => {
-    const { push } = this.props;
-    push(`/article/${id}/translate`);
-  };
 
   handlePaginateChange = paginate => {
     const { onUpdateRequest } = this.props;
@@ -66,7 +55,7 @@ class TranslatorArticleList extends Component {
       onSortChange: this.handleSortChange,
       head: true,
       menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
       ),
       box: this.renderBox,
       cells: [
@@ -164,7 +153,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push,
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };

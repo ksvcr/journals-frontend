@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
@@ -35,7 +34,7 @@ class ArticlesForReviewList extends Component {
     if (data.state_article === 'AWAIT_REVIEW') {
       tools.push({
         title: 'Написать рецензию',
-        handler: this.handleCreateReview
+        handler: `/article/${data.id}/review`
       });
     }
 
@@ -43,7 +42,7 @@ class ArticlesForReviewList extends Component {
       title: 'Просмотр',
       type: 'preview',
       icon: 'preview',
-      handler: this.handlePreview
+      handler: `/article/${data.id}`
     });
 
     return tools;
@@ -54,19 +53,9 @@ class ArticlesForReviewList extends Component {
     onUpdateRequest({ ordering });
   };
 
-  handleCreateReview = id => {
-    const { push } = this.props;
-    push(`/article/${id}/review`);
-  };
-
   handleAcceptInvite = id => {
     const { acceptArticleReviewInvite } = this.props;
     acceptArticleReviewInvite(id);
-  };
-
-  handlePreview = id => {
-    const { push } = this.props;
-    push(`/article/${id}`);
   };
 
   handlePaginateChange = paginate => {
@@ -75,11 +64,7 @@ class ArticlesForReviewList extends Component {
   };
 
   get listProps() {
-    const {
-      articlesArray,
-      reviewInvites,
-      reviewInvitesArticlesMap
-    } = this.props;
+    const { articlesArray, reviewInvites, reviewInvitesArticlesMap } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -147,7 +132,7 @@ class ArticlesForReviewList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        {total > 0 && (
+        { total > 0 && (
           <PaginateLine
             onChange={ this.handlePaginateChange }
             total={ total }
@@ -172,7 +157,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push,
   acceptArticleReviewInvite: articlesActions.acceptArticleReviewInvite
 };
 
