@@ -79,7 +79,7 @@ class ImageSlider extends Component {
     return (
       <div className="image-slider">
         <div className="image-slider__title">
-          Иллюстрации ({slidesCount})
+          Иллюстрации ({ slidesCount })
         </div>
         <div className="image-slider__swiper">
           <Swiper { ...this.sliderParams }>

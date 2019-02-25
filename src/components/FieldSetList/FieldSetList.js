@@ -31,22 +31,17 @@ class FieldSetList extends PureComponent {
           transitionEnterTimeout={ 400 }
           transitionLeaveTimeout={ 200 }
         >
-          {fields.map((field, index) => (
-            <FieldSet
-              key={ index }
-              isLast={ index === fields.length - 1 }
-              index={ index }
-              legend={ `${legend} №${index + 1}` }
-              onRemove={ this.handleRemove }
-              onMove={ this.handleMove }
-            >
-              {children(field, index, fields.get(index))}
+          { fields.map((field, index) => (
+            <FieldSet key={ index } isLast={ index === fields.length - 1 } index={ index }
+                      legend={ `${legend} №${index + 1}` }
+                      onRemove={ this.handleRemove } onMove={ this.handleMove } >
+              { children(field, index, fields.get(index)) }
             </FieldSet>
-          ))}
+          )) }
         </ReactCSSTransitionGroup>
 
         <div className="field-set-list__button">
-          <FieldAddButton onAdd={ this.handleAdd }>{addText}</FieldAddButton>
+          <FieldAddButton onAdd={ this.handleAdd }> { addText } </FieldAddButton>
         </div>
       </div>
     );

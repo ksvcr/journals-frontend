@@ -24,7 +24,7 @@ class Renderer extends Component {
         ...obj,
         [key]: (children, { key }) => (
           <span key={ key } style={ style }>
-            {children}
+            { children }
           </span>
         )
       };
@@ -36,7 +36,7 @@ class Renderer extends Component {
         ...obj,
         [key]: (children, { key }) => (
           <span key={ key } style={ style }>
-            {children}
+            { children }
           </span>
         )
       };
@@ -44,52 +44,52 @@ class Renderer extends Component {
 
     return {
       inline: {
-        BOLD: (children, { key }) => <strong key={ key }>{children}</strong>,
-        ITALIC: (children, { key }) => <em key={ key }>{children}</em>,
-        UNDERLINE: (children, { key }) => <u key={ key }>{children}</u>,
+        BOLD: (children, { key }) => <strong key={ key }>{ children }</strong>,
+        ITALIC: (children, { key }) => <em key={ key }>{ children }</em>,
+        UNDERLINE: (children, { key }) => <u key={ key }>{ children }</u>,
         ...defaultStyleMap,
         ...customStyleMap
       },
       blocks: {
         unstyled: children =>
-          children.map((child, index) => <p key={ index }>{child}</p>),
+          children.map((child, index) => <p key={ index }>{ child }</p>),
         'align-center': children =>
           children.map((child, index) => (
             <p key={ index } style={ { textAlign: 'center' } }>
-              {child}
+              { child }
             </p>
           )),
         'align-left': children =>
           children.map((child, index) => (
             <p key={ index } style={ { textAlign: 'left' } }>
-              {child}
+              { child }
             </p>
           )),
         'align-right': children =>
           children.map((child, index) => (
             <p key={ index } style={ { textAlign: 'right' } }>
-              {child}
+              { child }
             </p>
           )),
         'align-justify': children =>
           children.map((child, index) => (
             <p key={ index } style={ { textAlign: 'justify' } }>
-              {child}
+              { child }
             </p>
           )),
         atomic: children =>
           children.map((child, index) => (
-            <React.Fragment key={ index }>{child}</React.Fragment>
+            <React.Fragment key={ index }>{ child }</React.Fragment>
           )),
         'block-table': children =>
           children.map((child, index) => (
-            <React.Fragment key={ index }>{child}</React.Fragment>
+            <React.Fragment key={ index }>{ child }</React.Fragment>
           ))
       },
       entities: {
         LINK: (children, data, { key }) => (
           <a key={ key } href={ data.url }>
-            {children}
+            { children }
           </a>
         ),
         'image-list': (children, data, { key }) =>
@@ -119,7 +119,7 @@ class Renderer extends Component {
     if (!rendered) {
       return this.renderWarning();
     }
-    return <div>{rendered}</div>;
+    return <div>{ rendered }</div>;
   }
 }
 

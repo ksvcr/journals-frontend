@@ -158,13 +158,10 @@ class AuthorArticleList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        {total > 0 && (
-          <PaginateLine
-            onChange={ this.handlePaginateChange }
-            total={ total }
-            { ...paginate }
-          />
-        )}
+        { total > 0 && (
+          <PaginateLine onChange={ this.handlePaginateChange } total={ total }
+                        { ...paginate } />
+        ) }
       </div>
     );
   }

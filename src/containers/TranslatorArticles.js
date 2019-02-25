@@ -64,7 +64,7 @@ class TranslatorArticles extends Component {
           <form className="form">
             <div className="form__field">
               <label className="form__label">
-                {t('article_search')}
+                { t('article_search') }
               </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>

@@ -111,11 +111,11 @@ class ArticlesForReviewList extends Component {
             return (
               <React.Fragment>
                 <StatusLabel status={ data.state_article } />
-                {invite && (
+                { invite && (
                   <div className="articles-for-review-list__deadline">
                     <DeadlineLabel date={ invite.decision_deadline } />
                   </div>
-                )}
+                ) }
               </React.Fragment>
             );
           }
@@ -133,12 +133,9 @@ class ArticlesForReviewList extends Component {
         </div>
 
         { total > 0 && (
-          <PaginateLine
-            onChange={ this.handlePaginateChange }
-            total={ total }
-            { ...paginate }
-          />
-        )}
+          <PaginateLine onChange={ this.handlePaginateChange }
+                        total={ total } { ...paginate } />
+        ) }
       </div>
     );
   }

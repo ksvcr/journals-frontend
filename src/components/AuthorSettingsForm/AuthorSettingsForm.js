@@ -24,15 +24,9 @@ class AuthorSettingsForm extends Component {
     );
     const roles = isFullAccess ? Object.keys(roleMap) : ['AUTHOR', 'REVIEWER'];
     return roles.map(item => (
-      <Field
-        disabled={ isDisabled }
-        key={ item }
-        name="role"
-        value={ item }
-        type="radio"
-        component={ Radio }
-      >
-        {getUserRoleTitle(item)}
+      <Field disabled={ isDisabled } key={ item } name="role"
+             value={ item } type="radio" component={ Radio } >
+        { getUserRoleTitle(item) }
       </Field>
     ));
   };
@@ -51,36 +45,25 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="last_name" className="form__label">
                 Фамилия
               </label>
-              <Field
-                name="last_name"
-                id="last_name"
-                component={ TextField }
-                placeholder="Введите фамилию"
-                validate={ [validate.required] }
-              />
+              <Field name="last_name" id="last_name"
+                     component={ TextField } placeholder="Введите фамилию"
+                     validate={ [validate.required] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="first_name" className="form__label">
                 Имя
               </label>
-              <Field
-                name="first_name"
-                id="first_name"
-                component={ TextField }
-                placeholder="Введите имя"
-                validate={ [validate.required] }
-              />
+              <Field name="first_name" id="first_name"
+                     component={ TextField } placeholder="Введите имя"
+                     validate={ [validate.required] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="middle_name" className="form__label">
                 Отчество
               </label>
-              <Field
-                name="middle_name"
-                id="middle_name"
-                component={ TextField }
-                placeholder="Введите отчество"
-                validate={ [validate.required] }
+              <Field name="middle_name" id="middle_name"
+                     component={ TextField } placeholder="Введите отчество"
+                     validate={ [validate.required] }
               />
             </div>
           </div>
@@ -91,40 +74,26 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="email" className="form__label">
                 E-mail
               </label>
-              <Field
-                type="email"
-                name="email"
-                id="email"
-                component={ TextField }
-                placeholder="Введите e-mail"
-                validate={ [validate.email] }
-              />
+              <Field type="email" name="email"
+                     id="email" component={ TextField }
+                     placeholder="Введите e-mail"
+                     validate={ [validate.email] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="password" className="form__label">
                 Пароль
               </label>
-              <Field
-                disabled={ true }
-                name="password"
-                id="password"
-                component={ TextField }
-                type="password"
-                placeholder="Введите пароль"
-              />
+              <Field disabled={ true } name="password" id="password"
+                     component={ TextField } type="password"
+                     placeholder="Введите пароль" />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="password_confirm" className="form__label">
                 Повторите пароль
               </label>
-              <Field
-                disabled={ true }
-                name="password_confirm"
-                id="password_confirm"
-                component={ TextField }
-                type="password"
-                placeholder="Повторите пароль"
-              />
+              <Field disabled={ true } name="password_confirm" id="password_confirm"
+                     component={ TextField } type="password"
+                     placeholder="Повторите пароль" />
             </div>
           </div>
         </div>
@@ -132,22 +101,18 @@ class AuthorSettingsForm extends Component {
           <label htmlFor="work_place" className="form__label">
             Место работы (учебы)
           </label>
-          <Field
-            name="work_place"
-            id="work_place"
-            component={ TextField }
-            placeholder="Введите место работы/учебы"
+          <Field name="work_place" id="work_place"
+                 component={ TextField }
+                 placeholder="Введите место работы/учебы"
           />
         </div>
         <div className="form__field">
           <label htmlFor="work_place_en" className="form__label">
             Место работы по английски
           </label>
-          <Field
-            name="work_place_en"
-            id="work_place_en"
-            component={ TextField }
-            placeholder="Введите место работы/учебы"
+          <Field name="work_place_en" id="work_place_en"
+                 component={ TextField }
+                 placeholder="Введите место работы/учебы"
           />
         </div>
         <div className="form__field">
@@ -156,23 +121,13 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="country" className="form__label">
                 Cтрана
               </label>
-              <Field
-                name="country"
-                id="country"
-                format={ value =>
-                  value && countriesData[value]
-                    ? { name: countriesData[value].name, id: value }
-                    : ''
-                }
-                normalize={ value => value.id }
-                component={ props => (
-                  <SearchableSelect
-                    placeholder="Выберите страну"
-                    options={ countriesArray }
-                    { ...props }
-                  />
-                ) }
-              />
+              <Field name="country" id="country"
+                     format={ value =>
+                       value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
+                     normalize={ value => value.id }
+                     placeholder="Выберите страну"
+                     options={ countriesArray }
+                     component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
@@ -197,30 +152,19 @@ class AuthorSettingsForm extends Component {
                 name="country_en"
                 id="country_en"
                 format={ value =>
-                  value && countriesData[value]
-                    ? { name: countriesData[value].name, id: value }
-                    : ''
-                }
+                  value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
                 normalize={ value => value.id }
-                component={ props => (
-                  <SearchableSelect
-                    placeholder="Выберите страну"
-                    options={ countriesArray }
-                    { ...props }
-                  />
-                ) }
+                placeholder="Выберите страну"
+                options={ countriesArray }
+                component={ SearchableSelect }
               />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city_en" className="form__label">
                 Город по английски
               </label>
-              <Field
-                name="city_en"
-                id="city_en"
-                component={ TextField }
-                placeholder="Введите город"
-              />
+              <Field name="city_en" id="city_en"
+                     component={ TextField } placeholder="Введите город" />
             </div>
           </div>
         </div>
@@ -233,11 +177,8 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="code_orcid" className="form__label">
                 ORCID
               </label>
-              <Field
-                name="code_orcid"
-                id="code_orcid"
-                component={ TextField }
-                placeholder="Введите ORCID"
+              <Field name="code_orcid" id="code_orcid" component={ TextField }
+                     placeholder="Введите ORCID"
               />
             </div>
             <div className="form__col form__col_4">
@@ -289,23 +230,12 @@ class AuthorSettingsForm extends Component {
               <label htmlFor="mail_address_country" className="form__label">
                 Страна
               </label>
-              <Field
-                name="mail_address_country"
-                id="mail_address_country"
-                format={ value =>
-                  value && countriesData[value]
-                    ? { name: countriesData[value].name, id: value }
-                    : ''
-                }
-                normalize={ value => value.id }
-                component={ props => (
-                  <SearchableSelect
-                    placeholder="Выберите страну"
-                    options={ countriesArray }
-                    { ...props }
-                  />
-                ) }
-              />
+              <Field name="mail_address_country" id="mail_address_country"
+                     format={ value =>
+                       value && countriesData[value] ? { name: countriesData[value].name, id: value } : ''
+                     }
+                     normalize={ value => value.id } placeholder="Выберите страну"
+                     options={ countriesArray } component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -390,12 +320,12 @@ class AuthorSettingsForm extends Component {
         <hr className="page__divider" />
 
         <h2 className="form__subtitle">
-          {this.isCurrentUser
+          { this.isCurrentUser
             ? 'Вы зарегистрированы как:'
-            : 'Пользователь зарегистрирован как:'}
+            : 'Пользователь зарегистрирован как:' }
         </h2>
         <div className="author-settings-form__role form__field form__field_inline">
-          {this.renderRoleFields()}
+          { this.renderRoleFields() }
         </div>
 
         <div className="form__field">

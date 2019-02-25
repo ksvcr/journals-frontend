@@ -59,7 +59,7 @@ class RedactorReview extends Component {
   renderCollapseButton = props => {
     return (
       <RedactorCollapseButton { ...props }>
-        {`Рецензенты (${this.invitesCount})`}
+        { `Рецензенты (${this.invitesCount})` }
       </RedactorCollapseButton>
     );
   };
@@ -85,32 +85,32 @@ class RedactorReview extends Component {
               onSelfInvite={ this.handleSelfInvite }
             />
           </div>
-          {!isShowReviewerList && (
+          { !isShowReviewerList && (
             <div className="redactor-review__tools">
               <RedactorReviewTools
                 onReviewerAdd={ this.handleReviewerAdd }
                 onSelfInvite={ this.handleSelfInvite }
               />
             </div>
-          )}
+          ) }
         </div>
 
-        {isShowReviewerList && (
+        { isShowReviewerList && (
           <RedactorReviewerList
             onClose={ this.handleReviewerListClose }
             articleId={ articleId }
           />
-        )}
+        ) }
 
         <Collapse customHead={ this.renderCollapsePreliminaryButton }>
           <PreliminaryRevisionForm />
         </Collapse>
 
-        {this.invitesCount > 0 && (
+        { this.invitesCount > 0 && (
           <Collapse customHead={ this.renderCollapseButton }>
             <InvitedReviewersList articleId={ articleId } />
           </Collapse>
-        )}
+        ) }
       </div>
     );
   }

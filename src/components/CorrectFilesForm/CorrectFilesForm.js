@@ -30,7 +30,7 @@ class CorrectFilesForm extends Component {
             file={ item }
             onChangeDescription={ this.handleChangeDescription }
           />
-          {showDivider && <hr className="correct-files-form__divider" />}
+          { showDivider && <hr className="correct-files-form__divider" /> }
         </React.Fragment>
       );
     });
@@ -39,7 +39,7 @@ class CorrectFilesForm extends Component {
   render() {
     return (
       <div className="correct-files-form">
-        <ul className="correct-files-form__list">{this.renderItems()}</ul>
+        <ul className="correct-files-form__list">{ this.renderItems() }</ul>
       </div>
     );
   }

@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import {change, FieldArray, formValueSelector, getFormValues} from 'redux-form';
+import { change, FieldArray, formValueSelector, getFormValues } from 'redux-form';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
 
@@ -43,7 +43,7 @@ class ArticleSourcesForm extends Component {
   };
 
   handleDropFiles = (files) => {
-    this.setState({ hasError: { status: false, text: '' }});
+    this.setState({ hasError: { status: false, text: '' } });
 
     const { change, formName } = this.props;
     const file = files[0];
@@ -53,18 +53,22 @@ class ArticleSourcesForm extends Component {
       const ext = getFileExtension(file.name);
 
       if(availableFormat.indexOf(ext) < 0) {
-        this.setState({ hasError: {
+        this.setState({
+          hasError: {
             status: true,
-            text: 'Один или несколько файлов имеют недопустимое расширение',
-          }});
+            text: 'Один или несколько файлов имеют недопустимое расширение'
+          }
+        });
         return null;
       }
 
       if(file.size > maxAvailableSize) {
-        this.setState({ hasError: {
+        this.setState({
+          hasError: {
             status: true,
-            text: 'Размер одного из файлов может быть больше максимально допустимого (50мб)',
-          }});
+            text: 'Размер одного из файлов может быть больше максимально допустимого (50мб)'
+          }
+        });
         return null;
       }
 
@@ -78,9 +82,8 @@ class ArticleSourcesForm extends Component {
 
     return (
       <Fragment key={ 0 }>
-        <ArticleFilesFormItem
-          file={ list_literature_file }/>
-          <hr className="article-files-form__divider" />
+        <ArticleFilesFormItem file={ list_literature_file }/>
+        <hr className="article-files-form__divider" />
       </Fragment>
     );
   };
@@ -102,21 +105,17 @@ class ArticleSourcesForm extends Component {
           </div>
         </div>
 
-        { isFile
-          ?
+        { isFile ?
           <div className="form__field">
             { hasError.status && <div className="article-content-form__error">{ hasError.text }</div> }
-            <Dropzone
-              className="article-content-form__dropzone"
-              multiple={ false }
-              onDrop={ this.handleDropFiles }>
+            <Dropzone className="article-content-form__dropzone"  multiple={ false }
+                      onDrop={ this.handleDropFiles }>
               <FileDropPlaceholder />
             </Dropzone>
             <ul className="article-files-form__list">
               { this.renderUploadItems() }
             </ul>
-          </div>
-          :
+          </div> :
           <div className="form__field">
             <FieldArray name="sources" rerenderOnEveryChange={ true }
                         component={ this.renderSourceList } />

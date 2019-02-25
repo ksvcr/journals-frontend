@@ -118,13 +118,13 @@ class RedactorUsers extends Component {
 
         <RedactorUsersList onUpdateRequest={ this.handleRequest } />
 
-        {total > 0 && (
+        { total > 0 && (
           <PaginateLine
             onChange={ this.handlePaginateChange }
             total={ total }
             { ...paginate }
           />
-        )}
+        ) }
       </React.Fragment>
     );
   }

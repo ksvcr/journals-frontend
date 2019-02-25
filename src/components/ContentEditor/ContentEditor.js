@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import {
-  convertToRaw,
-  convertFromRaw,
-  DefaultDraftBlockRenderMap,
-  EditorState
-} from 'draft-js';
+import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState } from 'draft-js';
 import { merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
-import createStaticToolbarPlugin, {
-  Separator
-} from 'draft-js-static-toolbar-plugin';
+import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
@@ -20,9 +13,7 @@ import ToolbarStyleSection from '~/components/ToolbarStyleSection/ToolbarStyleSe
 import ToolbarAligmentSection from '~/components/ToolbarAligmentSection/ToolbarAligmentSection';
 import ToolbarCaseSection from '~/components/ToolbarCaseSection/ToolbarCaseSection';
 import TableTool from '~/components/TableTool/TableTool';
-import AddLinkTool, {
-  linkDecorator
-} from '~/components/AddLinkTool/AddLinkTool';
+import AddLinkTool, { linkDecorator } from '~/components/AddLinkTool/AddLinkTool';
 import RemoveLinkTool from '~/components/RemoveLinkTool/RemoveLinkTool';
 import HighlightTool from '~/components/HighlightTool/HighlightTool';
 import ColorTool from '~/components/ColorTool/ColorTool';
@@ -35,13 +26,7 @@ import HeadlinesButtons from '~/components/HeadlinesButtons/HeadlinesButtons';
 import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
 
 import { customStyleFn } from '~/services/editorCustomStyler';
-import {
-  styleMap,
-  blockRenderMap,
-  toolbarClasses,
-  getBlockStyle,
-  undoParams
-} from '~/services/customDraftUtils';
+import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
 
 import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
@@ -159,7 +144,7 @@ class ContentEditor extends Component {
           <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
         </div>
 
-        {isExpanded && (
+        { isExpanded && (
           <div className="editor-toolbar__row">
             <ColorTool { ...externalProps } />
             <HighlightTool { ...externalProps } />
@@ -171,7 +156,7 @@ class ContentEditor extends Component {
             <TableTool { ...externalProps } />
             <ImageMediaTool { ...externalProps } />
           </div>
-        )}
+        ) }
       </React.Fragment>
     );
   };
@@ -198,7 +183,7 @@ class ContentEditor extends Component {
           } }
         />
         <ContentCounter editorState={ editorState } />
-        <EditorToolbar>{this.renderButtons}</EditorToolbar>
+        <EditorToolbar>{ this.renderButtons }</EditorToolbar>
       </div>
     );
   }

@@ -60,12 +60,10 @@ class ArticleFilesForm extends Component {
       const showDivider = ++index < attachments.length;
       return (
         <React.Fragment key={ index }>
-          <ArticleFilesFormItem
-            file={ item }
-            onChangeDescription={ this.handleChangeDescription }
-            onRemove={ this.handleRemoveFile }
-          />
-          {showDivider && <hr className="article-files-form__divider" />}
+          <ArticleFilesFormItem file={ item }
+                                onChangeDescription={ this.handleChangeDescription }
+                                onRemove={ this.handleRemoveFile } />
+          { showDivider && <hr className="article-files-form__divider" /> }
         </React.Fragment>
       );
     });
@@ -79,14 +77,11 @@ class ArticleFilesForm extends Component {
           Вы можете выбрать несколько файлов. Для каждого из них нужно будет
           заполнить описание
         </p>
-        <Dropzone
-          className="article-files-form__dropzone"
-          multiple={ true }
-          onDrop={ this.handleDropFiles }
-        >
+        <Dropzone className="article-files-form__dropzone"
+                  multiple={ true } onDrop={ this.handleDropFiles } >
           <FileDropPlaceholder />
         </Dropzone>
-        <ul className="article-files-form__list">{this.renderItems()}</ul>
+        <ul className="article-files-form__list">{ this.renderItems() }</ul>
       </div>
     );
   }

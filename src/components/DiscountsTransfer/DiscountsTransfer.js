@@ -64,18 +64,18 @@ class DiscountsTransfer extends Component {
         <div className="discounts-transfer__cancel">
           <CancelLink onClick={ this.handleCancelClick } />
         </div>
-        {!user ? (
+        { !user ? (
           <div className="discounts-transfer__search">
             <SearchPanel onChange={ this.handleSearchChange } />
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
-                Найдено {searchResults.length}{' '}
-                {getNoun(
+                Найдено { searchResults.length }{ ' ' }
+                { getNoun(
                   searchResults.length,
                   'пользователь',
                   'пользователя',
                   'пользователей'
-                )}
+                ) }
                 :
               </p>
               <DiscountsTransferSelect
@@ -89,7 +89,7 @@ class DiscountsTransfer extends Component {
             user={ user }
             onSubmit={ this.handleTransferSubmit }
           />
-        )}
+        ) }
       </div>
     );
   }

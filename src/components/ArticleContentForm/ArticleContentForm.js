@@ -1,12 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import {
-  change,
-  Field,
-  FieldArray,
-  formValueSelector,
-  getFormValues
-} from 'redux-form';
+import { change, Field, FieldArray, formValueSelector, getFormValues } from 'redux-form';
 import { withNamespaces } from 'react-i18next';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
@@ -82,7 +76,7 @@ class ArticleContentForm extends Component {
         })
         .filter(file => file);
 
-      const textFiles = [...formValues.text_files, ...newFiles];
+      const textFiles = [ ...formValues.text_files, ...newFiles ];
       change(formName, 'text_files', textFiles);
     });
   };
@@ -116,12 +110,10 @@ class ArticleContentForm extends Component {
 
       return (
         <Fragment key={ index }>
-          <ArticleFilesFormItem
-            file={ item }
-            onChangeDescription={ this.handleChangeDescription }
-            onRemove={ this.handleRemoveFile }
+          <ArticleFilesFormItem file={ item } onChangeDescription={ this.handleChangeDescription }
+                                onRemove={ this.handleRemoveFile }
           />
-          {showDivider && <hr className="article-files-form__divider" />}
+          { showDivider && <hr className="article-files-form__divider" /> }
         </Fragment>
       );
     });
@@ -138,35 +130,30 @@ class ArticleContentForm extends Component {
 
     return (
       <div className="article-content-form">
-        <h2 className="page__title">{t('article_text')}</h2>
+        <h2 className="page__title">{ t('article_text') }</h2>
         <div className="form__field">
-          <Field
-            name="is_send_as_file"
-            id="is_send_as_file"
-            type="checkbox"
-            component={ Checkbox }
-          >
-            Хочу добавить статью файлом ({availableFormat.join(', ')})
+          <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
+                 component={ Checkbox } >
+            Хочу добавить статью файлом ({ availableFormat.join(', ') })
           </Field>
           <div className="article-content-form__description">
             При добавлении текста статьи файлом, стоимость размещения увеличится
             на 30%
           </div>
         </div>
-        {is_send_as_file ? (
+        { is_send_as_file ? (
           <div className="form__field">
-            {hasError.status && (
-              <div className="article-content-form__error">{hasError.text}</div>
-            )}
-            <Dropzone
-              className="article-content-form__dropzone"
-              multiple={ true }
-              onDrop={ this.handleDropFiles }
-            >
+            { hasError.status && (
+              <div className="article-content-form__error">
+                { hasError.text }
+              </div>
+            ) }
+            <Dropzone className="article-content-form__dropzone"
+                      multiple={ true } onDrop={ this.handleDropFiles } >
               <FileDropPlaceholder />
             </Dropzone>
             <ul className="article-files-form__list">
-              {this.renderUploadItems()}
+              { this.renderUploadItems() }
             </ul>
           </div>
         ) : (
@@ -175,20 +162,13 @@ class ArticleContentForm extends Component {
               <label htmlFor="article_type" className="form__label">
                 Тип статьи
               </label>
-              <Field
-                name="article_type"
-                id="article_type"
-                component={ props => (
-                  <Select options={ this.typeOptions } { ...props } />
-                ) }
-              />
+              <Field name="article_type" id="article_type"
+                     options={ this.typeOptions } component={ Select } />
             </div>
-            <FieldArray
-              name="content_blocks"
-              component={ this.renderContentBlockList }
+            <FieldArray name="content_blocks" component={ this.renderContentBlockList }
             />
           </Fragment>
-        )}
+        ) }
       </div>
     );
   }

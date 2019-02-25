@@ -16,14 +16,13 @@ class ReviewsHistory extends Component {
 
     return reviews.map((item, index) => {
       return isCollapse ? (
-        <Collapse
-          key={ index }
-          title={ item.review_round + ' раунд рецензирования' }
-        >
-          {this.renderItem(item)}
+        <Collapse key={ index } title={ item.review_round + ' раунд рецензирования' } >
+          { this.renderItem(item) }
         </Collapse>
       ) : (
-        <React.Fragment key={ index }>{this.renderItem(item)}</React.Fragment>
+        <React.Fragment key={ index }>
+          { this.renderItem(item) }
+        </React.Fragment>
       );
     });
   };
@@ -40,36 +39,36 @@ class ReviewsHistory extends Component {
 
     return (
       <div className="reviews-history__content">
-        {!isCollapse && reviewer && (
+        { !isCollapse && reviewer && (
           <div className="reviews-history__info">
             <span className="reviews-history__info-title">Рецензент:</span>
-            {reviewerName}
+            { reviewerName }
           </div>
-        )}
+        ) }
 
         <div className="reviews-history__review">
           <div className="reviews-history__title">
             Текст рецензии
-            {isCollapse && (
+            { isCollapse && (
               <FieldHint text={ 'Будет опубликован вместе с текстом статьи' } />
-            )}
+            ) }
           </div>
-          <div className="reviews-history__text">{item.comment_for_author}</div>
+          <div className="reviews-history__text">{ item.comment_for_author }</div>
         </div>
-        {!isCollapse && (
+        { !isCollapse && (
           <div className="reviews-history__table">
             <ReviewEstimate values={ item } disabled={ true } />
           </div>
-        )}
-        {item.author_answer && (
+        ) }
+        { item.author_answer && (
           <div className="reviews-history__answer">
             <div className="reviews-history__title">Ответ автора</div>
-            {author && (
-              <div className="reviews-history__author">{authorName}</div>
-            )}
-            <div className="reviews-history__text">{item.author_answer}</div>
+            { author && (
+              <div className="reviews-history__author">{ authorName }</div>
+            ) }
+            <div className="reviews-history__text">{ item.author_answer }</div>
           </div>
-        )}
+        ) }
       </div>
     );
   };
@@ -78,7 +77,7 @@ class ReviewsHistory extends Component {
     const { className } = this.props;
     const classes = classNames('reviews-history', className);
 
-    return <div className={ classes }>{this.renderList()}</div>;
+    return <div className={ classes }>{ this.renderList() }</div>;
   }
 }
 

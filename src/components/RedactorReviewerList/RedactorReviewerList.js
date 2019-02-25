@@ -25,11 +25,7 @@ class RedactorReviewerList extends Component {
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
   handleChoose = event => {
-    const {
-      articleId,
-      inviteArticleReviewer,
-      fetchArticleReviewInvites
-    } = this.props;
+    const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
     inviteArticleReviewer(articleId, { article: articleId, reviewer: id }).then(
@@ -92,17 +88,10 @@ class RedactorReviewerList extends Component {
           },
           render: data => (
             <div className="redactor-reviewer-list__choose-wrapper">
-              <Button
-                type="button"
-                className="button_small redactor-reviewer-list__choose"
-                data-id={ data.id }
-                onClick={ this.handleChoose }
-              >
+              <Button type="button" className="button_small redactor-reviewer-list__choose"
+                      data-id={ data.id } onClick={ this.handleChoose } >
                 Выбрать
-                <Icon
-                  name="arrow"
-                  className="redactor-reviewer-list__choose-icon"
-                />
+                <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
               </Button>
             </div>
           )
@@ -174,7 +163,7 @@ class RedactorReviewerList extends Component {
             </div>
           </div>
         </div>
-        <span className="redactor-reviewer-list__count">{this.countText}</span>
+        <span className="redactor-reviewer-list__count">{ this.countText }</span>
       </div>
     );
   };
@@ -182,7 +171,7 @@ class RedactorReviewerList extends Component {
   render() {
     return (
       <div className="redactor-reviewer-list">
-        {this.renderSearchBox()}
+        { this.renderSearchBox() }
 
         <List { ...this.listProps } />
       </div>

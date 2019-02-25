@@ -34,7 +34,7 @@ class ReviewApprove extends Component {
             parse={ value => parseInt(value, 10) }
             onChange={ this.handleReviewChange }
           >
-            {`Включить рецензию ${reviewer.first_name} ${reviewer.last_name}`}
+            { `Включить рецензию ${reviewer.first_name} ${reviewer.last_name}` }
           </Field>
         </div>
       );
@@ -44,7 +44,7 @@ class ReviewApprove extends Component {
   render() {
     return (
       <div className="review-approve">
-        <div className="review-approve__list">{this.renderItems()}</div>
+        <div className="review-approve__list">{ this.renderItems() }</div>
         <div className="review-approve__preview">
           <Field
             name="comment_for_redactor"

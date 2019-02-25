@@ -92,13 +92,13 @@ class RedactorDecision extends Component {
                 component={ MultiSwitch }
               />
             </div>
-          )}
+          ) }
 
           { currentArticleState === 'AWAIT_REDACTOR' && state_article === 'AWAIT_PAYMENT' && (
             <div className="redactor-decision__reviews">
               <ReviewApprove formName={ form } articleId={ articleId } />
             </div>
-          )}
+          ) }
 
           { state_article && (
             <div className="redactor-decision__bottom">
@@ -106,7 +106,7 @@ class RedactorDecision extends Component {
                 Отправить
               </Button>
             </div>
-          )}
+          ) }
         </form>
       </div>
     );

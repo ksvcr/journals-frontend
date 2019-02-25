@@ -87,9 +87,9 @@ class ImageMediaEditor extends Component {
               </div>
             </div>
             <div className="image-media-editor__info">
-              <div className="image-media-editor__title">{item.title}</div>
+              <div className="image-media-editor__title">{ item.title }</div>
               <div className="image-media-editor__size">
-                {`${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}`}
+                { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
               </div>
             </div>
           </button>
@@ -113,13 +113,13 @@ class ImageMediaEditor extends Component {
           <ImageDropPlaceholder />
         </Dropzone>
 
-        {data.images.length > 0 && (
+        { data.images.length > 0 && (
           <div className="image-media-editor__holder">
             <div className="image-media-editor__list">
-              {this.renderImageItems()}
+              { this.renderImageItems() }
             </div>
           </div>
-        )}
+        ) }
       </div>
     );
   }

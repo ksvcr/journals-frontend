@@ -195,7 +195,7 @@ class ArticlePublish extends Component {
           </h1>
 
           <div className="page__tools">
-            {isShowSiteChange && (
+            { isShowSiteChange && (
               <form className="form">
                 <div className="form__field">
                   <label htmlFor="sites-list" className="form__label">
@@ -204,7 +204,7 @@ class ArticlePublish extends Component {
                   <SiteSelect id="sites-list" onChange={ this.handleRequest } />
                 </div>
               </form>
-            )}
+            ) }
 
             { isShowArticleInfo && <ArticleInfo id={ articleId } /> }
           </div>

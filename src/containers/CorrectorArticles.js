@@ -57,14 +57,14 @@ class CorrectorArticles extends Component {
     return (
       <React.Fragment>
         <h1 className="page__title">
-          {t('my_articles')}
+          { t('my_articles') }
         </h1>
 
         <div className="page__tools">
           <div className="form">
             <div className="form__field">
               <label className="form__label">
-                {t('article_search')}
+                { t('article_search') }
               </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
@@ -72,7 +72,7 @@ class CorrectorArticles extends Component {
               <div className="form__col form__col_6">
                 <div className="form__field">
                   <label className="form__label">
-                    {t('tags')}
+                    { t('tags') }
                   </label>
                   <Select { ...this.selectTagsProps } />
                 </div>

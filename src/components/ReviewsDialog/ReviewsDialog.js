@@ -32,7 +32,7 @@ class ReviewsDialog extends Component {
 
     return (
       <div className="reviews-dialog">
-        <div className="reviews-dialog__comment">{item.comment_for_author}</div>
+        <div className="reviews-dialog__comment">{ item.comment_for_author }</div>
         <form className="reviews-dialog__answer" onSubmit={ this.handleSubmit }>
           <div className="form__field">
             <label htmlFor="author_answer" className="form__label">
@@ -44,8 +44,8 @@ class ReviewsDialog extends Component {
                 }
               />
             </label>
-            {answer ? (
-              <div className="reviews-dialog__comment">{answer}</div>
+            { answer ? (
+              <div className="reviews-dialog__comment">{ answer }</div>
             ) : (
               <Field
                 name="author_answer"
@@ -56,13 +56,13 @@ class ReviewsDialog extends Component {
                 placeholder="Введите Ваш ответ"
                 validate={ [validate.required] }
               />
-            )}
+            ) }
           </div>
-          {!answer && (
+          { !answer && (
             <button className="reviews-dialog__button" type="submit">
               Ответить
             </button>
-          )}
+          ) }
         </form>
       </div>
     );

@@ -14,51 +14,28 @@ class ArticleCommonTranslateForm extends Component {
     return articleData.financing_sources.map((item, index) => (
       <FieldSet legend={ `Грант №${index + 1}` } key={ item.id }>
         <div className="form__field">
-          <label
-            htmlFor={ `financing_sources[${index}].organization` }
-            className="form__label"
-          >
+          <label htmlFor={ `financing_sources[${index}].organization` }
+                 className="form__label">
             Название организации <ReqMark />
           </label>
 
-          <TextField
-            className="text-field_preview text-field_dark"
-            textarea
-            value={ item.organization }
-            readOnly
-          />
-          <Field
-            name={ `financing_sources[${index}].organization` }
-            id={ `financing_sources[${index}].organization` }
-            textarea
-            component={ TextField }
-            className="text-field_white"
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview text-field_dark" textarea
+                     value={ item.organization } readOnly />
+          <Field name={ `financing_sources[${index}].organization` }
+                 id={ `financing_sources[${index}].organization` }
+                 textarea component={ TextField } className="text-field_white"
+                 placeholder="Введите перевод" validate={ [validate.required] } />
         </div>
         <div className="form__field">
-          <label
-            htmlFor={ `financing_sources[${index}].grant_name` }
-            className="form__label"
-          >
+          <label htmlFor={ `financing_sources[${index}].grant_name` }
+                 className="form__label" >
             Название гранта <ReqMark />
           </label>
-          <TextField
-            className="text-field_preview text-field_dark"
-            textarea
-            value={ item.grant_name }
-            readOnly
-          />
-          <Field
-            name={ `financing_sources[${index}].grant_name` }
-            id={ `financing_sources[${index}].grant_name` }
-            textarea
-            component={ TextField }
-            className="text-field_white"
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview text-field_dark" textarea
+                     value={ item.grant_name } readOnly />
+          <Field name={ `financing_sources[${index}].grant_name` } id={ `financing_sources[${index}].grant_name` }
+                 textarea component={ TextField } className="text-field_white" placeholder="Введите перевод"
+                 validate={ [validate.required] } />
         </div>
       </FieldSet>
     ));
@@ -75,20 +52,11 @@ class ArticleCommonTranslateForm extends Component {
             Название статьи <ReqMark />
           </label>
 
-          <TextField
-            className="text-field_preview"
-            textarea
-            value={ articleData.title }
-            readOnly
-          />
-          <Field
-            name="title"
-            id="title"
-            textarea
-            component={ TextField }
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview" textarea
+                     value={ articleData.title } readOnly />
+          <Field name="title" id="title" textarea
+                 component={ TextField } placeholder="Введите перевод"
+                 validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -96,19 +64,11 @@ class ArticleCommonTranslateForm extends Component {
             Благодарности <ReqMark />
           </label>
 
-          <TextField
-            className="text-field_preview"
-            textarea
-            value={ articleData.thanks_text }
-            readOnly
-          />
-          <Field
-            name="thanks_text"
-            id="thanks_text"
-            component={ TextField }
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview" textarea
+                     value={ articleData.thanks_text } readOnly />
+          <Field name="thanks_text" id="thanks_text"
+                 component={ TextField } placeholder="Введите перевод"
+                 validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -116,19 +76,11 @@ class ArticleCommonTranslateForm extends Component {
             Ключевые слова <ReqMark />
           </label>
 
-          <TextField
-            className="text-field_preview"
-            textarea
-            value={ articleData.text_to_keywords }
-            readOnly
-          />
-          <Field
-            name="text_to_keywords"
-            id="text_to_keywords"
-            component={ TextField }
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview" textarea
+                     value={ articleData.text_to_keywords } readOnly />
+          <Field name="text_to_keywords" id="text_to_keywords"
+                 component={ TextField } placeholder="Введите перевод"
+                 validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -136,49 +88,32 @@ class ArticleCommonTranslateForm extends Component {
             Аннотация <ReqMark />
           </label>
 
-          <TextField
-            className="text-field_preview"
-            textarea
-            value={ articleData.text_to_description }
-            readOnly
-          />
-          <Field
-            name="text_to_description"
-            id="text_to_description"
-            component={ TextField }
-            placeholder="Введите перевод"
-            validate={ [validate.required] }
-          />
+          <TextField className="text-field_preview" textarea
+                     value={ articleData.text_to_description } readOnly />
+          <Field name="text_to_description" id="text_to_description"
+                 component={ TextField } placeholder="Введите перевод"
+                 validate={ [validate.required] } />
         </div>
 
-        {articleData.conflict_interest && (
+        { articleData.conflict_interest && (
           <div className="form__field">
             <label className="form__label">
               Конфликт интересов <ReqMark />
             </label>
 
-            <TextField
-              className="text-field_preview"
-              textarea
-              value={ articleData.conflict_interest }
-              readOnly
-            />
-            <Field
-              name="conflict_interest"
-              id="conflict_interest"
-              component={ TextField }
-              placeholder="Введите перевод"
-              validate={ [validate.required] }
-            />
+            <TextField className="text-field_preview" readOnly
+                       textarea value={ articleData.conflict_interest } />
+            <Field name="conflict_interest" id="conflict_interest"
+                   component={ TextField } placeholder="Введите перевод"
+                   validate={ [validate.required] } />
           </div>
-        )}
-        {articleData.financing_sources.length > 0 && (
+        ) }
+        { articleData.financing_sources.length > 0 && (
           <div className="form__field">
             <label className="form__label">Финансирование</label>
-
-            {this.renderFinancingSources()}
+            { this.renderFinancingSources() }
           </div>
-        )}
+        ) }
       </div>
     );
   }
