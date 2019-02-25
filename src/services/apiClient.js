@@ -118,8 +118,10 @@ const apiClient = {
     });
   },
   getReviewInvites: params => {
-    return fetchInstance.request('/review/invites/', { params });
+    return fetchInstance.request('/reviews/invites/', { params });
   },
+  editReviewInvite: (id, data) => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'put', data }),
+  removeReviewInvite: id => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'delete' }),
   createArticleTranslation: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/translations/`, {
       method: 'post',

@@ -1,4 +1,4 @@
-import { FETCH_REVIEW_INVITES } from './constants';
+import { FETCH_REVIEW_INVITES, REMOVE_REVIEW_INVITE } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -37,6 +37,14 @@ function reviewInvites(state = initialState, action) {
         isRejected: true,
         isPending: false,
         error: action.payload
+      };
+
+    case `${REMOVE_REVIEW_INVITE}_PENDING`:
+      const { [action.meta.id]:removedItem, ...newData  } = state.data;
+      return {
+        ...state,
+        data: newData,
+        ids: state.ids.filter(item => item.id !== action.meta.id)
       };
 
     default:

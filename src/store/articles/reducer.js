@@ -3,6 +3,8 @@ import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW
          REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
          EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
 import { CREATE_USER_TAG, REMOVE_USER_TAG } from '~/store/users/constants';
+import { REMOVE_REVIEW_INVITE } from '~/store/reviewInvites/constants';
+
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -135,11 +137,24 @@ function articles(state = initialState, action) {
       return {
         ...state,
         reviewers: invitedReviewersData,
-        data : {
+        data: {
           ...state.data,
           [ action.meta.article ]: {
             ...state.data[action.meta.article],
             reviewInvites: action.payload.results
+          }
+        }
+      };
+
+    case `${REMOVE_REVIEW_INVITE}_PENDING`:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            reviewInvites:
+              state.data[action.meta.article].reviewInvites.filter(item => item.id !== action.meta.id)
           }
         }
       };

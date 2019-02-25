@@ -7,6 +7,7 @@ import DeadlineEditor from '~/components/DeadlineEditor/DeadlineEditor';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 
 import * as usersActions from '~/store/users/actions';
+import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 
 import './invited-reviewers-list.scss';
 
@@ -17,22 +18,28 @@ class InvitedReviewersList extends Component {
     createUserTag(tagData);
   };
 
-  handleDeadlineChange = (date) => {
-    console.log(date);
+  handleDeadlineChange = (id, date) => {
+    const { editReviewInvite } = this.props;
+    editReviewInvite(id, { decision_deadline: date });
+  };
+
+  handleInviteRemove = (articleId, id) => {
+    const { removeReviewInvite } = this.props;
+    removeReviewInvite(id, articleId);
   };
 
   getToolsMenuItems(data) {
     const hasReview = data.reviews && data.reviews.length;
+    const articleId = data.article.id;
 
     let items = [
       {
         title: 'Отменить',
-        handler: id => console.log(`Cancel ${id}`)
+        handler: this.handleInviteRemove.bind(null, articleId)
       }
     ];
 
     if (hasReview) {
-      const articleId = data.article.id;
       const reviewId = data.reviews[data.reviews.length-1].id;
       items.push({
         title: 'Просмотр рецензии',
@@ -69,7 +76,7 @@ class InvitedReviewersList extends Component {
           style: {
             width: '25%'
           },
-          render: data => <DeadlineEditor date={ data.decision_deadline }
+          render: data => <DeadlineEditor id={ data.id } date={ data.decision_deadline }
                                           onChange={ this.handleDeadlineChange } />
         }
       ]
@@ -113,7 +120,9 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   createUserTag: usersActions.createUserTag,
-  removeUserTag: usersActions.removeUserTag
+  removeUserTag: usersActions.removeUserTag,
+  removeReviewInvite: reviewInvitesActions.removeReviewInvite,
+  editReviewInvite: reviewInvitesActions.editReviewInvite
 };
 
 export default connect(

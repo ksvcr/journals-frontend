@@ -24,11 +24,11 @@ class DeadlineEditor extends Component {
 
 
   handleChange = (date) => {
-    const { onChange } = this.props;
+    const { id, onChange } = this.props;
     this.setState({
       date
     }, () => {
-      onChange(date.format('DD.MM.YYYY'));
+      onChange(id, date.format());
     });
   };
 
