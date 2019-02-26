@@ -8,7 +8,6 @@ import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
-import ArticleFilesFormItem from '~/components/ArticleFilesFormItem/ArticleFilesFormItem';
 import getArticleTypes from '~/services/getArticleTypes';
 import fileToBase64 from '~/utils/fileToBase64';
 import getFileExtension from '~/utils/getFileExtension';
@@ -106,14 +105,8 @@ class ArticleContentForm extends Component {
     const { text_files } = formValues;
 
     return text_files.map((item, index) => {
-      const showDivider = ++index < text_files.length;
-
       return (
         <Fragment key={ index }>
-          <ArticleFilesFormItem file={ item } onChangeDescription={ this.handleChangeDescription }
-                                onRemove={ this.handleRemoveFile }
-          />
-          { showDivider && <hr className="article-files-form__divider" /> }
         </Fragment>
       );
     });

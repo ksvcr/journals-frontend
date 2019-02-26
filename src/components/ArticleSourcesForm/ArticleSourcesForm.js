@@ -6,7 +6,6 @@ import Dropzone from 'react-dropzone';
 
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
-import ArticleFilesFormItem from '~/components/ArticleFilesFormItem/ArticleFilesFormItem';
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';
 
 import fileToBase64 from '~/utils/fileToBase64';
@@ -82,8 +81,6 @@ class ArticleSourcesForm extends Component {
 
     return (
       <Fragment key={ 0 }>
-        <ArticleFilesFormItem file={ list_literature_file }/>
-        <hr className="article-files-form__divider" />
       </Fragment>
     );
   };

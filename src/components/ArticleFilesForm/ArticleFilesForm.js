@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import nanoid from 'nanoid';
-import { change, getFormValues } from 'redux-form';
+import { change, getFormValues, FieldArray } from 'redux-form';
 
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
-import ArticleFilesFormItem from '~/components/ArticleFilesFormItem/ArticleFilesFormItem';
+import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
 
 import fileToBase64 from '~/utils/fileToBase64';
 
@@ -22,50 +22,13 @@ class ArticleFilesForm extends Component {
           name: file.name,
           file_size: file.size,
           type: file.type,
-          file: base64,
-          text_to_description: ''
+          file: base64
         };
       });
 
       const { change, formValues, formName } = this.props;
       const attachments = [...formValues.attachments, ...newFiles];
       change(formName, 'attachments', attachments);
-    });
-  };
-
-  handleChangeDescription = (fileId, description) => {
-    const { change, formValues, formName } = this.props;
-    const newAttachments = formValues.attachments.map(file => {
-      if (file.id === fileId) {
-        file.text_to_description = description;
-      }
-
-      return file;
-    });
-    change(formName, 'attachments', newAttachments);
-  };
-
-  handleRemoveFile = fileId => {
-    const { formValues, formName, change } = this.props;
-    const attachments = formValues.attachments.filter(
-      item => item.id !== fileId
-    );
-    change(formName, 'attachments', attachments);
-  };
-
-  renderItems = () => {
-    const { formValues } = this.props;
-    const { attachments } = formValues;
-    return attachments.map((item, index) => {
-      const showDivider = ++index < attachments.length;
-      return (
-        <React.Fragment key={ index }>
-          <ArticleFilesFormItem file={ item }
-                                onChangeDescription={ this.handleChangeDescription }
-                                onRemove={ this.handleRemoveFile } />
-          { showDivider && <hr className="article-files-form__divider" /> }
-        </React.Fragment>
-      );
     });
   };
 
@@ -81,7 +44,9 @@ class ArticleFilesForm extends Component {
                   multiple={ true } onDrop={ this.handleDropFiles } >
           <FileDropPlaceholder />
         </Dropzone>
-        <ul className="article-files-form__list">{ this.renderItems() }</ul>
+
+        <FieldArray name="attachments"
+                    component={ props => <ArticleFileList { ...props } /> } />
       </div>
     );
   }
