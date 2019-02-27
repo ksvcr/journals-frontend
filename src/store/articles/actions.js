@@ -1,7 +1,8 @@
 import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
          ACCEPT_ARTICLE_REVIEW_INVITE, FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG,
          REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION,
-         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES } from './constants';
+         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES,
+         FETCH_ARTICLE_ATTACHMENTS } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -255,11 +256,7 @@ export function editArticleTranslation(id, data) {
 
       delete data.sources;
 
-      const editTranslationPromise = apiClient.editArticleTranslation(
-        id,
-        data.language_code,
-        data
-      );
+      const editTranslationPromise = apiClient.editArticleTranslation(id, data.language_code, data);
       const editArticlePromise = apiClient.editArticle(id, {
         state_article: 'AWAIT_PUBLICATION'
       });
@@ -295,6 +292,17 @@ export function fetchArticleReviewInvites(params) {
     return dispatch({
       type: FETCH_ARTICLE_REVIEW_INVITES,
       meta: params,
+      payload
+    }).catch(error => console.error(error));
+  };
+}
+
+export function fetchArticleAttachments(id) {
+  return dispatch => {
+    const payload = apiClient.getArticleAttachments(id);
+    return dispatch({
+      type: FETCH_ARTICLE_ATTACHMENTS,
+      meta: { article: id },
       payload
     }).catch(error => console.error(error));
   };

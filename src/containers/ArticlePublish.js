@@ -64,7 +64,7 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, isEdit, push, fetchArticle,
+    const { articleId, siteId, isEdit, push, fetchArticle, fetchArticleAttachments,
             fetchRubrics, fetchCategories, fetchCountries, fetchUser } = this.props;
     const promises = [fetchCountries()];
 
@@ -83,16 +83,19 @@ class ArticlePublish extends Component {
               fetchCategories(articleData.site)
             ]);
           })
-          .catch(() => {
-            push('/');
-          })
+      );
+      promises.push(
+        fetchArticleAttachments(articleId)
       );
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
     }
 
-    return Promise.all(promises);
+    return Promise.all(promises)
+      .catch(() => {
+        push('/');
+      });
   };
 
   handleSubmit = (formData, formName) => {
@@ -271,7 +274,8 @@ const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
-  fetchCountries: countriesActions.fetchCountries
+  fetchCountries: countriesActions.fetchCountries,
+  fetchArticleAttachments: articlesActions.fetchArticleAttachments,
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);
