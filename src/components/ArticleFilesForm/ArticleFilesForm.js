@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import nanoid from 'nanoid';
-import { change, getFormValues, FieldArray } from 'redux-form';
+import { FieldArray, arrayPush } from 'redux-form';
 
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
@@ -13,22 +12,22 @@ import './article-files-form.scss';
 
 class ArticleFilesForm extends Component {
   handleDropFiles = files => {
+    const { arrayPush, formName } = this.props;
     const newFilesPromises = files.map(file => fileToBase64(file));
     Promise.all(newFilesPromises).then(result => {
       const newFiles = result.map((base64, index) => {
         const file = files[index];
         return {
-          id: nanoid(),
           name: file.name,
           file_size: file.size,
           type: file.type,
-          file: base64
+          file: base64,
+          file_description: ''
         };
       });
-
-      const { change, formValues, formName } = this.props;
-      const attachments = [...formValues.attachments, ...newFiles];
-      change(formName, 'attachments', attachments);
+      newFiles.forEach(file => {
+        arrayPush(formName, 'attachments', file);
+      })
     });
   };
 
@@ -41,6 +40,8 @@ class ArticleFilesForm extends Component {
           заполнить описание
         </p>
         <Dropzone className="article-files-form__dropzone"
+                  accept=".doc, .docx, .rtf"
+                  maxSize={ 50 * Math.pow(1024, 2) }
                   multiple={ true } onDrop={ this.handleDropFiles } >
           <FileDropPlaceholder />
         </Dropzone>
@@ -52,19 +53,11 @@ class ArticleFilesForm extends Component {
   }
 }
 
-function mapStateToProps(state, props) {
-  const { formName } = props;
-
-  return {
-    formValues: getFormValues(formName)(state)
-  };
-}
-
 const mapDispatchToProps = {
-  change
+  arrayPush
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(ArticleFilesForm);

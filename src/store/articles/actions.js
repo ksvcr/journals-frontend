@@ -87,7 +87,7 @@ export function createArticle(siteId, data, cb) {
 
 export function editArticle(id, data) {
   return (dispatch, state) => {
-    const prevArticleData = state().articles.data[id];
+    const prevArticleData = state().articles.data[id] || {};
     let { content_blocks, financing_sources, sources, ...articleData } = data;
     // Источники финансирования
     let financingPromises = [];
@@ -123,7 +123,7 @@ export function editArticle(id, data) {
           if (sources) {
             const createSourcesArray = sources.filter(item => item.id === undefined);
             const editSourcesArray = sources.filter(item => item.id !== undefined);
-            const hasRemoved = prevArticleData.sources.length > editSourcesArray.length;
+            const hasRemoved = prevArticleData.sources && prevArticleData.sources.length > editSourcesArray.length;
             const removedSourcesArray = hasRemoved ? differenceBy(prevArticleData.sources, editSourcesArray, 'id') : [];
             const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
             const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));

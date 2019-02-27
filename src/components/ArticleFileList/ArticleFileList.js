@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Field } from 'redux-form';
 
 import Icon from '~/components/Icon/Icon';
@@ -10,7 +10,7 @@ import getFileExtension from '~/utils/getFileExtension';
 import './article-file-list.scss';
 import './assets/remove.svg';
 
-class ArticleFileList extends Component {
+class ArticleFileList extends PureComponent {
   handleRemove = (event) => {
     const { index } = event.currentTarget.dataset;
     const { fields } = this.props;
@@ -22,7 +22,7 @@ class ArticleFileList extends Component {
     return fields.map((field, index) => {
       const data = fields.get(index);
       return (
-        <div key={ data.id } className="article-file-list__item">
+        <div key={ index } className="article-file-list__item">
           <div className="article-file-list__header">
             <div className="article-file-list__infobox">
               <div className="article-file-list__top">
@@ -41,11 +41,13 @@ class ArticleFileList extends Component {
               </div>
             </div>
           </div>
-          <div className="article-file-list__description form__field">
-            <label htmlFor={ `${field}.file_description` } className="form__label">Описание файла</label>
-            <Field name={ `${field}.file_description` } id={ `${field}.file_description` }
-                   component={ TextField } placeholder="Введите описание" />
-          </div>
+          { data.file_description !== undefined &&
+            <div className="article-file-list__description form__field">
+              <label htmlFor={ `${field}.file_description` } className="form__label">Описание файла</label>
+              <Field name={ `${field}.file_description` } id={ `${field}.file_description` }
+                     component={ TextField } placeholder="Введите описание" />
+            </div>
+          }
         </div>
       );
     })
