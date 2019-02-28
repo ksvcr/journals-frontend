@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { reset } from 'redux-form';
+import { reset, destroy } from 'redux-form';
 import { withNamespaces } from 'react-i18next';
 
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
@@ -64,8 +64,8 @@ class ArticlePublish extends Component {
   };
 
   handleRequest = () => {
-    const { articleId, siteId, isEdit, push, fetchArticle, fetchArticleAttachments,
-            fetchRubrics, fetchCategories, fetchCountries, fetchUser } = this.props;
+    const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
+            fetchCategories, fetchCountries, fetchUser } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
@@ -84,9 +84,6 @@ class ArticlePublish extends Component {
             ]);
           })
       );
-      promises.push(
-        fetchArticleAttachments(articleId)
-      );
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
@@ -99,34 +96,42 @@ class ArticlePublish extends Component {
   };
 
   handleSubmit = (formData, formName) => {
-    const { siteId, userId, isEdit, userRole, createArticle,
-            editArticle, push, reset } = this.props;
+    const { siteId, isEdit, createArticle,
+            editArticle, push, reset, destroy } = this.props;
     const data = serializeArticleData(formData);
 
     if (!data.conflict_interest) {
       delete data.conflict_interest;
     }
 
-    data.state_article = 'SENT';
-
     if (isEdit) {
-      if (userId === data.author.user && data.state_article === 'REVISION') {
-        // Доработка
-        data.state_article = 'MODIFIED';
-      } else if (userRole === 'CORRECTOR') {
-        // Корректировка
-        data.state_article = 'AWAIT_TRANSLATE';
+      switch (data.state_article) {
+        case 'DRAFT':
+          // Отправка
+          data.state_article = 'SENT';
+          break;
+        case 'REVISION':
+          // Доработка
+          data.state_article = 'MODIFIED';
+          break;
+        case 'AWAIT_PROOFREADING':
+          // Корректировка
+          data.state_article = 'AWAIT_TRANSLATE';
+          break;
+        default:
+          delete data.state_article;
       }
+
       editArticle(this.tempArticleId, data)
         .then(() => {
-          reset(formName);
+          destroy(formName);
           push('/');
         })
         .catch(error => console.error(error));
     } else {
       createArticle(siteId, data)
         .then(() => {
-          reset(formName);
+          destroy(formName);
           push('/');
         })
         .catch(error => console.error(error));
@@ -264,7 +269,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   push,
-  reset,
+  reset, destroy,
   fetchArticle: articlesActions.fetchArticle,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
@@ -274,8 +279,7 @@ const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
-  fetchCountries: countriesActions.fetchCountries,
-  fetchArticleAttachments: articlesActions.fetchArticleAttachments,
+  fetchCountries: countriesActions.fetchCountries
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);

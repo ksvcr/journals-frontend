@@ -53,8 +53,10 @@ const apiClient = {
   lockArticle: articleId => fetchInstance.request(`/articles/${articleId}/lock/`),
   createArticleAttachment: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
-  getArticleAttachments: (articleId) =>
-    fetchInstance.request(`/articles/${articleId}/attachments/`),
+  editArticleAttachment: (id, data) =>
+    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'put', data }),
+  removeArticleAttachment: id =>
+    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'delete' }),
   createBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
   editBlocks: (articleId, data) =>
@@ -132,6 +134,7 @@ fetchInstance.instance.interceptors.response.use(null, error => {
       window.location.replace('/');
     }
   }
+  return Promise.reject(error);
 });
 
 export default apiClient;

@@ -41,10 +41,10 @@ class ArticleFileList extends PureComponent {
               </div>
             </div>
           </div>
-          { data.file_description !== undefined &&
+          { data.text_to_description !== undefined &&
             <div className="article-file-list__description form__field">
-              <label htmlFor={ `${field}.file_description` } className="form__label">Описание файла</label>
-              <Field name={ `${field}.file_description` } id={ `${field}.file_description` }
+              <label htmlFor={ `${field}.text_to_description` } className="form__label">Описание файла</label>
+              <Field name={ `${field}.text_to_description` } id={ `${field}.text_to_description` }
                      component={ TextField } placeholder="Введите описание" />
             </div>
           }

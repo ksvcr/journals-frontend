@@ -22,11 +22,11 @@ class ArticleFilesForm extends Component {
           file_size: file.size,
           type: file.type,
           file: base64,
-          file_description: ''
+          text_to_description: ''
         };
       });
       newFiles.forEach(file => {
-        arrayPush(formName, 'attachments', file);
+        arrayPush(formName, 'file_atachments', file);
       })
     });
   };
@@ -46,7 +46,7 @@ class ArticleFilesForm extends Component {
           <FileDropPlaceholder />
         </Dropzone>
 
-        <FieldArray name="attachments"
+        <FieldArray name="file_atachments"
                     component={ props => <ArticleFileList { ...props } /> } />
       </div>
     );

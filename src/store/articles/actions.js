@@ -1,8 +1,7 @@
 import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
          ACCEPT_ARTICLE_REVIEW_INVITE, FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG,
          REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION,
-         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES,
-         FETCH_ARTICLE_ATTACHMENTS } from './constants';
+         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -32,7 +31,7 @@ export function fetchArticle(id) {
 
 export function createArticle(siteId, data, cb) {
   return dispatch => {
-    let { content_blocks, sources, financing_sources, ...articleData } = data;
+    let { content_blocks, sources, financing_sources, file_atachments, ...articleData } = data;
     // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
 
@@ -67,14 +66,14 @@ export function createArticle(siteId, data, cb) {
               );
             }
 
-            return Promise.all(resourcePromises).then(() => {
-              // Создаем вложения
-              const attachmentsPromises = data.attachments.map(attachment => {
-                return apiClient.createArticleAttachment(articleId, attachment);
+            // Вложения
+            if (file_atachments) {
+              file_atachments.forEach(attachment => {
+                resourcePromises.push(apiClient.createArticleAttachment(articleId, attachment));
               });
+            }
 
-              return Promise.all(attachmentsPromises);
-            });
+            return Promise.all(resourcePromises);
           });
         });
     });
@@ -89,7 +88,7 @@ export function createArticle(siteId, data, cb) {
 export function editArticle(id, data) {
   return (dispatch, state) => {
     const prevArticleData = state().articles.data[id] || {};
-    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    let { content_blocks, financing_sources, sources, file_atachments, ...articleData } = data;
     // Источники финансирования
     let financingPromises = [];
 
@@ -130,6 +129,20 @@ export function editArticle(id, data) {
             const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
             const removeSourcesPromises = removedSourcesArray.map(item => apiClient.removeSource(id, item.id));
             editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises];
+          }
+
+          // Вложения
+          if (file_atachments) {
+            const createAttachmentsArray = file_atachments.filter(item => item.id === undefined);
+            const editAttachmentsArray = file_atachments.filter(item => item.id !== undefined);
+            const hasRemoved = prevArticleData.file_atachments &&
+                               prevArticleData.file_atachments.length > editAttachmentsArray.length;
+            const removedAttachmentsArray = hasRemoved ?
+              differenceBy(prevArticleData.file_atachments, editAttachmentsArray, 'id') : [];
+            const createAttachmentsPromises = createAttachmentsArray.map(item => apiClient.createArticleAttachment(id, item));
+            const editAttachmentsPromises = editAttachmentsArray.map(item => apiClient.editArticleAttachment(item.id, item));
+            const removeAttachmentsPromises = removedAttachmentsArray.map(item => apiClient.removeArticleAttachment(item.id));
+            editPromises = [ ...editPromises, ...createAttachmentsPromises, ...editAttachmentsPromises, ...removeAttachmentsPromises];
           }
 
           return Promise.all(editPromises);
@@ -292,17 +305,6 @@ export function fetchArticleReviewInvites(params) {
     return dispatch({
       type: FETCH_ARTICLE_REVIEW_INVITES,
       meta: params,
-      payload
-    }).catch(error => console.error(error));
-  };
-}
-
-export function fetchArticleAttachments(id) {
-  return dispatch => {
-    const payload = apiClient.getArticleAttachments(id);
-    return dispatch({
-      type: FETCH_ARTICLE_ATTACHMENTS,
-      meta: { article: id },
       payload
     }).catch(error => console.error(error));
   };

@@ -104,7 +104,7 @@ class ArticleForm extends Component {
       if(formValues && formValues.title && (!articleData || isDraft)) {
         onAutoSave(formValues);
       }
-    }, 10000);
+    }, 30000);
   };
 
   handleDraftSubmit = () => {
@@ -184,7 +184,6 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
@@ -222,7 +221,7 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: data.file_atachments || [],
+    file_atachments: data.file_atachments || [],
     list_literature_file: data.list_literature_file,
     ...data
   };

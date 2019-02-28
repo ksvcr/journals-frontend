@@ -1,5 +1,6 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, blocks, sources, ...rest } = data;
+  const { authors = [], has_financing, financing_sources, blocks, sources,
+          file_atachments, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -37,6 +38,15 @@ export function serializeArticleData(data = {}) {
       ordered: index,
       content: item.content
     }));
+  }
+
+  if (file_atachments) {
+    serializedData.file_atachments = file_atachments.map(item => {
+      if (item.id !== undefined) {
+        delete item.file;
+      }
+      return item
+    });
   }
 
   if (sources) {
