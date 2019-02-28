@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { change, FieldArray, formValueSelector, getFormValues } from 'redux-form';
+import { change, Field, FieldArray, formValueSelector, getFormValues } from 'redux-form';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
 
@@ -9,8 +9,6 @@ import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceh
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';
 
 import fileToBase64 from '~/utils/fileToBase64';
-import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
-
 
 class ArticleSourcesForm extends Component {
   state = {
@@ -41,13 +39,7 @@ class ArticleSourcesForm extends Component {
     const filePromise = fileToBase64(file);
 
     return filePromise.then((base64) => {
-      const newFile = {
-        name: file.name,
-        file_size: file.size,
-        type: file.type,
-        file: base64
-      };
-      change(formName, 'list_literature_file', [ newFile ]);
+      change(formName, 'list_literature_file', base64);
     });
   };
 
@@ -76,8 +68,7 @@ class ArticleSourcesForm extends Component {
                       onDrop={ this.handleDropFiles }>
               <FileDropPlaceholder />
             </Dropzone>
-            <FieldArray name="list_literature_file"
-                        component={ props => <ArticleFileList { ...props } /> } />
+            <Field name="list_literature_file" type="hidden" component="input" />
           </div> :
           <div className="form__field">
             <FieldArray name="sources" rerenderOnEveryChange={ true }

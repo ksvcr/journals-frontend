@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { arrayPush, Field, FieldArray, formValueSelector } from 'redux-form';
+import { Field, FieldArray, change, formValueSelector } from 'redux-form';
 import { withNamespaces } from 'react-i18next';
 import Dropzone from 'react-dropzone';
 
@@ -8,7 +8,6 @@ import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
-import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
 
 import fileToBase64 from '~/utils/fileToBase64';
 import getArticleTypes from '~/services/getArticleTypes';
@@ -24,23 +23,12 @@ class ArticleContentForm extends Component {
   }
 
   handleDropFiles = files => {
-    const { arrayPush, formName } = this.props;
-    const newFilesPromises = files.map(file => fileToBase64(file));
+    const { change, formName } = this.props;
+    const file = files[0];
+    const filePromise = fileToBase64(file);
 
-    Promise.all(newFilesPromises).then(result => {
-      const newFiles = result.map((base64, index) => {
-        const file = files[index];
-        return {
-          name: file.name,
-          file_size: file.size,
-          type: file.type,
-          file: base64
-        };
-      });
-
-      newFiles.forEach(file => {
-        arrayPush(formName, 'text_files', file);
-      })
+    return filePromise.then((base64) => {
+      change(formName, 'incoming_file', base64 );
     });
   };
 
@@ -70,11 +58,10 @@ class ArticleContentForm extends Component {
             <Dropzone className="article-content-form__dropzone"
                       accept=".doc, .docx, .rtf"
                       maxSize={ 50 * Math.pow(1024, 2) }
-                      multiple={ true } onDrop={ this.handleDropFiles } >
+                      multiple={ false } onDrop={ this.handleDropFiles } >
               <FileDropPlaceholder />
             </Dropzone>
-            <FieldArray name="text_files"
-                        component={ props => <ArticleFileList { ...props } /> } />
+            <Field name="incoming_file" type="hidden" component="input" />
           </div>
         ) : (
           <Fragment>
@@ -85,8 +72,7 @@ class ArticleContentForm extends Component {
               <Field name="article_type" id="article_type"
                      options={ this.typeOptions } component={ Select } />
             </div>
-            <FieldArray name="content_blocks" component={ this.renderContentBlockList }
-            />
+            <FieldArray name="content_blocks" component={ this.renderContentBlockList } />
           </Fragment>
         ) }
       </div>
@@ -105,7 +91,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
-  arrayPush
+  change
 };
 
 ArticleContentForm = withNamespaces()(ArticleContentForm);

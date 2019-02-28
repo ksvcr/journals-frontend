@@ -97,7 +97,7 @@ class ArticlePublish extends Component {
 
   handleSubmit = (formData, formName) => {
     const { siteId, isEdit, createArticle,
-            editArticle, push, reset, destroy } = this.props;
+            editArticle, push, destroy } = this.props;
     const data = serializeArticleData(formData);
 
     if (!data.conflict_interest) {

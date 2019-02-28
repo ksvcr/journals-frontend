@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import fetchService from '~/utils/fetchService';
 
 const fetchInstance = new fetchService({
@@ -131,6 +132,7 @@ const apiClient = {
 fetchInstance.instance.interceptors.response.use(null, error => {
   if (error.config && error.response && error.response.status === 403) {
     if (process.env.NODE_ENV === 'production') {
+      Cookies.remove('csrftoken');
       window.location.replace('/');
     }
   }
