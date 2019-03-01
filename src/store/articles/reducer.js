@@ -1,9 +1,8 @@
 import uniqBy from 'lodash/uniqBy';
-import {
-  FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
-  REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
-  EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION
-} from './constants';
+
+import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
+         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_PRINTED,
+         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
 import { CREATE_USER_TAG, REMOVE_USER_TAG } from '~/store/users/constants';
 import { REMOVE_REVIEW_INVITE } from '~/store/reviewInvites/constants';
 
@@ -219,6 +218,27 @@ function articles(state = initialState, action) {
 
     case `${RESET_ARTICLES}`:
       return initialState;
+
+    case `${FETCH_ARTICLE_PRINTED}_PENDING`:
+      return {
+        ...state,
+        isPending: true,
+        isFulfilled: false,
+      };
+
+    case `${FETCH_ARTICLE_PRINTED}_FULFILLED`:
+      return {
+        ...state,
+        isPending: false,
+        isFulfilled: true,
+        data: {
+          ...state.data,
+          [ action.meta.article ]: {
+            ...state.data[action.meta.article],
+            printed: action.payload.results
+          }
+        }
+      };
 
     default:
       return state;

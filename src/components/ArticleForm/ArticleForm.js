@@ -22,7 +22,7 @@ import './assets/save.svg';
 
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
-import {  getRootCategoriesArray } from '~/store/categories/selector';
+import { getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -192,9 +192,6 @@ function getInitialValues(state, props) {
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
     financing_sources: [{
       type: financingIds[0]
-    }],
-    addresses: [{
-      count: 1
     }],
     authors: [{
       id: user.data.id,

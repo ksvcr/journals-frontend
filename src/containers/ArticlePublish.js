@@ -65,7 +65,7 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchArticlePrinted } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
@@ -84,6 +84,7 @@ class ArticlePublish extends Component {
             ]);
           })
       );
+      promises.push(fetchArticlePrinted(articleId));
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
@@ -279,7 +280,8 @@ const mapDispatchToProps = {
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
-  fetchCountries: countriesActions.fetchCountries
+  fetchCountries: countriesActions.fetchCountries,
+  fetchArticlePrinted: articlesActions.fetchArticlePrinted
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);

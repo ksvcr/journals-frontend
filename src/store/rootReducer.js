@@ -29,6 +29,6 @@ export default combineReducers({
   discounts,
   lawtypes,
   countries,
-  reviews
+  reviews,
 });
 

@@ -126,7 +126,18 @@ const apiClient = {
   getReviews: (articleId = null, reviewId = null, params) => {
     const tail = reviewId !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
-  }
+  },
+  createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed/`, { method: 'post', data }),
+  editArticlePrinted: (articleId, printedId, data) => {
+    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'put', data })
+  },
+  removeArticlePrinted: (articleId, printedId) => {
+    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'delete' })
+  },
+  getPrinted: (articleId, printedId=null) => {
+    const tail = printedId !== null ? `${printedId}/` : '';
+    return fetchInstance.request(`/articles/${articleId}/printed/${tail}`);
+  },
 };
 
 fetchInstance.instance.interceptors.response.use(null, error => {
