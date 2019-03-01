@@ -54,7 +54,7 @@
     "react-tippy": "^1.2.2",
     "redraft": "^0.10.2",
     "redux": "^4.0.1",
-    "redux-form": "^8.1.0",
+    "redux-form": "^7.4.2",
     "redux-promise-middleware": "^5.1.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
