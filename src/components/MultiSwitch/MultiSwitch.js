@@ -35,7 +35,7 @@ class MultiSwitch extends Component {
   };
 
   render() {
-    const {input} = this.props;
+    const { input } = this.props;
     const { color } = this.state;
     let value = input.value ? input.value : this.props.value;
 

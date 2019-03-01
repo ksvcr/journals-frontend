@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
@@ -35,7 +34,7 @@ class ArticlesForReviewList extends Component {
     if (data.state_article === 'AWAIT_REVIEW') {
       tools.push({
         title: 'Написать рецензию',
-        handler: this.handleCreateReview
+        link: `/article/${data.id}/review`
       });
     }
 
@@ -43,33 +42,23 @@ class ArticlesForReviewList extends Component {
       title: 'Просмотр',
       type: 'preview',
       icon: 'preview',
-      handler: this.handlePreview
+      link: `/article/${data.id}`
     });
 
     return tools;
-  };
+  }
 
-  handleSortChange = (ordering) => {
+  handleSortChange = ordering => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
   };
 
-  handleCreateReview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/review`);
-  };
-
-  handleAcceptInvite = (id) => {
+  handleAcceptInvite = id => {
     const { acceptArticleReviewInvite } = this.props;
     acceptArticleReviewInvite(id);
   };
 
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
-  };
-
-  handlePaginateChange = (paginate) => {
+  handlePaginateChange = paginate => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ paginate });
   };
@@ -82,7 +71,9 @@ class ArticlesForReviewList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
+      menuTooltip: data => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      ),
       cells: [
         {
           style: {
@@ -90,8 +81,7 @@ class ArticlesForReviewList extends Component {
           },
           isMain: true,
           head: () => 'Название',
-          render: (data) =>
-            data.title || 'Название статьи не указано'
+          render: data => data.title || 'Название статьи не указано'
         },
         {
           style: {
@@ -99,8 +89,7 @@ class ArticlesForReviewList extends Component {
           },
           sort: 'date_create',
           head: () => 'Создана',
-          render: (data) =>
-            formatDate.toString(data[dateField])
+          render: data => formatDate.toString(data[dateField])
         },
         {
           style: {
@@ -108,8 +97,7 @@ class ArticlesForReviewList extends Component {
           },
           sort: 'stage_article',
           head: () => 'Этап',
-          render: (data) =>
-            getArticleStageTitle(data.stage_article)
+          render: data => getArticleStageTitle(data.stage_article)
         },
         {
           style: {
@@ -117,17 +105,17 @@ class ArticlesForReviewList extends Component {
           },
           sort: 'state_article',
           head: () => 'Статус',
-          render: (data) => {
+          render: data => {
             const inviteId = reviewInvitesArticlesMap[data.id];
             const invite = reviewInvites[inviteId];
             return (
               <React.Fragment>
-                <StatusLabel status={data.state_article} />
-                { invite &&
+                <StatusLabel status={ data.state_article } />
+                { invite && (
                   <div className="articles-for-review-list__deadline">
                     <DeadlineLabel date={ invite.decision_deadline } />
                   </div>
-                }
+                ) }
               </React.Fragment>
             );
           }
@@ -144,9 +132,10 @@ class ArticlesForReviewList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        { total > 0 &&
-          <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
-        }
+        { total > 0 && (
+          <PaginateLine onChange={ this.handlePaginateChange }
+                        total={ total } { ...paginate } />
+        ) }
       </div>
     );
   }
@@ -159,15 +148,16 @@ function mapStateToProps(state) {
     articlesArray: getArticlesArray(state),
     reviewInvites: reviewInvites.data,
     reviewInvitesArticlesMap: reviewInvites.articleId || {},
-    total, paginate
+    total,
+    paginate
   };
 }
 
 const mapDispatchToProps = {
-  push,
   acceptArticleReviewInvite: articlesActions.acceptArticleReviewInvite
 };
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(ArticlesForReviewList);

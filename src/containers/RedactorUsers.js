@@ -20,7 +20,7 @@ class RedactorUsers extends Component {
     const data = {
       ...usersParams,
       ...params,
-      search: params.search_query || usersParams.search,
+      search: params.search_query || usersParams.search
     };
     fetchUsers(data);
   };
@@ -48,18 +48,20 @@ class RedactorUsers extends Component {
     return {
       name: 'site',
       options,
-      onChange: (event) => {}
-    }
+      onChange: event => {}
+    };
   }
 
   get selectActionProps() {
     return {
       name: 'action',
-      options: [{
-        title: 'Отправить письмо',
-        value: 'mail'
-      }],
-      onChange: (event) => {}
+      options: [
+        {
+          title: 'Отправить письмо',
+          value: 'mail'
+        }
+      ],
+      onChange: event => {}
     };
   }
 
@@ -67,26 +69,29 @@ class RedactorUsers extends Component {
     return {
       name: 'tags',
       options: [],
-      onChange: (event) => {}
+      onChange: event => {}
     };
   }
 
-  handlePaginateChange = (paginate) => {
-    this.handleRequest({ paginate })
+  handlePaginateChange = paginate => {
+    this.handleRequest({ paginate });
   };
 
   render() {
     const { total, paginate } = this.props;
     return (
       <React.Fragment>
-         <h1 className="page__title">Пользователи</h1>
-
-         <div className="page__tools">
+        <h1 className="page__title">Пользователи</h1>
+        <div className="page__tools">
           <div className="form">
             <div className="form__field">
               <label className="form__label">Поиск пользователя</label>
-              <SearchPanel hasDefaultTarget={ false } targets={ this.searchTargets }
-                           onChange={ this.handleRequest } initialTarget="name" />
+              <SearchPanel
+                hasDefaultTarget={ false }
+                targets={ this.searchTargets }
+                onChange={ this.handleRequest }
+                initialTarget="name"
+              />
             </div>
             <div className="form__row">
               <div className="form__col form__col_4">
@@ -113,9 +118,13 @@ class RedactorUsers extends Component {
 
         <RedactorUsersList onUpdateRequest={ this.handleRequest } />
 
-        { total > 0 &&
-          <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
-        }
+        { total > 0 && (
+          <PaginateLine
+            onChange={ this.handlePaginateChange }
+            total={ total }
+            { ...paginate }
+          />
+        ) }
       </React.Fragment>
     );
   }
@@ -129,11 +138,14 @@ function mapStateToProps(state) {
     total,
     paginate,
     sitesArray: getSitesArray(state)
-  }
+  };
 }
 
 const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RedactorUsers);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RedactorUsers);

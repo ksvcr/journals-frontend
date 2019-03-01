@@ -12,14 +12,14 @@ import ArticleSourceTranslateItemForm from '~/components/ArticleSourceTranslateI
 import getSourceTypes from '~/services/getSourceTypes';
 
 class ArticleSourceList extends Component {
-  getResourceTypeName = (status) => {
+  getResourceTypeName = status => {
     const resourceTypes = getSourceTypes();
     const currentType = resourceTypes.find(item => item.value === status);
     return currentType.title;
   };
 
   handleAdd = () => {
-    const { fields, initialValues }  = this.props;
+    const { fields, initialValues } = this.props;
     fields.push(initialValues);
   };
 
@@ -28,7 +28,7 @@ class ArticleSourceList extends Component {
     fields.move(from, to);
   };
 
-  handleRemove = (index) => {
+  handleRemove = index => {
     const { fields } = this.props;
     fields.remove(index);
   };
@@ -48,7 +48,7 @@ class ArticleSourceList extends Component {
 
     const fieldSetParams = {
       onRemove: !isTranslator && this.handleRemove,
-      onMove: !isTranslator && this.handleMove,
+      onMove: !isTranslator && this.handleMove
     };
 
     return (
@@ -56,42 +56,42 @@ class ArticleSourceList extends Component {
         <ReactCSSTransitionGroup transitionName="fade"
                                  transitionEnterTimeout={ 400 }
                                  transitionLeaveTimeout={ 200 } >
-          {
-            fields.map((field, index) => {
-              const data = fields.get(index);
-              const { isEdit, hash } = data;
-              return (
-                <React.Fragment key={ index }>
-                  { isEdit ?
-                    <FieldSet fieldsTitle={ isTranslator && this.getResourceTypeName(data.resourcetype) }
-                              isLast={ index === fields.length - 1 } index={ index }
-                              legend={`${legend} №${index + 1}`} { ...fieldSetParams } >
-                      { isTranslator ?
-                        <ArticleSourceTranslateItemForm formName={ `source-translate[${hash}]` }
-                                                        data={ data } field={ field } index={ index }
-                                                        onSubmit={ this.handleFormSubmit }/>
-                        :
-                        <ArticleSourceCreateForm formName={ `source-create[${hash}]` } data={ data }
-                                                 field={ field } onSubmit={ this.handleFormSubmit }/>
-                      }
-                    </FieldSet> :
-                    <ArticleSource index={ index } field={ field } data={ data }
-                                   onRemove={ !isTranslator && this.handleRemove } onEdit={ this.handleEdit } />
-                  }
-                </React.Fragment>
-              )
-            })
-          }
+          { fields.map((field, index) => {
+            const data = fields.get(index);
+            const { isEdit, hash } = data;
+            return (
+              <React.Fragment key={ index }>
+                { isEdit ? (
+                  <FieldSet fieldsTitle={ isTranslator && this.getResourceTypeName(data.resourcetype) }
+                            isLast={ index === fields.length - 1 } index={ index }
+                            legend={ `${legend} №${index + 1}` }
+                            { ...fieldSetParams } >
+                    { isTranslator ? (
+                      <ArticleSourceTranslateItemForm
+                        formName={ `source-translate[${hash}]` }
+                        data={ data } field={ field } index={ index }
+                        onSubmit={ this.handleFormSubmit } />
+                    ) : (
+                      <ArticleSourceCreateForm
+                        formName={ `source-create[${hash}]` }
+                        data={ data } field={ field } onSubmit={ this.handleFormSubmit } />
+                    ) }
+                  </FieldSet>
+                ) : (
+                  <ArticleSource index={ index } field={ field }
+                                 data={ data } onRemove={ !isTranslator && this.handleRemove }
+                                 onEdit={ this.handleEdit } />
+                ) }
+              </React.Fragment>
+            );
+          }) }
         </ReactCSSTransitionGroup>
 
-        {
-          !isCorrector && addText &&
+        { !isCorrector && addText && (
           <div className="field-set-list__button">
-            <FieldAddButton onAdd={ this.handleAdd }>
-              { addText }
-            </FieldAddButton>
+            <FieldAddButton onAdd={ this.handleAdd }>{ addText }</FieldAddButton>
           </div>
-        }
+        ) }
       </div>
     );
   }
@@ -105,4 +105,7 @@ const mapDispatchToProps = {
   change
 };
 
-export default connect(null, mapDispatchToProps)(ArticleSourceList);
+export default connect(
+  null,
+  mapDispatchToProps
+)(ArticleSourceList);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
@@ -23,18 +22,19 @@ class AuthorArticleList extends Component {
 
   getToolsMenuItems(data) {
     const { locked_by } = data;
-    const {t, userId} = this.props;
+    const { t, userId } = this.props;
     const isLocked = locked_by !== null && locked_by !== userId;
     let items = [];
 
     if (!isLocked) {
       items.push({
         title: t('edit'),
-        handler: this.handleEdit
+        link: `/article/${data.id}/edit/`
       });
     }
 
-    items = [ ...items,
+    items = [
+      ...items,
       {
         title: 'Оплатить',
         handler: this.handlePaymentShow
@@ -43,40 +43,30 @@ class AuthorArticleList extends Component {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: this.handlePreview
+        link: `/article/${data.id}`
       }
     ];
 
     return items;
-  };
+  }
 
   get dateTitle() {
     return {
-      'date_create': 'Создана',
-      'date_send_to_review': 'Отправлена',
-      'last_change': 'Изменена'
+      date_create: 'Создана',
+      date_send_to_review: 'Отправлена',
+      last_change: 'Изменена'
     };
-  };
+  }
 
-  handleSortChange = (ordering) => {
+  handleSortChange = ordering => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
   };
 
-  handlePaymentShow = (id) => {
+  handlePaymentShow = id => {
     this.setState({
-      box: { id,  type: 'payment' }
+      box: { id, type: 'payment' }
     });
-  };
-
-  handleEdit = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/edit/`);
-  };
-
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
   };
 
   handlePaymentClose = () => {
@@ -89,7 +79,7 @@ class AuthorArticleList extends Component {
     onUpdateRequest({ filter: range });
   };
 
-  handlePaginateChange = (paginate) => {
+  handlePaginateChange = paginate => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ paginate });
   };
@@ -102,7 +92,9 @@ class AuthorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
+      menuTooltip: data => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      ),
       box: this.renderBox,
       cells: [
         {
@@ -111,8 +103,7 @@ class AuthorArticleList extends Component {
           },
           isMain: true,
           head: () => t('title'),
-          render: (data) =>
-            data.title || 'Название статьи не указано'
+          render: data => data.title || 'Название статьи не указано'
         },
         {
           style: {
@@ -120,11 +111,13 @@ class AuthorArticleList extends Component {
           },
           sort: dateField,
           head: () => this.dateTitle[dateField],
-          headToolTip: () =>
-            <DateFilter field={ dateField }
-                        onChange={ this.handleDateFilterChange } />,
-          render: (data) =>
-            formatDate.toString(data[dateField])
+          headToolTip: () => (
+            <DateFilter
+              field={ dateField }
+              onChange={ this.handleDateFilterChange }
+            />
+          ),
+          render: data => formatDate.toString(data[dateField])
         },
         {
           style: {
@@ -132,8 +125,7 @@ class AuthorArticleList extends Component {
           },
           sort: 'stage_article',
           head: () => t('stage'),
-          render: (data) =>
-            getArticleStageTitle(data.stage_article)
+          render: data => getArticleStageTitle(data.stage_article)
         },
         {
           style: {
@@ -141,14 +133,13 @@ class AuthorArticleList extends Component {
           },
           sort: 'state_article',
           head: () => t('state'),
-          render: (data) =>
-            <StatusLabel status={ data.state_article } />
+          render: data => <StatusLabel status={ data.state_article } />
         }
       ]
     };
   }
 
-  renderBox = (data) => {
+  renderBox = data => {
     const { box } = this.state;
     if (box && box.id === data.id) {
       if (box.type === 'payment') {
@@ -167,9 +158,10 @@ class AuthorArticleList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        { total > 0 &&
-          <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
-        }
+        { total > 0 && (
+          <PaginateLine onChange={ this.handlePaginateChange } total={ total }
+                        { ...paginate } />
+        ) }
       </div>
     );
   }
@@ -181,16 +173,13 @@ function mapStateToProps(state) {
   return {
     articlesArray: getArticlesArray(state),
     userId: user.data.id,
-    total, paginate
+    total,
+    paginate
   };
 }
-
-const mapDispatchToProps = {
-  push
-};
 
 AuthorArticleList = withNamespaces()(AuthorArticleList);
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps
 )(AuthorArticleList);

@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Field, getFormValues, reduxForm} from 'redux-form';
+import { Field, getFormValues, reduxForm } from 'redux-form';
 
 import FieldHint from '~/components/FieldHint/FieldHint';
 import TextField from '~/components/TextField/TextField';
@@ -14,7 +14,7 @@ class ReviewsDialog extends Component {
     answerValue: ''
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     const { onSubmit, formValues } = this.props;
     const { id } = this.props.item;
     const answer = event.target.author_answer.value;
@@ -32,24 +32,37 @@ class ReviewsDialog extends Component {
 
     return (
       <div className="reviews-dialog">
-        <div className="reviews-dialog__comment">
-          { item.comment_for_author }
-        </div>
+        <div className="reviews-dialog__comment">{ item.comment_for_author }</div>
         <form className="reviews-dialog__answer" onSubmit={ this.handleSubmit }>
           <div className="form__field">
             <label htmlFor="author_answer" className="form__label">
               ваш ответ (будет опубликован вместе со статьей)
-              <FieldHint text={'Когда статья будет опубликована в журнале, в ее составе ' +
-              'будет текст рецензии и ваш ответ на нее'}/>
+              <FieldHint
+                text={
+                  'Когда статья будет опубликована в журнале, в ее составе ' +
+                  'будет текст рецензии и ваш ответ на нее'
+                }
+              />
             </label>
-            { answer ?
+            { answer ? (
               <div className="reviews-dialog__comment">{ answer }</div>
-              :
-              <Field name="author_answer" id="author_answer" textarea minRows={5} component={TextField}
-                     placeholder="Введите Ваш ответ" validate={ [validate.required] }/>
-            }
+            ) : (
+              <Field
+                name="author_answer"
+                id="author_answer"
+                textarea
+                minRows={ 5 }
+                component={ TextField }
+                placeholder="Введите Ваш ответ"
+                validate={ [validate.required] }
+              />
+            ) }
           </div>
-          { !answer && <button className="reviews-dialog__button" type="submit">Ответить</button> }
+          { !answer && (
+            <button className="reviews-dialog__button" type="submit">
+              Ответить
+            </button>
+          ) }
         </form>
       </div>
     );
@@ -67,7 +80,7 @@ function mapStateToProps(state, props) {
   return {
     form: formName,
     formValues,
-    initialValues: getInitialValues(props),
+    initialValues: getInitialValues(props)
   };
 }
 

@@ -12,29 +12,33 @@ class ArticleSource extends Component {
     let resultString = '';
 
     if (data.author && lang === 'ru') {
-      if(typeof data.author === 'string') {
+      if (typeof data.author === 'string') {
         resultString = data.author;
       } else {
-        const author = Array.isArray(data.author) ? data.author[0] : data.author;
+        const author = Array.isArray(data.author)
+          ? data.author[0]
+          : data.author;
         const { lastname, initials } = author;
 
         resultString = `${lastname} ${initials} `;
       }
     }
 
-    let params = parts.filter(key => data[key]).reduce((result, key) => {
-      let item = data[key];
+    let params = parts
+      .filter(key => data[key])
+      .reduce((result, key) => {
+        let item = data[key];
 
-      if (key === 'page_count') {
-        if (lang === 'ru') {
-         item = `- ${item} с.`
-        } else {
-         item = `${item} P`
+        if (key === 'page_count') {
+          if (lang === 'ru') {
+            item = `- ${item} с.`;
+          } else {
+            item = `${item} P`;
+          }
         }
-      }
 
-      return `${result} ${item}`;
-    }, '');
+        return `${result} ${item}`;
+      }, '');
 
     return resultString + params;
   }
@@ -65,17 +69,21 @@ class ArticleSource extends Component {
           </div>
         </div>
         <div className="article-source__tools">
-          <button className="article-source__tool" type="button" onClick={ this.handleEdit }>
-            <Icon name="edit" className="article-source__icon article-source__icon_edit" />
+          <button className="article-source__tool"
+                  type="button" onClick={ this.handleEdit } >
+            <Icon name="edit"
+                  className="article-source__icon article-source__icon_edit" />
             Редактировать
           </button>
 
-          { onRemove &&
-            <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
-              <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
+          { onRemove && (
+            <button className="article-source__tool" type="button"
+                    onClick={ this.handleRemove } >
+              <Icon name="cancel"
+                    className="article-source__icon article-source__icon_remove" />
               Удалить
             </button>
-          }
+          ) }
         </div>
       </div>
     );

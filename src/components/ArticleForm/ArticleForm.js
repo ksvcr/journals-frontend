@@ -22,7 +22,7 @@ import './assets/save.svg';
 
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
-import {  getRootCategoriesArray } from '~/store/categories/selector';
+import { getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -95,16 +95,16 @@ class ArticleForm extends Component {
   }
 
   initAutoSave = () => {
-    const { onAutoSave, autoSaveTimer, form, articleData } = this.props;
+    const { onAutoSave, articleData } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
-
+    // Автоматическое сохранение
     this.autoSaveInterval = setInterval(() => {
       const { formValues } = this.props;
 
       if(formValues && formValues.title && (!articleData || isDraft)) {
-        onAutoSave(formValues, form);
+        onAutoSave(formValues);
       }
-    }, autoSaveTimer * 1000);
+    }, 30000);
   };
 
   handleDraftSubmit = () => {
@@ -184,7 +184,6 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
@@ -193,9 +192,6 @@ function getInitialValues(state, props) {
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
     financing_sources: [{
       type: financingIds[0]
-    }],
-    addresses: [{
-      count: 1
     }],
     authors: [{
       id: user.data.id,
@@ -222,7 +218,8 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: data.file_atachments || [],
+    file_atachments: data.file_atachments || [],
+    list_literature_file: data.list_literature_file,
     ...data
   };
 

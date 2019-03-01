@@ -11,30 +11,34 @@ const initialState = {
 function reviews(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_REVIEW}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${FETCH_REVIEW}_FULFILLED`:
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         isRejected: false,
-        data: { ...state.data,
-          [ action.payload.id ]: action.payload
+        data: {
+          ...state.data,
+          [action.payload.id]: action.payload
         },
-        ids: [ ...state.ids, action.payload.id ]
+        ids: [...state.ids, action.payload.id]
       };
 
     case `${FETCH_REVIEW}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     default:
-      return state
+      return state;
   }
 }
 

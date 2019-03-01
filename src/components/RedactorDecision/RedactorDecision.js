@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {reduxForm, Field, formValueSelector} from 'redux-form';
+import { reduxForm, Field, formValueSelector } from 'redux-form';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -17,12 +17,15 @@ class RedactorDecision extends Component {
     fetchArticleReviewInvites({ article: articleId });
   }
 
-  handleSubmit = (formData) => {
+  handleSubmit = formData => {
     const { articleId, editArticle, editArticleReview } = this.props;
     const { state_article, review_for_approve, comment_for_redactor } = formData;
     editArticle(articleId, { state_article });
     if (review_for_approve) {
-      editArticleReview(articleId, review_for_approve, { is_approved: true, comment_for_redactor });
+      editArticleReview(articleId, review_for_approve, {
+        is_approved: true,
+        comment_for_redactor
+      });
     }
   };
 
@@ -74,30 +77,36 @@ class RedactorDecision extends Component {
   }
 
   render() {
-    const { articleId, state_article, handleSubmit, form } = this.props;
+    const { articleId, state_article, handleSubmit, form, currentArticleState } = this.props;
     return (
       <div className="redactor-decision">
-        <form className="redactor-decision__form" onSubmit={ handleSubmit(this.handleSubmit) }>
-          { this.options.length > 0 &&
+        <form
+          className="redactor-decision__form"
+          onSubmit={ handleSubmit(this.handleSubmit) }
+        >
+          { this.options.length > 0 && (
             <div className="redactor-decision__switch">
-              <Field options={this.options} name="state_article"
-                     component={MultiSwitch}/>
+              <Field
+                options={ this.options }
+                name="state_article"
+                component={ MultiSwitch }
+              />
             </div>
-          }
+          ) }
 
-          { state_article === 'AWAIT_PAYMENT' &&
+          { currentArticleState === 'AWAIT_REDACTOR' && state_article === 'AWAIT_PAYMENT' && (
             <div className="redactor-decision__reviews">
-              <ReviewApprove formName={ form } articleId={ articleId }/>
+              <ReviewApprove formName={ form } articleId={ articleId } />
             </div>
-          }
+          ) }
 
-          { state_article &&
+          { state_article && (
             <div className="redactor-decision__bottom">
               <Button type="submit" className="button_orange">
                 Отправить
               </Button>
             </div>
-          }
+          ) }
         </form>
       </div>
     );

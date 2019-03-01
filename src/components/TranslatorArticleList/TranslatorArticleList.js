@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from "connected-react-router";
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -17,32 +16,22 @@ import * as formatDate from '~/services/formatDate';
 import './translator-article-list.scss';
 
 class TranslatorArticleList extends Component {
-  get toolsMenuItems() {
+  getToolsMenuItems = (data) => {
     return [
       {
         title: 'Перевести',
-        handler: this.handleTranslate
+        link: `/article/${data.id}/translate`
       },
       {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
-        handler: this.handlePreview
+        link: `/article/${data.id}`
       }
     ];
-  };
+  }
 
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
-  };
-
-  handleTranslate = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}/translate`);
-  };
-
-  handlePaginateChange = (paginate) => {
+  handlePaginateChange = paginate => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ paginate });
   };
@@ -53,7 +42,7 @@ class TranslatorArticleList extends Component {
     createArticleTag(article, tagData);
   };
 
-  handleSortChange = (ordering) => {
+  handleSortChange = ordering => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
   };
@@ -65,7 +54,9 @@ class TranslatorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: data => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      ),
       box: this.renderBox,
       cells: [
         {
@@ -74,8 +65,7 @@ class TranslatorArticleList extends Component {
           },
           isMain: true,
           head: () => 'Название',
-          render: (data) =>
-            data.title || 'Название статьи не указано'
+          render: data => data.title || 'Название статьи не указано'
         },
         {
           style: {
@@ -83,7 +73,7 @@ class TranslatorArticleList extends Component {
           },
           sort: 'site',
           head: () => 'Журнал',
-          render: (data) => {
+          render: data => {
             const siteId = data.site;
             const siteName = sitesData[siteId] && sitesData[siteId].name;
             return siteName || 'Журнал не найден';
@@ -95,28 +85,27 @@ class TranslatorArticleList extends Component {
           },
           sort: 'date_send_to_review',
           head: () => 'Отправлена',
-          render: (data) => formatDate.toString(data.date_send_to_review)
+          render: data => formatDate.toString(data.date_send_to_review)
         },
         {
           style: {
             width: '12%'
           },
           head: () => 'Перевод',
-          render: (data) => <TranslateDirection language={data.language}/>
+          render: data => <TranslateDirection language={ data.language } />
         },
         {
           style: {
             width: '20%'
           },
           head: () => 'Статус',
-          render: (data) =>
-            <StatusLabel status={ data.state_article } />
+          render: data => <StatusLabel status={ data.state_article } />
         }
       ]
     };
   }
 
-  renderBox = (data) => {
+  renderBox = data => {
     const { removeArticleTag } = this.props;
     return (
       <div className="translator-article-list__box">
@@ -136,9 +125,10 @@ class TranslatorArticleList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        { total > 0 &&
-          <PaginateLine onChange={ this.handlePaginateChange } total={ total } { ...paginate } />
-        }
+        { total > 0 && (
+          <PaginateLine onChange={ this.handlePaginateChange } total={ total }
+                        { ...paginate } />
+        ) }
       </div>
     );
   }
@@ -150,12 +140,12 @@ function mapStateToProps(state) {
   return {
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
-    total, paginate
+    total,
+    paginate
   };
 }
 
 const mapDispatchToProps = {
-  push,
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };

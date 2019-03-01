@@ -9,7 +9,7 @@ import './correct-files-form.scss';
 class CorrectFilesForm extends Component {
   handleChangeDescription = (fileId, description) => {
     const { change, formValues, formName } = this.props;
-    const newAttachments = formValues.attachments.map(file => {
+    const newAttachments = formValues.file_atachments.map(file => {
       if (file.id === fileId) {
         file.text_to_description = description;
       }
@@ -21,30 +21,25 @@ class CorrectFilesForm extends Component {
 
   renderItems = () => {
     const { formValues } = this.props;
-    const { attachments } = formValues;
-    return attachments.map((item, index) => {
-      const showDivider = ++index < attachments.length;
+    const { file_atachments } = formValues;
+    return file_atachments.map((item, index) => {
+      const showDivider = ++index < file_atachments.length;
       return (
         <React.Fragment key={ index }>
-            <CorrectFilesFormItem
-              file={ item }
-              onChangeDescription={ this.handleChangeDescription }
-              />
-            {
-              showDivider &&
-              <hr className="correct-files-form__divider" />
-            }
+          <CorrectFilesFormItem
+            file={ item }
+            onChangeDescription={ this.handleChangeDescription }
+          />
+          { showDivider && <hr className="correct-files-form__divider" /> }
         </React.Fragment>
       );
-    })
+    });
   };
 
   render() {
     return (
       <div className="correct-files-form">
-        <ul className="correct-files-form__list">
-          { this.renderItems() }
-        </ul>
+        <ul className="correct-files-form__list">{ this.renderItems() }</ul>
       </div>
     );
   }
@@ -62,4 +57,7 @@ const mapDispatchToProps = {
   change
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CorrectFilesForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CorrectFilesForm);

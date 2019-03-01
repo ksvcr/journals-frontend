@@ -18,25 +18,27 @@ import { getUsersArray } from '~/store/users/selector';
 import getNoun from '~/utils/getNoun';
 
 import './redactor-reviewer-list.scss';
-import './assets/arrow.svg'
+import './assets/arrow.svg';
 
 class RedactorReviewerList extends Component {
   renderName = ({ last_name, first_name, middle_name }) =>
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
-  handleChoose = (event) => {
+  handleChoose = event => {
     const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
     let { id } = event.currentTarget.dataset;
     id = parseInt(id, 10);
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: id }).then(() => {
-      return fetchArticleReviewInvites({ article: articleId });
-    });
+    inviteArticleReviewer(articleId, { article: articleId, reviewer: id }).then(
+      () => {
+        return fetchArticleReviewInvites({ article: articleId });
+      }
+    );
   };
 
   handleTagAdd = (user, text) => {
     const { currentUserId, createUserTag } = this.props;
     const tagData = { text, user, tag_author: currentUserId };
-    createUserTag(user, tagData);
+    createUserTag(tagData);
   };
 
   handleSearchChange = ({ search_query }) => {
@@ -69,7 +71,9 @@ class RedactorReviewerList extends Component {
             width: '30%'
           },
           head: () => 'Научные интересы',
-          render: ({ sphere_scientific_interests }) => <InterestList data={ sphere_scientific_interests } />
+          render: ({ sphere_scientific_interests }) => (
+            <InterestList data={ sphere_scientific_interests } />
+          )
         },
         {
           style: {
@@ -82,26 +86,31 @@ class RedactorReviewerList extends Component {
           style: {
             width: '30%'
           },
-          render: (data) =>
+          render: data => (
             <div className="redactor-reviewer-list__choose-wrapper">
               <Button type="button" className="button_small redactor-reviewer-list__choose"
-                      data-id={ data.id } onClick={ this.handleChoose }>
+                      data-id={ data.id } onClick={ this.handleChoose } >
                 Выбрать
                 <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
               </Button>
             </div>
+          )
         }
       ]
     };
   }
 
-  renderBox = (data) => {
+  renderBox = data => {
     const { removeUserTag } = this.props;
     return (
       <div className="redactor-reviewer-list__box">
         <div className="redactor-reviewer-list__tags">
-          <TagEditor entityId={ data.id } data={ data.tags }
-                     onAdd={ this.handleTagAdd } onRemove={ removeUserTag } />
+          <TagEditor
+            entityId={ data.id }
+            data={ data.tags }
+            onAdd={ this.handleTagAdd }
+            onRemove={ removeUserTag }
+          />
         </div>
       </div>
     );
@@ -123,7 +132,7 @@ class RedactorReviewerList extends Component {
     return {
       name: 'tags',
       options: [],
-      onChange: (event) => {}
+      onChange: event => {}
     };
   }
 
@@ -131,8 +140,11 @@ class RedactorReviewerList extends Component {
     const { onClose } = this.props;
     return (
       <div className="redactor-reviewer-list__search-box">
-        <button onClick={ onClose } type="button"
-                className="redactor-reviewer-list__cancel">
+        <button
+          onClick={ onClose }
+          type="button"
+          className="redactor-reviewer-list__cancel"
+        >
           Отмена
         </button>
         <SearchPanel onChange={ this.handleSearchChange } />
@@ -146,16 +158,12 @@ class RedactorReviewerList extends Component {
                 </div>
               </div>
               <div className="form__col form__col_6">
-                <Checkbox name="strict">
-                  Точное соответствие
-                </Checkbox>
+                <Checkbox name="strict">Точное соответствие</Checkbox>
               </div>
             </div>
           </div>
         </div>
-        <span className="redactor-reviewer-list__count">
-          { this.countText }
-        </span>
+        <span className="redactor-reviewer-list__count">{ this.countText }</span>
       </div>
     );
   };
@@ -188,5 +196,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(RedactorReviewerList);
