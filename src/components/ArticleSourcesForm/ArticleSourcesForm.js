@@ -9,6 +9,7 @@ import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceh
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';
 
 import fileToBase64 from '~/utils/fileToBase64';
+import * as validate from '~/utils/validate';
 
 class ArticleSourcesForm extends Component {
   state = {
@@ -68,7 +69,8 @@ class ArticleSourcesForm extends Component {
                       onDrop={ this.handleDropFiles }>
               <FileDropPlaceholder />
             </Dropzone>
-            <Field name="list_literature_file" type="hidden" component="input" />
+            <Field name="list_literature_file" type="hidden" component="input"
+                   validate={ [validate.required] } />
           </div> :
           <div className="form__field">
             <FieldArray name="sources" rerenderOnEveryChange={ true }

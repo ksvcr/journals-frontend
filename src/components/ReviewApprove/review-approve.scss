@@ -1,7 +1,12 @@
 .review-approve {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+  }
+
   &__item {
-    display: inline-block;
-    vertical-align: middle;
+    flex: none;
   }
 
   &__preview {
@@ -9,8 +14,7 @@
   }
 
   &__item {
-    & + & {
-      margin-left: 20px;
-    }
+    padding: 0 10px;
+    margin-bottom: 5px;
   }
 }

@@ -8,11 +8,13 @@ import Select from '~/components/Select/Select';
 import ContentBlockList from '~/components/ContentBlockList/ContentBlockList';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
+import DownloadLink from '~/components/DownloadLink/DownloadLink';
 
 import fileToBase64 from '~/utils/fileToBase64';
 import getArticleTypes from '~/services/getArticleTypes';
 
 import './article-content-form.scss';
+import * as validate from '~/utils/validate';
 
 class ArticleContentForm extends Component {
   get typeOptions() {
@@ -38,22 +40,28 @@ class ArticleContentForm extends Component {
   };
 
   render() {
-    const { t, is_send_as_file } = this.props;
-
+    const { t, is_send_as_file, articleData } = this.props;
+    const isProofreading = articleData.state_article === 'AWAIT_PROOFREADING';
     return (
       <div className="article-content-form">
         <h2 className="page__title">{ t('article_text') }</h2>
-        <div className="form__field">
-          <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
-                 component={ Checkbox } >
-            Хочу добавить статью файлом
-          </Field>
-          <div className="article-content-form__description">
-            При добавлении текста статьи файлом, стоимость размещения увеличится на 30%
+        { isProofreading ?
+          <div className="article-content-form__file">
+            <DownloadLink file={ articleData.incoming_file } title="Скачать контент статьи" />
           </div>
-        </div>
+          :
+          <div className="form__field">
+            <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
+                   component={ Checkbox } >
+              Хочу добавить статью файлом
+            </Field>
+            <div className="article-content-form__description">
+              При добавлении текста статьи файлом, стоимость размещения увеличится на 30%
+            </div>
+          </div>
+        }
 
-        { is_send_as_file ? (
+        { !isProofreading && is_send_as_file ? (
           <div className="form__field">
             <Dropzone className="article-content-form__dropzone"
                       accept=".doc, .docx, .rtf"
@@ -61,7 +69,8 @@ class ArticleContentForm extends Component {
                       multiple={ false } onDrop={ this.handleDropFiles } >
               <FileDropPlaceholder />
             </Dropzone>
-            <Field name="incoming_file" type="hidden" component="input" />
+            <Field name="incoming_file" type="hidden" component="input"
+                   validate={ [validate.required] } />
           </div>
         ) : (
           <Fragment>
@@ -81,11 +90,14 @@ class ArticleContentForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { formName } = props;
+  const { formName, articleId } = props;
+  const { articles } = state;
+  const articleData = articles.data[articleId];
   const formSelector = formValueSelector(formName);
   const is_send_as_file = formSelector(state, 'is_send_as_file');
 
   return {
+    articleData,
     is_send_as_file
   };
 }

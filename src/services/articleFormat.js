@@ -53,6 +53,18 @@ export function serializeArticleData(data = {}) {
     serializedData.sources = sources.filter(item => item.resourcetype);
   }
 
+  // Удаляем загруженные файлы, так как апи принимает только base64
+  const fileKeys = ['incoming_file', 'list_literature_file'];
+
+  fileKeys.forEach(key => {
+    if (serializedData[key]) {
+      const clearBase64 = serializedData[key].split(',')[1];
+      if (!clearBase64 || (clearBase64 && isBase64(clearBase64))) {
+        delete serializedData[key];
+      }
+    }
+  });
+
   return serializedData;
 }
 
@@ -65,4 +77,12 @@ export function deserializeArticleData(data = {}) {
     }, ...collaborators.map(item => ({ id: item.user.id }))];
   }
   return deserializedData;
+}
+
+function isBase64(str) {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (err) {
+    return false;
+  }
 }

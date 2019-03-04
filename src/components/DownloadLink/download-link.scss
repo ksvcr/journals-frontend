@@ -1,0 +1,28 @@
+.download-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &__title {
+    display: block;
+    font-size: 18px;
+    color: $orange-color;
+    font-weight: 600;
+  }
+
+  &__info {
+    font-size: 12px;
+    margin-top: 3px;
+    color: #B8B6B0;
+    display: block;
+  }
+
+  &__icon {
+    width: 16px;
+    height: 17px;
+    fill: $orange-color;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 6px;
+  }
+}

@@ -31,8 +31,9 @@ const FORM_NAME_BASE = 'article-publish';
 
 class ArticleForm extends Component {
   get formProps() {
-    const { form } = this.props;
+    const { form, id } = this.props;
     return {
+      articleId: id,
       formName: form
     };
   }
