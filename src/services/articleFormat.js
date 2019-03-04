@@ -25,7 +25,7 @@ export function serializeArticleData(data = {}) {
   }
 
   const collaborators = authors
-    .filter(author => author.id !== undefined && author.id !== serializedData.author.user.id)
+    .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
     .map(author => ({ user: author.id }));
 
   if (collaborators.length) {

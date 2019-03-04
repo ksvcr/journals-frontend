@@ -87,7 +87,8 @@ class ArticleForm extends Component {
   }
 
   componentDidMount() {
-    this.initAutoSave();
+    // TODO: Венуть автосейв после доработки апи
+    // this.initAutoSave();
   }
 
   componentWillUnmount() {
