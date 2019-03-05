@@ -32,8 +32,7 @@ class ArticleFilesForm extends Component {
   };
 
   render() {
-    const { userData, articleData } = this.props;
-    const isProofreading = userData.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING';
+    const { isProofreading } = this.props;
     return (
       <div className="article-files-form">
         <h2 className="page__title">Файлы к статье</h2>
@@ -70,7 +69,7 @@ function mapStateToProps(state, props) {
 
   return {
     userData: user.data,
-    articleData
+    isProofreading: user.data.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
   };
 }
 

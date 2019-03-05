@@ -40,8 +40,8 @@ class ArticleContentForm extends Component {
   };
 
   render() {
-    const { t, is_send_as_file, articleData } = this.props;
-    const isProofreading = articleData.state_article === 'AWAIT_PROOFREADING';
+    const { t, is_send_as_file, articleData, userData } = this.props;
+    const isProofreading = userData.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING';
     return (
       <div className="article-content-form">
         <h2 className="page__title">{ t('article_text') }</h2>
@@ -91,12 +91,13 @@ class ArticleContentForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName, articleId } = props;
-  const { articles } = state;
+  const { articles, user } = state;
   const articleData = articles.data[articleId];
   const formSelector = formValueSelector(formName);
   const is_send_as_file = formSelector(state, 'is_send_as_file');
 
   return {
+    userData: user.data,
     articleData,
     is_send_as_file
   };

@@ -10,14 +10,21 @@ import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList'
 
 import fileToBase64 from '~/utils/fileToBase64';
 import * as validate from '~/utils/validate';
+import DownloadLink from '~/components/DownloadLink/DownloadLink';
+
+import './article-sources-form.scss';
 
 class ArticleSourcesForm extends Component {
-  state = {
-    isFile: false,
-  };
+  constructor(props) {
+    super(props);
+    const { list_literature_file } = this.props;
+    this.state = {
+      isFile: !!list_literature_file
+    };
+  }
 
   renderSourceList = (props) => {
-    const { formName, isCorrector } = this.props;
+    const { formName } = this.props;
 
     const initialValues = {
       isEdit: true,
@@ -26,7 +33,7 @@ class ArticleSourcesForm extends Component {
 
     return (
       <ArticleSourceList formName={ formName } legend="Источник" addText="Добавить источник"
-                         initialValues={ initialValues } isCorrector={ isCorrector } { ...props } />
+                         initialValues={ initialValues } { ...props } />
     );
   };
 
@@ -46,22 +53,28 @@ class ArticleSourcesForm extends Component {
 
   render() {
     const { isFile } = this.state;
-
+    const { isProofreading, articleData } = this.props;
     return (
-      <div className="article-sources">
+      <div className="article-sources-form">
         <h2 className="page__title">Список литературы</h2>
 
-        <div className="form__field">
-          <Checkbox value={ isFile } checked={ isFile }
-                    onChange={ this.handleChange }>
-            Хочу добавить список литературы файлом
-          </Checkbox>
-          <div className="article-content-form__description">
-            При добавлении списка литературы файлом, стоимость размещения увеличится на 30%
+        { isProofreading ?
+          <div className="article-sources-form__file">
+            <DownloadLink file={ articleData.list_literature_file } name="Список литературы" />
           </div>
-        </div>
+          :
+          <div className="form__field">
+            <Checkbox value={ isFile } checked={ isFile }
+                      onChange={ this.handleChange }>
+              Хочу добавить список литературы файлом
+            </Checkbox>
+            <div className="article-content-form__description">
+              При добавлении списка литературы файлом, стоимость размещения увеличится на 30%
+            </div>
+          </div>
+        }
 
-        { isFile ?
+        { isFile && !isProofreading ?
           <div className="form__field">
             <Dropzone className="article-content-form__dropzone" multiple={ false }
                       accept=".doc, .docx, .rtf"
@@ -83,15 +96,18 @@ class ArticleSourcesForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { user } = state;
-  const { formName } = props;
+  const { user, articles } = state;
+  const { formName, articleId } = props;
   const formSelector = formValueSelector(formName);
   const list_literature_file = formSelector(state, 'list_literature_file');
+  const isCorrector = user.data.role === 'CORRECTOR';
+  const articleData = articles.data[articleId];
 
   return {
     formValues: getFormValues(formName)(state),
+    isProofreading: isCorrector && articleData.state_article === 'AWAIT_PROOFREADING',
     list_literature_file,
-    isCorrector: user.data.role === 'CORRECTOR'
+    articleData
   };
 }
 
