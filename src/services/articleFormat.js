@@ -59,7 +59,7 @@ export function serializeArticleData(data = {}) {
   fileKeys.forEach(key => {
     if (serializedData[key]) {
       const clearBase64 = serializedData[key].split(',')[1];
-      if (!clearBase64 || (clearBase64 && isBase64(clearBase64))) {
+      if (!clearBase64 || (clearBase64 && !isBase64(clearBase64))) {
         delete serializedData[key];
       }
     }

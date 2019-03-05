@@ -9,13 +9,13 @@ import formatBytes from '~/utils/formatBytes';
 import './download-link.scss';
 import './assets/download.svg';
 
-const DownloadLink = ({ file, size, title }) => {
+const DownloadLink = ({ file, size, name }) => {
   const sizeString = size ? `${formatBytes(size)}, ` : '';
   return (
     <a href={ file } className="download-link">
-      <span className="download-link__title">
+      <span className="download-link__head">
         <Icon className="download-link__icon" name="download" />
-        { title ? title: file }
+        <span className="download-link__title">{ name ? name: file }</span>
       </span>
       <span className="download-link__info">
         { sizeString }{ getFileExtension(file) || 'неизвестно' }
@@ -26,7 +26,7 @@ const DownloadLink = ({ file, size, title }) => {
 
 DownloadLink.propTypes = {
   size: PropTypes.number,
-  title: PropTypes.string,
+  name: PropTypes.string,
   file: PropTypes.string.isRequired
 };
 

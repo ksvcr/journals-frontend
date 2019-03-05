@@ -11,7 +11,6 @@ import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsFo
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
-import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
 import FormError from '~/components/FormError/FormError';
 
 import Button from '~/components/Button/Button';
@@ -54,7 +53,7 @@ class ArticleForm extends Component {
           },
           {
             title: t('files_to_article'),
-            component: <CorrectFilesForm { ...this.formProps } />
+            component: <ArticleFilesForm { ...this.formProps } />
           },
           {
             title: t('source_list'),

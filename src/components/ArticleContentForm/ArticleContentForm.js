@@ -47,7 +47,7 @@ class ArticleContentForm extends Component {
         <h2 className="page__title">{ t('article_text') }</h2>
         { isProofreading ?
           <div className="article-content-form__file">
-            <DownloadLink file={ articleData.incoming_file } title="Скачать контент статьи" />
+            <DownloadLink file={ articleData.incoming_file } name="Скачать контент статьи" />
           </div>
           :
           <div className="form__field">
