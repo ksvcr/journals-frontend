@@ -27,6 +27,9 @@ const apiClient = {
   lockUser: data =>
     fetchInstance.request('/users/lock/', { method: 'post', data }),
 
+  getUserStatistics: (userId, params) =>
+    fetchInstance.request(`/users/${userId}/statistic`, { params }),
+
   createUserTag: data =>
     fetchInstance.request('/users/tags/', { method: 'post', data }),
   removeUserTag: id =>
@@ -158,7 +161,7 @@ const apiClient = {
   getReviews: (articleId = null, reviewId = null, params) => {
     const tail = reviewId !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
-  }
+  },
 };
 
 fetchInstance.instance.interceptors.response.use(null, error => {

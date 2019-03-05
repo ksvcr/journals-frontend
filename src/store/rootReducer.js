@@ -14,6 +14,7 @@ import discounts from './discounts/reducer';
 import lawtypes from './lawtypes/reducer';
 import countries from './countries/reducer';
 import reviews from './reviews/reducer';
+import stats from './stats/reducer';
 
 export default combineReducers({
   form: formReducer,
@@ -29,6 +30,7 @@ export default combineReducers({
   discounts,
   lawtypes,
   countries,
-  reviews
+  reviews,
+  stats
 });
 
