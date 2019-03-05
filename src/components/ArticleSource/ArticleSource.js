@@ -59,41 +59,31 @@ class ArticleSource extends Component {
       <div className="article-source">
         <div className="article-source__box">
           <div className="article-source__legend">
-            {`Источник №${index + 1}`}
+            { `Источник №${index + 1}` }
           </div>
           <div className="article-source__title">
-            {this.getTitle(['original_name', 'page_count'], 'ru')}
+            { this.getTitle(['original_name', 'page_count'], 'ru') }
           </div>
           <div className="article-source__text">
-            {this.getTitle(['second_name', 'page_count'], 'en')}
+            { this.getTitle(['second_name', 'page_count'], 'en') }
           </div>
         </div>
         <div className="article-source__tools">
-          <button
-            className="article-source__tool"
-            type="button"
-            onClick={ this.handleEdit }
-          >
-            <Icon
-              name="edit"
-              className="article-source__icon article-source__icon_edit"
-            />
+          <button className="article-source__tool"
+                  type="button" onClick={ this.handleEdit } >
+            <Icon name="edit"
+                  className="article-source__icon article-source__icon_edit" />
             Редактировать
           </button>
 
-          {onRemove && (
-            <button
-              className="article-source__tool"
-              type="button"
-              onClick={ this.handleRemove }
-            >
-              <Icon
-                name="cancel"
-                className="article-source__icon article-source__icon_remove"
-              />
+          { onRemove && (
+            <button className="article-source__tool" type="button"
+                    onClick={ this.handleRemove } >
+              <Icon name="cancel"
+                    className="article-source__icon article-source__icon_remove" />
               Удалить
             </button>
-          )}
+          ) }
         </div>
       </div>
     );

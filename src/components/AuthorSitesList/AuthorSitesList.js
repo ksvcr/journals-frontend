@@ -50,7 +50,7 @@ class AuthorSitesList extends Component {
           data-id={ item.id }
           className="author-sites-list__item"
         >
-          {item.name}
+          { item.name }
           <button
             type="button"
             className="author-sites-list__remove"
@@ -71,14 +71,14 @@ class AuthorSitesList extends Component {
     return (
       <div className="author-sites-list">
         <p className="author-sites-list__header">
-          Журналы, в которые {userId ? 'пользователь может' : 'Вы можете'}{' '}
+          Журналы, в которые { userId ? 'пользователь может' : 'Вы можете' }{ ' ' }
           писать статьи:
         </p>
 
-        <div className="author-sites-list__content">{this.renderItems()}</div>
+        <div className="author-sites-list__content">{ this.renderItems() }</div>
 
         <div className="author-sites-list__actions">
-          {!openAdd ? (
+          { !openAdd ? (
             <button
               onClick={ this.handleAddOpen }
               type="button"
@@ -109,7 +109,7 @@ class AuthorSitesList extends Component {
                 </div>
               </div>
             </React.Fragment>
-          )}
+          ) }
         </div>
 
         <hr className="page__divider" />

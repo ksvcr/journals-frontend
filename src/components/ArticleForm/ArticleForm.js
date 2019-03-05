@@ -11,7 +11,6 @@ import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsFo
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
-import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
 import FormError from '~/components/FormError/FormError';
 
 import Button from '~/components/Button/Button';
@@ -22,7 +21,7 @@ import './assets/save.svg';
 
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
-import {  getRootCategoriesArray } from '~/store/categories/selector';
+import { getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -31,8 +30,9 @@ const FORM_NAME_BASE = 'article-publish';
 
 class ArticleForm extends Component {
   get formProps() {
-    const { form } = this.props;
+    const { form, id } = this.props;
     return {
+      articleId: id,
       formName: form
     };
   }
@@ -53,7 +53,7 @@ class ArticleForm extends Component {
           },
           {
             title: t('files_to_article'),
-            component: <CorrectFilesForm { ...this.formProps } />
+            component: <ArticleFilesForm { ...this.formProps } />
           },
           {
             title: t('source_list'),
@@ -87,7 +87,8 @@ class ArticleForm extends Component {
   }
 
   componentDidMount() {
-    this.initAutoSave();
+    // TODO: Венуть автосейв после доработки апи
+    // this.initAutoSave();
   }
 
   componentWillUnmount() {
@@ -104,7 +105,7 @@ class ArticleForm extends Component {
       if(formValues && formValues.title && (!articleData || isDraft)) {
         onAutoSave(formValues);
       }
-    }, 10000);
+    }, 30000);
   };
 
   handleDraftSubmit = () => {
@@ -184,7 +185,6 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
@@ -193,9 +193,6 @@ function getInitialValues(state, props) {
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
     financing_sources: [{
       type: financingIds[0]
-    }],
-    addresses: [{
-      count: 1
     }],
     authors: [{
       id: user.data.id,
@@ -222,7 +219,8 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: data.file_atachments || [],
+    file_atachments: data.file_atachments || [],
+    list_literature_file: data.list_literature_file,
     ...data
   };
 

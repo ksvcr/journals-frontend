@@ -94,7 +94,7 @@ const linkDecorator = {
   strategy: findEntities('LINK'),
   component: props => {
     const { url } = props.contentState.getEntity(props.entityKey).getData();
-    return <a href={ url }>{props.children}</a>;
+    return <a href={ url }>{ props.children }</a>;
   }
 };
 

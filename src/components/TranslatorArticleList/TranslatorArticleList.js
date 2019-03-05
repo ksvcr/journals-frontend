@@ -110,12 +110,8 @@ class TranslatorArticleList extends Component {
     return (
       <div className="translator-article-list__box">
         <div className="translator-article-list__tags">
-          <TagEditor
-            entityId={ data.id }
-            data={ data.tags }
-            onAdd={ this.handleTagAdd }
-            onRemove={ removeArticleTag }
-          />
+          <TagEditor entityId={ data.id } data={ data.tags }
+                     onAdd={ this.handleTagAdd } onRemove={ removeArticleTag } />
         </div>
       </div>
     );
@@ -129,13 +125,10 @@ class TranslatorArticleList extends Component {
           <List { ...this.listProps } />
         </div>
 
-        {total > 0 && (
-          <PaginateLine
-            onChange={ this.handlePaginateChange }
-            total={ total }
-            { ...paginate }
-          />
-        )}
+        { total > 0 && (
+          <PaginateLine onChange={ this.handlePaginateChange } total={ total }
+                        { ...paginate } />
+        ) }
       </div>
     );
   }

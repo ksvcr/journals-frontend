@@ -25,13 +25,16 @@ import { getCountriesArray } from '~/store/countries/selector';
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
-  state = {
-    visibleFields: {
-      conflicts: true,
-      addressRadio: false,
-      addressList: false
-    }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibleFields: {
+        conflicts: true,
+        addressRadio: Boolean(props.isPrinted),
+        addressList: props.isPrinted || false
+      }
+    };
+  }
 
   componentDidUpdate(prevProps) {
     this.setInitialCategory(prevProps.rootCategory);
@@ -115,7 +118,7 @@ class ArticleCommonForm extends Component {
   renderFinancingSourcesList = props => {
     return (
       <FieldSetList legend="Грант" addText="Добавить грант" { ...props }>
-        {field => <FinancingSourceForm field={ field } />}
+        { field => <FinancingSourceForm field={ field } /> }
       </FieldSetList>
     );
   };
@@ -127,19 +130,12 @@ class ArticleCommonForm extends Component {
     };
 
     return (
-      <FieldSetList
-        legend="Адрес"
-        addText="Добавить адрес"
-        initialValues={ initialValues }
-        { ...props }
-      >
-        {field => (
-          <AddressForm
-            field={ field }
-            countriesData={ countriesData }
-            countriesArray={ countriesArray }
-          />
-        )}
+      <FieldSetList legend="Адрес" addText="Добавить адрес"
+                    initialValues={ initialValues } { ...props }>
+        { field => (
+          <AddressForm field={ field } countriesData={ countriesData }
+                       countriesArray={ countriesArray } />
+        ) }
       </FieldSetList>
     );
   };
@@ -152,7 +148,7 @@ class ArticleCommonForm extends Component {
       <div className="article-common-form">
         <h2 className="page__title">Общие сведения</h2>
 
-        {this.hasPublishAccess && (
+        { this.hasPublishAccess && (
           <React.Fragment>
             <div className="form__field">
               <label htmlFor="language" className="form__label">
@@ -160,29 +156,18 @@ class ArticleCommonForm extends Component {
               </label>
               <div className="form__row">
                 <div className="form__col form__col_4">
-                  <Field
-                    name="language"
-                    id="language"
-                    component={ props => (
-                      <Select options={ this.languagesOptions } { ...props } />
-                    ) }
-                  />
+                  <Field name="language" id="language" options={ this.languagesOptions }
+                         component={ Select } />
                 </div>
                 <div className="form__col form__col_8">
-                  <Field
-                    name="need_translation"
-                    id="need_translation"
-                    type="checkbox"
-                    component={ Checkbox }
-                  >
+                  <Field name="need_translation" id="need_translation"
+                         type="checkbox" component={ Checkbox }>
                     Нужен перевод сопроводительной информации на русский
                   </Field>
-                  <FieldHint
-                    position={ 'top-end' }
-                    text={ `Наши переводчики быстро и грамотно переведут на русский язык
-                    всю сопроводительную информацию для вашей статьи.
-                    Иначе вам придется делать это самостоятельно` }
-                  />
+                  <FieldHint position={ 'top-end' }
+                             text={ `Наши переводчики быстро и грамотно переведут на русский язык
+                                     всю сопроводительную информацию для вашей статьи.
+                                     Иначе вам придется делать это самостоятельно` } />
                 </div>
               </div>
             </div>
@@ -193,13 +178,7 @@ class ArticleCommonForm extends Component {
                   <label htmlFor="rubric" className="form__label">
                     Направление
                   </label>
-                  <Field
-                    name="rubric"
-                    id="rubric"
-                    component={ props => (
-                      <Select options={ this.rubricsOptions } { ...props } />
-                    ) }
-                  />
+                  <Field name="rubric" id="rubric" options={ this.rubricsOptions } component={ Select } />
                 </div>
               </div>
               <div className="form__col form__col_4">
@@ -207,75 +186,48 @@ class ArticleCommonForm extends Component {
                   <label htmlFor="root_category" className="form__label">
                     Категория
                   </label>
-                  <Field
-                    name="root_category"
-                    id="root_category"
-                    component={ props => (
-                      <Select options={ this.rootCategoriesOptions } { ...props } />
-                    ) }
-                  />
+                  <Field name="root_category" id="root_category"
+                         options={ this.rootCategoriesOptions }
+                         component={ Select } />
                 </div>
               </div>
-              {this.childCategoriesOptions.length > 0 && (
+              { this.childCategoriesOptions.length > 0 && (
                 <div className="form__col form__col_4">
                   <div className="form__field">
                     <label htmlFor="category" className="form__label">
                       Подкатегория
                     </label>
-                    <Field
-                      name="category"
-                      id="category"
-                      component={ props => (
-                        <Select
-                          options={ this.childCategoriesOptions }
-                          { ...props }
-                        />
-                      ) }
-                    />
+                    <Field name="category" id="category" options={ this.childCategoriesOptions }
+                           component={ Select } />
                   </div>
                 </div>
-              )}
+              ) }
             </div>
 
             <div className="form__field form__field_inline">
-              <Field
-                name="agris_unload"
-                id="agris_unload"
-                type="checkbox"
-                component={ Checkbox }
-              >
+              <Field name="agris_unload" id="agris_unload" type="checkbox"
+                     component={ Checkbox }>
                 Статья AGRIS
               </Field>
               <FieldHint text={ 'Подсказка про AGRIS' } />
             </div>
 
             <div className="form__field form__field_inline">
-              <Field
-                name="georef_unload"
-                id="georef_unload"
-                type="checkbox"
-                component={ Checkbox }
-              >
+              <Field name="georef_unload" id="georef_unload" type="checkbox"
+                     component={ Checkbox } >
                 Статья GEOREF
               </Field>
               <FieldHint text={ 'Подсказка про GEOREF' } />
             </div>
           </React.Fragment>
-        )}
+        ) }
 
         <div className="form__field">
           <label htmlFor="title" className="form__label">
             Название статьи <ReqMark />
           </label>
-          <Field
-            name="title"
-            id="title"
-            textarea
-            minRows={ 2 }
-            component={ TextField }
-            placeholder="Введите название"
-            validate={ [validate.required] }
-          />
+          <Field name="title" id="title" textarea minRows={ 2 } component={ TextField }
+                 placeholder="Введите название" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -283,13 +235,8 @@ class ArticleCommonForm extends Component {
             Благодарности <ReqMark />
             <FieldHint text={ 'Подсказка про Благодарности' } />
           </label>
-          <Field
-            name="thanks_text"
-            id="thanks_text"
-            component={ TextField }
-            placeholder="Введите благодарности"
-            validate={ [validate.required] }
-          />
+          <Field name="thanks_text" id="thanks_text" component={ TextField }
+                 placeholder="Введите благодарности" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -297,28 +244,18 @@ class ArticleCommonForm extends Component {
             Ключевые слова (через запятую) <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
-          <Field
-            name="text_to_keywords"
-            id="text_to_keywords"
-            component={ TextField }
-            placeholder="Перечислите ключевые слова"
-            validate={ [validate.required] }
-          />
+          <Field name="text_to_keywords" id="text_to_keywords"
+                 component={ TextField } placeholder="Перечислите ключевые слова"
+                 validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
           <label htmlFor="text_to_description" className="form__label">
             Аннотация <ReqMark />
           </label>
-          <Field
-            name="text_to_description"
-            id="text_to_description"
-            textarea
-            minRows={ 2 }
-            component={ TextField }
-            placeholder="Введите аннотацию"
-            validate={ [validate.required] }
-          />
+          <Field name="text_to_description" id="text_to_description"
+                 textarea minRows={ 2 } component={ TextField }
+                 placeholder="Введите аннотацию" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -327,77 +264,57 @@ class ArticleCommonForm extends Component {
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
-            <Field
-              name="is_conflict_interest"
-              id="is_conflict_interest"
-              type="checkbox"
-              component={ Switcher }
-            />
+            <Field name="is_conflict_interest" id="is_conflict_interest"
+                   type="checkbox" component={ Switcher } />
           </div>
-          {isConflictInterest && (
-            <Field
-              name="conflict_interest"
-              id="conflict_interest"
-              component={ TextField }
-              placeholder="Перечислите конфликты интересов"
-              validate={ [validate.required] }
-            />
-          )}
+          { isConflictInterest && (
+            <Field name="conflict_interest" id="conflict_interest"
+                   component={ TextField } placeholder="Перечислите конфликты интересов"
+                   validate={ [validate.required] } />
+          ) }
         </div>
 
         <div className="form__field">
           <label className="form__label">Финансирование</label>
           <div className="form__switcher">
-            <Field
-              name="has_financing"
-              id="has_financing"
-              type="checkbox"
-              component={ Switcher }
-            />
+            <Field name="has_financing" id="has_financing" type="checkbox"
+                   component={ Switcher } />
           </div>
 
-          {hasFinancing && (
+          { hasFinancing && (
             <FieldArray
               name="financing_sources"
               component={ this.renderFinancingSourcesList }
             />
-          )}
+          ) }
         </div>
 
         <div className="form__field">
-          <label className="form__label">Нужна печатная копия</label>
+          <label className="form__label">
+            Нужна печатная копия
+          </label>
           <div className="form__switcher">
-            <Switcher
-              checked={ Boolean(visibleFields.addressRadio) }
-              name="addressRadio"
-              onChange={ this.handleFieldToggle }
-            />
+            <Switcher checked={ Boolean(visibleFields.addressRadio) } name="addressRadio"
+                      onChange={ this.handleFieldToggle } />
           </div>
 
-          {visibleFields.addressRadio && (
+          { visibleFields.addressRadio && (
             <div className="form__switcher">
-              <Radio
-                name="addressList"
-                value="profile-address"
-                checked={ !Boolean(visibleFields.addressList) }
-                onChange={ this.handleAddressToggle }
-              >
+              <Radio name="addressList" value="profile-address"
+                     checked={ !Boolean(visibleFields.addressList) } onChange={ this.handleAddressToggle } >
                 Адрес, указанный в профиле
               </Radio>
-              <Radio
-                name="addressList"
-                value="custom-address"
-                checked={ Boolean(visibleFields.addressList) }
-                onChange={ this.handleAddressToggle }
-              >
+              <Radio name="addressList" value="custom-address" checked={ Boolean(visibleFields.addressList) }
+                     onChange={ this.handleAddressToggle }>
                 Другой адрес
               </Radio>
             </div>
-          )}
+          ) }
 
-          {visibleFields.addressList && (
-            <FieldArray name="addresses" component={ this.renderAddressList } />
-          )}
+          { visibleFields.addressList &&
+            <FieldArray name="printed"
+                        component={ this.renderAddressList } />
+          }
         </div>
       </div>
     );
@@ -416,6 +333,7 @@ function mapStateToProps(state, props) {
 
   const hasFinancing = formSelector(state, 'has_financing');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
+  const isPrinted = formSelector(state, 'printed');
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
@@ -433,7 +351,8 @@ function mapStateToProps(state, props) {
     rubricsArray,
     languagesArray,
     countriesArray,
-    countriesData: countries.data
+    countriesData: countries.data,
+    isPrinted
   };
 }
 

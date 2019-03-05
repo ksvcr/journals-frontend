@@ -21,15 +21,16 @@ class DiscountsTransferSelect extends Component {
       <li key={ index } className="discounts-transfer-select__item">
         <div className="discounts-transfer-select__item__infobox">
           <p className="discounts-transfer-select__item__fullname">
-            <b>{ item.last_name }</b> { item.first_name } {item.middle_name}
+            <b>{ item.last_name }</b> { item.first_name } { item.middle_name }
           </p>
           <p className="discounts-transfer-select__item__info">
-            {/* TODO: Заменить на реальные данные */}
+            { /* TODO: Заменить на реальные данные */ }
             НИИ УХИМВАДЕ, Екатеринбург, Россия
           </p>
         </div>
         <div className="discounts-transfer-select__item__actions">
-          <Button className="discounts-transfer-select__item__button button_small" data-id={ item.id } onClick={ this.handleItemSelect }>
+          <Button className="discounts-transfer-select__item__button button_small"
+                  data-id={ item.id } onClick={ this.handleItemSelect }>
             Выбрать
             <Icon className="discounts-transfer-select__item__button__icon" name="arrow_right" />
           </Button>

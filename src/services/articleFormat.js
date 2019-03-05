@@ -1,5 +1,6 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, blocks, ...rest } = data;
+  const { authors = [], has_financing, financing_sources, blocks, sources,
+          file_atachments, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -24,7 +25,7 @@ export function serializeArticleData(data = {}) {
   }
 
   const collaborators = authors
-    .filter(author => author.id !== undefined && author.id !== serializedData.author.user.id)
+    .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
     .map(author => ({ user: author.id }));
 
   if (collaborators.length) {
@@ -39,6 +40,31 @@ export function serializeArticleData(data = {}) {
     }));
   }
 
+  if (file_atachments) {
+    serializedData.file_atachments = file_atachments.map(item => {
+      if (item.id !== undefined) {
+        delete item.file;
+      }
+      return item
+    });
+  }
+
+  if (sources) {
+    serializedData.sources = sources.filter(item => item.resourcetype);
+  }
+
+  // Удаляем загруженные файлы, так как апи принимает только base64
+  const fileKeys = ['incoming_file', 'list_literature_file'];
+
+  fileKeys.forEach(key => {
+    if (serializedData[key]) {
+      const clearBase64 = serializedData[key].split(',')[1];
+      if (!clearBase64 || (clearBase64 && !isBase64(clearBase64))) {
+        delete serializedData[key];
+      }
+    }
+  });
+
   return serializedData;
 }
 
@@ -51,4 +77,12 @@ export function deserializeArticleData(data = {}) {
     }, ...collaborators.map(item => ({ id: item.user.id }))];
   }
   return deserializedData;
+}
+
+function isBase64(str) {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (err) {
+    return false;
+  }
 }

@@ -8,9 +8,11 @@ const SupportContact = ({ t }) => {
   return (
     <div className="support-contact">
       <React.Fragment>
-        <div className="support-contact__label">{t('support')}:&nbsp;</div>
+        <div className="support-contact__label">
+          { t('support') }:&nbsp;
+        </div>
         <a href={ `mailto:${email}` } className="support-contact__link">
-          {email}
+          { email }
         </a>
       </React.Fragment>
     </div>

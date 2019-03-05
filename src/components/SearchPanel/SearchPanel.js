@@ -13,6 +13,9 @@ class SearchPanel extends Component {
   handleSearchChange = (value) => {
     const { target } = this.state;
     const { onChange } = this.props;
+
+    if (!value) return;
+
     this.query = value;
     const searchData = {
       search_query: value

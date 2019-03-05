@@ -50,13 +50,13 @@ class ColorTool extends Component {
           />
         </button>
 
-        {showColorPicker && (
+        { showColorPicker && (
           <ColorPicker
             color={ this.currentColor }
             onChange={ this.handleChange }
             onCloseRequest={ this.handlePickerClose }
           />
-        )}
+        ) }
       </div>
     );
   }

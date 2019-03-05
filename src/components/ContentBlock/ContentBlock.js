@@ -55,10 +55,10 @@ class ContentBlock extends Component {
     });
     return (
       <div className="content-block form__field">
-        {data.static ? (
+        { data.static ? (
           <label htmlFor={ `block-${index}` } className="form__label">
-            {data.title} <ReqMark />
-            {data.hint && <FieldHint text={ data.hint } />}
+            { data.title } <ReqMark />
+            { data.hint && <FieldHint text={ data.hint } /> }
           </label>
         ) : (
           <div className="form__label content-block__label">
@@ -69,7 +69,7 @@ class ContentBlock extends Component {
                 ref={ this.getRef }
                 html={ data.title }
                 onChange={ this.handleTitleChange }
-              />{' '}
+              />{ ' ' }
               <ReqMark />
             </div>
             <button
@@ -89,7 +89,7 @@ class ContentBlock extends Component {
               Удалить
             </button>
           </div>
-        )}
+        ) }
         <Field
           name={ `${field}.title` }
           type="hidden"
@@ -104,9 +104,9 @@ class ContentBlock extends Component {
         />
 
         <div className="content-block__add">
-          {index === fields.length - 2 && (
+          { index === fields.length - 2 && (
             <FieldAddButton onAdd={ onAdd }>Добавить поле</FieldAddButton>
-          )}
+          ) }
         </div>
       </div>
     );

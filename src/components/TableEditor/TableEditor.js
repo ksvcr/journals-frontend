@@ -130,7 +130,7 @@ class TableEditor extends Component {
       <div className="table-editor" contentEditable={ false } readOnly>
         <div className="table-editor__holder">
           <h3 className="table-editor__title">
-            {entityData.title ? entityData.title : 'Заголовок таблицы'}
+            { entityData.title ? entityData.title : 'Заголовок таблицы' }
           </h3>
 
           <div className="table-editor__toolbar">

@@ -53,63 +53,45 @@ class ArticleSourceList extends Component {
 
     return (
       <div className="article-source-list">
-        <ReactCSSTransitionGroup
-          transitionName="fade"
-          transitionEnterTimeout={ 400 }
-          transitionLeaveTimeout={ 200 }
-        >
-          {fields.map((field, index) => {
+        <ReactCSSTransitionGroup transitionName="fade"
+                                 transitionEnterTimeout={ 400 }
+                                 transitionLeaveTimeout={ 200 } >
+          { fields.map((field, index) => {
             const data = fields.get(index);
             const { isEdit, hash } = data;
             return (
               <React.Fragment key={ index }>
-                {isEdit ? (
-                  <FieldSet
-                    fieldsTitle={
-                      isTranslator &&
-                      this.getResourceTypeName(data.resourcetype)
-                    }
-                    isLast={ index === fields.length - 1 }
-                    index={ index }
-                    legend={ `${legend} №${index + 1}` }
-                    { ...fieldSetParams }
-                  >
-                    {isTranslator ? (
+                { isEdit ? (
+                  <FieldSet fieldsTitle={ isTranslator && this.getResourceTypeName(data.resourcetype) }
+                            isLast={ index === fields.length - 1 } index={ index }
+                            legend={ `${legend} №${index + 1}` }
+                            { ...fieldSetParams } >
+                    { isTranslator ? (
                       <ArticleSourceTranslateItemForm
                         formName={ `source-translate[${hash}]` }
-                        data={ data }
-                        field={ field }
-                        index={ index }
-                        onSubmit={ this.handleFormSubmit }
-                      />
+                        data={ data } field={ field } index={ index }
+                        onSubmit={ this.handleFormSubmit } />
                     ) : (
                       <ArticleSourceCreateForm
                         formName={ `source-create[${hash}]` }
-                        data={ data }
-                        field={ field }
-                        onSubmit={ this.handleFormSubmit }
-                      />
-                    )}
+                        data={ data } field={ field } onSubmit={ this.handleFormSubmit } />
+                    ) }
                   </FieldSet>
                 ) : (
-                  <ArticleSource
-                    index={ index }
-                    field={ field }
-                    data={ data }
-                    onRemove={ !isTranslator && this.handleRemove }
-                    onEdit={ this.handleEdit }
-                  />
-                )}
+                  <ArticleSource index={ index } field={ field }
+                                 data={ data } onRemove={ !isTranslator && this.handleRemove }
+                                 onEdit={ this.handleEdit } />
+                ) }
               </React.Fragment>
             );
-          })}
+          }) }
         </ReactCSSTransitionGroup>
 
-        {!isCorrector && addText && (
+        { !isCorrector && addText && (
           <div className="field-set-list__button">
-            <FieldAddButton onAdd={ this.handleAdd }>{addText}</FieldAddButton>
+            <FieldAddButton onAdd={ this.handleAdd }>{ addText }</FieldAddButton>
           </div>
-        )}
+        ) }
       </div>
     );
   }

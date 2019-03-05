@@ -107,7 +107,7 @@ class RedactorUsersList extends Component {
           ),
           render: ({ role }) => (
             <div className="redactor-users-list__role">
-              {userRoles.getUserRoleTitle(role)}
+              { userRoles.getUserRoleTitle(role) }
             </div>
           )
         },

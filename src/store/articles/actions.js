@@ -1,7 +1,7 @@
-import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES,
-         ACCEPT_ARTICLE_REVIEW_INVITE, FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG,
-         REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW, EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION,
-         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES } from './constants';
+import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
+         FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW,
+         EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES, FETCH_ARTICLE_PRINTED,
+         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -31,7 +31,7 @@ export function fetchArticle(id) {
 
 export function createArticle(siteId, data, cb) {
   return dispatch => {
-    let { content_blocks, sources, financing_sources, ...articleData } = data;
+    let { content_blocks, sources, financing_sources, file_atachments, printed, ...articleData } = data;
     // Источники финансирования
     const financingPromise = financing_sources ? apiClient.createFinancingSources(financing_sources) : Promise.resolve();
 
@@ -66,14 +66,23 @@ export function createArticle(siteId, data, cb) {
               );
             }
 
-            return Promise.all(resourcePromises).then(() => {
-              // Создаем вложения
-              const attachmentsPromises = data.attachments.map(attachment => {
-                return apiClient.createArticleAttachment(articleId, attachment);
+            // Вложения
+            if (file_atachments) {
+              file_atachments.forEach(attachment => {
+                resourcePromises.push(apiClient.createArticleAttachment(articleId, attachment));
               });
+            }
 
-              return Promise.all(attachmentsPromises);
-            });
+            //Печатная копия статьи
+            if (printed) {
+              printed.forEach((item) => {
+                resourcePromises.push(
+                  apiClient.createArticlePrinted(articleId, { ...item, user: data.author.user, article: articleId })
+                );
+              });
+            }
+
+            return Promise.all(resourcePromises);
           });
         });
     });
@@ -87,8 +96,9 @@ export function createArticle(siteId, data, cb) {
 
 export function editArticle(id, data) {
   return (dispatch, state) => {
-    const prevArticleData = state().articles.data[id];
-    let { content_blocks, financing_sources, sources, ...articleData } = data;
+    const prevArticleData = state().articles.data[id] || {};
+    let { content_blocks, financing_sources, sources, file_atachments, printed, ...articleData } = data;
+
     // Источники финансирования
     let financingPromises = [];
 
@@ -123,7 +133,7 @@ export function editArticle(id, data) {
           if (sources) {
             const createSourcesArray = sources.filter(item => item.id === undefined);
             const editSourcesArray = sources.filter(item => item.id !== undefined);
-            const hasRemoved = prevArticleData.sources.length > editSourcesArray.length;
+            const hasRemoved = prevArticleData.sources && prevArticleData.sources.length > editSourcesArray.length;
             const removedSourcesArray = hasRemoved ? differenceBy(prevArticleData.sources, editSourcesArray, 'id') : [];
             const createSourcesPromise = apiClient.createSources(id, createSourcesArray);
             const editSourcesPromises = editSourcesArray.map(item => apiClient.editSource(id, item));
@@ -131,10 +141,44 @@ export function editArticle(id, data) {
             editPromises = [ ...editPromises, createSourcesPromise, ...editSourcesPromises, ...removeSourcesPromises];
           }
 
+          // Вложения
+          if (file_atachments) {
+            const createAttachmentsArray = file_atachments.filter(item => item.id === undefined);
+            const editAttachmentsArray = file_atachments.filter(item => item.id !== undefined);
+            const hasRemoved = prevArticleData.file_atachments &&
+                               prevArticleData.file_atachments.length > editAttachmentsArray.length;
+            const removedAttachmentsArray = hasRemoved ?
+              differenceBy(prevArticleData.file_atachments, editAttachmentsArray, 'id') : [];
+            const createAttachmentsPromises = createAttachmentsArray.map(item => apiClient.createArticleAttachment(id, item));
+            const editAttachmentsPromises = editAttachmentsArray.map(item => apiClient.editArticleAttachment(item.id, item));
+            const removeAttachmentsPromises = removedAttachmentsArray.map(item => apiClient.removeArticleAttachment(item.id));
+            editPromises = [ ...editPromises, ...createAttachmentsPromises,
+              ...editAttachmentsPromises, ...removeAttachmentsPromises ];
+          }
+
+          // Печатная копия статьи
+          if (printed) {
+            const createPrintedArray = printed.filter(item => item.id === undefined);
+            const editPrintedArray = printed.filter(item => item.id !== undefined);
+            const hasRemoved = prevArticleData.printed &&
+                  prevArticleData.printed.length > editPrintedArray.length;
+            const removedPrintedArray = hasRemoved ?
+              differenceBy(prevArticleData.printed, editPrintedArray, 'id') : [];
+            const createPrintedPromises = createPrintedArray.map((item) => {
+              return apiClient.createArticlePrinted(id, { ...item });
+            });
+            const editPrintedPromises = editPrintedArray.map((item) => {
+              return apiClient.editArticlePrinted(id, item.id, item);
+            });
+            const removePrintedPromises = removedPrintedArray.map(item => apiClient.removeArticlePrinted(id, item.id));
+            editPromises = [...editPrintedPromises, ...createPrintedPromises, ...removePrintedPromises];
+          }
+
           return Promise.all(editPromises);
         });
       }
     );
+
     return dispatch({
       type: EDIT_ARTICLE,
       meta: { articleId: id, data: articleData },
@@ -255,11 +299,7 @@ export function editArticleTranslation(id, data) {
 
       delete data.sources;
 
-      const editTranslationPromise = apiClient.editArticleTranslation(
-        id,
-        data.language_code,
-        data
-      );
+      const editTranslationPromise = apiClient.editArticleTranslation(id, data.language_code, data);
       const editArticlePromise = apiClient.editArticle(id, {
         state_article: 'AWAIT_PUBLICATION'
       });
@@ -304,4 +344,15 @@ export function resetArticles() {
   return {
     type: RESET_ARTICLES
   };
+}
+
+export function fetchArticlePrinted(id, printedId=null) {
+  return (dispatch) => {
+    const payload = apiClient.getPrinted(id, printedId);
+    return dispatch({
+      type: FETCH_ARTICLE_PRINTED,
+      meta: { article: id },
+      payload
+    });
+  }
 }
