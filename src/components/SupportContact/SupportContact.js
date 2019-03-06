@@ -11,7 +11,7 @@ const SupportContact = ({ t }) => {
         <div className="support-contact__label">
           { t('support') }:&nbsp;
         </div>
-        <a href={`mailto:${email}`} className="support-contact__link">
+        <a href={ `mailto:${email}` } className="support-contact__link">
           { email }
         </a>
       </React.Fragment>

@@ -31,7 +31,7 @@ class ArticlePreview extends Component {
     const { fetchArticle, fetchUser, articleId } = this.props;
     return fetchArticle(articleId).then((res) => {
       const { author, reviews } = res.value;
-      let userIds = [author.user];
+      let userIds = [author.user.id];
       if (reviews.length > 0) {
         reviews.forEach((item) => {
           if (userIds.indexOf(item.reviewer) < 0) {

@@ -11,7 +11,7 @@ import * as validate from '~/utils/validate';
 
 class ArticleSourceTranslateItemForm extends Component {
   getFields = (status) => {
-    const standartParams = [{name: 'second_name', original: 'original_name', label: 'Название'}];
+    const standartParams = [{ name: 'second_name', original: 'original_name', label: 'Название' }];
 
     switch (status) {
       case 'SourceThesis':

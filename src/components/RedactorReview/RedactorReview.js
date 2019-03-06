@@ -21,7 +21,7 @@ class RedactorReview extends Component {
 
   get invitesCount() {
     const { articleData } = this.props;
-    return articleData.reviewInvites ? articleData.reviewInvites.length : 0;
+    return articleData && articleData.reviewInvites ? articleData.reviewInvites.length : 0;
   }
 
   componentDidMount() {
@@ -42,13 +42,21 @@ class RedactorReview extends Component {
   };
 
   handleSelfInvite = () => {
-    const { articleId, currentUserId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
-    inviteArticleReviewer(articleId, { article: articleId, reviewer: currentUserId }).then(() => {
+    const {
+      articleId,
+      currentUserId,
+      inviteArticleReviewer,
+      fetchArticleReviewInvites
+    } = this.props;
+    inviteArticleReviewer(articleId, {
+      article: articleId,
+      reviewer: currentUserId
+    }).then(() => {
       return fetchArticleReviewInvites({ article: articleId });
     });
   };
 
-  renderCollapseButton = (props) => {
+  renderCollapseButton = props => {
     return (
       <RedactorCollapseButton { ...props }>
         { `Рецензенты (${this.invitesCount})` }
@@ -56,12 +64,12 @@ class RedactorReview extends Component {
     );
   };
 
-  renderCollapsePreliminaryButton = (props) => {
+  renderCollapsePreliminaryButton = props => {
     return (
-      <RedactorCollapseButton {...props}>
+      <RedactorCollapseButton { ...props }>
         Предварительная доработка
       </RedactorCollapseButton>
-    )
+    );
   };
 
   render() {
@@ -71,30 +79,38 @@ class RedactorReview extends Component {
       <div className="redactor-review">
         <div className="redactor-review__top">
           <div className="redactor-review__status">
-            <RedactorReviewStatus stage={ articleData.stage } isShowReviewerList={ isShowReviewerList }
-                                  onSelfInvite={ this.handleSelfInvite } />
+            <RedactorReviewStatus
+              stage={ articleData && articleData.stage }
+              isShowReviewerList={ isShowReviewerList }
+              onSelfInvite={ this.handleSelfInvite }
+            />
           </div>
-          { !isShowReviewerList &&
+          { !isShowReviewerList && (
             <div className="redactor-review__tools">
-              <RedactorReviewTools onReviewerAdd={ this.handleReviewerAdd }
-                                   onSelfInvite={ this.handleSelfInvite } />
+              <RedactorReviewTools
+                onReviewerAdd={ this.handleReviewerAdd }
+                onSelfInvite={ this.handleSelfInvite }
+              />
             </div>
-          }
+          ) }
         </div>
 
-        { isShowReviewerList &&
-          <RedactorReviewerList onClose={ this.handleReviewerListClose } articleId={ articleId } />
-        }
+        { isShowReviewerList && (
+          <RedactorReviewerList
+            onClose={ this.handleReviewerListClose }
+            articleId={ articleId }
+          />
+        ) }
 
         <Collapse customHead={ this.renderCollapsePreliminaryButton }>
-          <PreliminaryRevisionForm />
+          <PreliminaryRevisionForm articleId={ articleId } />
         </Collapse>
 
-        { this.invitesCount > 0 &&
+        { this.invitesCount > 0 && (
           <Collapse customHead={ this.renderCollapseButton }>
             <InvitedReviewersList articleId={ articleId } />
           </Collapse>
-        }
+        ) }
       </div>
     );
   }
@@ -119,5 +135,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(RedactorReview);

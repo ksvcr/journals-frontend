@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -25,19 +24,28 @@ class RedactorArticleList extends Component {
     dateField: 'date_create'
   };
 
-  get toolsMenuItems() {
-    return [
-      {
-        title: 'Редактировать',
-        handler: this.handleEdit
-      },
-      {
-        title: 'Просмотр',
-        type: 'preview',
-        icon: 'preview',
-        handler: this.handlePreview
-      }
-    ];
+  getToolsMenuItems = (data) => {
+    const tools = [];
+
+    if (data.state_article === 'AWAIT_PUBLICATION') {
+      tools.push({
+        title: 'Посмотреть перевод',
+        link: `/article/${data.id}/translate`
+      });
+    }
+
+    tools.push({
+      title: 'Редактировать',
+      link: `/article/${data.id}/edit`
+    },
+    {
+      title: 'Просмотр',
+      type: 'preview',
+      icon: 'preview',
+      link: `/article/${data.id}`
+    });
+
+    return tools;
   };
 
   get dateTitle() {
@@ -51,16 +59,6 @@ class RedactorArticleList extends Component {
   handleSortChange = (ordering) => {
     const { onUpdateRequest } = this.props;
     onUpdateRequest({ ordering });
-  };
-
-  handleEdit = (id) => {
-    const { push } = this.props;
-    push(`article/${id}/edit`);
-  };
-
-  handlePreview = (id) => {
-    const { push } = this.props;
-    push(`/article/${id}`);
   };
 
   handleDateFilterChange = (field, range) => {
@@ -93,7 +91,7 @@ class RedactorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.toolsMenuItems } />,
+      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
       box: this.renderBox,
       cells: [
         {
@@ -199,7 +197,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  push,
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };

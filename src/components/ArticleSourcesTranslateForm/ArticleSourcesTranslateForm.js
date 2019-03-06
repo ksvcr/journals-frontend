@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FieldArray } from "redux-form";
+import { FieldArray } from 'redux-form';
 import nanoid from 'nanoid';
 
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';

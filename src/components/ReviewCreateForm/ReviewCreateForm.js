@@ -87,7 +87,7 @@ class ReviewCreateForm extends Component {
             { this.commentForAuthorLabel }
           </label>
           <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea
-                 rows={ recommendation === 1 ? 20 : 6 }
+                 minRows={ recommendation === 1 ? 20 : 6 }
                  placeholder="Введите текст рецензии" />
         </div>
 
@@ -102,8 +102,8 @@ class ReviewCreateForm extends Component {
             Замечания для редактора по доработке статьи (не показываются автору) <ReqMark />
           </label>
           <Field name="comment_for_redactor" id="comment_for_redactor" component={ TextField } textarea
-                 rows={ 6 }
-                 placeholder="Введите текст рецензии" validate={ [validate.required] } />
+                 minRows={ 6 }
+                 placeholder="Введите комментарий для редактора" validate={ [validate.required] } />
         </div>
 
         <div className="form__field">

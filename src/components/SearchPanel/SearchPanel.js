@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import debounce from 'lodash/debounce';
 
 import Radio from '~/components/Radio/Radio';
 import TextField from '~/components/TextField/TextField';
@@ -9,14 +10,23 @@ import './search-panel.scss';
 import './assets/search.svg';
 
 class SearchPanel extends Component {
-  constructor(props) {
-    super(props);
-    const { initialTarget } = this.props;
+  handleSearchChange = (value) => {
+    const { target } = this.state;
+    const { onChange } = this.props;
 
-    this.state = {
-      target: initialTarget
+    if (!value) return;
+
+    this.query = value;
+    const searchData = {
+      search_query: value
     };
-  }
+
+    if (target !== 'all') {
+      searchData.search_target = target;
+    }
+
+    onChange(searchData);
+  };
 
   handleParamsChange = (event) => {
     const { value } = event.target;
@@ -35,22 +45,19 @@ class SearchPanel extends Component {
       onChange({ search: data });
     }
   };
-
-  handleSearchChange = (event) => {
-    const { target } = this.state;
-    const { onChange } = this.props;
+  handleChange = (event) => {
     const { value } = event.target;
-    this.query = value;
-    const searchData = {
-      search_query: value
-    };
-
-    if (target !== 'all') {
-      searchData.search_target = target;
-    }
-
-    onChange(searchData);
+    this.handleSearchChange(value);
   };
+
+  constructor(props) {
+    super(props);
+    const { initialTarget } = this.props;
+    this.handleSearchChange = debounce(this.handleSearchChange, 300);
+    this.state = {
+      target: initialTarget
+    };
+  }
 
   get targets() {
     const { targets, hasDefaultTarget, t } = this.props;
@@ -84,7 +91,7 @@ class SearchPanel extends Component {
         }
         <div className="search-panel__field">
           <TextField input={ this.inputProps } className="text-field_search" icon="search"
-                     onChange={ this.handleSearchChange } />
+                     onChange={ this.handleChange } />
         </div>
       </div>
     );

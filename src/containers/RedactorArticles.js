@@ -63,24 +63,22 @@ class RedactorArticles extends Component {
           { t('my_articles') }
         </h1>
         <div className="page__tools">
-          <form className="form">
-            <div className="form__field">
-              <label className="form__label">
-                { t('article_search') }
-              </label>
-              <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
-            </div>
-            <div className="form__row">
-              <div className="form__col form__col_6">
-                <div className="form__field">
-                  <label className="form__label">
-                    {t('tags')}
-                  </label>
-                  <Select { ...this.selectTagsProps } />
-                </div>
+          <div className="form__field">
+            <label className="form__label">
+              { t('article_search') }
+            </label>
+            <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
+          </div>
+          <div className="form__row">
+            <div className="form__col form__col_6">
+              <div className="form__field">
+                <label className="form__label">
+                  { t('tags') }
+                </label>
+                <Select { ...this.selectTagsProps } />
               </div>
             </div>
-          </form>
+          </div>
         </div>
         <RedactorArticleList onUpdateRequest={ this.handleRequest } />
       </React.Fragment>

@@ -1,0 +1,15 @@
+.preliminary-review-comment {
+  font-size: 16px;
+  border-top: 1px solid #e8e7e4;
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #192A3E;
+    font-weight: 600;
+    padding: 15px 0;
+  }
+}

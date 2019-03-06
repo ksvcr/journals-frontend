@@ -137,7 +137,7 @@ class ArticleSourceCreateForm extends Component {
                     Тип источника
                   </label>
                   <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
-                        component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
+                         component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
                 </div>
                 { resourceType === 'SourceThesis' ?
                   <div className="form__col form__col_6">
@@ -153,7 +153,7 @@ class ArticleSourceCreateForm extends Component {
                       Язык оригинала
                     </label>
                     <Field name="language" id="source_language" className="select_white"
-                          component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
+                           component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
                   </div>
                 }
               </div>

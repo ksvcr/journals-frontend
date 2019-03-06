@@ -66,7 +66,13 @@ class ContentEditor extends Component {
 
     const { Toolbar } = toolbarPlugin;
     this.toolbar = editorWithStyles(Toolbar);
-    return [createEntityPropsPlugin({}), createFocusPlugin({}), tablePlugin, toolbarPlugin, undoPlugin];
+    return [
+      createEntityPropsPlugin({}),
+      createFocusPlugin({}),
+      tablePlugin,
+      toolbarPlugin,
+      undoPlugin
+    ];
   };
 
   initEditorState = () => {
@@ -80,7 +86,7 @@ class ContentEditor extends Component {
     }
   };
 
-   mediaBlockRenderer = (block) => {
+  mediaBlockRenderer = block => {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
@@ -90,18 +96,17 @@ class ContentEditor extends Component {
         }
       };
     }
-
     return null;
   };
 
-  toggleReadOnly = (isReadOnly) => {
-    const { editorState } = this.state;   
+  toggleReadOnly = isReadOnly => {
+    const { editorState } = this.state;
     const selection = editorState.getSelection();
-    
+
     this.setState({
       isReadOnly,
       editorState: EditorState.forceSelection(editorState, selection)
-     });
+    });
   };
 
   handleExpand = () => {
@@ -110,7 +115,7 @@ class ContentEditor extends Component {
     }));
   };
 
-  handleChange = (editorState) => {
+  handleChange = editorState => {
     this.setState({ editorState });
     this.changeValue(editorState);
   };
@@ -123,7 +128,7 @@ class ContentEditor extends Component {
     onChange(value);
   }
 
-  renderButtons = (externalProps) => {
+  renderButtons = externalProps => {
     const { isExpanded } = this.state;
     const ToolbarUndoSection = this.undoSection;
     return (
@@ -139,11 +144,11 @@ class ContentEditor extends Component {
           <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
         </div>
 
-        { isExpanded &&
+        { isExpanded && (
           <div className="editor-toolbar__row">
             <ColorTool { ...externalProps } />
             <HighlightTool { ...externalProps } />
-            <AddLinkTool  { ...externalProps } />
+            <AddLinkTool { ...externalProps } />
             <RemoveLinkTool { ...externalProps } />
             <Separator className="editor-toolbar__separator" />
             <ToolbarCaseSection { ...externalProps } />
@@ -151,9 +156,9 @@ class ContentEditor extends Component {
             <TableTool { ...externalProps } />
             <ImageMediaTool { ...externalProps } />
           </div>
-        }
+        ) }
       </React.Fragment>
-    )
+    );
   };
 
   render() {
@@ -173,12 +178,12 @@ class ContentEditor extends Component {
           onChange={ this.handleChange }
           blockStyleFn={ getBlockStyle }
           blockRendererFn={ this.mediaBlockRenderer }
-          ref={ (element) => { this.editor = element; } }
+          ref={ element => {
+            this.editor = element;
+          } }
         />
         <ContentCounter editorState={ editorState } />
-        <EditorToolbar>
-          { this.renderButtons }
-        </EditorToolbar>
+        <EditorToolbar>{ this.renderButtons }</EditorToolbar>
       </div>
     );
   }

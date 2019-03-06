@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { change, Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import cx from 'classnames';
 
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
@@ -13,6 +12,7 @@ import { searchUsers, createUser, insertUser } from '~/store/users/actions';
 import './author-add.scss';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FieldHint from '~/components/FieldHint/FieldHint';
+import Collapse from '~/components/Collapse/Collapse';
 
 class AuthorAdd extends Component {
   get sources() {
@@ -21,10 +21,6 @@ class AuthorAdd extends Component {
       { value: 'create', title: 'Создать автора' }
     ];
   }
-
-  state = {
-    isOpenRoles: false,
-  };
 
   handleSearchChange = (event) => {
     const { searchUsers, data } = this.props;
@@ -75,36 +71,9 @@ class AuthorAdd extends Component {
     ));
   };
 
-  handleToggleRoles = () => {
-    this.setState((state) => ({ isOpenRoles: !state.isOpenRoles }));
-  };
-
-  handleRolesChoose = (id, event) => {
-    const { field, formName, change, data } = this.props;
-    const { checked } = event.target;
-    let currentRoles = data.roles;
-
-    if(!currentRoles) currentRoles = [];
-
-    if(checked) {
-      // Добавляем роль в список
-      change(formName, `${field}.roles`, [...currentRoles, id]);
-    } else {
-      // Убираем роль из списка
-      change(formName, `${field}.roles`, currentRoles.filter(nId => nId !== id));
-    }
-  };
-
-  isSelectedRole = id => {
-    const { data } = this.props;
-    if(!Array.isArray(data.roles)) return false;
-
-    return data.roles.indexOf(id) >= 0;
-  };
-
   render() {
     const { field, authorData, correspondingAuthor,
-            authorsArray, data, authorRoles } = this.props;
+            authorsArray, data, authorRolesArray } = this.props;
     const { source, isCurrent, hash } = data;
 
     return (
@@ -126,34 +95,30 @@ class AuthorAdd extends Component {
               </Checkbox>
               <FieldHint text={ 'Подсказка про корреспонденту' } />
             </div>
-            {authorRoles.length > 0 && (
+            { authorRolesArray.length > 0 && (
               <div className="author-add__roles">
-                <div className="author-add__forbut">
-                  <button className="author-add__roles-button" type="button" onClick={this.handleToggleRoles}>
-                    <span>{ isCurrent ? 'Моя роль в подготовке статьи' : 'Роль в подготовке статьи' }</span>
-                  </button>
-                  <FieldHint text={ 'Подсказка про роли' } />
-                  <span className={cx({
-                    "author-add__roles-arrow": true,
-                    "author-add__roles-arrow_up": this.state.isOpenRoles,
-                    "author-add__roles-arrow_down": !this.state.isOpenRoles,
-                  })} />
-                </div>
-                { this.state.isOpenRoles && (
+                <Collapse
+                  title={
+                    <React.Fragment>
+                      { isCurrent ? 'Моя роль в подготовке статьи' : 'Роль в подготовке статьи' }
+                      <FieldHint text={ 'Подсказка про роли' } />
+                    </React.Fragment>
+                  }>
                   <div className="author-add__roles-box">
                     <ul className="author-add__roles-list">
-                      {authorRoles.map(role => (
-                        <li className="author-add__roles-role" key={role.id}>
-                          <Checkbox name="AuthorRole" checked={this.isSelectedRole(role.id)} onChange={ (e) => this.handleRolesChoose(role.id, e) }>
+                      { authorRolesArray.map(role => (
+                        <li className="author-add__roles-role" key={ role.id }>
+                          <Field type="checkbox" name={ `${field}.roles.role-${role.id}` }
+                                 value={ role.id } component={ Checkbox }>
                             { role.name }
-                          </Checkbox>
+                          </Field>
                         </li>
-                      ))}
+                      )) }
                     </ul>
                   </div>
-                )}
+                </Collapse>
               </div>
-            )}
+            ) }
           </div> :
           <div className="author-add__form">
             <h3 className="author-add__title">Добавить автора</h3>
@@ -203,14 +168,14 @@ function mapStateToProps(state, props) {
   const hash = formSelector(state, `${field}.hash`);
   const id = formSelector(state, `${field}.id`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
-  const authorRoles = getRolesArray(state);
+  const authorRolesArray = getRolesArray(state);
 
   return {
     correspondingAuthor,
     authorData: isCurrent ? user.data : users.data[id],
     authorsArray: users.searchData[hash],
     searchData: users.searchData,
-    authorRoles,
+    authorRolesArray,
   };
 }
 

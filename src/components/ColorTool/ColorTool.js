@@ -37,19 +37,26 @@ class ColorTool extends Component {
     const { showColorPicker } = this.state;
     return (
       <div className="color-tool">
-        <button className="color-tool__button" type="button"
-                onClick={ this.handlePickerShow }>
-            <Icon name="letter" className="color-tool__icon" />
-            Выбрать цвет текста
-          <div className="color-tool__box" style={ { background: this.currentColor } } />
+        <button
+          className="color-tool__button"
+          type="button"
+          onClick={ this.handlePickerShow }
+        >
+          <Icon name="letter" className="color-tool__icon" />
+          Выбрать цвет текста
+          <div
+            className="color-tool__box"
+            style={ { background: this.currentColor } }
+          />
         </button>
 
-        { showColorPicker &&
-          <ColorPicker color={ this.currentColor }
-                       onChange={ this.handleChange }
-                       onCloseRequest={ this.handlePickerClose }
+        { showColorPicker && (
+          <ColorPicker
+            color={ this.currentColor }
+            onChange={ this.handleChange }
+            onCloseRequest={ this.handlePickerClose }
           />
-        }
+        ) }
       </div>
     );
   }

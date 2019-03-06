@@ -12,28 +12,31 @@ const initialState = {
 function categories(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_CATEGORIES}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${FETCH_CATEGORIES}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
 
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         ...entity
       };
 
     case `${FETCH_CATEGORIES}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     default:
-      return state
+      return state;
   }
 }
 

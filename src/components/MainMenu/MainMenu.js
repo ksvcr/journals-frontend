@@ -19,7 +19,7 @@ class MainMenu extends Component {
   }
 
   get correctorItems() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         title: t('articles_in_work'),
@@ -34,7 +34,7 @@ class MainMenu extends Component {
   }
 
   get authorItems() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         title: t('my_articles'),
@@ -49,7 +49,7 @@ class MainMenu extends Component {
   }
 
   get reviewerItems() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       ...this.authorItems,
       {
@@ -60,7 +60,7 @@ class MainMenu extends Component {
   }
 
   get redactorItems() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         title: t('my_articles'),

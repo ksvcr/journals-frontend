@@ -12,28 +12,31 @@ const initialState = {
 function rubrics(state = initialState, action) {
   switch (action.type) {
     case `${FETCH_RUBRICS}_PENDING`:
-      return { ...state,
+      return {
+        ...state,
         isPending: true
       };
 
     case `${FETCH_RUBRICS}_FULFILLED`:
       const entity = entityNormalize.toObject(action.payload.results);
 
-      return { ...state,
+      return {
+        ...state,
         isPending: false,
         isFulfilled: true,
         ...entity
       };
 
     case `${FETCH_RUBRICS}_REJECTED`:
-      return { ...state,
+      return {
+        ...state,
         isRejected: true,
         isPending: false,
         error: action.payload
       };
 
     default:
-      return state
+      return state;
   }
 }
 

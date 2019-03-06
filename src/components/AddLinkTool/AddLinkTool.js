@@ -15,10 +15,10 @@ class AddLinkTool extends Component {
     showURLInput: false
   };
 
-  handlePromptOpen = (event) => {
+  handlePromptOpen = event => {
     event.preventDefault();
     const { getEditorState } = this.props;
-    const editorState  = getEditorState();
+    const editorState = getEditorState();
     const selection = editorState.getSelection();
     if (!selection.isCollapsed()) {
       const contentState = editorState.getCurrentContent();
@@ -35,7 +35,7 @@ class AddLinkTool extends Component {
 
       this.setState({
         showURLInput: true,
-        urlValue: url,
+        urlValue: url
       });
     }
   };
@@ -46,9 +46,11 @@ class AddLinkTool extends Component {
     });
   };
 
-  handleConfirm = (urlValue) => {
+  handleConfirm = urlValue => {
     const { getEditorState, setEditorState } = this.props;
-    setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), urlValue));
+    setEditorState(
+      EditorUtils.createLinkAtSelection(getEditorState(), urlValue)
+    );
     this.setState({
       showURLInput: false
     });
@@ -57,17 +59,29 @@ class AddLinkTool extends Component {
   render() {
     const { showURLInput, urlValue } = this.state;
     const { getEditorState } = this.props;
-    const hasLinkSelected = EditorUtils.hasEntity(
-      getEditorState(),
-      'LINK'
-    );
-    const classes = classNames('add-link-tool', 'editor-button', { 'editor-button_active': hasLinkSelected });
+    const hasLinkSelected = EditorUtils.hasEntity(getEditorState(), 'LINK');
+    const classes = classNames('add-link-tool', 'editor-button', {
+      'editor-button_active': hasLinkSelected
+    });
     return (
-      <ToolTip open={ showURLInput } className="tooltip" position="right-start" unmountHTMLWhenHide={ true }
-               html={ <LinkPrompt value={ urlValue } onConfirm={ this.handleConfirm } /> } onRequestClose={ this.handlePromptClose }>
-        <button type="button" className={ classes } onClick={ this.handlePromptOpen }>
+      <ToolTip
+        open={ showURLInput }
+        className="tooltip"
+        position="right-start"
+        unmountHTMLWhenHide={ true }
+        html={ <LinkPrompt value={ urlValue } onConfirm={ this.handleConfirm } /> }
+        onRequestClose={ this.handlePromptClose }
+      >
+        <button
+          type="button"
+          className={ classes }
+          onClick={ this.handlePromptOpen }
+        >
           Добавить ссылку
-          <Icon name="link" className="add-link-tool__icon editor-button__icon" />
+          <Icon
+            name="link"
+            className="add-link-tool__icon editor-button__icon"
+          />
         </button>
       </ToolTip>
     );
@@ -78,16 +92,10 @@ export default AddLinkTool;
 
 const linkDecorator = {
   strategy: findEntities('LINK'),
-  component: (props) => {
+  component: props => {
     const { url } = props.contentState.getEntity(props.entityKey).getData();
-    return (
-      <a href={url}>
-        {props.children}
-      </a>
-    );
-  },
+    return <a href={ url }>{ props.children }</a>;
+  }
 };
 
-export {
-  linkDecorator
-}
+export { linkDecorator };

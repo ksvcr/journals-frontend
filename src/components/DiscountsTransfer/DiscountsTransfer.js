@@ -21,7 +21,7 @@ class DiscountsTransfer extends Component {
     user: null
   };
 
-  handleCancelClick = (event) => {
+  handleCancelClick = event => {
     const { onClose } = this.props;
     event.preventDefault();
     onClose();
@@ -37,16 +37,17 @@ class DiscountsTransfer extends Component {
     dispatch(usersActions.searchUsers(SEARCH_KEY, data));
   };
 
-  handleUserSelect = (id) => {
+  handleUserSelect = id => {
     const { searchResults } = this.props;
     const user = searchResults.find(item => item.id === id);
     this.setState({ user });
   };
 
-  handleTransferSubmit = (formData) => {
+  handleTransferSubmit = formData => {
     const { dispatch } = this.props;
     const { user } = this.state;
-    const bonusCount = formData.bonus_count && parseInt(formData.bonus_count, 10);
+    const bonusCount =
+      formData.bonus_count && parseInt(formData.bonus_count, 10);
     const data = {
       user_id: user.id,
       bonus_count: bonusCount
@@ -63,19 +64,32 @@ class DiscountsTransfer extends Component {
         <div className="discounts-transfer__cancel">
           <CancelLink onClick={ this.handleCancelClick } />
         </div>
-        {
-          !user ?
+        { !user ? (
           <div className="discounts-transfer__search">
             <SearchPanel onChange={ this.handleSearchChange } />
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
-                Найдено { searchResults.length } {getNoun(searchResults.length, 'пользователь', 'пользователя', 'пользователей')}:
+                Найдено { searchResults.length }{ ' ' }
+                { getNoun(
+                  searchResults.length,
+                  'пользователь',
+                  'пользователя',
+                  'пользователей'
+                ) }
+                :
               </p>
-              <DiscountsTransferSelect items={ searchResults } onSelect={ this.handleUserSelect } />
+              <DiscountsTransferSelect
+                items={ searchResults }
+                onSelect={ this.handleUserSelect }
+              />
             </div>
-          </div> :
-          <DiscountsTransferForm user={ user } onSubmit={ this.handleTransferSubmit } />
-        }
+          </div>
+        ) : (
+          <DiscountsTransferForm
+            user={ user }
+            onSubmit={ this.handleTransferSubmit }
+          />
+        ) }
       </div>
     );
   }

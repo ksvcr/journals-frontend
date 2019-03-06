@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import Collapse from '~/components/Collapse/Collapse';
 import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';

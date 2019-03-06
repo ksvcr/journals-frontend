@@ -11,7 +11,7 @@ import ArticleAuthorsForm from '~/components/ArticleAuthorsForm/ArticleAuthorsFo
 import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentForm';
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
-import CorrectFilesForm from '~/components/CorrectFilesForm/CorrectFilesForm';
+import FormError from '~/components/FormError/FormError';
 
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
@@ -21,7 +21,7 @@ import './assets/save.svg';
 
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
-import {  getRootCategoriesArray } from '~/store/categories/selector';
+import { getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -30,14 +30,15 @@ const FORM_NAME_BASE = 'article-publish';
 
 class ArticleForm extends Component {
   get formProps() {
-    const { form } = this.props;
+    const { form, id } = this.props;
     return {
+      articleId: id,
       formName: form
     };
   }
 
   get wizardSteps() {
-    const {t, userData} = this.props;
+    const { t, userData } = this.props;
 
     switch (userData.role) {
       case 'CORRECTOR':
@@ -52,7 +53,7 @@ class ArticleForm extends Component {
           },
           {
             title: t('files_to_article'),
-            component: <CorrectFilesForm { ...this.formProps } />
+            component: <ArticleFilesForm { ...this.formProps } />
           },
           {
             title: t('source_list'),
@@ -85,6 +86,28 @@ class ArticleForm extends Component {
     }
   }
 
+  componentDidMount() {
+    // TODO: Венуть автосейв после доработки апи
+    // this.initAutoSave();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.autoSaveInterval);
+  }
+
+  initAutoSave = () => {
+    const { onAutoSave, articleData } = this.props;
+    const isDraft = articleData && articleData.state_article === 'DRAFT';
+    // Автоматическое сохранение
+    this.autoSaveInterval = setInterval(() => {
+      const { formValues } = this.props;
+
+      if(formValues && formValues.title && (!articleData || isDraft)) {
+        onAutoSave(formValues);
+      }
+    }, 30000);
+  };
+
   handleDraftSubmit = () => {
     const { formValues, form, onDraftSubmit } = this.props;
     onDraftSubmit(formValues, form);
@@ -93,7 +116,7 @@ class ArticleForm extends Component {
   handleSubmit = (formData) => {
     const { form, onSubmit } = this.props;
     onSubmit(formData, form);
-  }
+  };
 
   renderTools = () => {
     const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;
@@ -115,10 +138,14 @@ class ArticleForm extends Component {
   };
 
   render() {
+    const { articlesError, isRejected } = this.props;
     return (
       <div className="article-publish-form">
         <div className="article-publish-form__wizard">
           <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
+          { isRejected &&
+            <FormError data={ articlesError }/>
+          }
         </div>
       </div>
     );
@@ -144,6 +171,8 @@ function mapStateToProps(state, props) {
     isInvalidForm,
     initialValues: getInitialValues(state, props),
     userData: user.data,
+    isRejected: articles.isRejected,
+    articlesError: articles.error,
     articleData: articles.data[id]
   };
 }
@@ -156,7 +185,6 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
@@ -166,9 +194,6 @@ function getInitialValues(state, props) {
     financing_sources: [{
       type: financingIds[0]
     }],
-    addresses: [{
-      count: 1
-    }],
     authors: [{
       id: user.data.id,
       isCurrent: true,
@@ -176,6 +201,7 @@ function getInitialValues(state, props) {
       hash: initialAuthorHash
     }],
     article_type: 0,
+    text_files: [],
     content_blocks: [
       {
         title: 'Введение'
@@ -193,7 +219,8 @@ function getInitialValues(state, props) {
         title: 'Заключение'
       },
     ],
-    attachments: data.file_atachments || [],
+    file_atachments: data.file_atachments || [],
+    list_literature_file: data.list_literature_file,
     ...data
   };
 
@@ -216,7 +243,13 @@ function getInitialValues(state, props) {
 ArticleForm.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['new'])]),
   onSubmit: PropTypes.func,
-  onDraftSubmit: PropTypes.func
+  onDraftSubmit: PropTypes.func,
+  onAutoSave: PropTypes.func,
+  autoSaveTimer: PropTypes.number,
+};
+
+ArticleForm.defaultProps = {
+  autoSaveTimer: 30,
 };
 
 ArticleForm = withNamespaces()(ArticleForm);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import TranslatorArticleList from '~/components/TranslatorArticleList/TranslatorArticleList';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
@@ -25,7 +26,7 @@ class TranslatorArticles extends Component {
   };
 
   get searchTargets() {
-    const {t} = this.props;
+    const { t } = this.props;
     return [
       {
         value: 'title',
@@ -52,18 +53,18 @@ class TranslatorArticles extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
-          {t('articles_in_work')}
+          { t('articles_in_work') }
         </h1>
 
         <div className="page__tools">
           <form className="form">
             <div className="form__field">
               <label className="form__label">
-                {t('article_search')}
+                { t('article_search') }
               </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
@@ -94,6 +95,7 @@ const mapDispatchToProps = {
   fetchArticles: articlesActions.fetchArticles
 };
 
+TranslatorArticles = withNamespaces()(TranslatorArticles);
 
 export default connect(
   mapStateToProps,

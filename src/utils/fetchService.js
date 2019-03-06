@@ -35,9 +35,13 @@ class fetchService {
       // Something happened in setting up the request that triggered an Error
       console.error('Error', error.message);
     }
-
-    throw new Error(error.message);
+    if (error.response && error.response.data) {
+      throw error.response.data;
+    } else {
+      throw error.message;
+    }
   }
+
 }
 
 export default fetchService;

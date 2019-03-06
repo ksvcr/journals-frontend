@@ -8,26 +8,39 @@ import './assets/cancel.svg';
 
 class ArticleSource extends Component {
   getTitle(parts, lang) {
-   const { data } = this.props;
-   let resultString = '';
-   if (data.author && lang === 'ru') {
-     const { lastname, initials } = data.author;
-     resultString = `${lastname} ${initials} `;
-   }
+    const { data } = this.props;
+    let resultString = '';
 
-   let params = parts.filter(key => data[key]).reduce((result, key) => {
-     let item = data[key];
-     if (key === 'page_count') {
-       if (lang === 'ru') {
-         item = `- ${item} с.`
-       } else {
-         item = `${item} P`
-       }
-     }
-     return `${result} ${item}`;
-   }, '');
+    if (data.author && lang === 'ru') {
+      if (typeof data.author === 'string') {
+        resultString = data.author;
+      } else {
+        const author = Array.isArray(data.author)
+          ? data.author[0]
+          : data.author;
+        const { lastname, initials } = author;
 
-   return resultString + params;
+        resultString = `${lastname} ${initials} `;
+      }
+    }
+
+    let params = parts
+      .filter(key => data[key])
+      .reduce((result, key) => {
+        let item = data[key];
+
+        if (key === 'page_count') {
+          if (lang === 'ru') {
+            item = `- ${item} с.`;
+          } else {
+            item = `${item} P`;
+          }
+        }
+
+        return `${result} ${item}`;
+      }, '');
+
+    return resultString + params;
   }
 
   handleRemove = () => {
@@ -56,17 +69,21 @@ class ArticleSource extends Component {
           </div>
         </div>
         <div className="article-source__tools">
-          <button className="article-source__tool" type="button" onClick={ this.handleEdit }>
-            <Icon name="edit" className="article-source__icon article-source__icon_edit" />
+          <button className="article-source__tool"
+                  type="button" onClick={ this.handleEdit } >
+            <Icon name="edit"
+                  className="article-source__icon article-source__icon_edit" />
             Редактировать
           </button>
 
-          { onRemove &&
-            <button className="article-source__tool" type="button" onClick={ this.handleRemove }>
-              <Icon name="cancel" className="article-source__icon article-source__icon_remove" />
+          { onRemove && (
+            <button className="article-source__tool" type="button"
+                    onClick={ this.handleRemove } >
+              <Icon name="cancel"
+                    className="article-source__icon article-source__icon_remove" />
               Удалить
             </button>
-          }
+          ) }
         </div>
       </div>
     );
