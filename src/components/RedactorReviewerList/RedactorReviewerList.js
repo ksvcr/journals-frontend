@@ -7,20 +7,32 @@ import Icon from '~/components/Icon/Icon';
 import InterestList from '~/components/InterestList/InterestList';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import Checkbox from '~/components/Checkbox/Checkbox';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
 
-import { getUsersArray } from '~/store/users/selector';
+import { getUsersArray, getUsersParams } from '~/store/users/selector';
 
 import getNoun from '~/utils/getNoun';
 
 import './redactor-reviewer-list.scss';
 import './assets/arrow.svg';
+import apiClient from '~/services/apiClient';
 
 class RedactorReviewerList extends Component {
+  handleRequest = (params = {}) => {
+    const { fetchUsers, usersParams } = this.props;
+    const data = {
+      ...usersParams,
+      ...params,
+      search: params.search_query || usersParams.search,
+      role: 'REVIEWER'
+    };
+    fetchUsers(data);
+  };
+
   renderName = ({ last_name, first_name, middle_name }) =>
     `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
 
@@ -39,16 +51,6 @@ class RedactorReviewerList extends Component {
     const { currentUserId, createUserTag } = this.props;
     const tagData = { text, user, tag_author: currentUserId };
     createUserTag(tagData);
-  };
-
-  handleSearchChange = ({ search_query }) => {
-    const { fetchUsers } = this.props;
-    const data = {
-      role: 'REVIEWER',
-      search: search_query
-    };
-
-    fetchUsers(data);
   };
 
   get listProps() {
@@ -127,12 +129,24 @@ class RedactorReviewerList extends Component {
     );
   }
 
+  loadOptions = inputValue => {
+    return new Promise(resolve => {
+      if (!inputValue) resolve([]);
+      apiClient.getUserTags({ search_query: inputValue }).then(data => {
+        const options = data.results.map(item => ({ label: item.text, value: item.id }));
+        resolve(options);
+      });
+    });
+  };
+
   get selectTagsProps() {
-    // TODO: Добавить список тегов
     return {
+      async: true,
       name: 'tags',
-      options: [],
-      onChange: event => {}
+      loadOptions: this.loadOptions,
+      placeholder: 'Выберите тег',
+      normalize: option => option.value,
+      onChange: tag => this.handleRequest({ filter: { tag_ids: tag } })
     };
   }
 
@@ -147,14 +161,14 @@ class RedactorReviewerList extends Component {
         >
           Отмена
         </button>
-        <SearchPanel onChange={ this.handleSearchChange } />
+        <SearchPanel onChange={ this.handleRequest } />
         <div className="redactor-reviewer-list__search-form form">
           <div className="form__field">
             <label className="form__label">Искать по:</label>
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <Select { ...this.selectTagsProps } />
+                  <SearchableSelect { ...this.selectTagsProps } />
                 </div>
               </div>
               <div className="form__col form__col_6">
@@ -183,7 +197,8 @@ function mapStateToProps(state) {
   const { user } = state;
   return {
     currentUserId: user.data.id,
-    usersArray: getUsersArray(state)
+    usersArray: getUsersArray(state),
+    usersParams: getUsersParams(state)
   };
 }
 

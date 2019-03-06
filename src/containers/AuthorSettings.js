@@ -49,7 +49,6 @@ class AuthorSettings extends Component {
         </div>
 
         <AuthorSettingsForm form={ form } userId={ userId } onSubmit={ this.handleSubmit } />
-
       </React.Fragment>
     );
   }

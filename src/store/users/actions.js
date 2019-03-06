@@ -9,8 +9,8 @@ export function fetchUsers(params) {
     const payload = apiClient.getUsers(null, flatParams);
     return dispatch({
       type: FETCH_USERS,
-      payload,
-      meta: params
+      meta: params,
+      payload
     }).catch(error => console.error(error));
   };
 }

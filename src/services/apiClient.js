@@ -107,7 +107,7 @@ const apiClient = {
     );
   },
   getDiscountsInfo: userId =>
-    fetchInstance.request(`users/${userId}/balance`, { method: 'get' }),
+    fetchInstance.request(`users/${userId}/balance`),
   transferBonus: data =>
     fetchInstance.request('users/balance/transfer/', { method: 'post', data }),
 
@@ -122,6 +122,8 @@ const apiClient = {
       { method: 'put', data }
     );
   },
+  getArticleTags: (params) => fetchInstance.request('articles/tags/', { params }),
+  getUserTags: (params) => fetchInstance.request('users/tags/', { params }),
 
   getReviews: (articleId = null, reviewId = null, params) => {
     const tail = reviewId !== null ? `reviews/${reviewId}/` : '';

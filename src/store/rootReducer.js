@@ -29,6 +29,6 @@ export default combineReducers({
   lawtypes,
   countries,
   reviews,
-  roles
+  roles,
 });
 
