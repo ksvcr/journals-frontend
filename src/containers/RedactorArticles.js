@@ -6,9 +6,12 @@ import RedactorArticleList from '~/components/RedactorArticleList/RedactorArticl
 
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
+import apiClient from '~/services/apiClient';
+
 import { getArticlesParams } from '~/store/articles/selector';
+
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
 class RedactorArticles extends Component {
   componentDidMount() {
@@ -46,12 +49,26 @@ class RedactorArticles extends Component {
     ];
   }
 
+  loadOptions = inputValue => {
+    return new Promise(resolve => {
+      if (!inputValue) resolve([]);
+      apiClient.getArticleTags({ search_query: inputValue }).then(data => {
+        const options = data.results.map(item => ({ label: item.text, value: item.id }));
+        resolve(options);
+      });
+    });
+  };
+
   get selectTagsProps() {
-    // TODO: Добавить список тегов
     return {
+      async: true,
       name: 'tags',
-      options: [],
-      onChange: (event) => {}
+      loadOptions: this.loadOptions,
+      placeholder: 'Выберите тег',
+      normalize: option => option.value,
+      onChange: tag => {
+        this.handleRequest({ filter: { tag_ids: tag } });
+      }
     };
   }
 
@@ -75,7 +92,7 @@ class RedactorArticles extends Component {
                 <label className="form__label">
                   { t('tags') }
                 </label>
-                <Select { ...this.selectTagsProps } />
+                <SearchableSelect { ...this.selectTagsProps } />
               </div>
             </div>
           </div>

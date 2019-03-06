@@ -9,7 +9,7 @@ import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, countriesArray }) => {
+const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, countriesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -80,10 +80,12 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, c
               Страна защиты <ReqMark />
             </label>
             <Field name="defense_country" id="defense_country" validate={ [validate.required] }
-                   format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
-                   normalize={ value => value.id }
-                   component={ props => <SearchableSelect placeholder="Выберите страну"
-                                                          options={ countriesArray } { ...props } /> }  />
+                   format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                   normalize={ option => option.value }
+                   placeholder="Выберите страну"
+                   options={ countriesOptions }
+                   className="searchable-select-wrapper_white"
+                   component={ SearchableSelect }  />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="defense_city" className="form__label">

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Select, { components } from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
 import classNames from 'classnames';
+import debounce from 'lodash/debounce';
 
 import './searchable-select.scss';
 
@@ -16,37 +18,66 @@ const Option = ({ children, ...props }) => {
 };
 
 class SearchableSelect extends Component {
+  constructor(props) {
+    super(props);
+    const { loadOptions, async } = this.props;
+    if (async) {
+      this.loadOptions = debounce(loadOptions, 300);
+    }
+  }
+
   handleChange = selectedOption => {
-    const { input } = this.props;
-    input.onChange(selectedOption);
+    const { input = {} } = this.props;
+    const onChange = input.onChange ? input.onChange : this.props.onChange;
+    onChange(selectedOption);
   };
 
-  getOptionValue = option => option.id;
-  getOptionLabel = option => option.name;
-  noOptionsMessage = () => 'Ничего не найдено';
+  handleBlur = () => {
+    const { input = {} } = this.props;
+    if (input.onBlur) {
+      input.onBlur(input.value)
+    }
+  };
 
-  render() {
-    const { input, meta, id, options, required, placeholder } = this.props;
+  get selectProps() {
+    const { input = {}, meta, id, options, required, placeholder, className } = this.props;
     const hasError = meta && meta.submitFailed && meta.error;
-    const classes = classNames(
-      'searchable-select-wrapper searchable-select-wrapper_white',
+    const wrapperClasses = classNames(
+      'searchable-select-wrapper', className,
       { 'searchable-select-wrapper_error': hasError }
     );
+    const value = input.value ? input.value : this.props.value;
+    const props = {
+      id,
+      required,
+      placeholder,
+      options,
+      value,
+      components: { Option },
+      className: wrapperClasses,
+      classNamePrefix: 'searchable-select',
+      noOptionsMessage: () => 'Ничего не найдено',
+      loadingMessage: () => 'Загрузка...',
+      getOptionValue: this.getOptionValue,
+      getOptionLabel: this.getOptionLabel,
+      onChange: this.handleChange,
+      onBlur: this.handleBlur
+    };
+
+    if (this.loadOptions) {
+      props.loadOptions = this.loadOptions;
+    }
+
+    return props;
+  };
+
+  render() {
+    const { meta, async } = this.props;
+    const hasError = meta && meta.submitFailed && meta.error;
     return (
       <React.Fragment>
-        <Select id={ id }
-                required={ required }
-                components={ { Option } }
-                className={ classes }
-                classNamePrefix="searchable-select"
-                value={ input.value }
-                placeholder={ placeholder }
-                noOptionsMessage={ this.noOptionsMessage }
-                getOptionValue={ this.getOptionValue }
-                getOptionLabel={ this.getOptionLabel }
-                options={ options }
-                onChange={ this.handleChange }
-                onBlur={ () => input.onBlur(input.value) } />
+        { async ? <AsyncSelect { ...this.selectProps } /> : <Select { ...this.selectProps } /> }
+
         { hasError && (
           <div className="searchable-select-wrapper__error">
             { meta.error }

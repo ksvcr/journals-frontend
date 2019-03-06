@@ -20,7 +20,7 @@ import SourcePatent from '~/components/SourcePatent/SourcePatent';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLawtypesArray } from '~/store/lawtypes/selector';
-import { getCountriesArray } from '~/store/countries/selector';
+import { getCountriesOptions } from '~/store/countries/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -84,12 +84,12 @@ class ArticleSourceCreateForm extends Component {
   }
 
   get specialFields() {
-    const { resourceType, rightholderType, countriesArray, countriesData } = this.props;
+    const { resourceType, rightholderType, countriesOptions, countriesData } = this.props;
     switch (resourceType) {
       case 'SourceThesis':
         return <SourceThesisFields rubricsOptions={ this.rubricsOptions }
                                    languagesOptions={ this.languagesOptions }
-                                   countriesArray={ countriesArray }
+                                   countriesOptions={ countriesOptions }
                                    countriesData={ countriesData } />;
 
       case 'SourceArticleSerialEdition':
@@ -105,7 +105,7 @@ class ArticleSourceCreateForm extends Component {
         return <SourceElectronic rubricsOptions={ this.rubricsOptions } />;
 
       case 'SourceLegislativeMaterial':
-        return <SourceLegislativeMaterial countriesArray={ countriesArray }
+        return <SourceLegislativeMaterial countriesOptions={ countriesOptions }
                                           countriesData={ countriesData }
                                           lawTypesOptions={ this.lawtypesOptions }/>;
 
@@ -115,7 +115,7 @@ class ArticleSourceCreateForm extends Component {
       case 'SourcePatent':
         return <SourcePatent rightholderType={ rightholderType }
                              rightholderOptions={ getRightholderTypes() }
-                             countriesArray={ countriesArray }
+                             countriesOptions={ countriesOptions }
                              countriesData={ countriesData } />;
 
       default:
@@ -209,7 +209,7 @@ function mapStateToProps(state, props) {
   const { user, countries } = state;
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
-  const countriesArray = getCountriesArray(state);
+  const countriesOptions = getCountriesOptions(state);
   const rubricsArray = getRubricsArray(state);
   const resourceType = formSelector(state, 'resourcetype');
   const rightholderType = parseInt(formSelector(state, 'rightholder'), 10);
@@ -224,7 +224,7 @@ function mapStateToProps(state, props) {
     resourceType,
     rightholderType,
     lawtypes,
-    countriesArray,
+    countriesOptions,
     countriesData: countries.data,
     initialValues: {
       language: languagesArray.length ? languagesArray[0].id : null,

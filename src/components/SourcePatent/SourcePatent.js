@@ -9,7 +9,7 @@ import Select from '~/components/Select/Select';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import * as validate from '~/utils/validate';
 
-const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, countriesArray }) => {
+const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, countriesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -169,10 +169,12 @@ const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, coun
               Страна <ReqMark />
             </label>
             <Field name="country" id="country"
-                   format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
-                   normalize={ value => value.id }
-                   component={ props => <SearchableSelect placeholder="Выберите страну"
-                                                          options={ countriesArray } { ...props } /> }  />
+                   format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                   normalize={ option => option.value }
+                   placeholder="Выберите страну"
+                   className="searchable-select-wrapper_white"
+                   options={ countriesOptions }
+                   component={ SearchableSelect }  />
           </div>
         </div>
       </div>

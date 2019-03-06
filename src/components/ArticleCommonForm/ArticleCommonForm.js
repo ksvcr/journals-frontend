@@ -20,7 +20,7 @@ import {
   getCategoriesArray,
   getRootCategoriesArray
 } from '~/store/categories/selector';
-import { getCountriesArray } from '~/store/countries/selector';
+import { getCountriesOptions } from '~/store/countries/selector';
 
 import * as validate from '~/utils/validate';
 
@@ -124,7 +124,7 @@ class ArticleCommonForm extends Component {
   };
 
   renderAddressList = props => {
-    const { countriesArray, countriesData } = this.props;
+    const { countriesOptions, countriesData } = this.props;
     const initialValues = {
       count: 1
     };
@@ -134,7 +134,7 @@ class ArticleCommonForm extends Component {
                     initialValues={ initialValues } { ...props }>
         { field => (
           <AddressForm field={ field } countriesData={ countriesData }
-                       countriesArray={ countriesArray } />
+                       countriesOptions={ countriesOptions } />
         ) }
       </FieldSetList>
     );
@@ -338,7 +338,7 @@ function mapStateToProps(state, props) {
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
-  const countriesArray = getCountriesArray(state);
+  const countriesOptions = getCountriesOptions(state);
 
   return {
     userData: user.data,
@@ -350,7 +350,7 @@ function mapStateToProps(state, props) {
     categoriesArray,
     rubricsArray,
     languagesArray,
-    countriesArray,
+    countriesOptions,
     countriesData: countries.data,
     isPrinted
   };

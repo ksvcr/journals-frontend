@@ -133,6 +133,7 @@ class ArticlePublish extends Component {
         })
         .catch(error => console.error(error));
     } else {
+      data.state_article = 'SENT';
       createArticle(siteId, data)
         .then(() => {
           destroy(formName);

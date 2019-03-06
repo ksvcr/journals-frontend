@@ -269,9 +269,13 @@ export function createArticleTranslation(id, data) {
         id,
         data
       );
+      const editArticlePromise = apiClient.editArticle(id, {
+        state_article: 'AWAIT_PUBLICATION'
+      });
       return Promise.all([
         ...editSourcePromises,
-        createTranslationPromise
+        createTranslationPromise,
+        editArticlePromise
       ]);
     });
 
@@ -296,9 +300,13 @@ export function editArticleTranslation(id, data) {
       delete data.sources;
 
       const editTranslationPromise = apiClient.editArticleTranslation(id, data.language_code, data);
+      const editArticlePromise = apiClient.editArticle(id, {
+        state_article: 'AWAIT_PUBLICATION'
+      });
       return Promise.all([
         ...editSourcePromises,
-        editTranslationPromise
+        editTranslationPromise,
+        editArticlePromise
       ]);
     });
 

@@ -9,3 +9,10 @@ export const getCountriesArray = createSelector(
     return entityNormalize.toArray(countries.data, countries.ids);
   }
 );
+
+export const getCountriesOptions = createSelector(
+  countriesSelector,
+  countries => {
+    return entityNormalize.toArray(countries.data, countries.ids).map(item => ({ value: item.id, label: item.name }));
+  }
+);

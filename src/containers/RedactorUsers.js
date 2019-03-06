@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersParams } from '~/store/users/selector';
 import { getSitesArray } from '~/store/sites/selector';
+import apiClient from '~/services/apiClient';
 
 class RedactorUsers extends Component {
   componentDidMount() {
@@ -52,24 +54,24 @@ class RedactorUsers extends Component {
     };
   }
 
-  get selectActionProps() {
-    return {
-      name: 'action',
-      options: [
-        {
-          title: 'Отправить письмо',
-          value: 'mail'
-        }
-      ],
-      onChange: event => {}
-    };
-  }
+  loadOptions = inputValue => {
+    return new Promise(resolve => {
+      if (!inputValue) resolve([]);
+      apiClient.getUserTags({ search_query: inputValue }).then(data => {
+        const options = data.results.map(item => ({ label: item.text, value: item.id }));
+        resolve(options);
+      });
+    });
+  };
 
   get selectTagsProps() {
     return {
+      async: true,
       name: 'tags',
-      options: [],
-      onChange: event => {}
+      loadOptions: this.loadOptions,
+      placeholder: 'Выберите тег',
+      normalize: option => option.value,
+      onChange: tag => this.handleRequest({ filter: { tag_ids: tag } })
     };
   }
 
@@ -94,22 +96,16 @@ class RedactorUsers extends Component {
               />
             </div>
             <div className="form__row">
-              <div className="form__col form__col_4">
+              <div className="form__col form__col_6">
                 <div className="form__field">
                   <label className="form__label">Журнал</label>
                   <Select { ...this.selectSiteProps } />
                 </div>
               </div>
-              <div className="form__col form__col_4">
-                <div className="form__field">
-                  <label className="form__label">Действия</label>
-                  <Select { ...this.selectActionProps } />
-                </div>
-              </div>
-              <div className="form__col form__col_4">
+              <div className="form__col form__col_6">
                 <div className="form__field">
                   <label className="form__label">Теги</label>
-                  <Select { ...this.selectTagsProps } />
+                  <SearchableSelect { ...this.selectTagsProps } />
                 </div>
               </div>
             </div>

@@ -9,7 +9,7 @@ import Calendar from '~/components/Calendar/Calendar';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import Select from '~/components/Select/Select';
 
-const SourceLegislativeMaterial = ({ countriesData, countriesArray, lawTypesOptions }) => {
+const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOptions }) => {
   return (
     <React.Fragment>
       <div className="form__field">
@@ -54,10 +54,12 @@ const SourceLegislativeMaterial = ({ countriesData, countriesArray, lawTypesOpti
               Страна <ReqMark />
             </label>
             <Field name="country" id="country"
-                   format={ value => value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
-                   normalize={ value => value.id }
-                   component={ props => <SearchableSelect placeholder="Выберите страну"
-                                                          options={ countriesArray } { ...props } /> }  />
+                   format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                   normalize={ option => option.value }
+                   placeholder="Выберите страну"
+                   options={ countriesOptions }
+                   className="searchable-select-wrapper_white"
+                   component={ SearchableSelect }  />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue" className="form__label">

@@ -10,6 +10,15 @@ import './search-panel.scss';
 import './assets/search.svg';
 
 class SearchPanel extends Component {
+  constructor(props) {
+    super(props);
+    const { initialTarget } = this.props;
+    this.handleSearchChange = debounce(this.handleSearchChange, 300);
+    this.state = {
+      target: initialTarget
+    };
+  }
+
   handleSearchChange = (value) => {
     const { target } = this.state;
     const { onChange } = this.props;
@@ -49,15 +58,6 @@ class SearchPanel extends Component {
     const { value } = event.target;
     this.handleSearchChange(value);
   };
-
-  constructor(props) {
-    super(props);
-    const { initialTarget } = this.props;
-    this.handleSearchChange = debounce(this.handleSearchChange, 300);
-    this.state = {
-      target: initialTarget
-    };
-  }
 
   get targets() {
     const { targets, hasDefaultTarget, t } = this.props;

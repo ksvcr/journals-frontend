@@ -4,10 +4,11 @@ import { withNamespaces } from 'react-i18next';
 
 import TranslatorArticleList from '~/components/TranslatorArticleList/TranslatorArticleList';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import Select from '~/components/Select/Select';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
+import apiClient from '~/services/apiClient';
 
 class TranslatorArticles extends Component {
   componentDidMount() {
@@ -43,12 +44,26 @@ class TranslatorArticles extends Component {
     ];
   }
 
+  loadOptions = inputValue => {
+    return new Promise(resolve => {
+      if (!inputValue) resolve([]);
+      apiClient.getArticleTags({ search_query: inputValue }).then(data => {
+        const options = data.results.map(item => ({ label: item.text, value: item.id }));
+        resolve(options);
+      });
+    });
+  };
+
   get selectTagsProps() {
-    // TODO: Добавить список тегов
     return {
+      async: true,
       name: 'tags',
-      options: [],
-      onChange: (event) => {}
+      loadOptions: this.loadOptions,
+      placeholder: 'Выберите тег',
+      normalize: option => option.value,
+      onChange: tag => {
+        this.handleRequest({ filter: { tag_ids: tag } });
+      }
     };
   }
 
@@ -72,7 +87,7 @@ class TranslatorArticles extends Component {
               <div className="form__col form__col_6">
                 <div className="form__field">
                   <label className="form__label">Теги</label>
-                  <Select { ...this.selectTagsProps } />
+                  <SearchableSelect { ...this.selectTagsProps } />
                 </div>
               </div>
             </div>

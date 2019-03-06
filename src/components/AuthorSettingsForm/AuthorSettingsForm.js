@@ -8,7 +8,7 @@ import Button from '~/components/Button/Button';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
 import { roleMap, getUserRoleTitle } from '~/services/userRoles';
-import { getCountriesArray } from '~/store/countries/selector';
+import { getCountriesOptions } from '~/store/countries/selector';
 import * as validate from '~/utils/validate';
 
 import './author-settings-form.scss';
@@ -36,7 +36,7 @@ class AuthorSettingsForm extends Component {
   }
 
   render() {
-    const { handleSubmit, countriesArray, countriesData } = this.props;
+    const { handleSubmit, countriesOptions, countriesData } = this.props;
     return (
       <form className="author-settings-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
@@ -123,10 +123,10 @@ class AuthorSettingsForm extends Component {
               </label>
               <Field name="country" id="country"
                      format={ value =>
-                       value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
-                     normalize={ value => value.id }
+                       value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                     normalize={ option => option.value }
                      placeholder="Выберите страну"
-                     options={ countriesArray }
+                     options={ countriesOptions }
                      component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_6">
@@ -152,10 +152,10 @@ class AuthorSettingsForm extends Component {
                 name="country_en"
                 id="country_en"
                 format={ value =>
-                  value && countriesData[value] ? { name: countriesData[value].name, id: value } : '' }
-                normalize={ value => value.id }
+                  value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                normalize={ option => option.value }
                 placeholder="Выберите страну"
-                options={ countriesArray }
+                options={ countriesOptions }
                 component={ SearchableSelect }
               />
             </div>
@@ -232,10 +232,11 @@ class AuthorSettingsForm extends Component {
               </label>
               <Field name="mail_address_country" id="mail_address_country"
                      format={ value =>
-                       value && countriesData[value] ? { name: countriesData[value].name, id: value } : ''
+                       value && countriesData[value] ? { label: countriesData[value].name, value } : ''
                      }
-                     normalize={ value => value.id } placeholder="Выберите страну"
-                     options={ countriesArray } component={ SearchableSelect } />
+                     normalize={ option => option.value }
+                     placeholder="Выберите страну"
+                     options={ countriesOptions } component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
@@ -346,11 +347,11 @@ function mapStateToProps(state, props) {
   const { user, users, countries } = state;
   const initialValues = userId ? users.data[userId] : user.data;
 
-  const countriesArray = getCountriesArray(state);
+  const countriesOptions = getCountriesOptions(state);
 
   return {
     userData: user.data,
-    countriesArray,
+    countriesOptions,
     countriesData: countries.data,
     initialValues
   };
