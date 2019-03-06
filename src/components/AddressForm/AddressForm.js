@@ -29,7 +29,7 @@ const AddressForm = ({ field, countriesOptions, countriesData }) => {
                    className="form__label" >
               Страну
             </label>
-            <Field className="text-field_white"
+            <Field className="searchable-select-wrapper_white"
                    name={ `${field}.mail_address_country` }
                    id={ `${field}.mail_address_country` }
                    format={ value => value ? { label: countriesData[value].name, value } : '' }
