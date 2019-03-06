@@ -58,7 +58,7 @@ class ArticleSourcesForm extends Component {
       <div className="article-sources-form">
         <h2 className="page__title">Список литературы</h2>
 
-        { isProofreading ?
+        { isProofreading && isFile ?
           <div className="article-sources-form__file">
             <DownloadLink file={ articleData.list_literature_file } name="Список литературы" />
           </div>
