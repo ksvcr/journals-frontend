@@ -24,4 +24,27 @@
   &__person {
     margin-bottom: 20px;
   }
+
+  &__roles {
+    margin-top: 30px;
+    margin-bottom: -40px;
+  }
+
+  &__roles-box {
+    padding: 30px 0 30px;
+  }
+
+  &__roles-list {
+    flex-flow: row wrap;
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 -30px;
+  }
+
+  &__roles-role {
+    width: 33.333333%;
+    margin: 0 0 30px;
+  }
+
 }

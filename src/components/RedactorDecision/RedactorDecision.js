@@ -125,10 +125,15 @@ function mapStateToProps(state, props) {
   const articleData = articles.data[articleId];
   const formName = `redactor-decision-${articleId}`;
   const formSelector = formValueSelector(formName);
+  const defaultReview = articleData && articleData.reviews.length &&  articleData.reviews[0];
   return {
     form: formName,
     state_article: formSelector(state, 'state_article'),
-    currentArticleState: articleData && articleData.state_article
+    currentArticleState: articleData && articleData.state_article,
+    initialValues: {
+      review_for_approve: defaultReview && defaultReview.id,
+      comment_for_redactor: defaultReview && defaultReview.comment_for_redactor
+    }
   };
 }
 

@@ -6,12 +6,13 @@ import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import AuthorChooser from '~/components/AuthorChooser/AuthorChooser';
 import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
-
+import { getRolesArray } from '~/store/roles/selector';
 import { searchUsers, createUser, insertUser } from '~/store/users/actions';
 
 import './author-add.scss';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FieldHint from '~/components/FieldHint/FieldHint';
+import Collapse from '~/components/Collapse/Collapse';
 
 class AuthorAdd extends Component {
   get sources() {
@@ -72,8 +73,9 @@ class AuthorAdd extends Component {
 
   render() {
     const { field, authorData, correspondingAuthor,
-            authorsArray, data } = this.props;
+            authorsArray, data, authorRolesArray } = this.props;
     const { source, isCurrent, hash } = data;
+
     return (
       <div className="author-add">
         { authorData !== undefined ?
@@ -93,6 +95,30 @@ class AuthorAdd extends Component {
               </Checkbox>
               <FieldHint text={ 'Подсказка про корреспонденту' } />
             </div>
+            { authorRolesArray.length > 0 && (
+              <div className="author-add__roles">
+                <Collapse
+                  title={
+                    <React.Fragment>
+                      { isCurrent ? 'Моя роль в подготовке статьи' : 'Роль в подготовке статьи' }
+                      <FieldHint text={ 'Подсказка про роли' } />
+                    </React.Fragment>
+                  }>
+                  <div className="author-add__roles-box">
+                    <ul className="author-add__roles-list">
+                      { authorRolesArray.map(role => (
+                        <li className="author-add__roles-role" key={ role.id }>
+                          <Field type="checkbox" name={ `${field}.roles.role-${role.id}` }
+                                 value={ role.id } component={ Checkbox }>
+                            { role.name }
+                          </Field>
+                        </li>
+                      )) }
+                    </ul>
+                  </div>
+                </Collapse>
+              </div>
+            ) }
           </div> :
           <div className="author-add__form">
             <h3 className="author-add__title">Добавить автора</h3>
@@ -142,12 +168,14 @@ function mapStateToProps(state, props) {
   const hash = formSelector(state, `${field}.hash`);
   const id = formSelector(state, `${field}.id`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
+  const authorRolesArray = getRolesArray(state);
 
   return {
     correspondingAuthor,
     authorData: isCurrent ? user.data : users.data[id],
     authorsArray: users.searchData[hash],
-    searchData: users.searchData
+    searchData: users.searchData,
+    authorRolesArray,
   };
 }
 

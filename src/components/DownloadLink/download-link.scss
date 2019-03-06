@@ -1,0 +1,44 @@
+.download-link {
+  $root: &;
+
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+
+  &__title {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 600;
+    color: $link-color;
+    box-shadow: 0 1px 0 $link-color;
+    transition: all .2s;
+    line-height: 1.1;
+
+    #{$root}:hover & {
+      color: $orange-color;
+      box-shadow: 0 1px 0 transparent;
+    }
+  }
+
+  &__info {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #B8B6B0;
+    display: block;
+  }
+
+  &__icon {
+    width: 16px;
+    height: 17px;
+    fill: $link-color;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 6px;
+    transition: all .2s;
+
+    #{$root}:hover & {
+      fill: $orange-color;
+    }
+  }
+}

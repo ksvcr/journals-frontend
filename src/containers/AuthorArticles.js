@@ -17,9 +17,9 @@ class AuthorArticles extends Component {
   handleRequest = (params = {}) => {
     const { siteId, articlesParams, userId, fetchArticles } = this.props;
     return fetchArticles(siteId, {
+      author: userId,
       ...articlesParams,
       ...params,
-      author: userId
     });
   };
 

@@ -13,6 +13,7 @@ import ReviewsDialogList from '~/components/ReviewsDialogList/ReviewsDialogList'
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 
 import * as languagesActions from '~/store/languages/actions';
+import * as rolesActions from '~/store/roles/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
 import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
@@ -22,6 +23,7 @@ import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
 import apiClient from '~/services/apiClient';
+import PreliminaryReviewComment from '~/components/PreliminaryReviewComment/PreliminaryReviewComment';
 
 class ArticlePublish extends Component {
   constructor(props) {
@@ -65,7 +67,7 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser, fetchArticlePrinted } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchRoles, fetchArticlePrinted } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
@@ -88,6 +90,7 @@ class ArticlePublish extends Component {
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
+      promises.push(fetchRoles(siteId));
     }
 
     return Promise.all(promises)
@@ -184,7 +187,6 @@ class ArticlePublish extends Component {
   render() {
     const { articleId, isFulfilled, articleStatus, userRole,
             articleData, isEdit, t } = this.props;
-    const isStatusRework = articleStatus === 'PRELIMINARY_REVISION' || articleStatus === 'REVISION';
     const editText = userRole === 'CORRECTOR' ? t('correct_article') : t('edit_article');
     const isShowSiteChange = userRole === 'AUTHOR';
     const isShowArticleInfo = Boolean(~['REDACTOR', 'CORRECTOR'].indexOf(userRole)) && isEdit;
@@ -218,12 +220,16 @@ class ArticlePublish extends Component {
             { isShowArticleInfo && <ArticleInfo id={ articleId } /> }
           </div>
 
-          { isStatusRework && (
+          { articleStatus === 'REVISION' && (
             <ReviewsDialogList articleId={ articleId }
                                reviews={ articleData.reviews }
                                onSubmit={ this.handleEditArticleReview }
             />
           ) }
+
+          { articleStatus === 'PRELIMINARY_REVISION' &&
+            <PreliminaryReviewComment review={ articleData.redactor_review } />
+          }
 
           <ArticleForm id={ articleId } onSubmit={ this.handleSubmit }
                        onDraftSubmit={ this.handleDraftSubmit }
@@ -281,6 +287,7 @@ const mapDispatchToProps = {
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
   fetchCountries: countriesActions.fetchCountries,
+  fetchRoles: rolesActions.fetchRoles,
   fetchArticlePrinted: articlesActions.fetchArticlePrinted
 };
 

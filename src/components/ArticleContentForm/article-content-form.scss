@@ -1,9 +1,11 @@
-.article-content-form__description {
-  color: $text-color;
-  margin-top: 10px;
+.article-content-form {
+  &__description {
+    color: $text-color;
+    margin-top: 10px;
+  }
+
+  &__file {
+    margin-bottom: 40px;
+  }
 }
 
-.article-content-form__error {
-  margin-bottom: 10px;
-  color: red;
-}

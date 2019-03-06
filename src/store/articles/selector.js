@@ -15,7 +15,7 @@ export const getArticlesArray = createSelector(
 export const getArticlesParams = createSelector(
   articlesSelector, paginateSelector,
   articles => {
-    const { paginate, filter, search, ordering } = articles;
+    const { paginate, filter, search, ordering='-date_create' } = articles;
     return { paginate, filter, search, ordering };
   }
 );

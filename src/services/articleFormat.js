@@ -22,11 +22,26 @@ export function serializeArticleData(data = {}) {
 
   if (author) {
     serializedData.author = { user: author.id };
+
+    if(author.roles) {
+      serializedData.author.roles = Object.keys(author.roles)
+        .filter(key => author.roles[key])
+        .map(role => role.split('-')[0]);
+    }
   }
 
   const collaborators = authors
-    .filter(author => author.id !== undefined && author.id !== serializedData.author.user.id)
-    .map(author => ({ user: author.id }));
+    .filter(author => author.id !== undefined && author.id !== serializedData.author.user)
+    .map(author => {
+      const collaborator = { user: author.id };
+      if(author.roles) {
+        collaborator.roles = Object.keys(author.roles)
+          .filter(key => author.roles[key])
+          .map(role => role.split('-')[0]);
+      }
+
+      return collaborator;
+    });
 
   if (collaborators.length) {
     serializedData.collaborators = collaborators;
@@ -53,16 +68,43 @@ export function serializeArticleData(data = {}) {
     serializedData.sources = sources.filter(item => item.resourcetype);
   }
 
+  // Удаляем загруженные файлы, так как апи принимает только base64
+  const fileKeys = ['incoming_file', 'list_literature_file'];
+
+  fileKeys.forEach(key => {
+    if (serializedData[key]) {
+      const clearBase64 = serializedData[key].split(',')[1];
+      if (!clearBase64 || (clearBase64 && !isBase64(clearBase64))) {
+        delete serializedData[key];
+      }
+    }
+  });
+
   return serializedData;
 }
 
 export function deserializeArticleData(data = {}) {
-  const { author, collaborators, ...rest } = data; 
+  const { author, collaborators, ...rest } = data;
   const deserializedData = rest;
   if (author && collaborators) {
-    deserializedData.authors = [{
-      id: author.user.id
-    }, ...collaborators.map(item => ({ id: item.user.id }))];
+    deserializedData.authors = [
+      {
+        id: author.user.id,
+        roles: author.roles && author.roles.map(role => `role-${role}`)
+      },
+      ...collaborators.map(item => ({
+        id: item.user.id,
+        roles: item.roles && item.roles.map(role => `role-${role}`)
+      }))
+    ];
   }
   return deserializedData;
+}
+
+function isBase64(str) {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (err) {
+    return false;
+  }
 }

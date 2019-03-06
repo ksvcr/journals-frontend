@@ -127,6 +127,7 @@ const apiClient = {
     const tail = reviewId !== null ? `reviews/${reviewId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/${tail}`, { params });
   },
+  getAvailableRoles: (siteId) => fetchInstance.request(`sites/${siteId}/author-roles/`),
   createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed/`, { method: 'post', data }),
   editArticlePrinted: (articleId, printedId, data) => {
     return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'put', data })

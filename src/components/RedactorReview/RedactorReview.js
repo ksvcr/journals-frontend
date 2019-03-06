@@ -103,7 +103,7 @@ class RedactorReview extends Component {
         ) }
 
         <Collapse customHead={ this.renderCollapsePreliminaryButton }>
-          <PreliminaryRevisionForm />
+          <PreliminaryRevisionForm articleId={ articleId } />
         </Collapse>
 
         { this.invitesCount > 0 && (

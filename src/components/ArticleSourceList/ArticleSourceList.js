@@ -44,7 +44,7 @@ class ArticleSourceList extends Component {
   };
 
   render() {
-    const { fields, legend, addText, isCorrector, isTranslator } = this.props;
+    const { fields, legend, addText, isTranslator } = this.props;
 
     const fieldSetParams = {
       onRemove: !isTranslator && this.handleRemove,
@@ -87,7 +87,7 @@ class ArticleSourceList extends Component {
           }) }
         </ReactCSSTransitionGroup>
 
-        { !isCorrector && addText && (
+        { addText && (
           <div className="field-set-list__button">
             <FieldAddButton onAdd={ this.handleAdd }>{ addText }</FieldAddButton>
           </div>

@@ -32,25 +32,45 @@ class ArticleFilesForm extends Component {
   };
 
   render() {
+    const { isProofreading } = this.props;
     return (
       <div className="article-files-form">
         <h2 className="page__title">Файлы к статье</h2>
-        <p className="article-files-form__description">
-          Вы можете выбрать несколько файлов. Для каждого из них нужно будет
-          заполнить описание
-        </p>
-        <Dropzone className="article-files-form__dropzone"
-                  accept=".doc, .docx, .rtf"
-                  maxSize={ 50 * Math.pow(1024, 2) }
-                  multiple={ true } onDrop={ this.handleDropFiles } >
-          <FileDropPlaceholder />
-        </Dropzone>
 
-        <FieldArray name="file_atachments"
-                    component={ props => <ArticleFileList { ...props } /> } />
+        { isProofreading ?
+          <FieldArray name="file_atachments"
+                      component={ props => <ArticleFileList download { ...props } /> } /> :
+          <React.Fragment>
+            <p className="article-files-form__description">
+              Вы можете выбрать несколько файлов. Для каждого из них нужно будет
+              заполнить описание
+            </p>
+            <Dropzone className="article-files-form__dropzone"
+                      accept=".doc, .docx, .rtf"
+                      maxSize={ 50 * Math.pow(1024, 2) }
+                      multiple={ true } onDrop={ this.handleDropFiles } >
+              <FileDropPlaceholder />
+            </Dropzone>
+
+            <FieldArray name="file_atachments"
+                        component={ props => <ArticleFileList { ...props } /> } />
+          </React.Fragment>
+        }
+
       </div>
     );
   }
+}
+
+function mapStateToProps(state, props) {
+  const { articleId } = props;
+  const { articles, user } = state;
+  const articleData = articles.data[articleId];
+
+  return {
+    userData: user.data,
+    isProofreading: user.data.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
+  };
 }
 
 const mapDispatchToProps = {
@@ -58,6 +78,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ArticleFilesForm);
