@@ -27,8 +27,8 @@ const apiClient = {
   lockUser: data =>
     fetchInstance.request('/users/lock/', { method: 'post', data }),
 
-  getUserStatistics: (userId, params) =>
-    fetchInstance.request(`/users/${userId}/statistic`, { params }),
+  getUserStatistics: (params) =>
+    fetchInstance.request('/users/me/statistic', { params }),
 
   createUserTag: data =>
     fetchInstance.request('/users/tags/', { method: 'post', data }),

@@ -6,11 +6,11 @@ import './months-list.scss';
 
 const propTypes = {
   period: PropTypes.number.isRequired,
-  handleFetchStat: PropTypes.func,
+  onUpdateRequest: PropTypes.func,
 };
 
 const defaultProps = {
-  handleFetchStat: () => {},
+  onUpdateRequest: () => {},
 };
 
 class MonthsList extends Component {
@@ -36,13 +36,19 @@ class MonthsList extends Component {
   }
 
   render() {
-    const { handleFetchStat } = this.props;
+    const { onUpdateRequest } = this.props;
 
     return (
       <div className="months-list">
-        { this.monthsFromPeriod.map((date, i) => (
-          <MonthAccordion key={ i } date={ date } handleToggle={ () => handleFetchStat(date.monthIndex) } />
-        ))}
+        {
+          this.monthsFromPeriod.map((date, i) => (
+            <MonthAccordion
+              key={ i }
+              date={ date }
+              onUpdateRequest={ onUpdateRequest(date.monthIndex, date.year) }
+            />
+          ))
+        }
       </div>
     );
   }

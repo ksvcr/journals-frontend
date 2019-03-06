@@ -7,8 +7,6 @@ const initialState = {
   isRejected: false,
   error: null,
   data: {},
-  ids: [],
-  total: 0,
 };
 
 function stats(state = initialState, action) {
@@ -28,13 +26,23 @@ function stats(state = initialState, action) {
       };
 
     case `${FETCH_STATISTIC}_FULFILLED`:
+      const { month, year } = action.meta;
       const entity = entityNormalize.toObject(action.payload.results);
+
       return {
         ...state,
         isPending: false,
         isFulfilled: true,
-        total: action.payload.count,
-        ...entity
+        data: {
+          ...state.data,
+          [year]: {
+            ...state.data[year],
+            [month]: {
+              count: action.payload.count,
+              ...entity
+            },
+          },
+        },
       };
 
     default:

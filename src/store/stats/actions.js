@@ -1,31 +1,16 @@
 import { FETCH_STATISTIC } from './constants';
 import apiClient from '~/services/apiClient';
+import getFlatParams from '~/services/getFlatParams';
 
-export function fetchStats(month) {
+export function fetchStats(month, year, params) {
   return (dispatch, state) => {
-    const { user } = state();
-    const { id: userId } = user.data;
-
-    const payload = apiClient.getUserStatistics(userId, { month });
-    // const fakePayload = new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     resolve({
-    //       count: 0,
-    //       next: null,
-    //       previous: null,
-    //       results: [
-    //         {
-    //           id: 0,
-    //           month: 'Январь'
-    //         }
-    //       ]
-    //     });
-    //   }, 300);
-    // });
+    const flatParams = getFlatParams(params);
+    const payload = apiClient.getUserStatistics(flatParams);
 
     return dispatch({
       type: FETCH_STATISTIC,
-      payload, // TODO: Заменить на payload когда апи будет работать
+      payload,
+      meta: { month, year }
     }).catch(error => console.log(error));
   };
 }

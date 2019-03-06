@@ -1,42 +1,51 @@
 import React, { PureComponent } from 'react';
 import cx from 'classnames';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as formatDate from '~/services/formatDate';
+import { getStatsByDate, getCountInMonth } from '~/store/stats/selector';
+import { getSitesArray } from '~/store/sites/selector';
 import List from '~/components/List/List';
+import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import './month-accordion.scss';
 
-const fakeArticlesArray = [
-  {
-    id: 17,
-    title: 'Проблемы восприятия молодежью сакральных и уникальных природных мест Якутии',
-    date_create: '2018-10-31T20:12:22.056000+05:00',
-    site: 1,
-  }
-];
-
 const propTypes = {
+  articles: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
   date: PropTypes.shape({
     isCurrent: PropTypes.bool,
     year: PropTypes.string,
     month: PropTypes.string,
     monthIndex: PropTypes.number,
   }).isRequired,
-  handleToggle: PropTypes.func,
+  onUpdateRequest: PropTypes.func,
 };
 
 const defaultProps = {
-  handleToggle: () => {}
+  onUpdateRequest: () => {},
 };
+
+const accClass = 'month-accordion';
 
 class MonthAccordion extends PureComponent {
   state = {
     isOpen: false,
+    paginate: {
+      limit: 5,
+      offset: 0,
+    }
   };
 
   get listProps() {
+    const { articles, sites } = this.props;
+
     return {
-      data: fakeArticlesArray,
+      data: articles,
       head: true,
+      listClass: `${accClass}__list`,
+      rowClass: `${accClass}__list-row`,
       cells: [
         {
           style: {
@@ -45,10 +54,16 @@ class MonthAccordion extends PureComponent {
           isMain: true,
           head: () => 'Название',
           render: data => (
-            <div>
-              <div>{data.title || 'Название статьи не указано'}</div>
-              <div>{data.site}</div>
-            </div>
+            <React.Fragment>
+              <div className={ `${accClass}__article-title` }>{ data.article.title || 'Название статьи не указано' }</div>
+              {
+                data.article.site && sites.map(site => (
+                  site.id === data.article.site && (
+                    <div className={ `${accClass}__article-site` } key={ site.id }>{ site.name }</div>
+                  )
+                ))
+              }
+            </React.Fragment>
           )
         },
         {
@@ -56,29 +71,49 @@ class MonthAccordion extends PureComponent {
             width: '20%'
           },
           head: () => 'Выполнена',
-          render: data => formatDate.toString(data['date_create'])
+          render: data => (
+            <div className={ `${accClass}__article-date` }>
+              { formatDate.toString(data.time) }
+            </div>
+          )
         },
         {
           style: {
             width: '20%'
           },
           head: () => 'Знаков',
-          render: data => '12 456'
+          render: data => (
+            <div className={ `${accClass}__article-count` }>
+              { data.counter || 0 }
+            </div>
+          ),
         },
       ],
     }
   }
 
-  handleToggleClick = (e) => {
-    e.preventDefault();
-    this.setState({ isOpen: !this.state.isOpen });
-    this.props.handleToggle();
+  handleToggleClick = () => {
+    const { onUpdateRequest } = this.props;
+    const { paginate } = this.state;
+
+    this.setState({ isOpen: !this.state.isOpen }, () => {
+      if(this.state.isOpen && !Array.isArray(this.props.articles)) {
+        onUpdateRequest({ paginate });
+      }
+    });
+  };
+
+  handlePaginateChange = (paginate) => {
+    const { onUpdateRequest } = this.props;
+
+    this.setState({ paginate }, () => {
+      onUpdateRequest({ paginate });
+    });
   };
 
   render() {
-    const { date } = this.props;
-    const { isOpen } = this.state;
-    const accClass = 'month-accordion';
+    const { date, articles, articlesCount } = this.props;
+    const { isOpen, paginate } = this.state;
     const accHeadClasses = cx({
       [`${accClass}__head`]: true,
       [`${accClass}__head_is-open`]: isOpen,
@@ -95,9 +130,21 @@ class MonthAccordion extends PureComponent {
 
         { isOpen && (
           <section className={ `${accClass}__body` }>
-            <List { ...this.listProps } />
+            { Array.isArray(articles) && articles.length > 0
+              ? (
+                <React.Fragment>
+                  <List { ...this.listProps } />
+                  {
+                    articlesCount > 0 && (
+                      <PaginateLine onChange={ this.handlePaginateChange } total={ articlesCount } { ...paginate } />
+                    )
+                  }
+                </React.Fragment>
+              )
+              : <div className={ `${accClass}__empty` }>Нет записей</div>
+            }
           </section>
-        )}
+        ) }
       </div>
     );
   }
@@ -106,4 +153,14 @@ class MonthAccordion extends PureComponent {
 MonthAccordion.propTypes = propTypes;
 MonthAccordion.defaultProps = defaultProps;
 
-export default MonthAccordion;
+function mapStateToProps(state, props) {
+  const { monthIndex, year } = props.date;
+
+  return {
+    articlesCount: getCountInMonth(year, monthIndex)(state),
+    articles: getStatsByDate(year, monthIndex)(state),
+    sites: getSitesArray(state),
+  };
+}
+
+export default connect(mapStateToProps)(MonthAccordion);

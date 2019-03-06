@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import Select from '~/components/Select/Select';
-import StatsCounter from '~/components/StatsCounter/StatsCounter';
 import MonthsList from '~/components/MonthsList/MonthsList';
 import * as statsActions from '~/store/stats/actions';
 
@@ -31,9 +30,17 @@ class Stats extends Component {
     this.setState({ period: parseInt(e.target.value, 10) });
   };
 
-  handleFetchStat = (month) => {
+  handleRequest = (month, year) => (params = {}) => {
     const { dispatch } = this.props;
-    dispatch(statsActions.fetchStats(month));
+    const time_after = `${year}-${month}-01`;
+    const time_before = month !== 12 ? `${year}-${parseInt(month, 10) + 1}-01` : `${parseInt(year, 10) + 1}-1-01`;
+    const fetchParams = {
+      time_after,
+      time_before,
+      ...params,
+    };
+
+    dispatch(statsActions.fetchStats(month, year, fetchParams));
   };
 
   render() {
@@ -41,8 +48,7 @@ class Stats extends Component {
       <React.Fragment>
         <h1 className="page__title">Статистика выполненных работ</h1>
         { this.renderForm() }
-        {/*<StatsCounter />*/}
-        <MonthsList period={ this.state.period } handleFetchStat={ this.handleFetchStat } />
+        <MonthsList period={ this.state.period } onUpdateRequest={ this.handleRequest } />
       </React.Fragment>
     );
   }
@@ -71,9 +77,7 @@ class Stats extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-
-  };
+  return {};
 }
 
 export default connect(mapStateToProps)(Stats);
