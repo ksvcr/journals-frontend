@@ -14,6 +14,7 @@ import lawtypes from './lawtypes/reducer';
 import countries from './countries/reducer';
 import reviews from './reviews/reducer';
 import roles from './roles/reducer';
+import stats from './stats/reducer';
 
 export default combineReducers({
   form: formReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
   countries,
   reviews,
   roles,
+  stats
 });
 

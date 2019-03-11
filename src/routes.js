@@ -15,6 +15,7 @@ import Discounts from '~/containers/Discounts';
 import NotFound from '~/containers/NotFound';
 import RedactorUsers from '~/containers/RedactorUsers';
 import ReviewPreview from '~/containers/ReviewPreview';
+import Stats from '~/containers/Stats';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
 const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
@@ -24,6 +25,7 @@ const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR', '
 const ArticleCorrectWithAccess = RoleAccess(ArticlePublish, ['CORRECTOR']);
 const RedactorUsersWithAccess = RoleAccess(RedactorUsers, ['REDACTOR']);
 const AuthorSettingsWithAccess = RoleAccess(AuthorSettings, ['REDACTOR']);
+const StatsWithAccess = RoleAccess(Stats, ['CORRECTOR']);
 
 const routes = () => (
   <Page>
@@ -41,6 +43,7 @@ const routes = () => (
       <Route path="/settings/:userId" component={ AuthorSettingsWithAccess } />
       <Route path="/settings" component={ AuthorSettings } />
       <Route path="/discounts" component={ Discounts } />
+      <Route path="/stats" component={ StatsWithAccess } />
       <Route component={ NotFound } />
     </Switch>
   </Page>
