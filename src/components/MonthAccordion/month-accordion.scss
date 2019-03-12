@@ -11,6 +11,7 @@
   text-align: left;
   cursor: pointer;
   position: relative;
+  outline: none;
 
   &::after {
     content: '';
