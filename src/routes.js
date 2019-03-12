@@ -25,7 +25,7 @@ const ArticleTranslateWithAccess = RoleAccess(ArticleTranslate, ['TRANSLATOR', '
 const ArticleCorrectWithAccess = RoleAccess(ArticlePublish, ['CORRECTOR']);
 const RedactorUsersWithAccess = RoleAccess(RedactorUsers, ['REDACTOR']);
 const AuthorSettingsWithAccess = RoleAccess(AuthorSettings, ['REDACTOR']);
-const StatsWithAccess = RoleAccess(Stats, ['CORRECTOR']);
+const StatsWithAccess = RoleAccess(Stats, ['CORRECTOR', 'TRANSLATOR']);
 
 const routes = () => (
   <Page>

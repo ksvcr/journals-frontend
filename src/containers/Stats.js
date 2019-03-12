@@ -12,7 +12,8 @@ class Stats extends Component {
   };
 
   componentDidMount() {
-    this.handleCounterRequest();
+    const { fetchStatsCounter } = this.props;
+    fetchStatsCounter();
   }
 
   get periods () {
@@ -44,15 +45,6 @@ class Stats extends Component {
     fetchStats(month, year, fetchParams);
   };
 
-  handleCounterRequest() {
-    const { fetchStatsCounter } = this.props;
-    fetchStatsCounter();
-  };
-
-  handleChangeSite = () => {
-    this.handleCounterRequest();
-  };
-
   render() {
     const { counter } = this.props;
 
@@ -73,7 +65,7 @@ class Stats extends Component {
           <div className="form__col form__col_8">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">Для журнала</label>
-              <SiteSelect id="sites-list" onChange={ this.handleChangeSite } />
+              <SiteSelect id="sites-list" />
             </div>
           </div>
 
