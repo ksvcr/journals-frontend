@@ -4,18 +4,18 @@ import { hot } from 'react-hot-loader';
 
 import Page from '~/containers/Page';
 import RoleAccess from '~/containers/RoleAccess';
+import NotFound from '~/containers/NotFound';
 import Articles from '~/containers/Articles';
-import ArticlePublish from '~/containers/ArticlePublish';
-import ArticlePreview from '~/containers/ArticlePreview';
 import ArticleTranslate from '~/containers/ArticleTranslate';
 import AuthorSettings from '~/containers/AuthorSettings';
 import ArticlesForReview from '~/containers/ArticlesForReview';
-import ReviewCreate from '~/containers/ReviewCreate';
-import Discounts from '~/containers/Discounts';
-import NotFound from '~/containers/NotFound';
-import RedactorUsers from '~/containers/RedactorUsers';
+import ArticlePublish from '~/containers/ArticlePublish';
+import ArticlePreview from '~/containers/ArticlePreview';
 import ReviewPreview from '~/containers/ReviewPreview';
+import Discounts from '~/containers/Discounts';
+import RedactorUsers from '~/containers/RedactorUsers';
 import Stats from '~/containers/Stats';
+import ReviewCreate from '~/containers/ReviewCreate';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
 const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
