@@ -29,6 +29,8 @@ const apiClient = {
 
   getUserStatistics: (params) =>
     fetchInstance.request('/users/me/statistic', { params }),
+  getUserStatisticsCounter: () =>
+    fetchInstance.request('/users/me/statistic/agg'),
 
   createUserTag: data =>
     fetchInstance.request('/users/tags/', { method: 'post', data }),

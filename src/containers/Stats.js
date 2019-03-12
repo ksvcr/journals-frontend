@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import Select from '~/components/Select/Select';
 import MonthsList from '~/components/MonthsList/MonthsList';
+import StatsCounter from '~/components/StatsCounter/StatsCounter';
 import * as statsActions from '~/store/stats/actions';
 
 class Stats extends Component {
   state = {
     period: 6,
   };
+
+  componentDidMount() {
+    this.handleCounterRequest();
+  }
 
   get periods () {
     return [
@@ -22,16 +27,12 @@ class Stats extends Component {
     ]
   }
 
-  componentDidMount() {
-
-  }
-
   handleChangePeriod = (e) => {
     this.setState({ period: parseInt(e.target.value, 10) });
   };
 
   handleRequest = (month, year) => (params = {}) => {
-    const { dispatch } = this.props;
+    const { fetchStats } = this.props;
     const time_after = `${year}-${month}-01`;
     const time_before = month !== 12 ? `${year}-${parseInt(month, 10) + 1}-01` : `${parseInt(year, 10) + 1}-1-01`;
     const fetchParams = {
@@ -40,14 +41,26 @@ class Stats extends Component {
       ...params,
     };
 
-    dispatch(statsActions.fetchStats(month, year, fetchParams));
+    fetchStats(month, year, fetchParams);
+  };
+
+  handleCounterRequest() {
+    const { fetchStatsCounter } = this.props;
+    fetchStatsCounter();
+  };
+
+  handleChangeSite = () => {
+    this.handleCounterRequest();
   };
 
   render() {
+    const { counter } = this.props;
+
     return (
       <React.Fragment>
         <h1 className="page__title">Статистика выполненных работ</h1>
         { this.renderForm() }
+        <StatsCounter counter={ counter } />
         <MonthsList period={ this.state.period } onUpdateRequest={ this.handleRequest } />
       </React.Fragment>
     );
@@ -60,7 +73,7 @@ class Stats extends Component {
           <div className="form__col form__col_8">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">Для журнала</label>
-              <SiteSelect id="sites-list" onChange={ this.handleRequest } />
+              <SiteSelect id="sites-list" onChange={ this.handleChangeSite } />
             </div>
           </div>
 
@@ -77,7 +90,16 @@ class Stats extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { stats } = state;
+
+  return {
+    counter: stats.counter
+  };
 }
 
-export default connect(mapStateToProps)(Stats);
+const mapDispatchToProps = {
+  fetchStats: statsActions.fetchStats,
+  fetchStatsCounter: statsActions.fetchStatsCounter
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stats);

@@ -1,4 +1,4 @@
-import { FETCH_STATISTIC } from './constants';
+import { FETCH_STATISTIC, FETCH_STATISTIC_COUNTER } from './constants';
 import * as entityNormalize from '~/utils/entityNormalize';
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
   isRejected: false,
   error: null,
   data: {},
+  counter: 0
 };
 
 function stats(state = initialState, action) {
@@ -44,6 +45,16 @@ function stats(state = initialState, action) {
           },
         },
       };
+
+    case `${FETCH_STATISTIC_COUNTER}_FULFILLED`:
+      const counter = action.payload.monthes.reduce((sum, v) => {
+        return sum + v.characters_count;
+      }, 0);
+
+      return {
+        ...state,
+        counter
+      }
 
     default:
       return state;

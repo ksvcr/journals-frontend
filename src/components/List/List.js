@@ -47,7 +47,7 @@ class List extends PureComponent {
     const { rowClass } = this.props;
 
     return (
-      <div className={ classNames('list__row', { [rowClass]: rowClass }) }>
+      <div className={ classNames('list__row', rowClass) }>
         { this.renderCells(data) }
       </div>
     );
@@ -143,7 +143,7 @@ class List extends PureComponent {
     const { head, listClass } = this.props;
 
     return (
-      <div className={ classNames('list', { [listClass]: listClass }) }>
+      <div className={ classNames('list', listClass) }>
         <div className="list__holder">
           { head && this.renderHead() }
           <ReactCSSTransitionGroup transitionName="fade"

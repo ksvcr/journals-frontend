@@ -56,6 +56,7 @@
     transition: all .2s;
     border-bottom: 1px solid;
     cursor: pointer;
+    outline: none;
 
     &:focus {
       color: $orange-color;

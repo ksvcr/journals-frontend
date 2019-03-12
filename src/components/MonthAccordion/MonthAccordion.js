@@ -97,7 +97,7 @@ class MonthAccordion extends PureComponent {
     const { paginate } = this.state;
 
     this.setState({ isOpen: !this.state.isOpen }, () => {
-      if(this.state.isOpen && !Array.isArray(this.props.articles)) {
+      if (this.state.isOpen && !Array.isArray(this.props.articles)) {
         onUpdateRequest({ paginate });
       }
     });

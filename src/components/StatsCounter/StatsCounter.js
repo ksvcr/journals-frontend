@@ -1,16 +1,21 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+
 import './stats-counter.scss';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  counter: PropTypes.number
+};
+const defaultProps = {
+  counter: 0
+};
 
-const StatsCounter = () => {
+const StatsCounter = ({ counter }) => {
   return (
     <div className="stats-counter">
       <div className="stats-counter__label">всего знаков:</div>
       <div className="stats-counter__value">
-        <b>3 250</b>
+        <b>{ counter.toLocaleString() }</b>
         <small>(без пробелов)</small>
       </div>
     </div>
