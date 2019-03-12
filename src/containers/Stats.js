@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import Select from '~/components/Select/Select';
 import MonthsList from '~/components/MonthsList/MonthsList';
-import StatsCounter from '~/components/StatsCounter/StatsCounter';
+// import StatsCounter from '~/components/StatsCounter/StatsCounter';
 import * as statsActions from '~/store/stats/actions';
 
 class Stats extends Component {
@@ -46,13 +46,11 @@ class Stats extends Component {
   };
 
   render() {
-    const { counter } = this.props;
-
     return (
       <React.Fragment>
         <h1 className="page__title">Статистика выполненных работ</h1>
         { this.renderForm() }
-        <StatsCounter counter={ counter } />
+        { /* <StatsCounter counter={ counter } /> */ }
         <MonthsList period={ this.state.period } onUpdateRequest={ this.handleRequest } />
       </React.Fragment>
     );
