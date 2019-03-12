@@ -10,9 +10,14 @@ class PaginateLine extends Component {
   handlePageChange = (newCurrent) => {
     const { limit, onChange } = this.props;
     const offset = (newCurrent - 1) * limit;
+
+    if (newCurrent > this.totalPageAmount) {
+      return;
+    }
+
     onChange({ limit, offset });
   };
-  
+
   handleLimitChange = (newLimit) => {
     const { total, limit, offset, onChange } = this.props;
     const totalPageAmount = Math.ceil(total / newLimit);
@@ -29,14 +34,18 @@ class PaginateLine extends Component {
     return Math.ceil((offset + 1) / limit)
   }
 
-  render() {
+  get totalPageAmount() {
     const { limit, total } = this.props;
-    const totalPageAmount = Math.ceil(total / limit);
+    return Math.ceil(total / limit);
+  }
+
+  render() {
+    const { limit } = this.props;
     return (
       <div className="paginate-line">
         <div className="paginate-line__item">
           <Paginator current={ this.current }
-                     total={ totalPageAmount } onChange={ this.handlePageChange } />
+                     total={ this.totalPageAmount } onChange={ this.handlePageChange } />
         </div>
         <div className="paginate-line__item">
           <PageSizer value={ limit } onChange={ this.handleLimitChange } />
