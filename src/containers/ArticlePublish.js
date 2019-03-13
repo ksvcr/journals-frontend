@@ -120,7 +120,11 @@ class ArticlePublish extends Component {
           break;
         case 'AWAIT_PROOFREADING':
           // Корректировка
-          data.state_article = 'AWAIT_TRANSLATE';
+          if (data.need_translation) {
+            data.state_article = 'AWAIT_TRANSLATE';
+          } else {
+            data.state_article = 'AWAIT_PUBLICATION';
+          }
           break;
         default:
           delete data.state_article;
