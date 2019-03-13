@@ -34,7 +34,7 @@ class RedactorReviewerList extends Component {
   };
 
   renderName = ({ last_name, first_name, middle_name }) =>
-    `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
+    `${last_name} ${first_name.charAt(0)}. ${ middle_name ? middle_name.charAt(0) + '.' : ''}`;
 
   handleChoose = event => {
     const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
