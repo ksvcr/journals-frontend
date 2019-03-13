@@ -82,11 +82,13 @@ class AuthorAdd extends Component {
           <div className="author-add__current">
             <div className="author-add__person">
               <div className="author-add__name">
-                { `${authorData.last_name} ${authorData.first_name} ${authorData.middle_name}` }
+                { `${authorData.last_name} ${authorData.first_name} ${authorData.middle_name || ''}` }
               </div>
-              <div className="author-add__info">
-                НИИ УХИМВАДЕ, Екатеринбург, Россия
-              </div>
+              { (authorData.workplace || authorData.study_place) &&
+                <div className="author-chooser__info">
+                  { authorData.workplace || authorData.study_place }
+                </div>
+              }
             </div>
             <div className="form__field form__field_inline">
               <Checkbox name="isCorrespondingAuthor" checked={ authorData.id ===  correspondingAuthor }
