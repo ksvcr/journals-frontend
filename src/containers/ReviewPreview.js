@@ -36,7 +36,7 @@ class ReviewPreview extends Component {
 
         <hr className="page__divider" />
 
-        <ReviewContent data={ reviewData }
+        <ReviewContent data={ reviewData } articleId={ articleId }
                        isShowDecision={ isShowDecision(articleData.state_article) } />
       </React.Fragment>
     );

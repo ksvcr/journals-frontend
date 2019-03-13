@@ -15,7 +15,7 @@ class ReviewContent extends Component {
   }
 
   render() {
-    const { data, isShowDecision } = this.props;
+    const { data, isShowDecision, articleId } = this.props;
     return (
       <div className="review-content">
         <div className="review-content__item">
@@ -60,7 +60,7 @@ class ReviewContent extends Component {
             <div className="review-content__label">
               Вынести решение по статье
             </div>
-            <RedactorDecision articleId={ data.article } />
+            <RedactorDecision articleId={ articleId } />
           </div>
         }
       </div>
