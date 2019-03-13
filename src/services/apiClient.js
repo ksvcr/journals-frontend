@@ -147,6 +147,7 @@ fetchInstance.instance.interceptors.response.use(null, error => {
   if (error.config && error.response && error.response.status === 403) {
     if (process.env.NODE_ENV === 'production') {
       Cookies.remove('csrftoken');
+      Cookies.remove('sessionid');
       window.location.replace('/');
     }
   }
