@@ -24,21 +24,28 @@ class AuthorArticleList extends Component {
     const { locked_by } = data;
     const { t, userId } = this.props;
     const isLocked = locked_by !== null && locked_by !== userId;
+
     let items = [];
 
-    if (!isLocked) {
+    const allowEditStatuses = ['DRAFT', 'PRELIMINARY_REVISION', 'CALL_OFF'];
+    const isAllowEdit = ~allowEditStatuses.indexOf(data.state_article);
+
+    if (!isLocked && isAllowEdit) {
       items.push({
         title: t('edit'),
         link: `/article/${data.id}/edit/`
       });
     }
 
-    items = [
-      ...items,
-      {
+    if (data.state_article === 'AWAIT_PAYMENT') {
+      items.push({
         title: 'Оплатить',
         handler: this.handlePaymentShow
-      },
+      });
+    }
+
+    items = [
+      ...items,
       {
         title: 'Просмотр',
         type: 'preview',
