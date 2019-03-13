@@ -76,7 +76,7 @@ class TranslatorArticles extends Component {
         </h1>
 
         <div className="page__tools">
-          <form className="form">
+          <div className="form">
             <div className="form__field">
               <label className="form__label">
                 { t('article_search') }
@@ -91,7 +91,7 @@ class TranslatorArticles extends Component {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
 
         <TranslatorArticleList onUpdateRequest={ this.handleRequest } />

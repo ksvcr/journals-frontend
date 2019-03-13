@@ -40,7 +40,7 @@ class AuthorArticles extends Component {
         <h1 className="page__title">{ t('my_articles') }</h1>
 
         <div className="page__tools">
-          <form className="form">
+          <div className="form">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">
                 { t('for_journals') }
@@ -53,7 +53,7 @@ class AuthorArticles extends Component {
                            onChange={ this.handleRequest }
               />
             </div>
-          </form>
+          </div>
         </div>
 
         <AuthorArticleList onUpdateRequest={ this.handleRequest } />

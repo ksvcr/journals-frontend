@@ -53,7 +53,7 @@ class ArticlesForReview extends Component {
         </h1>
 
         <div className="page__tools">
-          <form className="form">
+          <div className="form">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">Выбрать журнал</label>
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
@@ -64,7 +64,7 @@ class ArticlesForReview extends Component {
               </label>
               <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
-          </form>
+          </div>
         </div>
 
         <ArticlesForReviewList onUpdateRequest={ this.handleRequest } />

@@ -54,6 +54,7 @@ class SearchPanel extends Component {
       onChange({ search: data });
     }
   };
+  
   handleChange = (event) => {
     const { value } = event.target;
     this.handleSearchChange(value);

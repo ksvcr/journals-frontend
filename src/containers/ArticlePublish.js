@@ -208,14 +208,14 @@ class ArticlePublish extends Component {
 
           <div className="page__tools">
             { isShowSiteChange && (
-              <form className="form">
+              <div className="form">
                 <div className="form__field">
                   <label htmlFor="sites-list" className="form__label">
                     { t('for_journals') }
                   </label>
                   <SiteSelect id="sites-list" onChange={ this.handleRequest } />
                 </div>
-              </form>
+              </div>
             ) }
 
             { isShowArticleInfo && <ArticleInfo id={ articleId } /> }
