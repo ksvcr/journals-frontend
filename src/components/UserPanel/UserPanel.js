@@ -15,6 +15,7 @@ class UserPanel extends Component {
 
     logout().then(() => {
       Cookies.remove('csrftoken');
+      Cookies.remove('sessionid');
       window.location.replace('/');
     });
   };

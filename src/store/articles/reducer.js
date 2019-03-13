@@ -30,6 +30,7 @@ function articles(state = initialState, action) {
         ...state,
         isPending: true,
         isRejected: false,
+        isFulfilled: false,
         ...action.meta
       };
 

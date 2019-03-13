@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { reset, destroy } from 'redux-form';
+import { destroy } from 'redux-form';
 import { withNamespaces } from 'react-i18next';
 
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
@@ -148,13 +148,13 @@ class ArticlePublish extends Component {
   };
 
   handleDraftSubmit = (formData, formName) => {
-    const { siteId, createArticle, editArticle, push, reset } = this.props;
+    const { siteId, createArticle, editArticle, push, destroy } = this.props;
     const data = serializeArticleData(formData);
 
     if (this.tempArticleId !== undefined) {
       editArticle(this.tempArticleId, data)
         .then(() => {
-          reset(formName);
+          destroy(formName);
           push('/');
         })
         .catch(error => console.error(error));
@@ -162,7 +162,7 @@ class ArticlePublish extends Component {
       data.state_article = 'DRAFT';
       createArticle(siteId, data)
         .then(() => {
-          reset(formName);
+          destroy(formName);
           push('/');
         })
         .catch(error => console.error(error));
@@ -281,7 +281,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   push,
-  reset, destroy,
+  destroy,
   fetchArticle: articlesActions.fetchArticle,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
