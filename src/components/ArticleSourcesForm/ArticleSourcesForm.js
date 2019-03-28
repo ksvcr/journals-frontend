@@ -53,7 +53,8 @@ class ArticleSourcesForm extends Component {
 
   render() {
     const { isFile } = this.state;
-    const { isProofreading, articleData } = this.props;
+    const { isProofreading, articleData, formValues } = this.props;
+    const { sources = [] } = formValues;
     return (
       <div className="article-sources-form">
         <h2 className="page__title">Список литературы</h2>
@@ -89,6 +90,20 @@ class ArticleSourcesForm extends Component {
             <FieldArray name="sources" rerenderOnEveryChange={ true }
                         component={ this.renderSourceList } />
           </div>
+        }
+
+        { !isProofreading && sources.length > 0 &&
+          <React.Fragment>
+            <hr className="article-sources-form__divider" />
+            <div className="form__field">
+              <Field name="publicationAllowed" validate={ [validate.required] } component={ Checkbox }>
+                Материал разрешен к публикации
+              </Field>
+              <div className="article-sources-form__allowed-description">
+                Я подтверждаю, что данная статья не нарушает права третьих лиц и не противоречит данным мною обязательствам о неразглашении информации.
+              </div>
+            </div>
+          </React.Fragment>
         }
       </div>
     );
