@@ -92,7 +92,7 @@ class ArticleSourcesForm extends Component {
           </div>
         }
 
-        { !isProofreading && sources.length > 0 &&
+        { !isProofreading &&
           <React.Fragment>
             <hr className="article-sources-form__divider" />
             <div className="form__field">
