@@ -82,10 +82,10 @@ class CorrectorArticleList extends Component {
           style: {
             width: '15%'
           },
-          sort: 'date_send_to_review',
+          sort: 'date_create',
           head: () => 'Отправлена',
           render: (data) =>
-            formatDate.toString(data.date_send_to_review)
+            formatDate.toString(data.date_create)
         },
         {
           style: {
