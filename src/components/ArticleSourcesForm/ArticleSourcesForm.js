@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { change, Field, FieldArray, formValueSelector, getFormValues } from 'redux-form';
+import { change, Field, FieldArray, formValueSelector } from 'redux-form';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
 
@@ -53,8 +53,7 @@ class ArticleSourcesForm extends Component {
 
   render() {
     const { isFile } = this.state;
-    const { isProofreading, articleData, formValues } = this.props;
-    const { sources = [] } = formValues;
+    const { isProofreading, articleData } = this.props;
     return (
       <div className="article-sources-form">
         <h2 className="page__title">Список литературы</h2>
@@ -119,7 +118,6 @@ function mapStateToProps(state, props) {
   const articleData = articles.data[articleId];
 
   return {
-    formValues: getFormValues(formName)(state),
     isProofreading: isCorrector && articleData.state_article === 'AWAIT_PROOFREADING',
     list_literature_file,
     articleData

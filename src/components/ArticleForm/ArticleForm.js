@@ -153,7 +153,9 @@ class ArticleForm extends Component {
 }
 
 ArticleForm = reduxForm({
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true
 })(ArticleForm);
 
 const initialAuthorHash = nanoid();

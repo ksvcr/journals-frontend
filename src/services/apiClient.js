@@ -35,9 +35,7 @@ const apiClient = {
   createSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
   editSource: (articleId, data) =>
-    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/`, { method: 'put', data }),
-  removeSource: (articleId, sourceId) =>
-    fetchInstance.request(`/articles/${articleId}/sources/${sourceId}/`, { method: 'delete' }),
+    fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'put', data }),
 
   getArticles: (siteId = null, articleId = null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
@@ -54,18 +52,17 @@ const apiClient = {
   lockArticle: articleId => fetchInstance.request(`/articles/${articleId}/lock/`),
   createArticleAttachment: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
-  editArticleAttachment: (id, data) =>
-    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'put', data }),
-  removeArticleAttachment: id =>
-    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'delete' }),
+  editArticleAttachment: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'put', data }),
   createBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
   editBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
 
-  createFinancingSources: data => fetchInstance.request('/financing/', { method: 'post', data }),
-  editFinancingSource: (id, data) => {
-    return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
+  createFinancingSources: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'post', data }),
+  editFinancingSource: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'put', data });
   },
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });
@@ -131,11 +128,8 @@ const apiClient = {
   },
   getAvailableRoles: (siteId) => fetchInstance.request(`sites/${siteId}/author-roles/`),
   createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed/`, { method: 'post', data }),
-  editArticlePrinted: (articleId, printedId, data) => {
-    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'put', data })
-  },
-  removeArticlePrinted: (articleId, printedId) => {
-    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'delete' })
+  editArticlePrinted: (articleId, data) => {
+    return fetchInstance.request(`articles/${articleId}/printed/`, { method: 'put', data })
   },
   getPrinted: (articleId, printedId=null) => {
     const tail = printedId !== null ? `${printedId}/` : '';

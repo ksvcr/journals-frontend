@@ -67,7 +67,7 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser, fetchRoles, fetchArticlePrinted } = this.props;
+            fetchCategories, fetchCountries, fetchUser, fetchRoles } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
@@ -86,7 +86,6 @@ class ArticlePublish extends Component {
             ]);
           })
       );
-      promises.push(fetchArticlePrinted(articleId));
     } else {
       promises.push(fetchRubrics(siteId));
       promises.push(fetchCategories(siteId));
@@ -132,16 +131,16 @@ class ArticlePublish extends Component {
 
       editArticle(this.tempArticleId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     } else {
       data.state_article = 'SENT';
       createArticle(siteId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     }
@@ -154,16 +153,16 @@ class ArticlePublish extends Component {
     if (this.tempArticleId !== undefined) {
       editArticle(this.tempArticleId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     } else {
       data.state_article = 'DRAFT';
       createArticle(siteId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     }
@@ -292,8 +291,7 @@ const mapDispatchToProps = {
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
   fetchCountries: countriesActions.fetchCountries,
-  fetchRoles: rolesActions.fetchRoles,
-  fetchArticlePrinted: articlesActions.fetchArticlePrinted
+  fetchRoles: rolesActions.fetchRoles
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);
