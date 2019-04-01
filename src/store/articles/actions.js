@@ -5,8 +5,6 @@ import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
-import differenceBy from 'lodash/differenceBy';
-
 export function fetchArticles(siteId, params = {}) {
   return dispatch => {
     const flatParams = getFlatParams(params);
