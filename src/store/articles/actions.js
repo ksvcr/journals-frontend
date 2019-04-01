@@ -46,32 +46,32 @@ export function createArticle(siteId, data, cb) {
           const resourcePromises = [];
 
           // Источники финансирования
-          if (financing_sources) {
+          if (financing_sources && financing_sources.length) {
             resourcePromises.push(
               apiClient.createFinancingSources(articleId, financing_sources)
             );
           }
 
           // Контент-блоки
-          if (content_blocks) {
+          if (content_blocks && content_blocks.length) {
             content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
             resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
           }
 
           // Список литературы
-          if (sources) {
+          if (sources && sources.length) {
             resourcePromises.push(
               apiClient.createSources(articleId, sources)
             );
           }
 
           // Вложения
-          if (file_atachments) {
+          if (file_atachments && file_atachments.length) {
             resourcePromises.push(apiClient.createArticleAttachment(articleId, file_atachments));
           }
 
           // Печатная копия статьи
-          if (printed) {
+          if (printed && printed.length) {
             printed = printed.map(item => ({ ...item, article: articleId }));
             resourcePromises.push(
               apiClient.createArticlePrinted(articleId, printed)
@@ -98,30 +98,30 @@ export function editArticle(id, data) {
       let editPromises = [apiClient.editArticle(id, articleData)];
 
       // Источники финансирования
-      if (financing_sources) {
+      if (financing_sources && financing_sources.length) {
         editPromises.push(
           apiClient.editFinancingSource(id, financing_sources)
         );
       }
 
       // Контент-блоки
-      if (content_blocks) {
+      if (content_blocks && content_blocks.length) {
         content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
         editPromises.push(apiClient.editBlocks(id, content_blocks));
       }
 
       // Список литературы
-      if (sources) {
+      if (sources && sources.length) {
         editPromises.push(apiClient.editSource(id, sources));
       }
 
       // Вложения
-      if (file_atachments) {
+      if (file_atachments && file_atachments.length) {
         editPromises.push(apiClient.editArticleAttachment(id, file_atachments));
       }
 
       // Печатная копия статьи
-      if (printed) {
+      if (printed && printed.length) {
         printed = printed.map(item => ({ ...item, article: id }));
         editPromises.push(
           apiClient.editArticlePrinted(id, printed)

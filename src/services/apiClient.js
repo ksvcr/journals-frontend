@@ -28,7 +28,7 @@ const apiClient = {
     fetchInstance.request('/users/lock/', { method: 'post', data }),
 
   getUserStatistics: (params) =>
-    fetchInstance.request('/users/me/statistic', { params }),
+    fetchInstance.request('/users/me/statistic/', { params }),
   getUserStatisticsCounter: () =>
     fetchInstance.request('/users/me/statistic/agg'),
 

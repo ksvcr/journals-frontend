@@ -31,14 +31,17 @@ class Content extends Component {
 
   renderSourcesList = () => {
     const { data } = this.props;
-    return data.sources.map((item, index) => (
-      <li key={ index }>
-        <p>
-          { item.author.lastname } { item.author.initials }, { item.original_name }, { ' ' }
-          { item.page_count } c.
-        </p>
-      </li>
-    ));
+    return data.sources.map((item, index) => {
+      const authorName = item.author ? `${ item.author.lastname } ${ item.author.initials },` : '';
+      return (
+        <li key={ index }>
+          <p>
+            { authorName }, { item.original_name }, { ' ' }
+            { item.page_count } c.
+          </p>
+        </li>
+      )
+    });
   };
 
   render() {
