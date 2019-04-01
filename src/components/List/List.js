@@ -44,7 +44,13 @@ class List extends PureComponent {
   };
 
   renderRow = data => {
-    return <div className="list__row">{ this.renderCells(data) }</div>;
+    const { rowClass } = this.props;
+
+    return (
+      <div className={ classNames('list__row', rowClass) }>
+        { this.renderCells(data) }
+      </div>
+    );
   };
 
   renderHead = () => {
@@ -134,9 +140,10 @@ class List extends PureComponent {
   };
 
   render() {
-    const { head } = this.props;
+    const { head, listClass } = this.props;
+
     return (
-      <div className="list">
+      <div className={ classNames('list', listClass) }>
         <div className="list__holder">
           { head && this.renderHead() }
           <ReactCSSTransitionGroup transitionName="fade"
@@ -156,6 +163,8 @@ List.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
+  listClass: PropTypes.string,
+  rowClass: PropTypes.string,
   sort: PropTypes.string,
   cells: PropTypes.arrayOf(
     PropTypes.shape({
