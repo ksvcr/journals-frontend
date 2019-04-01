@@ -39,7 +39,7 @@ const apiClient = {
 
   createSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
-  editSource: (articleId, data) =>
+  editSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'put', data }),
 
   getArticles: (siteId = null, articleId = null, params) => {

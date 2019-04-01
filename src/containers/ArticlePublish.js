@@ -110,6 +110,7 @@ class ArticlePublish extends Component {
     if (isEdit) {
       switch (data.state_article) {
         case 'DRAFT':
+        case 'CALL_OFF':
           // Отправка
           data.state_article = 'SENT';
           break;

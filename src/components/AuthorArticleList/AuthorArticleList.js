@@ -10,6 +10,7 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
@@ -34,6 +35,13 @@ class AuthorArticleList extends Component {
       items.push({
         title: t('edit'),
         link: `/article/${data.id}/edit/`
+      });
+    }
+
+    if (data.state_article !== 'CALL_OFF' && data.state_article !== 'DRAFT') {
+      items.push({
+        title: 'Отозвать',
+        handler: this.handleCallOff
       });
     }
 
@@ -64,6 +72,11 @@ class AuthorArticleList extends Component {
       last_change: 'Изменена'
     };
   }
+
+  handleCallOff = id => {
+    const { editArticle } = this.props;
+    editArticle(id, { state_article: 'CALL_OFF' })
+  };
 
   handleSortChange = ordering => {
     const { onUpdateRequest } = this.props;
@@ -185,8 +198,13 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  editArticle: articlesActions.editArticle
+};
+
 AuthorArticleList = withNamespaces()(AuthorArticleList);
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AuthorArticleList);

@@ -112,7 +112,7 @@ export function editArticle(id, data) {
 
       // Список литературы
       if (sources && sources.length) {
-        editPromises.push(apiClient.editSource(id, sources));
+        editPromises.push(apiClient.editSources(id, sources));
       }
 
       // Вложения
@@ -212,7 +212,7 @@ export function createArticleTranslation(id, data) {
 
       if (data.sources) {
         editSourcePromises = data.sources.map(item =>
-          apiClient.editSource(id, item)
+          apiClient.editSources(id, item)
         );
       }
 
@@ -246,7 +246,7 @@ export function editArticleTranslation(id, data) {
 
       if (data.sources) {
         editSourcePromises = data.sources.map(item =>
-          apiClient.editSource(id, item)
+          apiClient.editSources(id, item)
         );
       }
 

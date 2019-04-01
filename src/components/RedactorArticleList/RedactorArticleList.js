@@ -27,7 +27,7 @@ class RedactorArticleList extends Component {
   getToolsMenuItems = (data) => {
     const tools = [];
 
-    if (data.state_article === 'AWAIT_PUBLICATION') {
+    if (data.state_article === 'AWAIT_PUBLICATION' && data.need_translation) {
       tools.push({
         title: 'Посмотреть перевод',
         link: `/article/${data.id}/translate`
