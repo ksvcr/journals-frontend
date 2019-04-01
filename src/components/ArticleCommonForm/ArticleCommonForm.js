@@ -25,17 +25,6 @@ import { getCountriesOptions } from '~/store/countries/selector';
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visibleFields: {
-        conflicts: true,
-        addressRadio: Boolean(props.isPrinted),
-        addressList: props.isPrinted || false
-      }
-    };
-  }
-
   componentDidUpdate(prevProps) {
     this.setInitialCategory(prevProps.rootCategory);
   }
@@ -90,29 +79,19 @@ class ArticleCommonForm extends Component {
   }
 
   setInitialCategory = prevRootCategory => {
-    const { rootCategory, change } = this.props;
+    const { rootCategory, change, formName } = this.props;
     if (rootCategory !== prevRootCategory) {
       if (this.childCategories.length) {
-        change('category', this.childCategories[0].id);
+        change(formName, 'category', this.childCategories[0].id);
       } else {
-        change('category', null);
+        change(formName, 'category', null);
       }
     }
   };
 
-  handleFieldToggle = event => {
-    const { checked, name } = event.target;
-    this.setState(prevState => ({
-      visibleFields: { ...prevState.visibleFields, [name]: checked }
-    }));
-  };
-
-  handleAddressToggle = event => {
-    const { value } = event.target;
-    const isChecked = value === 'custom-address';
-    this.setState(prevState => ({
-      visibleFields: { ...prevState.visibleFields, addressList: isChecked }
-    }));
+  handleHasPrintedChange = () => {
+    const { change, formName } = this.props;
+    change(formName, 'printed[0].use_address_from_profile', true);
   };
 
   renderFinancingSourcesList = props => {
@@ -141,8 +120,7 @@ class ArticleCommonForm extends Component {
   };
 
   render() {
-    const { visibleFields } = this.state;
-    const { hasFinancing, isConflictInterest } = this.props;
+    const { hasFinancing, hasPrinted, isConflictInterest, useAddressFromProfile } = this.props;
 
     return (
       <div className="article-common-form">
@@ -294,24 +272,26 @@ class ArticleCommonForm extends Component {
             Нужна печатная копия
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.addressRadio) } name="addressRadio"
-                      onChange={ this.handleFieldToggle } />
+            <Field name="has_printed" id="has_printed" type="checkbox"
+                   component={ Switcher } onChange={ this.handleHasPrintedChange } />
           </div>
 
-          { visibleFields.addressRadio && (
+          { hasPrinted && (
             <div className="form__switcher">
-              <Radio name="addressList" value="profile-address"
-                     checked={ !Boolean(visibleFields.addressList) } onChange={ this.handleAddressToggle } >
+              <Field name="use_address_from_profile" value={ true }
+                     component={ Radio } type="radio" format={ value => Boolean(value) }
+                     parse={ value => value === 'true' } >
                 Адрес, указанный в профиле
-              </Radio>
-              <Radio name="addressList" value="custom-address" checked={ Boolean(visibleFields.addressList) }
-                     onChange={ this.handleAddressToggle }>
+              </Field>
+              <Field name="use_address_from_profile" value={ false }
+                     component={ Radio } type="radio" format={ value => Boolean(value) }
+                     parse={ value => value === 'true' } >
                 Другой адрес
-              </Radio>
+              </Field>
             </div>
           ) }
 
-          { visibleFields.addressList &&
+          { hasPrinted && !useAddressFromProfile &&
             <FieldArray name="printed"
                         component={ this.renderAddressList } />
           }
@@ -332,8 +312,10 @@ function mapStateToProps(state, props) {
   category = category && parseInt(category, 10);
 
   const hasFinancing = formSelector(state, 'has_financing');
+  const printed = formSelector(state, 'printed');
+  const hasPrinted = formSelector(state, 'has_printed');
+  const useAddressFromProfile = formSelector(state, 'use_address_from_profile');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
-  const isPrinted = formSelector(state, 'printed');
   const rootCategoriesArray = getRootCategoriesArray(state);
   const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
@@ -342,7 +324,10 @@ function mapStateToProps(state, props) {
 
   return {
     userData: user.data,
+    countriesData: countries.data,
+    useAddressFromProfile,
     hasFinancing,
+    hasPrinted,
     isConflictInterest,
     rootCategory,
     category,
@@ -351,8 +336,7 @@ function mapStateToProps(state, props) {
     rubricsArray,
     languagesArray,
     countriesOptions,
-    countriesData: countries.data,
-    isPrinted
+    printed
   };
 }
 

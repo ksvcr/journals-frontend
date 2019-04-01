@@ -6,7 +6,6 @@ import './switcher.scss';
 class Switcher extends PureComponent {
   render() {
     const { trueLabel, falseLabel, input, ...rest } = this.props;
-
     return (
       <label className="switcher">
         <input type="checkbox" className="switcher__input" { ...input } { ...rest } />

@@ -187,6 +187,7 @@ function getInitialValues(state, props) {
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
+
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,

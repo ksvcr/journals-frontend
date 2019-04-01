@@ -1,6 +1,6 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, blocks, sources,
-          file_atachments, ...rest } = data;
+  const { authors = [], has_financing, has_printed, financing_sources, blocks, sources,
+          file_atachments, use_address_from_profile, printed, ...rest } = data;
 
   const serializedData = {
     ...rest,
@@ -15,6 +15,14 @@ export function serializeArticleData(data = {}) {
 
     if (!serializedData.financing_sources.length) {
       delete serializedData.financing_sources;
+    }
+  }
+
+  if (has_printed) {
+    if (use_address_from_profile) {
+      serializedData.printed = [{ use_address_from_profile: true }];
+    } else {
+      serializedData.printed = printed;
     }
   }
 
@@ -98,6 +106,9 @@ export function deserializeArticleData(data = {}) {
       }))
     ];
   }
+
+  deserializedData.has_printed = Boolean(data.printed);
+  deserializedData.use_address_from_profile = data.printed && data.printed[0] && data.printed[0].use_address_from_profile;
   return deserializedData;
 }
 
