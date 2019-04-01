@@ -89,19 +89,7 @@ class CorrectorArticleList extends Component {
         },
         {
           style: {
-            width: '10%',
-            textAlign: 'center'
-          },
-          sort: '',
-          head: () => 'Знаков',
-          render: (data) => {
-            // TODO: Количество символов из апи
-            return data.count || 0;
-          }
-        },
-        {
-          style: {
-            width: '15%'
+            width: '25%'
           },
           head: () => t('state'),
           render: (data) =>
