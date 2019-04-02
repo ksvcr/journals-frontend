@@ -23,12 +23,25 @@ class CorrectorArticleList extends Component {
         link: `/article/${data.id}/correct`
       },
       {
+        title: 'Отправить редактору',
+        handler: id => this.handleProofreadingCommit(id, data)
+      },
+      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
       }
     ];
+  };
+
+  handleProofreadingCommit = (id, data) => {
+    const { editArticle } = this.props;
+    const commitData = {
+      state_article: data.need_translation ? 'AWAIT_TRANSLATE' : 'AWAIT_PUBLICATION'
+    };
+
+    editArticle(id, commitData);
   };
 
   handlePaginateChange = (paginate) => {
@@ -140,7 +153,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
-  removeArticleTag: articlesActions.removeArticleTag
+  removeArticleTag: articlesActions.removeArticleTag,
+  editArticle: articlesActions.editArticle
 };
 
 CorrectorArticleList = withNamespaces()(CorrectorArticleList);
