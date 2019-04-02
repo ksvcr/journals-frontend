@@ -97,7 +97,7 @@ const apiClient = {
   editReviewInvite: (id, data) => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'put', data }),
   removeReviewInvite: id => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'delete' }),
   createArticleTranslation: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/translations/`, {
+    return fetchInstance.request(`/articles/${articleId}/translations/${data.language_code}/`, {
       method: 'post',
       data
     });
@@ -106,11 +106,14 @@ const apiClient = {
     const tail = languageCode !== null ? `${languageCode}/` : '';
     return fetchInstance.request(`/articles/${articleId}/translations/${tail}`);
   },
-  editArticleTranslation: (articleId, languageCode, data) => {
+  editArticleTranslation: (articleId, data) => {
     return fetchInstance.request(
-      `/articles/${articleId}/translations/${languageCode}/`,
+      `/articles/${articleId}/translations/${data.language_code}/`,
       { method: 'put', data }
     );
+  },
+  commitArticleTranslation: (articleId, languageCode) => {
+    return fetchInstance.request(`/articles/${articleId}/translations/${languageCode}/commit/`, { method: 'post' });
   },
   getDiscountsInfo: userId =>
     fetchInstance.request(`users/${userId}/balance`),

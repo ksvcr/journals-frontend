@@ -226,7 +226,9 @@ export function createArticleTranslation(id, data) {
         translatePromises.push(apiClient.editSources(id, sources));
       }
 
-      return Promise.all(translatePromises);
+      return Promise.all(translatePromises).then(() => {
+        return apiClient.commitArticleTranslation(id, articleData.language_code)
+      });
     });
 
     return dispatch({
@@ -242,7 +244,7 @@ export function editArticleTranslation(id, data) {
       let { sources, financing_sources, ...articleData } = data;
 
       const translatePromises = [
-        apiClient.editArticleTranslation(id, articleData.language_code, articleData),
+        apiClient.editArticleTranslation(id, articleData),
         apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' })
       ];
 
@@ -258,9 +260,9 @@ export function editArticleTranslation(id, data) {
         translatePromises.push(apiClient.editSources(id, sources));
       }
 
-      return Promise.all([
-        translatePromises
-      ]);
+      return Promise.all(translatePromises).then(() => {
+        return apiClient.commitArticleTranslation(id, articleData.language_code)
+      });
     });
 
     return dispatch({
