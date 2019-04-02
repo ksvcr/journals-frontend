@@ -17,10 +17,18 @@ import './translator-article-list.scss';
 
 class TranslatorArticleList extends Component {
   getToolsMenuItems = (data) => {
+    const { commitArticleTranslation } = this.props;
     return [
       {
         title: 'Перевести',
         link: `/article/${data.id}/translate`
+      },
+      {
+        title: 'Отправить редактору',
+        handler: (id) => {
+          const languageCode = data.language === 'en' ? 'ru' : 'en';
+          commitArticleTranslation(id, languageCode)
+        }
       },
       {
         title: 'Просмотр',
@@ -85,7 +93,7 @@ class TranslatorArticleList extends Component {
           },
           sort: 'date_send_to_review',
           head: () => 'Отправлена',
-          render: data => formatDate.toString(data.date_send_to_review)
+          render: data => formatDate.toString(data.date_create)
         },
         {
           style: {
@@ -147,7 +155,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
-  removeArticleTag: articlesActions.removeArticleTag
+  removeArticleTag: articlesActions.removeArticleTag,
+  commitArticleTranslation: articlesActions.commitArticleTranslation
 };
 
 export default connect(

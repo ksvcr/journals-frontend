@@ -1,7 +1,7 @@
 import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
          FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW,
          EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES,
-         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION } from './constants';
+         FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, COMMIT_ARTICLE_TRANSLATION } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
@@ -33,54 +33,52 @@ export function createArticle(siteId, data, cb) {
   return dispatch => {
     let { content_blocks, sources, financing_sources, file_atachments, printed, ...articleData } = data;
 
-    const payload = apiClient
-      .createArticle(siteId, articleData)
-      .then(articleResponse => {
-        const articleId = articleResponse.id;
+    const payload = apiClient.createArticle(siteId, articleData).then(articleResponse => {
+      const articleId = articleResponse.id;
 
-        if (cb) {
-          cb(articleResponse);
+      if (cb) {
+        cb(articleResponse);
+      }
+
+      return apiClient.lockArticle(articleId).then(() => {
+        const resourcePromises = [];
+
+        // Источники финансирования
+        if (financing_sources) {
+          resourcePromises.push(
+            apiClient.createFinancingSources(articleId, financing_sources)
+          );
         }
 
-        return apiClient.lockArticle(articleId).then(() => {
-          const resourcePromises = [];
+        // Контент-блоки
+        if (content_blocks) {
+          content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
+          resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
+        }
 
-          // Источники финансирования
-          if (financing_sources) {
-            resourcePromises.push(
-              apiClient.createFinancingSources(articleId, financing_sources)
-            );
-          }
+        // Список литературы
+        if (sources) {
+          resourcePromises.push(
+            apiClient.createSources(articleId, sources)
+          );
+        }
 
-          // Контент-блоки
-          if (content_blocks) {
-            content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
-            resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
-          }
+        // Вложения
+        if (file_atachments) {
+          resourcePromises.push(apiClient.createArticleAttachment(articleId, file_atachments));
+        }
 
-          // Список литературы
-          if (sources) {
-            resourcePromises.push(
-              apiClient.createSources(articleId, sources)
-            );
-          }
+        // Печатная копия статьи
+        if (printed) {
+          printed = printed.map(item => ({ ...item, article: articleId }));
+          resourcePromises.push(
+            apiClient.createArticlePrinted(articleId, printed)
+          );
+        }
 
-          // Вложения
-          if (file_atachments) {
-            resourcePromises.push(apiClient.createArticleAttachment(articleId, file_atachments));
-          }
-
-          // Печатная копия статьи
-          if (printed) {
-            printed = printed.map(item => ({ ...item, article: articleId }));
-            resourcePromises.push(
-              apiClient.createArticlePrinted(articleId, printed)
-            );
-          }
-
-          return Promise.all(resourcePromises);
-        });
+        return Promise.all(resourcePromises);
       });
+    });
 
     return dispatch({
       type: CREATE_ARTICLE,
@@ -92,7 +90,6 @@ export function createArticle(siteId, data, cb) {
 export function editArticle(id, data) {
   return dispatch => {
     let { content_blocks, financing_sources, sources, file_atachments, printed, ...articleData } = data;
-
 
     const payload = apiClient.lockArticle(id).then(() => {
       let editPromises = [apiClient.editArticle(id, articleData)];
@@ -210,8 +207,7 @@ export function createArticleTranslation(id, data) {
     let { sources, financing_sources, ...articleData } = data;
     const payload = apiClient.lockArticle(id).then(() => {
       const translatePromises = [
-        apiClient.createArticleTranslation(id, articleData),
-        apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' })
+        apiClient.createArticleTranslation(id, articleData)
       ];
 
       if (financing_sources) {
@@ -226,9 +222,7 @@ export function createArticleTranslation(id, data) {
         translatePromises.push(apiClient.editSources(id, sources));
       }
 
-      return Promise.all(translatePromises).then(() => {
-        return apiClient.commitArticleTranslation(id, articleData.language_code)
-      });
+      return Promise.all(translatePromises);
     });
 
     return dispatch({
@@ -244,8 +238,7 @@ export function editArticleTranslation(id, data) {
       let { sources, financing_sources, ...articleData } = data;
 
       const translatePromises = [
-        apiClient.editArticleTranslation(id, articleData),
-        apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' })
+        apiClient.editArticleTranslation(id, articleData)
       ];
 
       if (financing_sources) {
@@ -260,9 +253,7 @@ export function editArticleTranslation(id, data) {
         translatePromises.push(apiClient.editSources(id, sources));
       }
 
-      return Promise.all(translatePromises).then(() => {
-        return apiClient.commitArticleTranslation(id, articleData.language_code)
-      });
+      return Promise.all(translatePromises);
     });
 
     return dispatch({
@@ -285,6 +276,14 @@ export function fetchArticleTranslation(id, languageCode = null) {
       meta: { article: id },
       payload
     }).catch(error => console.error(error));
+  };
+}
+
+export function commitArticleTranslation(id, languageCode) {
+  apiClient.commitArticleTranslation(id, languageCode);
+  return {
+    type: COMMIT_ARTICLE_TRANSLATION,
+    meta: { article: id }
   };
 }
 

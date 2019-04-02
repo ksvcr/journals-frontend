@@ -43,7 +43,7 @@ class ArticleTranslateForm extends Component {
     return (
       <React.Fragment>
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          Отправить перевод
+          Сохранить перевод
         </Button>
       </React.Fragment>
     );
