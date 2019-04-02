@@ -63,11 +63,15 @@ const apiClient = {
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
   editBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
-
+  getFinancingSources: (articleId, params) =>
+    fetchInstance.request(`/articles/${articleId}/financing/`, { params }),
   createFinancingSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'post', data }),
-  editFinancingSource: (articleId, data) => {
+  editFinancingSources: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'put', data });
+  },
+  editFinancingSource: (id, data) => {
+    return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
   },
   createArticleTag: (articleId, data) => {
     return fetchInstance.request(`/articles/${articleId}/tags/`, { method: 'post', data });

@@ -92,6 +92,7 @@ function getInitialValues(state, props) {
 
   const initialValues = {
     sources: data.sources,
+    financing_sources: translation ? translation.financing_sources : data.financing_sources.map(item => ({ id: item.id })),
     title: translation && translation.title,
     conflict_interest: translation && translation.conflict_interest,
     text_to_description: translation && translation.text_to_description,

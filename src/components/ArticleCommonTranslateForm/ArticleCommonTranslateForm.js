@@ -13,6 +13,7 @@ class ArticleCommonTranslateForm extends Component {
     const { articleData } = this.props;
     return articleData.financing_sources.map((item, index) => (
       <FieldSet legend={ `Грант №${index + 1}` } key={ item.id }>
+        <Field type="hidden" component={ TextField } name={ `financing_sources[${index}].id` } value={ item.id } />
         <div className="form__field">
           <label htmlFor={ `financing_sources[${index}].organization` }
                  className="form__label">

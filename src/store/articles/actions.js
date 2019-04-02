@@ -100,7 +100,7 @@ export function editArticle(id, data) {
       // Источники финансирования
       if (financing_sources) {
         editPromises.push(
-          apiClient.editFinancingSource(id, financing_sources)
+          apiClient.editFinancingSources(id, financing_sources)
         );
       }
 
@@ -207,29 +207,26 @@ export function acceptArticleReviewInvite(articleId) {
 
 export function createArticleTranslation(id, data) {
   return dispatch => {
+    let { sources, financing_sources, ...articleData } = data;
     const payload = apiClient.lockArticle(id).then(() => {
-      let editSourcePromises = [];
+      const translatePromises = [
+        apiClient.createArticleTranslation(id, articleData),
+        apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' })
+      ];
 
-      if (data.sources) {
-        editSourcePromises = data.sources.map(item =>
-          apiClient.editSources(id, item)
-        );
+      if (financing_sources) {
+        financing_sources.forEach(item => {
+          translatePromises.push(
+            apiClient.editFinancingSource(item.id, { ...item, language_code: articleData.language_code })
+          )
+        });
       }
 
-      delete data.sources;
+      if (sources) {
+        translatePromises.push(apiClient.editSources(id, sources));
+      }
 
-      const createTranslationPromise = apiClient.createArticleTranslation(
-        id,
-        data
-      );
-      const editArticlePromise = apiClient.editArticle(id, {
-        state_article: 'AWAIT_PUBLICATION'
-      });
-      return Promise.all([
-        ...editSourcePromises,
-        createTranslationPromise,
-        editArticlePromise
-      ]);
+      return Promise.all(translatePromises);
     });
 
     return dispatch({
@@ -242,24 +239,27 @@ export function createArticleTranslation(id, data) {
 export function editArticleTranslation(id, data) {
   return dispatch => {
     const payload = apiClient.lockArticle(id).then(() => {
-      let editSourcePromises = [];
+      let { sources, financing_sources, ...articleData } = data;
 
-      if (data.sources) {
-        editSourcePromises = data.sources.map(item =>
-          apiClient.editSources(id, item)
-        );
+      const translatePromises = [
+        apiClient.editArticleTranslation(id, articleData.language_code, articleData),
+        apiClient.editArticle(id, { state_article: 'AWAIT_PUBLICATION' })
+      ];
+
+      if (financing_sources) {
+        financing_sources.forEach(item => {
+          translatePromises.push(
+            apiClient.editFinancingSource(item.id, { ...item, language_code: articleData.language_code })
+          )
+        });
       }
 
-      delete data.sources;
+      if (sources) {
+        translatePromises.push(apiClient.editSources(id, sources));
+      }
 
-      const editTranslationPromise = apiClient.editArticleTranslation(id, data.language_code, data);
-      const editArticlePromise = apiClient.editArticle(id, {
-        state_article: 'AWAIT_PUBLICATION'
-      });
       return Promise.all([
-        ...editSourcePromises,
-        editTranslationPromise,
-        editArticlePromise
+        translatePromises
       ]);
     });
 
@@ -272,7 +272,11 @@ export function editArticleTranslation(id, data) {
 
 export function fetchArticleTranslation(id, languageCode = null) {
   return dispatch => {
-    const payload = apiClient.getArticleTranslation(id, languageCode);
+    const payload = apiClient.getArticleTranslation(id, languageCode).then(articleData => {
+      return apiClient.getFinancingSources(id,
+        { languageCode }).then(({ results=[] }) => ({ ...articleData, financing_sources: results })
+      );
+    });
 
     return dispatch({
       type: FETCH_ARTICLE_TRANSLATION,
