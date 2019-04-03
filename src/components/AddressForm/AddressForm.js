@@ -9,16 +9,40 @@ const AddressForm = ({ field, countriesOptions, countriesData }) => {
   return (
     <React.Fragment>
       <div className="form__row">
-        <div className="form__col form__col_8">
+        <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.user` } className="form__label">
-              ФИО получателя
+            <label htmlFor={ `${field}.last_name` } className="form__label">
+              Фамилия
             </label>
             <Field className="text-field_white"
-                   name={ `${field}.user` }
-                   id={ `${field}.user` }
+                   name={ `${field}.last_name` }
+                   id={ `${field}.last_name` }
                    component={ TextField }
-                   placeholder="Введите ФИО" />
+                   placeholder="Введите фамилию" />
+          </div>
+        </div>
+        <div className="form__col form__col_4">
+          <div className="form__field">
+            <label htmlFor={ `${field}.first_name` } className="form__label">
+              Имя
+            </label>
+            <Field className="text-field_white"
+                   name={ `${field}.first_name` }
+                   id={ `${field}.first_name` }
+                   component={ TextField }
+                   placeholder="Введите имя" />
+          </div>
+        </div>
+        <div className="form__col form__col_4">
+          <div className="form__field">
+            <label htmlFor={ `${field}.middle_name` } className="form__label">
+              Отчество
+            </label>
+            <Field className="text-field_white"
+                   name={ `${field}.middle_name` }
+                   id={ `${field}.middle_name` }
+                   component={ TextField }
+                   placeholder="Введите имя" />
           </div>
         </div>
       </div>
