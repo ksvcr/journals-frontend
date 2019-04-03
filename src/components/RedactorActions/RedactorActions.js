@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
+import ArticleHistory from '~/components/ArticleHistory/ArticleHistory';
 
 import isShowDecision from '~/services/isShowDecision';
 
@@ -21,6 +22,10 @@ class RedactorActions extends Component {
       {
         title: 'Рецензировать',
         component: <RedactorReview articleId={ articleId } />
+      },
+      {
+        title: 'История',
+        component: <ArticleHistory articleId={ articleId } />
       }
     ];
 

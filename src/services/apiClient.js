@@ -55,6 +55,7 @@ const apiClient = {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
   lockArticle: articleId => fetchInstance.request(`/articles/${articleId}/lock/`),
+  getArticleHistory: articleId => fetchInstance.request(`/articles/${articleId}/states`),
   createArticleAttachment: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
   editArticleAttachment: (articleId, data) =>

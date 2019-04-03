@@ -6,6 +6,7 @@ import rubrics from './rubrics/reducer';
 import categories from './categories/reducer';
 import sites from './sites/reducer';
 import articles from './articles/reducer';
+import articleHistory from './articleHistory/reducer';
 import user from './user/reducer';
 import users from './users/reducer';
 import reviewInvites from './reviewInvites/reducer';
@@ -23,6 +24,7 @@ export default combineReducers({
   categories,
   sites,
   articles,
+  articleHistory,
   user,
   users,
   reviewInvites,
