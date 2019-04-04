@@ -5,6 +5,8 @@ import * as articleHistoryActions from '~/store/articleHistory/actions';
 
 import List from '~/components/List/List';
 
+import './article-history.scss';
+
 class ArticleHistory extends Component {
   componentDidMount() {
     const { articleId, fetchArticleHistory } = this.props;

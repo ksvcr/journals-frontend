@@ -50,26 +50,28 @@ class ArticleCommonForm extends Component {
   }
 
   get rubricsOptions() {
-    const { rubricsArray } = this.props;
-    return rubricsArray.map(item => ({
-      title: item.name,
-      value: item.id
-    }));
-  }
+    const { rubricsArray, rubricSet, rubricsData } = this.props;
 
-  get rootCategoriesOptions() {
-    const { rootCategoriesArray } = this.props;
-    return rootCategoriesArray.map(item => ({
-      title: item.translations['ru'].name,
-      value: item.id
-    }));
-  }
+    const options = rubricSet.map((id, index) => {
+      const rubric = rubricsData[id];
+      const parentId = index > 0 ? rubric.parent : null;
+      return getOptionsByParent(parentId);
+    });
+    console.log(rubricSet);
+    console.log(options);
+    return options;
 
-  get childCategoriesOptions() {
-    return this.childCategories.map(item => ({
-      title: item.translations['ru'].name,
-      value: item.id
-    }));
+    function getOptionsByParent(parent) {
+      const filtered = rubricsArray.filter(item => item.parent === parent);
+      return getOptions(filtered);
+    }
+
+    function getOptions(array) {
+      return array.map(item => ({
+        title: item.name,
+        value: item.id
+      }));
+    }
   }
 
   get hasPublishAccess() {
@@ -153,33 +155,31 @@ class ArticleCommonForm extends Component {
             <div className="form__row">
               <div className="form__col form__col_4">
                 <div className="form__field">
-                  <label htmlFor="rubric" className="form__label">
+                  <label htmlFor="rubric_set[0]" className="form__label">
                     Направление
                   </label>
-                  <Field name="rubric" id="rubric" options={ this.rubricsOptions } component={ Select } />
+                  <Field name="rubric_set[0]" id="rubric_set[0]" options={ this.rubricsOptions[0] }
+                         component={ Select } />
                 </div>
               </div>
               <div className="form__col form__col_4">
                 <div className="form__field">
-                  <label htmlFor="root_category" className="form__label">
+                  <label htmlFor="rubric_set[1]" className="form__label">
                     Категория
                   </label>
-                  <Field name="root_category" id="root_category"
-                         options={ this.rootCategoriesOptions }
+                  <Field name="rubric_set[1]" id="rubric_set[1]" options={ this.rubricsOptions[1] }
                          component={ Select } />
                 </div>
               </div>
-              { this.childCategoriesOptions.length > 0 && (
-                <div className="form__col form__col_4">
-                  <div className="form__field">
-                    <label htmlFor="category" className="form__label">
-                      Подкатегория
-                    </label>
-                    <Field name="category" id="category" options={ this.childCategoriesOptions }
-                           component={ Select } />
-                  </div>
+              <div className="form__col form__col_4">
+                <div className="form__field">
+                  <label htmlFor="rubric_set[2]" className="form__label">
+                    Подкатегория
+                  </label>
+                  <Field name="rubric_set[2]" id="rubric_set[2]" options={ this.rubricsOptions[2] }
+                         component={ Select } />
                 </div>
-              ) }
+              </div>
             </div>
 
             <div className="form__field form__field_inline">
@@ -303,7 +303,7 @@ class ArticleCommonForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-  const { user, countries } = state;
+  const { user, countries, rubrics } = state;
   const formSelector = formValueSelector(formName);
 
   let rootCategory = formSelector(state, 'root_category');
@@ -314,6 +314,7 @@ function mapStateToProps(state, props) {
   const hasFinancing = formSelector(state, 'has_financing');
   const printed = formSelector(state, 'printed');
   const hasPrinted = formSelector(state, 'has_printed');
+  const rubricSet = formSelector(state, 'rubric_set');
   const useAddressFromProfile = formSelector(state, 'use_address_from_profile');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
   const rootCategoriesArray = getRootCategoriesArray(state);
@@ -325,6 +326,8 @@ function mapStateToProps(state, props) {
   return {
     userData: user.data,
     countriesData: countries.data,
+    rubricsData: rubrics.data,
+    rubricSet,
     useAddressFromProfile,
     hasFinancing,
     hasPrinted,

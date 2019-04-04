@@ -19,7 +19,7 @@ import Icon from '~/components/Icon/Icon';
 import './article-form.scss';
 import './assets/save.svg';
 
-import { getRubricsArray } from '~/store/rubrics/selector';
+import { getRubricsArray, getRootRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRootCategoriesArray } from '~/store/categories/selector';
 
@@ -179,20 +179,36 @@ function mapStateToProps(state, props) {
   };
 }
 
+function getRubricSet(rubric, rubricsData) {
+  const rubricSet = [];
+
+  return setLevel(rubric);
+
+  function setLevel(rubric) {
+    rubricSet.unshift(rubric);
+    const currentRubric = rubricsData[rubric];
+    if (currentRubric.parent) {
+      return setLevel(currentRubric.parent)
+    } else {
+      return rubricSet;
+    }
+  }
+}
+
 function getInitialValues(state, props) {
-  const { user, articles } = state;
+  const { user, articles, rubrics } = state;
   const { id } = props;
   const rootCategoriesArray = getRootCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
+  const rootRubricsArray = getRootRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
-
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
     has_financing: true,
-    rubric: rubricsArray.length ? rubricsArray[0].id : null,
+    rubric_set: getRubricSet(data.rubric, rubrics.data),
     root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
     financing_sources: [{
       type: financingIds[0]
@@ -224,7 +240,6 @@ function getInitialValues(state, props) {
     ],
     file_atachments: data.file_atachments || [],
     list_literature_file: data.list_literature_file,
-    ...data
   };
 
   if (initialValues.content_blocks.length > 2) {

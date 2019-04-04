@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import Icon from '~/components/Icon/Icon';
-
 import './assets/download.svg';
 import './image-media.scss';
 

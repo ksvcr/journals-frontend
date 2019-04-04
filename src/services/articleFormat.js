@@ -94,6 +94,7 @@ export function serializeArticleData(data = {}) {
 export function deserializeArticleData(data = {}) {
   const { author, collaborators, ...rest } = data;
   const deserializedData = rest;
+
   if (author && collaborators) {
     deserializedData.authors = [
       {
