@@ -237,7 +237,7 @@ class ArticlePublish extends Component {
 function mapStateToProps(state, props) {
   const { match } = props;
   const { sites, articles, languages, rubrics,
-          categories, user, countries } = state;
+          user, countries } = state;
 
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
@@ -250,7 +250,6 @@ function mapStateToProps(state, props) {
     languages.isFulfilled &&
     rubrics.isFulfilled &&
     countries.isFulfilled &&
-    categories.isFulfilled &&
     sites.isFulfilled;
 
   return {

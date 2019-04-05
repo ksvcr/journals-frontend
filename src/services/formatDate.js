@@ -7,6 +7,11 @@ export function toString(date) {
   return parsedDate.format('DD.MM.YYYY');
 }
 
+export function toStringWithTime(date) {
+  const parsedDate = moment(date, DEFAULT_FORMAT);
+  return parsedDate.format('DD.MM.YYYY, HH:mm');
+}
+
 export function toUnix(date) {
   return moment(date, DEFAULT_FORMAT).unix();
 }

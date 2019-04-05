@@ -5,6 +5,11 @@ import * as articleHistoryActions from '~/store/articleHistory/actions';
 
 import List from '~/components/List/List';
 
+import * as formatDate from '~/services/formatDate';
+import { getArticleActionTitle } from '~/services/articleActions';
+import { getArticleStageTitle } from '~/services/articleStages';
+import { getUserRoleTitle } from '~/services/userRoles';
+
 import './article-history.scss';
 
 class ArticleHistory extends Component {
@@ -25,21 +30,37 @@ class ArticleHistory extends Component {
             width: '25%'
           },
           head: () => 'Время',
-          render: data => data.date_create
+          render: ({ date_create }) => {
+            return <div className="article-history__time"> { formatDate.toStringWithTime(date_create) } </div>
+          }
         },
         {
           style: {
             width: '25%'
           },
           head: () => 'Действие',
-          render: data => data.action
+          render: ({ action }) => getArticleActionTitle(action)
         },
         {
           style: {
-            width: '25%'
+            width: '20%'
           },
           head: () => 'Этап',
-          render: data => data.state
+          render: ({ stage_article }) => getArticleStageTitle(stage_article)
+        },
+        {
+          style: {
+            width: '15%'
+          },
+          head: () => 'От кого',
+          render: ({ from_user_role }) => getUserRoleTitle(from_user_role, 'from')
+        },
+        {
+          style: {
+            width: '15%'
+          },
+          head: () => 'Кому',
+          render: ({ user_role }) => getUserRoleTitle(user_role, 'to')
         }
       ]
     };
