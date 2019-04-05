@@ -19,9 +19,8 @@ import Icon from '~/components/Icon/Icon';
 import './article-form.scss';
 import './assets/save.svg';
 
-import { getRubricsArray, getRootRubricsArray } from '~/store/rubrics/selector';
+import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
-import { getRootCategoriesArray } from '~/store/categories/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
@@ -181,7 +180,7 @@ function mapStateToProps(state, props) {
 
 function getRubricSet(rubric, rubricsData) {
   const rubricSet = [];
-
+  
   return setLevel(rubric);
 
   function setLevel(rubric) {
@@ -198,18 +197,16 @@ function getRubricSet(rubric, rubricsData) {
 function getInitialValues(state, props) {
   const { user, articles, rubrics } = state;
   const { id } = props;
-  const rootCategoriesArray = getRootCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
-  const rootRubricsArray = getRootRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
+  const defaultRubric = rubricsArray.find(item => item.parent === null);
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
     has_financing: true,
-    rubric_set: getRubricSet(data.rubric, rubrics.data),
-    root_category: rootCategoriesArray.length ? rootCategoriesArray[0].id : null,
+    rubric_set: data.rubric ? getRubricSet(data.rubric, rubrics.data) : [defaultRubric.id],
     financing_sources: [{
       type: financingIds[0]
     }],

@@ -15,7 +15,6 @@ import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 import * as languagesActions from '~/store/languages/actions';
 import * as rolesActions from '~/store/roles/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
-import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
@@ -67,7 +66,7 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser, fetchRoles } = this.props;
+            fetchCountries, fetchUser, fetchRoles } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
@@ -81,14 +80,12 @@ class ArticlePublish extends Component {
             const userPromises = userIds.map(id => fetchUser(id));
             return Promise.all([
               ...userPromises,
-              fetchRubrics(articleData.site),
-              fetchCategories(articleData.site)
+              fetchRubrics(articleData.site)
             ]);
           })
       );
     } else {
       promises.push(fetchRubrics(siteId));
-      promises.push(fetchCategories(siteId));
       promises.push(fetchRoles(siteId));
     }
 
@@ -277,7 +274,6 @@ const mapDispatchToProps = {
   fetchArticle: articlesActions.fetchArticle,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
-  fetchCategories: categoriesActions.fetchCategories,
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,

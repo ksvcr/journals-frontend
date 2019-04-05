@@ -16,29 +16,14 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
-import {
-  getCategoriesArray,
-  getRootCategoriesArray
-} from '~/store/categories/selector';
 import { getCountriesOptions } from '~/store/countries/selector';
 
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
-  componentDidUpdate(prevProps) {
-    this.setInitialCategory(prevProps.rootCategory);
-  }
-
-  get childCategories() {
-    const { rootCategoriesArray, categoriesArray, rootCategory } = this.props;
-    let rootId;
-    if (rootCategory !== undefined) {
-      rootId = rootCategory;
-    } else if (rootCategoriesArray[0]) {
-      rootId = rootCategoriesArray[0].id;
-    }
-
-    return categoriesArray.filter(item => item.parent === rootId);
+  componentDidMount() {
+    const { rubricSet } = this.props;
+    this.handleRubricChange(rubricSet.length, rubricSet[rubricSet.length-1]);
   }
 
   get languagesOptions() {
@@ -52,14 +37,16 @@ class ArticleCommonForm extends Component {
   get rubricsOptions() {
     const { rubricsArray, rubricSet, rubricsData } = this.props;
 
-    const options = rubricSet.map((id, index) => {
+    return rubricSet.map((id, index) => {
       const rubric = rubricsData[id];
-      const parentId = index > 0 ? rubric.parent : null;
-      return getOptionsByParent(parentId);
+
+      if (rubric) {
+        const parentId = index > 0 ? rubric.parent : null;
+        return getOptionsByParent(parentId);
+      } else {
+        return null;
+      }
     });
-    console.log(rubricSet);
-    console.log(options);
-    return options;
 
     function getOptionsByParent(parent) {
       const filtered = rubricsArray.filter(item => item.parent === parent);
@@ -80,20 +67,38 @@ class ArticleCommonForm extends Component {
     return Boolean(~roles.indexOf(userData.role));
   }
 
-  setInitialCategory = prevRootCategory => {
-    const { rootCategory, change, formName } = this.props;
-    if (rootCategory !== prevRootCategory) {
-      if (this.childCategories.length) {
-        change(formName, 'category', this.childCategories[0].id);
-      } else {
-        change(formName, 'category', null);
-      }
-    }
-  };
 
   handleHasPrintedChange = () => {
     const { change, formName } = this.props;
     change(formName, 'printed[0].use_address_from_profile', true);
+  };
+
+  handleRubricChange = (level, value) => {
+    const { change, formName, rubricSet, rubricsArray } = this.props;
+    const newRubricSet = rubricSet.map((item, index) => {
+      if (index < level) {
+        return item;
+      } else if (index > level) {
+        return null;
+      } else {
+        return value;
+      }
+    });
+
+    setDefaultRubric(level, value);
+
+    change(formName, 'rubric_set', newRubricSet);
+
+    function setDefaultRubric(level, value) {
+      if (level < 2) {
+        const rubricId = parseInt(value, 10);
+        const rubric = rubricsArray.find(item => item.parent === rubricId);
+        if (rubric) {
+          newRubricSet[level+1]= rubric.id;
+          setDefaultRubric(level+1, rubric.id);
+        }
+      }
+    }
   };
 
   renderFinancingSourcesList = props => {
@@ -159,27 +164,31 @@ class ArticleCommonForm extends Component {
                     Направление
                   </label>
                   <Field name="rubric_set[0]" id="rubric_set[0]" options={ this.rubricsOptions[0] }
-                         component={ Select } />
+                         onChange={ (e, val) => this.handleRubricChange(0, val) } component={ Select } />
                 </div>
               </div>
-              <div className="form__col form__col_4">
-                <div className="form__field">
-                  <label htmlFor="rubric_set[1]" className="form__label">
-                    Категория
-                  </label>
-                  <Field name="rubric_set[1]" id="rubric_set[1]" options={ this.rubricsOptions[1] }
-                         component={ Select } />
+              { this.rubricsOptions[1] &&
+                <div className="form__col form__col_4">
+                  <div className="form__field">
+                    <label htmlFor="rubric_set[1]" className="form__label">
+                      Категория
+                    </label>
+                    <Field name="rubric_set[1]" id="rubric_set[1]" options={ this.rubricsOptions[1] }
+                           onChange={ (e, val) => this.handleRubricChange(1, val) } component={ Select } />
+                  </div>
                 </div>
-              </div>
-              <div className="form__col form__col_4">
-                <div className="form__field">
-                  <label htmlFor="rubric_set[2]" className="form__label">
-                    Подкатегория
-                  </label>
-                  <Field name="rubric_set[2]" id="rubric_set[2]" options={ this.rubricsOptions[2] }
-                         component={ Select } />
+              }
+              { this.rubricsOptions[2] &&
+                <div className="form__col form__col_4">
+                  <div className="form__field">
+                    <label htmlFor="rubric_set[2]" className="form__label">
+                      Подкатегория
+                    </label>
+                    <Field name="rubric_set[2]" id="rubric_set[2]" options={ this.rubricsOptions[2] }
+                           onChange={ (e, val) => this.handleRubricChange(2, val) } component={ Select } />
+                  </div>
                 </div>
-              </div>
+              }
             </div>
 
             <div className="form__field form__field_inline">
@@ -306,19 +315,12 @@ function mapStateToProps(state, props) {
   const { user, countries, rubrics } = state;
   const formSelector = formValueSelector(formName);
 
-  let rootCategory = formSelector(state, 'root_category');
-  rootCategory = rootCategory && parseInt(rootCategory, 10);
-  let category = formSelector(state, 'category');
-  category = category && parseInt(category, 10);
-
   const hasFinancing = formSelector(state, 'has_financing');
   const printed = formSelector(state, 'printed');
   const hasPrinted = formSelector(state, 'has_printed');
   const rubricSet = formSelector(state, 'rubric_set');
   const useAddressFromProfile = formSelector(state, 'use_address_from_profile');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
-  const rootCategoriesArray = getRootCategoriesArray(state);
-  const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const countriesOptions = getCountriesOptions(state);
@@ -332,10 +334,6 @@ function mapStateToProps(state, props) {
     hasFinancing,
     hasPrinted,
     isConflictInterest,
-    rootCategory,
-    category,
-    rootCategoriesArray,
-    categoriesArray,
     rubricsArray,
     languagesArray,
     countriesOptions,

@@ -9,12 +9,3 @@ export const getRubricsArray = createSelector(
     return entityNormalize.toArray(rubrics.data, rubrics.ids);
   }
 );
-
-export const getRootRubricsArray = createSelector(
-  rubricsSelector,
-  rubrics => {
-    return entityNormalize
-      .toArray(rubrics.data, rubrics.ids)
-      .filter(item => !item.parent);
-  }
-);

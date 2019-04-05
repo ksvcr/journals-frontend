@@ -1,12 +1,18 @@
 export function serializeArticleData(data = {}) {
   const { authors = [], has_financing, has_printed, financing_sources, blocks, sources,
-          file_atachments, use_address_from_profile, printed, ...rest } = data;
+          file_atachments, use_address_from_profile, printed, rubric_set, ...rest } = data;
 
   const serializedData = {
     ...rest,
     text_to_title: data.title,
     article_type: 1
   };
+
+  rubric_set.forEach(item => {
+    if (item) {
+      serializedData.rubric = item;
+    }
+  });
 
   if (has_financing && financing_sources) {
     serializedData.financing_sources = financing_sources.filter(item => {

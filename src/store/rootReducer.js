@@ -3,7 +3,6 @@ import { reducer as formReducer } from 'redux-form'
 
 import languages from './languages/reducer';
 import rubrics from './rubrics/reducer';
-import categories from './categories/reducer';
 import sites from './sites/reducer';
 import articles from './articles/reducer';
 import articleHistory from './articleHistory/reducer';
@@ -21,7 +20,6 @@ export default combineReducers({
   form: formReducer,
   languages,
   rubrics,
-  categories,
   sites,
   articles,
   articleHistory,
