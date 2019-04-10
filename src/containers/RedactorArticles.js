@@ -66,8 +66,8 @@ class RedactorArticles extends Component {
       loadOptions: this.loadOptions,
       placeholder: 'Выберите тег',
       normalize: option => option.value,
-      onChange: tag => {
-        this.handleRequest({ filter: { tag_ids: tag } });
+      onChange: ({ value }) => {
+        this.handleRequest({ filter: { tag_ids: value } });
       }
     };
   }
