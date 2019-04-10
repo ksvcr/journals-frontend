@@ -237,6 +237,7 @@ function getInitialValues(state, props) {
     ],
     file_atachments: data.file_atachments || [],
     list_literature_file: data.list_literature_file,
+    ...data
   };
 
   if (initialValues.content_blocks.length > 2) {
