@@ -1,6 +1,6 @@
 import { CREATE_ARTICLE, FETCH_ARTICLES, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, ACCEPT_ARTICLE_REVIEW_INVITE,
          FETCH_ARTICLE, EDIT_ARTICLE, CREATE_ARTICLE_TAG, REMOVE_ARTICLE_TAG, CREATE_ARTICLE_REVIEW,
-         EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES,
+         EDIT_ARTICLE_REVIEW, CREATE_ARTICLE_TRANSLATION, FETCH_ARTICLE_REVIEW_INVITES, REMOVE_ARTICLE_REVIEWER_TAG,
          FETCH_ARTICLE_TRANSLATION, EDIT_ARTICLE_TRANSLATION, COMMIT_ARTICLE_TRANSLATION } from './constants';
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
@@ -293,6 +293,17 @@ export function fetchArticleReviewInvites(params) {
     return dispatch({
       type: FETCH_ARTICLE_REVIEW_INVITES,
       meta: params,
+      payload
+    }).catch(error => console.error(error));
+  };
+}
+
+export function removeArticleReviewerTag(userId, id, data={}) {
+  return dispatch => {
+    const payload = apiClient.removeUserTag(id);
+    return dispatch({
+      type: REMOVE_ARTICLE_REVIEWER_TAG,
+      meta: { userId, id, ...data },
       payload
     }).catch(error => console.error(error));
   };

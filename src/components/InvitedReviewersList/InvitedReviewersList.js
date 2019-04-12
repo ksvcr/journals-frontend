@@ -8,6 +8,7 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 
 import * as usersActions from '~/store/users/actions';
 import * as reviewInvitesActions from '~/store/reviewInvites/actions';
+import * as articleActions from '~/store/articles/actions';
 
 import './invited-reviewers-list.scss';
 
@@ -84,7 +85,7 @@ class InvitedReviewersList extends Component {
   }
 
   renderBox = (data) => {
-    const { reviewers, removeUserTag } = this.props;
+    const { reviewers, removeArticleReviewerTag } = this.props;
     const reviewer = reviewers[data.reviewer.id];
     return reviewer && (
       <div className="invited-reviewers-list__box">
@@ -92,7 +93,7 @@ class InvitedReviewersList extends Component {
           <TagEditor entityId={ reviewer.id }
                      data={ reviewer.tags }
                      onAdd={ this.handleTagAdd }
-                     onRemove={ removeUserTag }
+                     onRemove={ removeArticleReviewerTag }
           />
         </div>
       </div>
@@ -120,7 +121,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   createUserTag: usersActions.createUserTag,
-  removeUserTag: usersActions.removeUserTag,
+  removeArticleReviewerTag: articleActions.removeArticleReviewerTag,
   removeReviewInvite: reviewInvitesActions.removeReviewInvite,
   editReviewInvite: reviewInvitesActions.editReviewInvite
 };

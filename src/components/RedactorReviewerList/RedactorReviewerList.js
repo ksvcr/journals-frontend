@@ -74,7 +74,7 @@ class RedactorReviewerList extends Component {
           },
           head: () => 'Научные интересы',
           render: ({ sphere_scientific_interests }) => (
-            <InterestList data={ sphere_scientific_interests } />
+            sphere_scientific_interests ? <InterestList data={ sphere_scientific_interests } /> : null
           )
         },
         {
