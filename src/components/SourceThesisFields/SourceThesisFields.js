@@ -47,10 +47,10 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, c
       </div>
 
       <div className="form__field">
-        <label htmlFor="second_source_name" className="form__label">
+        <label htmlFor="second_name" className="form__label">
           Название на английском языке
         </label>
-        <Field name="second_source_name" id="second_source_name" className="text-field_white" component={ TextField }
+        <Field name="second_name" id="second_name" className="text-field_white" component={ TextField }
                placeholder="Введите название" />
       </div>
 
