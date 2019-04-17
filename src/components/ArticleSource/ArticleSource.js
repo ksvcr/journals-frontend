@@ -15,11 +15,11 @@ class ArticleSource extends Component {
       if (typeof data.author === 'string') {
         resultString = data.author;
       } else {
-        const author = Array.isArray(data.author)
+        const author = Array.isArray(data.author) && data.author.length
           ? data.author[0]
           : data.author;
-        const { lastname, initials } = author;
 
+        const { lastname, initials } = author;
         resultString = `${lastname} ${initials} `;
       }
     }
