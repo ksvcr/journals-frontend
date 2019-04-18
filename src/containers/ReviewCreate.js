@@ -4,6 +4,7 @@ import { push } from 'connected-react-router';
 
 import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
 
+import * as rubricsActions from '~/store/rubrics/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
 
@@ -13,7 +14,7 @@ class ReviewCreate extends Component {
   }
 
   handleInitialRequest = () => {
-    const { articleId, fetchArticle, fetchUser } = this.props;
+    const { articleId, fetchArticle, fetchUser, fetchRubrics } = this.props;
 
     const promises = [];
 
@@ -21,7 +22,12 @@ class ReviewCreate extends Component {
       promises.push(
         fetchArticle(articleId).then(({ value: articleData }) => {
           const authorId = articleData.author.user.id;
-          return fetchUser(authorId);
+          const { site:siteId } = articleData;
+
+          return Promise.all([
+            fetchUser(authorId),
+            fetchRubrics(siteId)
+          ]);
         })
       );
     }
@@ -90,7 +96,8 @@ const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleReview: articlesActions.createArticleReview,
-  fetchUser: usersActions.fetchUser
+  fetchUser: usersActions.fetchUser,
+  fetchRubrics: rubricsActions.fetchRubrics
 };
 
 export default connect(

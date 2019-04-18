@@ -9,8 +9,11 @@ import Button from '~/components/Button/Button';
 import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
+import ArticleVersions from '~/components/ArticleVersions/ArticleVersions';
+import ArticleSpec from '~/components/ArticleSpec/ArticleSpec';
 
 import * as validate from '~/utils/validate';
+import getArticleTypes from '~/services/getArticleTypes';
 
 import './review-create-form.scss';
 
@@ -57,6 +60,28 @@ class ReviewCreateForm extends Component {
     return label;
   }
 
+
+  get specData() {
+    const { articleData, sitesData, rubricsData } = this.props;
+    const site = sitesData[articleData.site];
+    const types = getArticleTypes();
+    const rubric = rubricsData[articleData.rubric];
+    return [
+      {
+        title: 'Для журнала',
+        value: site ? site.name : 'Журнал не найден'
+      },
+      {
+        title: 'Категория статьи:',
+        value: rubric ? rubric.name : 'Рубрика не найдена'
+      },
+      {
+        title: 'Тип статьи:',
+        value: types[articleData.article_type]
+      }
+    ];
+  }
+
   handleRecommendationChange = (value) => {
     const { change } = this.props;
     value = parseInt(value, 10);
@@ -65,10 +90,18 @@ class ReviewCreateForm extends Component {
 
   render() {
     const { articleData, handleSubmit, recommendation, reviews, author } = this.props;
-
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
         <h2 className="page__title">{ articleData.title }</h2>
+
+        <div className="review-create-form__spec">
+          <ArticleSpec data={ this.specData } />
+        </div>
+
+        <div className="review-create-form__versions">
+          <ArticleVersions articleId={ articleData.id }
+                           versions={ articleData.versions } />
+        </div>
 
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
@@ -120,7 +153,7 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles, users } = state;
+  const { articles, users, rubrics, sites } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
@@ -130,6 +163,8 @@ function mapStateToProps(state, props) {
     push,
     articleData,
     recommendation,
+    rubricsData: rubrics.data,
+    sitesData: sites.data,
     initialValues: {
       recommendation: 1
     },

@@ -1,4 +1,12 @@
 .review-create-form {
+  &__spec {
+    margin-bottom: 40px;
+  }
+
+  &__versions {
+    margin-bottom: 35px;
+  }
+
   &__estimate {
     padding: 32px 0;
   }
