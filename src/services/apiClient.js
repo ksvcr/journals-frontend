@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import fetchService from '~/utils/fetchService';
 
 const fetchInstance = new fetchService({
-  baseURL: process.env.REACT_APP_API_URL
+  baseURL: process.env.REACT_APP_API_URL || '/api'
 });
 
 const apiClient = {

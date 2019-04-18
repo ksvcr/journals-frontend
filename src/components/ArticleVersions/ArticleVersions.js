@@ -10,7 +10,7 @@ const ArticleVersions = ({ articleId, versions }) => {
   function renderItems() {
     return versions.sort((a, b) => a.version - b.version).map(({ version, date_create }) => (
       <li className="article-versions__item" key={ version }>
-        <Link className="article-versions__link" to={ `article/${articleId}/version/${version}` }>
+        <Link className="article-versions__link" to={ `/article/${articleId}/version/${version}` }>
           { `Версия ${ version } (${ formatDate.toString(date_create) })` }
         </Link>
       </li>
