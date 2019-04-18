@@ -14,6 +14,7 @@ import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
+import { allowEditStatuses } from '~/services/articleStatuses';
 
 class AuthorArticleList extends Component {
   state = {
@@ -28,7 +29,6 @@ class AuthorArticleList extends Component {
 
     let items = [];
 
-    const allowEditStatuses = ['DRAFT', 'PRELIMINARY_REVISION', 'CALL_OFF'];
     const isAllowEdit = ~allowEditStatuses.indexOf(data.state_article);
 
     if (!isLocked && isAllowEdit) {

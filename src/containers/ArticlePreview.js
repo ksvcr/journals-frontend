@@ -28,7 +28,7 @@ class ArticlePreview extends Component {
   }
 
   handleRequest = () => {
-    const { fetchArticle, fetchUser, articleId } = this.props;
+    const { fetchArticle, fetchUser, articleId, push } = this.props;
     return fetchArticle(articleId).then((res) => {
       const { author, reviews } = res.value;
       let userIds = [author.user.id];
@@ -40,6 +40,8 @@ class ArticlePreview extends Component {
         });
       }
       return userIds.map(id => fetchUser(id));
+    }).catch(() => {
+      push('/');
     });
   };
 
