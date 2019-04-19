@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 const SourceOneVolumeBookFields = () => {
   return (
@@ -67,9 +68,10 @@ const SourceOneVolumeBookFields = () => {
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="page_count" className="form__label">

@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 const SourceArticleSerialEditionFields = () => {
   return (
@@ -63,10 +64,11 @@ const SourceArticleSerialEditionFields = () => {
         <div className="form__row">
           <div className="form__col form__col_4">
             <label htmlFor="source_year_publication" className="form__label">
-              Год публикации <ReqMark />
+              Год публикации<ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="year_publication" id="source_year_publication" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue_number" className="form__label">

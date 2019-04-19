@@ -8,6 +8,7 @@ import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import Select from '~/components/Select/Select';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOptions }) => {
   return (
@@ -90,9 +91,10 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
           <div className="form__col form__col_4">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="issue_number" className="form__label">

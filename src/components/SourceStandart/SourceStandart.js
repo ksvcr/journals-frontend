@@ -6,6 +6,7 @@ import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import * as validate from '~/utils/validate';
 import moment from 'moment';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 const SourceStandart = () => {
   return (
@@ -79,9 +80,10 @@ const SourceStandart = () => {
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="page_count" className="form__label">

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsForm';
 
@@ -29,12 +30,16 @@ class AuthorSettings extends Component {
   };
 
   handleSubmit = (data) => {
-    const { updateCurrentUser, updateUser, userId } = this.props;
+    const { updateCurrentUser, updateUser, userId, push } = this.props;
 
     if (userId) {
-      updateUser(userId, data);
+      updateUser(userId, data).then(() => {
+        push('/');
+      });
     } else {
-      updateCurrentUser(data);
+      updateCurrentUser(data).then(() => {
+        push('/');
+      });
     }
   };
 
@@ -66,6 +71,7 @@ function mapStateToProps(state, props) {
 }
 
 const mapDispatchToProps = {
+  push,
   updateCurrentUser: userActions.updateCurrentUser,
   fetchUser: usersActions.fetchUser,
   updateUser: usersActions.updateUser,
