@@ -1,33 +1,17 @@
 import React from 'react';
 import { Field } from 'redux-form';
+import { FieldArray } from 'redux-form';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
 import FieldHint from '~/components/FieldHint/FieldHint';
+import SourceAuthorsFields from '~/components/SourceAuthorsFields/SourceAuthorsFields';
 
 const SourceOneVolumeBookFields = () => {
   return (
     <React.Fragment>
-      <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author[0].lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_6">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author[0].initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-        </div>
-      </div>
-
+      <FieldArray name="authors" component={ SourceAuthorsFields } />
       <div className="form__field">
         <label htmlFor="original_source_name" className="form__label">
           Название на языке оригинала <ReqMark />

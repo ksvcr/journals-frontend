@@ -79,7 +79,9 @@ export function serializeArticleData(data = {}) {
   }
 
   if (sources) {
-    serializedData.sources = sources.filter(item => item.resourcetype);
+    serializedData.sources = sources.filter(item => item.resourcetype).map(item => {
+      return item.author ? item : { ...item, author: item.authors }
+    });
   }
 
   // Удаляем загруженные файлы, так как апи принимает только base64
@@ -98,7 +100,7 @@ export function serializeArticleData(data = {}) {
 }
 
 export function deserializeArticleData(data = {}) {
-  const { author, collaborators, ...rest } = data;
+  const { author, collaborators, sources, ...rest } = data;
   const deserializedData = rest;
 
   if (author && collaborators) {
@@ -112,6 +114,18 @@ export function deserializeArticleData(data = {}) {
         roles: item.roles && item.roles.map(role => `role-${role}`)
       }))
     ];
+  }
+
+  if (sources) {
+    deserializedData.sources = sources.map(item => {
+      const newItem = { ...item };
+      if (Array.isArray(item.author)) {
+        newItem.authors = item.author;
+        delete newItem.author;
+      }
+
+      return newItem;
+    });
   }
 
   deserializedData.has_printed = Boolean(data.printed);

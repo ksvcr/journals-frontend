@@ -10,6 +10,8 @@ import Icon from '~/components/Icon/Icon';
 
 import './author-create-form.scss';
 import './assets/cancel.svg';
+import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import { getCountriesOptions } from '~/store/countries/selector';
 
 class AuthorCreateForm extends Component {
   handleReset = () => {
@@ -18,7 +20,7 @@ class AuthorCreateForm extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, countriesData, countriesOptions } = this.props;
     return (
       <form className="author-create-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
@@ -39,10 +41,10 @@ class AuthorCreateForm extends Component {
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="middle_name" className="form__label">
-                Отчество <ReqMark />
+                Отчество
               </label>
               <Field name="middle_name" id="middle_name" className="text-field_white" component={ TextField }
-                     placeholder="Введите отчество" validate={ [validate.required] } />
+                     placeholder="Введите отчество" />
             </div>
           </div>
         </div>
@@ -70,8 +72,13 @@ class AuthorCreateForm extends Component {
               <label htmlFor="country" className="form__label">
                 Страна
               </label>
-              <Field name="country" id="country" className="text-field_white"
-                     component={ TextField } placeholder="Введите страну" />
+              <Field name="country" id="country" validate={ [validate.required] }
+                     format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
+                     normalize={ option => option.value }
+                     placeholder="Выберите страну"
+                     options={ countriesOptions }
+                     className="searchable-select-wrapper_white"
+                     component={ SearchableSelect }  />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
@@ -136,9 +143,12 @@ AuthorCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-
+  const { countries } = state;
+  const countriesOptions = getCountriesOptions(state);
   return {
     form: formName,
+    countriesData: countries.data,
+    countriesOptions,
     initialValues: {
       role: 'AUTHOR'
     }

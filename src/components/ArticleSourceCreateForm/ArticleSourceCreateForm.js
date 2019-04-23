@@ -231,6 +231,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
+      authors: [{}],
       category: '1',
       defense_date: defaultDate,
       statement_date: defaultDate,
