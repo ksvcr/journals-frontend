@@ -167,11 +167,6 @@ class ArticlePublish extends Component {
     }
   };
 
-  handleEditArticleReview = (reviewId, formData) => {
-    const { articleId, editArticleReview } = this.props;
-    editArticleReview(articleId, reviewId, formData);
-  };
-
   handleAutoSave = (formData) => {
     const { siteId, createArticle, editArticle } = this.props;
 
@@ -225,9 +220,7 @@ class ArticlePublish extends Component {
 
           { articleStatus === 'REVISION' && (
             <ReviewsDialogList articleId={ articleId }
-                               reviews={ articleData.reviews }
-                               onSubmit={ this.handleEditArticleReview }
-            />
+                               reviews={ articleData.reviews } />
           ) }
 
           { articleStatus === 'PRELIMINARY_REVISION' &&

@@ -132,6 +132,8 @@ const apiClient = {
       { method: 'put', data }
     );
   },
+  createArticleReviewAnswer: (articleId, reviewId, data) =>
+    fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/answer/`, { method: 'put', data }),
   getArticleTags: (params) => fetchInstance.request('articles/tags/', { params }),
   getUserTags: (params) => fetchInstance.request('users/tags/', { params }),
 
