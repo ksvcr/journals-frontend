@@ -22,7 +22,7 @@ function sites(state = initialState, action) {
       const entity = entityNormalize.toObject(action.payload.results);
 
       if (!state.current && action.payload.results[0]) {
-        entity.current = action.payload.results[0].id;
+        entity.current = entity.ids.sort()[0];
       }
 
       return {
