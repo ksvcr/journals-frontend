@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, isInvalid, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import Button from '~/components/Button/Button';
@@ -26,24 +27,25 @@ class ArticleTranslateForm extends Component {
   }
 
   get wizardSteps() {
+    const { t } = this.props;
     return [
       {
-        title: 'Общие сведения',
+        title: t('common_content'),
         component: <ArticleCommonTranslateForm { ...this.formProps } />
       },
       {
-        title: 'Список литературы',
+        title: t('source_list'),
         component: <ArticleSourcesTranslateForm { ...this.formProps } />
       }
     ];
   }
 
   renderTools = () => {
-    const { handleSubmit, isInvalidForm } = this.props;
+    const { t, handleSubmit, isInvalidForm } = this.props;
     return (
       <React.Fragment>
         <Button className="button_orange" onClick={ handleSubmit } disabled={ isInvalidForm } >
-          Сохранить перевод
+          { t('save_translation') }
         </Button>
       </React.Fragment>
     );
@@ -108,6 +110,8 @@ function getInitialValues(state, props) {
 
   return initialValues;
 }
+
+ArticleTranslateForm = withNamespaces()(ArticleTranslateForm);
 
 export default connect(
   mapStateToProps,

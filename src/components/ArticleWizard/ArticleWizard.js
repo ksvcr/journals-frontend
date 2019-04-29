@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 
@@ -50,7 +51,7 @@ class ArticleWizard extends Component {
 
   render() {
     const { stepIndex } = this.state;
-    const { steps, tools } = this.props;
+    const { t, steps, tools } = this.props;
 
     return (
       <div className="article-wizard">
@@ -66,7 +67,7 @@ class ArticleWizard extends Component {
           <button className="article-wizard__nav article-wizard__nav_prev" type="button"
                   disabled={ stepIndex <= 0 } onClick={ this.handleStepPrev }>
             <Icon className="article-wizard__arrow article-wizard__arrow_prev" name="arrow" />
-            Назад
+            { t('prev') }
           </button>
 
           { tools &&
@@ -77,7 +78,7 @@ class ArticleWizard extends Component {
 
           <button className="article-wizard__nav article-wizard__nav_next" type="button"
                   disabled={ stepIndex >= steps.length-1 } onClick={ this.handleStepNext }>
-            Далее
+            { t('next') }
             <Icon className="article-wizard__arrow article-wizard__arrow_next" name="arrow" />
           </button>
         </div>
@@ -85,5 +86,8 @@ class ArticleWizard extends Component {
     );
   }
 }
+
+ArticleWizard = withNamespaces()(ArticleWizard);
+
 
 export default ArticleWizard;

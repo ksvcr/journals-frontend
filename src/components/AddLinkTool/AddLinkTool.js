@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EditorUtils from 'draft-js-plugins-utils';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import ToolTip from '~/components/ToolTip/ToolTip';
@@ -58,7 +59,7 @@ class AddLinkTool extends Component {
 
   render() {
     const { showURLInput, urlValue } = this.state;
-    const { getEditorState } = this.props;
+    const { t, getEditorState } = this.props;
     const hasLinkSelected = EditorUtils.hasEntity(getEditorState(), 'LINK');
     const classes = classNames('add-link-tool', 'editor-button', {
       'editor-button_active': hasLinkSelected
@@ -77,7 +78,7 @@ class AddLinkTool extends Component {
           className={ classes }
           onClick={ this.handlePromptOpen }
         >
-          Добавить ссылку
+          { t('add_link') }
           <Icon
             name="link"
             className="add-link-tool__icon editor-button__icon"
@@ -87,6 +88,7 @@ class AddLinkTool extends Component {
     );
   }
 }
+AddLinkTool = withNamespaces()(AddLinkTool);
 
 export default AddLinkTool;
 
@@ -97,5 +99,6 @@ const linkDecorator = {
     return <a href={ url }>{ props.children }</a>;
   }
 };
+
 
 export { linkDecorator };

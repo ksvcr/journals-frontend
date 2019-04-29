@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import ColorPicker from '~/components/ColorPicker/ColorPicker';
 import Icon from '~/components/Icon/Icon';
+import { withNamespaces } from 'react-i18next';
 
 import { styles } from '~/services/editorCustomStyler';
 
@@ -35,6 +36,7 @@ class ColorTool extends Component {
 
   render() {
     const { showColorPicker } = this.state;
+    const { t } = this.props;
     return (
       <div className="color-tool">
         <button
@@ -43,7 +45,7 @@ class ColorTool extends Component {
           onClick={ this.handlePickerShow }
         >
           <Icon name="letter" className="color-tool__icon" />
-          Выбрать цвет текста
+          { t('select_text_color') }
           <div
             className="color-tool__box"
             style={ { background: this.currentColor } }
@@ -61,5 +63,7 @@ class ColorTool extends Component {
     );
   }
 }
+ColorTool = withNamespaces()(ColorTool);
+
 
 export default ColorTool;

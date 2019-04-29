@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import DateFilter from '~/components/DateFilter/DateFilter';
@@ -25,21 +26,22 @@ class RedactorArticleList extends Component {
   };
 
   getToolsMenuItems = (data) => {
+    const { t } = this.props;
     const tools = [];
 
     if (data.state_article === 'AWAIT_PUBLICATION' && data.need_translation) {
       tools.push({
-        title: 'Посмотреть перевод',
+        title: t('see_translation'),
         link: `/article/${data.id}/translate`
       });
     }
 
     tools.push({
-      title: 'Редактировать',
+      title: t('edit'),
       link: `/article/${data.id}/edit`
     },
     {
-      title: 'Просмотр',
+      title: t('view'),
       type: 'preview',
       icon: 'preview',
       link: `/article/${data.id}`
@@ -49,10 +51,11 @@ class RedactorArticleList extends Component {
   };
 
   get dateTitle() {
+    const { t } =this.props;
     return {
-      'date_create': 'Создана',
-      'date_send_to_review': 'Отправлена',
-      'last_change': 'Изменена'
+      'date_create': t('created'),
+      'date_send_to_review': t('sended'),
+      'last_change': t('changed')
     };
   };
 
@@ -84,7 +87,7 @@ class RedactorArticleList extends Component {
   };
 
   get listProps() {
-    const { articlesArray, sitesData } = this.props;
+    const { t, articlesArray, sitesData } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -99,20 +102,20 @@ class RedactorArticleList extends Component {
             width: '30%'
           },
           isMain: true,
-          head: () => 'Название',
+          head: () => t('title_of_article'),
           render: (data) =>
-            data.title || 'Название статьи не указано'
+            data.title || t('title_of_article_not_found')
         },
         {
           style: {
             width: '20%'
           },
           sort: 'site',
-          head: () => 'Журнал',
+          head: () => t('journal'),
           render: (data) => {
             const siteId = data.site;
             const siteName = sitesData[siteId] && sitesData[siteId].name;
-            return siteName || 'Журнал не найден';
+            return siteName || t('journal_not_found');
           }
         },
         {
@@ -132,7 +135,7 @@ class RedactorArticleList extends Component {
             width: '13%'
           },
           sort: 'stage_article',
-          head: () => 'Этап',
+          head: () => t('stage'),
           headToolTip: () => <ListChecker data={ articleStageOptions } name="stage_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
@@ -143,7 +146,7 @@ class RedactorArticleList extends Component {
             width: '20%'
           },
           sort: 'state_article',
-          head: () => 'Статус',
+          head: () => t('state'),
           headToolTip: () => <ListChecker data={ articleStatusOptions } name="state_article"
                                           onChange={ this.handleCheckerFilterChange } />,
           render: (data) =>
@@ -200,6 +203,8 @@ const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
   removeArticleTag: articlesActions.removeArticleTag
 };
+
+RedactorArticleList = withNamespaces()(RedactorArticleList);
 
 export default connect(
   mapStateToProps,

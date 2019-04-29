@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { change, formValueSelector } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import CancelLink from '~/components/CancelLink/CancelLink';
@@ -41,7 +42,7 @@ class AuthorSitesList extends Component {
   };
 
   renderItems = () => {
-    const { ids, sitesData } = this.props;
+    const { t, ids, sitesData } = this.props;
     return ids.map(id => {
       const item = sitesData[id];
       return (
@@ -58,7 +59,7 @@ class AuthorSitesList extends Component {
             onClick={ this.handleRemove }
           >
             <Icon name="cancel" className="author-sites-list__remove-icon" />
-            Удалить журнал
+            { t('delete_jornal') }
           </button>
         </div>
       );
@@ -66,7 +67,7 @@ class AuthorSitesList extends Component {
   };
 
   render() {
-    const { userId } = this.props;
+    const { t, userId } = this.props;
     const { openAdd } = this.state;
     return (
       <div className="author-sites-list">
@@ -85,7 +86,7 @@ class AuthorSitesList extends Component {
               className="author-sites-list__add"
             >
               <Icon name="add" className="author-sites-list__add-icon" />
-              Добавить другие журналы
+              { t('add_other_jornal') }
             </button>
           ) : (
             <React.Fragment>
@@ -94,7 +95,7 @@ class AuthorSitesList extends Component {
               <div className="form">
                 <div className="form__field form__field_small">
                   <label htmlFor="sites-list" className="form__label">
-                    Выберите журнал:
+                    { t('select_jornal') }:
                   </label>
                   <SiteSelect id="sites-list" />
                 </div>
@@ -104,7 +105,7 @@ class AuthorSitesList extends Component {
                     type="button"
                     className="button_small"
                   >
-                    Добавить
+                    { t('add') }
                   </Button>
                 </div>
               </div>
@@ -134,6 +135,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   change
 };
+
+AuthorSitesList = withNamespaces()(AuthorSitesList);
 
 export default connect(
   mapStateToProps,

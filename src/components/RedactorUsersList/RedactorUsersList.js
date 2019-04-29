@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -63,13 +64,14 @@ class RedactorUsersList extends Component {
   };
 
   getToolsMenuItems = (data) => {
+    const { t } = this.props;
     return [
       {
         title: 'Войти',
         link: `/settings/${data.id}`
       },
       {
-        title: 'Заблокировать',
+        title: t('block'),
         handler: this.handleUserLock
       }
     ];
@@ -145,6 +147,8 @@ const mapDispatchToProps = {
   createUserTag: usersActions.createUserTag,
   removeUserTag: usersActions.removeUserTag
 };
+
+RedactorUsersList = withNamespaces()(RedactorUsersList);
 
 export default connect(
   mapStateToProps,

@@ -55,7 +55,7 @@ class ArticlesForReview extends Component {
         <div className="page__tools">
           <div className="form">
             <div className="form__field">
-              <label htmlFor="sites-list" className="form__label">Выбрать журнал</label>
+              <label htmlFor="sites-list" className="form__label">{ t('choose_jornal') }</label>
               <SiteSelect id="sites-list" onChange={ this.handleRequest } />
             </div>
             <div className="form__field">

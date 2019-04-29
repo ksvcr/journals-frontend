@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import cx from 'classnames';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types';
 import * as formatDate from '~/services/formatDate';
 import { getStatsByDate, getCountInMonth } from '~/store/stats/selector';
@@ -39,7 +40,7 @@ class MonthAccordion extends PureComponent {
   };
 
   get listProps() {
-    const { articles, sites } = this.props;
+    const { t, articles, sites } = this.props;
 
     return {
       data: articles,
@@ -52,10 +53,10 @@ class MonthAccordion extends PureComponent {
             width: '60%'
           },
           isMain: true,
-          head: () => 'Название',
+          head: () => t('title_of_article'),
           render: data => (
             <React.Fragment>
-              <div className={ `${accClass}__article-title` }>{ data.article.title || 'Название статьи не указано' }</div>
+              <div className={ `${accClass}__article-title` }>{ data.article.title || t('title_of_article_not_found') }</div>
               {
                 data.article.site && sites.map(site => (
                   site.id === data.article.site && (
@@ -70,7 +71,7 @@ class MonthAccordion extends PureComponent {
           style: {
             width: '20%'
           },
-          head: () => 'Выполнена',
+          head: () => t('done'),
           render: data => (
             <div className={ `${accClass}__article-date` }>
               { formatDate.toString(data.time) }
@@ -162,5 +163,7 @@ function mapStateToProps(state, props) {
     sites: getSitesArray(state),
   };
 }
+
+MonthAccordion = withNamespaces()(MonthAccordion);
 
 export default connect(mapStateToProps)(MonthAccordion);

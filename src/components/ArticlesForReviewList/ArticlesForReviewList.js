@@ -6,6 +6,7 @@ import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import DeadlineLabel from '~/components/DeadlineLabel/DeadlineLabel';
+import { withNamespaces } from 'react-i18next';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -23,23 +24,24 @@ class ArticlesForReviewList extends Component {
 
   getToolsMenuItems(data) {
     const tools = [];
+    const { t } = this.props;
 
     if (data.state_article === 'AWAIT_REVIEWER') {
       tools.push({
-        title: 'Принять статью',
+        title: t('accept_article'),
         handler: this.handleAcceptInvite
       });
     }
 
     if (data.state_article === 'AWAIT_REVIEW') {
       tools.push({
-        title: 'Написать рецензию',
+        title: t('write_review'),
         link: `/article/${data.id}/review`
       });
     }
 
     tools.push({
-      title: 'Просмотр',
+      title: t('view'),
       type: 'preview',
       icon: 'preview',
       link: `/article/${data.id}`
@@ -64,7 +66,7 @@ class ArticlesForReviewList extends Component {
   };
 
   get listProps() {
-    const { articlesArray, reviewInvites, reviewInvitesArticlesMap } = this.props;
+    const { t, articlesArray, reviewInvites, reviewInvitesArticlesMap } = this.props;
     const { dateField } = this.state;
 
     return {
@@ -80,15 +82,15 @@ class ArticlesForReviewList extends Component {
             width: '50%'
           },
           isMain: true,
-          head: () => 'Название',
-          render: data => data.title || 'Название статьи не указано'
+          head: () => t('title_of_article'),
+          render: data => data.title || t('title_of_article_not_found')
         },
         {
           style: {
             width: '13%'
           },
           sort: 'date_create',
-          head: () => 'Создана',
+          head: () => t('created'),
           render: data => formatDate.toString(data[dateField])
         },
         {
@@ -96,7 +98,7 @@ class ArticlesForReviewList extends Component {
             width: '20%'
           },
           sort: 'stage_article',
-          head: () => 'Этап',
+          head: () => t('stage'),
           render: data => getArticleStageTitle(data.stage_article)
         },
         {
@@ -104,7 +106,7 @@ class ArticlesForReviewList extends Component {
             width: '17%'
           },
           sort: 'state_article',
-          head: () => 'Статус',
+          head: () => t('state'),
           render: data => {
             const inviteId = reviewInvitesArticlesMap[data.id];
             const invite = reviewInvites[inviteId];
@@ -156,6 +158,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   acceptArticleReviewInvite: articlesActions.acceptArticleReviewInvite
 };
+
+ArticlesForReviewList = withNamespaces()(ArticlesForReviewList);
 
 export default connect(
   mapStateToProps,

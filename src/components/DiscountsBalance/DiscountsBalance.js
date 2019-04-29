@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import DiscountsTransfer from '~/components/DiscountsTransfer/DiscountsTransfer';
 
@@ -26,13 +27,14 @@ class DiscountsBalance extends Component {
 
   render() {
     const { showTransfer } = this.state;
+    const { t } = this.props;
     return (
       <div className="discounts-balance">
         <h3 className="discounts-balance__text">
           Баланс (руб): <span className="discounts-balance__value">{ this.balanceText }</span>
         </h3>
         <a href="#transfer" className="discounts-balance__transfer" onClick={ this.handleTrasnferClick }>
-          Передать другому пользователю
+          { t('give_to_another_user') }
         </a>
         {
           showTransfer &&
@@ -46,5 +48,7 @@ class DiscountsBalance extends Component {
 DiscountsBalance.propTypes = {
   balance: PropTypes.number.isRequired
 };
+
+DiscountsBalance = withNamespaces()(DiscountsBalance);
 
 export default DiscountsBalance;

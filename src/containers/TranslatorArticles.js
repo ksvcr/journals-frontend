@@ -28,6 +28,8 @@ class TranslatorArticles extends Component {
 
   get searchTargets() {
     const { t } = this.props;
+
+    console.log('this.props ==== ', this.props);
     return [
       {
         value: 'title',
@@ -55,11 +57,12 @@ class TranslatorArticles extends Component {
   };
 
   get selectTagsProps() {
+    const { t } = this.props;
     return {
       async: true,
       name: 'tags',
       loadOptions: this.loadOptions,
-      placeholder: 'Выберите тег',
+      placeholder: t('select_tag'),
       normalize: option => option.value,
       onChange: ({ value }) => {
         this.handleRequest({ filter: { tag_ids: value } });
@@ -86,7 +89,7 @@ class TranslatorArticles extends Component {
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <label className="form__label">Теги</label>
+                  <label className="form__label">{ t('tags') }</label>
                   <SearchableSelect { ...this.selectTagsProps } />
                 </div>
               </div>

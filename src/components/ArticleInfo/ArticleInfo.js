@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { withNamespaces } from 'react-i18next';
 import ArticleSpec from '~/components/ArticleSpec/ArticleSpec';
 import TagEditor from '~/components/TagEditor/TagEditor';
 
@@ -18,21 +19,21 @@ class ArticleInfo extends Component {
   };
 
   get specData() {
-    const { articleData, sitesData, rubricsData } = this.props;
+    const { t, articleData, sitesData, rubricsData } = this.props;
     const site = sitesData[articleData.site];
     const types = getArticleTypes();
 
     return [
       {
-        title: 'Для журнала',
-        value: site ? site.name : 'Журнал не найден'
+        title: t('for_journals'),
+        value: site ? site.name : t('journal_not_found')
       },
       {
-        title: 'Категория статьи:',
+        title: t('article_category'),
         value: rubricsData[articleData.rubric].name
       },
       {
-        title: 'Тип статьи:',
+        title: t('type_category'),
         value: types[articleData.article_type]
       }
     ];
@@ -74,6 +75,8 @@ const mapDispatchToProps = {
 ArticleInfo.propTypes = {
   id: PropTypes.number.isRequired
 };
+
+ArticleInfo = withNamespaces()(ArticleInfo);
 
 export default connect(
   mapStateToProps,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
@@ -17,14 +18,14 @@ import './translator-article-list.scss';
 
 class TranslatorArticleList extends Component {
   getToolsMenuItems = (data) => {
-    const { commitArticleTranslation } = this.props;
+    const { t, commitArticleTranslation } = this.props;
     return [
       {
         title: 'Перевести',
         link: `/article/${data.id}/translate`
       },
       {
-        title: 'Отправить редактору',
+        title: t('send_to_editor'),
         handler: (id) => {
           const languageCode = data.language === 'en' ? 'ru' : 'en';
           commitArticleTranslation(id, languageCode)
@@ -56,7 +57,7 @@ class TranslatorArticleList extends Component {
   };
 
   get listProps() {
-    const { articlesArray, sitesData } = this.props;
+    const { t, articlesArray, sitesData } = this.props;
 
     return {
       data: articlesArray,
@@ -72,19 +73,19 @@ class TranslatorArticleList extends Component {
             width: '26%'
           },
           isMain: true,
-          head: () => 'Название',
-          render: data => data.title || 'Название статьи не указано'
+          head: () => t('title_of_article'),
+          render: data => data.title || t('title_of_article_not_found')
         },
         {
           style: {
             width: '20%'
           },
           sort: 'site',
-          head: () => 'Журнал',
+          head: () => t('journal'),
           render: data => {
             const siteId = data.site;
             const siteName = sitesData[siteId] && sitesData[siteId].name;
-            return siteName || 'Журнал не найден';
+            return siteName || t('journal_not_found');
           }
         },
         {
@@ -92,7 +93,7 @@ class TranslatorArticleList extends Component {
             width: '12%'
           },
           sort: 'date_send_to_review',
-          head: () => 'Отправлена',
+          head: () => t('sended'),
           render: data => formatDate.toString(data.date_create)
         },
         {
@@ -106,7 +107,7 @@ class TranslatorArticleList extends Component {
           style: {
             width: '20%'
           },
-          head: () => 'Статус',
+          head: () => t('state'),
           render: data => <StatusLabel status={ data.state_article } />
         }
       ]
@@ -158,6 +159,8 @@ const mapDispatchToProps = {
   removeArticleTag: articlesActions.removeArticleTag,
   commitArticleTranslation: articlesActions.commitArticleTranslation
 };
+
+TranslatorArticleList = withNamespaces()(TranslatorArticleList);
 
 export default connect(
   mapStateToProps,

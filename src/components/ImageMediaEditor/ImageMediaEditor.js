@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import nanoid from 'nanoid';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import ToolTip from '~/components/ToolTip/ToolTip';
@@ -57,7 +58,7 @@ class ImageMediaEditor extends Component {
   };
 
   renderImageItems = () => {
-    const { data, onInteract, onCancelInteract } = this.props;
+    const { t, data, onInteract, onCancelInteract } = this.props;
     return data.images.map(item => (
       <div className="image-media-editor__item" key={ item.id }>
         <ToolTip
@@ -83,7 +84,7 @@ class ImageMediaEditor extends Component {
               />
               <div className="image-media-editor__box">
                 <Icon name="edit" className="image-media-editor__edit-icon" />
-                Редактировать
+                { t('edit') }
               </div>
             </div>
             <div className="image-media-editor__info">
@@ -124,5 +125,8 @@ class ImageMediaEditor extends Component {
     );
   }
 }
+
+ImageMediaEditor = withNamespaces()(ImageMediaEditor);
+
 
 export default ImageMediaEditor;

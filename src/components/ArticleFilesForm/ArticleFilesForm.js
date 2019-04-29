@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import { FieldArray, arrayPush } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
@@ -32,19 +33,16 @@ class ArticleFilesForm extends Component {
   };
 
   render() {
-    const { isProofreading } = this.props;
+    const { t, isProofreading } = this.props;
     return (
       <div className="article-files-form">
-        <h2 className="page__title">Файлы к статье</h2>
+        <h2 className="page__title">{ t('files_to_article') }</h2>
 
         { isProofreading ?
           <FieldArray name="file_atachments"
                       component={ props => <ArticleFileList download { ...props } /> } /> :
           <React.Fragment>
-            <p className="article-files-form__description">
-              Вы можете выбрать несколько файлов. Для каждого из них нужно будет
-              заполнить описание
-            </p>
+            <p className="article-files-form__description">{ t('select_several_files') }</p>
             <Dropzone className="article-files-form__dropzone"
                       accept=".doc, .docx, .rtf"
                       maxSize={ 50 * Math.pow(1024, 2) }
@@ -76,6 +74,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   arrayPush
 };
+
+ArticleFilesForm = withNamespaces()(ArticleFilesForm);
 
 export default connect(
   mapStateToProps,

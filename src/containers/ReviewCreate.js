@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
 import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
+import { withNamespaces } from 'react-i18next';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
@@ -52,10 +53,10 @@ class ReviewCreate extends Component {
   };
 
   render() {
-    const { articleId, reviewsFromCurrentUser } = this.props;
+    const { t, articleId, reviewsFromCurrentUser } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Новая рецензия</h1>
+        <h1 className="page__title">{ t('new_review') }</h1>
 
         <ReviewCreateForm
           id={ articleId }
@@ -92,6 +93,8 @@ const mapDispatchToProps = {
   createArticleReview: articlesActions.createArticleReview,
   fetchUser: usersActions.fetchUser
 };
+
+ReviewCreate = withNamespaces()(ReviewCreate);
 
 export default connect(
   mapStateToProps,

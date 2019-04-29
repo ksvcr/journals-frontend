@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import Button from '~/components/Button/Button';
@@ -53,11 +54,12 @@ class ArticleSourceCreateForm extends Component {
   }
 
   get thesisCategories() {
+    const { t } = this.props;
     return [{
-      title: 'Кандидатская',
+      title: t('candidates_work'),
       value: '1',
     }, {
-      title: 'Докторская',
+      title: t('doctoral_work'),
       value: '2'
     }]
   }
@@ -124,7 +126,7 @@ class ArticleSourceCreateForm extends Component {
   }
 
   render() {
-    const { handleSubmit, resourceType, isCorrector } = this.props;
+    const { t, handleSubmit, resourceType, isCorrector } = this.props;
     return (
       <form className="article-source-create-form form" onSubmit={ handleSubmit(this.handleSubmit) }>
         {
@@ -134,7 +136,7 @@ class ArticleSourceCreateForm extends Component {
               <div className="form__row">
                 <div className="form__col form__col_6">
                   <label htmlFor="resourcetype" className="form__label">
-                    Тип источника
+                    { t('type_of_source') }
                   </label>
                   <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
                          component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
@@ -142,7 +144,7 @@ class ArticleSourceCreateForm extends Component {
                 { resourceType === 'SourceThesis' ?
                   <div className="form__col form__col_6">
                     <label htmlFor="category" className="form__label">
-                      Тип диссертации
+                      { t('type_of_dissertation') }
                     </label>
                     <div className="form__box form__box_radios">
                       { this.renderThesisCategories() }
@@ -150,7 +152,7 @@ class ArticleSourceCreateForm extends Component {
                   </div> :
                   <div className="form__col form__col_6">
                     <label htmlFor="source_language" className="form__label">
-                      Язык оригинала
+                      { t('original_language') }
                     </label>
                     <Field name="language" id="source_language" className="select_white"
                            component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
@@ -192,7 +194,7 @@ class ArticleSourceCreateForm extends Component {
         <div className="form__field">
           <Button type="submit">
             <Icon name="save" className="article-source-create-form__save-icon" />
-            Сохранить
+            { t('save') }
           </Button>
         </div>
       </form>
@@ -245,6 +247,7 @@ function mapStateToProps(state, props) {
   };
 }
 
+ArticleSourceCreateForm = withNamespaces()(ArticleSourceCreateForm);
 
 export default connect(mapStateToProps)(ArticleSourceCreateForm);
 

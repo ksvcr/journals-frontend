@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { change, Field, FieldArray, formValueSelector } from 'redux-form';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
+import { withNamespaces } from 'react-i18next';
 
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
@@ -53,20 +54,20 @@ class ArticleSourcesForm extends Component {
 
   render() {
     const { isFile } = this.state;
-    const { isProofreading, articleData } = this.props;
+    const { t, isProofreading, articleData } = this.props;
     return (
       <div className="article-sources-form">
-        <h2 className="page__title">Список литературы</h2>
+        <h2 className="page__title">{ t('source_list') }</h2>
 
         { isProofreading && isFile ?
           <div className="article-sources-form__file">
-            <DownloadLink file={ articleData.list_literature_file } name="Список литературы" />
+            <DownloadLink file={ articleData.list_literature_file } name={ t('source_list') } />
           </div>
           :
           <div className="form__field">
             <Checkbox value={ isFile } checked={ isFile }
                       onChange={ this.handleChange }>
-              Хочу добавить список литературы файлом
+              { t('add_file_with_list') }
             </Checkbox>
             <div className="article-content-form__description">
               При добавлении списка литературы файлом, стоимость размещения увеличится на 30%
@@ -127,6 +128,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   change
 };
+
+ArticleSourcesForm = withNamespaces()(ArticleSourcesForm);
 
 export default connect(
   mapStateToProps,

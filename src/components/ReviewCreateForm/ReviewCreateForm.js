@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
@@ -28,19 +29,20 @@ class ReviewCreateForm extends Component {
   };
 
   get recommendationOptions() {
+    const { t } = this.props;
     return [
       {
-        title: 'Принять',
+        title: t('accept'),
         value: 1,
         color: 'green'
       },
       {
-        title: 'Доработать',
+        title: t('finalize'),
         value: 2,
         color: 'orange'
       },
       {
-        title: 'Отклонить',
+        title: t('reject'),
         value: 3,
         color: 'red'
       }
@@ -48,8 +50,8 @@ class ReviewCreateForm extends Component {
   }
 
   get commentForAuthorLabel() {
-    const { reviews, recommendation } = this.props;
-    let label = 'Текст рецензии';
+    const { t, reviews, recommendation } = this.props;
+    let label = t('review_text');
     const review_round = reviews.length + 1;
     if (recommendation !== 1) {
       label = `Замечания после ${review_round} раунда рецензирования`;
@@ -64,7 +66,7 @@ class ReviewCreateForm extends Component {
   };
 
   render() {
-    const { articleData, handleSubmit, recommendation, reviews, author } = this.props;
+    const { t, articleData, handleSubmit, recommendation, reviews, author } = this.props;
 
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
@@ -72,7 +74,7 @@ class ReviewCreateForm extends Component {
 
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
-            Ваши рекомендации к статье:
+            { t('your_article_recommendations') }:
           </label>
           <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
@@ -107,7 +109,7 @@ class ReviewCreateForm extends Component {
         </div>
 
         <div className="form__field">
-          <Button type="submit">Отправить рецензию</Button>
+          <Button type="submit">{ t('send_review') }</Button>
         </div>
       </form>
     ) : null;
@@ -136,6 +138,8 @@ function mapStateToProps(state, props) {
     author
   };
 }
+
+ReviewCreateForm = withNamespaces()(ReviewCreateForm);
 
 export default connect(
   mapStateToProps

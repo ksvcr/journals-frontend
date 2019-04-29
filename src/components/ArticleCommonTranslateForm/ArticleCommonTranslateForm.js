@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
@@ -10,14 +11,14 @@ import * as validate from '~/utils/validate';
 
 class ArticleCommonTranslateForm extends Component {
   renderFinancingSources = () => {
-    const { articleData } = this.props;
+    const { t, articleData } = this.props;
     return articleData.financing_sources.map((item, index) => (
       <FieldSet legend={ `Грант №${index + 1}` } key={ item.id }>
         <Field type="hidden" component={ TextField } name={ `financing_sources[${index}].id` } value={ item.id } />
         <div className="form__field">
           <label htmlFor={ `financing_sources[${index}].organization` }
                  className="form__label">
-            Название организации <ReqMark />
+            { t('title_of_organization') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview text-field_dark" textarea
@@ -30,7 +31,7 @@ class ArticleCommonTranslateForm extends Component {
         <div className="form__field">
           <label htmlFor={ `financing_sources[${index}].grant_name` }
                  className="form__label" >
-            Название гранта <ReqMark />
+            { t('title_of_grant') } <ReqMark />
           </label>
           <TextField className="text-field_preview text-field_dark" textarea
                      value={ item.grant_name } readOnly />
@@ -43,10 +44,10 @@ class ArticleCommonTranslateForm extends Component {
   };
 
   render() {
-    const { articleData } = this.props;
+    const { t, articleData } = this.props;
     return (
       <div className="article-common-translate-form">
-        <h2 className="page__title">Общие сведения</h2>
+        <h2 className="page__title">{ t('common_content') }</h2>
 
         <div className="form__field">
           <label htmlFor="title" className="form__label">
@@ -74,7 +75,7 @@ class ArticleCommonTranslateForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_keywords" className="form__label">
-            Ключевые слова <ReqMark />
+            { t('keywords') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview" textarea
@@ -86,7 +87,7 @@ class ArticleCommonTranslateForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_keywords" className="form__label">
-            Аннотация <ReqMark />
+            { t('annotation') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview" textarea
@@ -99,7 +100,7 @@ class ArticleCommonTranslateForm extends Component {
         { articleData.conflict_interest && (
           <div className="form__field">
             <label className="form__label">
-              Конфликт интересов <ReqMark />
+              { t('conflict_of_interest') } <ReqMark />
             </label>
 
             <TextField className="text-field_preview" readOnly
@@ -111,7 +112,7 @@ class ArticleCommonTranslateForm extends Component {
         ) }
         { articleData.financing_sources.length > 0 && (
           <div className="form__field">
-            <label className="form__label">Финансирование</label>
+            <label className="form__label">{ t('financing') }</label>
             { this.renderFinancingSources() }
           </div>
         ) }
@@ -127,5 +128,7 @@ function mapStateToProps(state, props) {
     articleData: state.articles.data[id]
   };
 }
+
+ArticleCommonTranslateForm = withNamespaces()(ArticleCommonTranslateForm);
 
 export default connect(mapStateToProps)(ArticleCommonTranslateForm);

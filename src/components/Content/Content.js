@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import Renderer from '~/components/Renderer/Renderer';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
@@ -45,7 +46,7 @@ class Content extends Component {
   };
 
   render() {
-    const { data, author } = this.props;
+    const { t, data, author } = this.props;
     const { content_blocks = [], financing_sources = [] } = data;
     const reviews = data.reviews.filter(item => item.recommendation === 1);
 
@@ -53,11 +54,11 @@ class Content extends Component {
       <div className="content">
         { data.text_to_description && (
           <React.Fragment>
-            <h2 className="content__title">Аннотация</h2>
+            <h2 className="content__title">{ t('annotation') }</h2>
             <p>{ data.text_to_description }</p>
             { data.text_to_keywords && (
               <div className="content__keywords">
-                <div className="content__keywords-title">Ключевые слова:</div>
+                <div className="content__keywords-title">{ t('keywords') }</div>
                 <div className="content__keywords-text">
                   { data.text_to_keywords }
                 </div>
@@ -70,11 +71,11 @@ class Content extends Component {
 
         <div className="content__footer">
           <div className="content__additional">
-            <h3>Дополнительные материалы</h3>
-            <p>Не указаны</p>
+            <h3>{ t('additional_materials') }</h3>
+            <p>{ t('not_specified') }</p>
           </div>
           <div className="content__financing">
-            <h3>Финансирование</h3>
+            <h3>{ t('financing') }</h3>
             { financing_sources ? (
               <ul> { this.renderFinancingSources(financing_sources) } </ul>
             ) : (
@@ -87,10 +88,10 @@ class Content extends Component {
           </div>
           <div className="content__thanks">
             <h3>Благодарности</h3>
-            { data.thanks_text ? <p>{ data.thanks_text }</p> : <p>Не указаны</p> }
+            { data.thanks_text ? <p>{ data.thanks_text }</p> : <p>{ t('not_specified') }</p> }
           </div>
           <div className="content__conflict">
-            <h3>Конфликт интересов</h3>
+            <h3>{ t('conflict_of_interest') }</h3>
             { data.conflict_interest ? (
               <p>{ data.conflict_interest }</p>
             ) : (
@@ -99,13 +100,13 @@ class Content extends Component {
           </div>
           { data.sources && (
             <div className="content__literature">
-              <h3>Список литературы</h3>
+              <h3>{ t('source_list') }</h3>
               <ul>{ this.renderSourcesList() }</ul>
             </div>
           ) }
           { reviews && (
             <div className="content__reviews">
-              <h3>Рецензия</h3>
+              <h3>{ t('review') }</h3>
               <ReviewsHistory
                 reviews={ reviews }
                 author={ author }
@@ -118,5 +119,7 @@ class Content extends Component {
     );
   }
 }
+
+Content = withNamespaces()(Content);
 
 export default Content;

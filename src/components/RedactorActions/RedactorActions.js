@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
@@ -16,7 +17,7 @@ class RedactorActions extends Component {
   };
 
   get actions() {
-    const { articleId, articleState } = this.props;
+    const { t, articleId, articleState } = this.props;
 
     const actions = [
       {
@@ -24,14 +25,14 @@ class RedactorActions extends Component {
         component: <RedactorReview articleId={ articleId } />
       },
       {
-        title: 'История',
+        title: t('history'),
         component: <ArticleHistory articleId={ articleId } />
       }
     ];
 
     if (isShowDecision(articleState)) {
       actions.push({
-        title: 'Решение',
+        title: t('decision'),
         component: <div className="redactor-actions__decision">
           <RedactorDecision articleId={ articleId } />
         </div>
@@ -98,6 +99,8 @@ function mapStateToProps(state, props) {
     articleState: articles.data[articleId] && articles.data[articleId].state_article
   };
 }
+
+RedactorActions = withNamespaces()(RedactorActions);
 
 export default connect(
   mapStateToProps

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 import Calendar from '~/components/Calendar/Calendar';
@@ -41,24 +42,25 @@ class DateFilter extends Component {
   }
 
   get filterOptions() {
+    const { t } = this.props;
     return [
       {
-        title: 'Дата создания',
+        title: t('date_of_creation'),
         value: 'date_create'
       },
       {
-        title: 'Дата отправки',
+        title: t('departure_date'),
         value: 'date_send_to_review'
       },
       {
-        title: 'Последнее изменение',
+        title: t('last_change'),
         value: 'last_change'
       }
     ];
   }
 
   render() {
-    const { field } = this.props;
+    const { t, field } = this.props;
     return (
       <div className="date-filter">
         <form className="form">
@@ -67,7 +69,7 @@ class DateFilter extends Component {
                     onChange={ this.handleFieldChange } className="select_small" />
           </div>
           <div className="form__field form__field_small">
-            <label htmlFor="date-start" className="form__label form__label_small">Задать период</label>
+            <label htmlFor="date-start" className="form__label form__label_small">{ t('set_period') }</label>
             <div className="form__row form__row_small">
               <div className="form__col form__col_small">
                 <Calendar id="date-start"
@@ -98,5 +100,7 @@ DateFilter.propTypes = {
   field: PropTypes.string.isRequired,
   onChange: PropTypes.func
 };
+
+DateFilter = withNamespaces()(DateFilter);
 
 export default DateFilter;

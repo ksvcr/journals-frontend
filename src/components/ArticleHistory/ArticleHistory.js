@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as articleHistoryActions from '~/store/articleHistory/actions';
 
 import List from '~/components/List/List';
+import { withNamespaces } from 'react-i18next';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleActionTitle } from '~/services/articleActions';
@@ -19,7 +20,7 @@ class ArticleHistory extends Component {
   }
 
   get listProps() {
-    const { articleHistoryArray } = this.props;
+    const { t, articleHistoryArray } = this.props;
 
     return {
       data: articleHistoryArray,
@@ -29,7 +30,7 @@ class ArticleHistory extends Component {
           style: {
             width: '25%'
           },
-          head: () => 'Время',
+          head: () => t('time'),
           render: ({ date_create }) => {
             return <div className="article-history__time"> { formatDate.toStringWithTime(date_create) } </div>
           }
@@ -38,28 +39,28 @@ class ArticleHistory extends Component {
           style: {
             width: '25%'
           },
-          head: () => 'Действие',
+          head: () => t('action'),
           render: ({ action }) => getArticleActionTitle(action)
         },
         {
           style: {
             width: '20%'
           },
-          head: () => 'Этап',
+          head: () => t('stage'),
           render: ({ stage_article }) => getArticleStageTitle(stage_article)
         },
         {
           style: {
             width: '15%'
           },
-          head: () => 'От кого',
+          head: () => t('from_whom'),
           render: ({ from_user_role }) => getUserRoleTitle(from_user_role, 'from')
         },
         {
           style: {
             width: '15%'
           },
-          head: () => 'Кому',
+          head: () => t('to_whom'),
           render: ({ user_role }) => getUserRoleTitle(user_role, 'to')
         }
       ]
@@ -90,6 +91,9 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   fetchArticleHistory: articleHistoryActions.fetchArticleHistory
 };
+
+ArticleHistory = withNamespaces()(ArticleHistory);
+
 
 export default connect(
   mapStateToProps,

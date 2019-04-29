@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { withNamespaces } from 'react-i18next';
 
 import * as formatDate from '~/services/formatDate';
 import Icon from '~/components/Icon/Icon';
@@ -34,6 +35,7 @@ class DeadlineEditor extends Component {
 
   render() {
     const { date } = this.state;
+    const { t } = this.props;
     return (
       <div className="deadline-editor">
         <div className="deadline-editor__holder">
@@ -47,7 +49,7 @@ class DeadlineEditor extends Component {
               <div className="deadline-editor__field">
                 <div className="form__field form__field_small">
                   <label htmlFor="deadline" className="form__label form__label_small">
-                    Другая дата
+                    { t('other_date') }
                   </label>
                   <Calendar className="text-field_calendar text-field_small"
                             id="deadline"
@@ -71,5 +73,8 @@ DeadlineEditor.propTypes = {
   date: PropTypes.string,
   onChange: PropTypes.func
 };
+
+DeadlineEditor = withNamespaces()(DeadlineEditor);
+
 
 export default DeadlineEditor;

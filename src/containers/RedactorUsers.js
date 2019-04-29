@@ -6,6 +6,7 @@ import Select from '~/components/Select/Select';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
+import { withNamespaces } from 'react-i18next';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersParams } from '~/store/users/selector';
@@ -28,14 +29,15 @@ class RedactorUsers extends Component {
   };
 
   get searchTargets() {
+    const { t } = this.props;
     return [
       {
         value: 'name',
-        title: 'По имени'
+        title: t('search_by_name')
       },
       {
         value: 'science',
-        title: 'По научным данным'
+        title: t('search_by_scientific_data')
       }
     ];
   }
@@ -65,11 +67,12 @@ class RedactorUsers extends Component {
   };
 
   get selectTagsProps() {
+    const { t } = this.props;
     return {
       async: true,
       name: 'tags',
       loadOptions: this.loadOptions,
-      placeholder: 'Выберите тег',
+      placeholder: t('select_tag'),
       normalize: option => option.value,
       onChange: ({ value }) => this.handleRequest({ filter: { tag_ids: value } })
     };
@@ -80,14 +83,14 @@ class RedactorUsers extends Component {
   };
 
   render() {
-    const { total, paginate } = this.props;
+    const { t, total, paginate } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Пользователи</h1>
+        <h1 className="page__title">{ t('users') }</h1>
         <div className="page__tools">
           <div className="form">
             <div className="form__field">
-              <label className="form__label">Поиск пользователя</label>
+              <label className="form__label">{ t('user_search') }</label>
               <SearchPanel
                 hasDefaultTarget={ false }
                 targets={ this.searchTargets }
@@ -98,13 +101,13 @@ class RedactorUsers extends Component {
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <label className="form__label">Журнал</label>
+                  <label className="form__label">{ t('journal') }</label>
                   <Select { ...this.selectSiteProps } />
                 </div>
               </div>
               <div className="form__col form__col_6">
                 <div className="form__field">
-                  <label className="form__label">Теги</label>
+                  <label className="form__label">{ t('tags') }</label>
                   <SearchableSelect { ...this.selectTagsProps } />
                 </div>
               </div>
@@ -140,6 +143,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers
 };
+
+RedactorUsers = withNamespaces()(RedactorUsers);
 
 export default connect(
   mapStateToProps,

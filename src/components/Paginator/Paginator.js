@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import './paginator.scss';
 
@@ -38,7 +39,7 @@ class Paginator extends Component {
   };
 
   render() {
-    const { total, current } = this.props;
+    const { t, total, current } = this.props;
 
     return (
       <div className="paginator">
@@ -48,7 +49,7 @@ class Paginator extends Component {
         </button>
         <button type="button" className="paginator__button paginator__button_prev"
                 onClick={ this.handlePrev }>
-          Назад
+          { t('prev') }
         </button>
 
         <div className="paginator__holder">
@@ -59,7 +60,7 @@ class Paginator extends Component {
 
         <button type="button" className="paginator__button paginator__button_next"
                 onClick={ this.handleNext }>
-          Вперед
+          { t('next') }
         </button>
         <button type="button" className="paginator__button paginator__button_end"
                 onClick={ this.handleEnd }>
@@ -75,5 +76,7 @@ Paginator.propTypes = {
   total: PropTypes.number.isRequired,
   onChange: PropTypes.func
 };
+
+Paginator = withNamespaces()(Paginator);
 
 export default Paginator;

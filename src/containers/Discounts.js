@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import DiscountsDescription from '~/components/DiscountsDescription/DiscountsDescription';
 import DiscountsBalance from '~/components/DiscountsBalance/DiscountsBalance';
 import DiscountsHistory from '~/components/DiscountsHistory/DiscountsHistory';
+import { withNamespaces } from 'react-i18next';
+
 
 import * as discountsActions from '~/store/discounts/actions';
 
@@ -16,11 +18,11 @@ class Discounts extends Component {
   }
 
   render() {
-    const { balance, incomingOperations, outcomingOperations } = this.props;
+    const { t, balance, incomingOperations, outcomingOperations } = this.props;
 
     return (
       <React.Fragment>
-        <h1 className="page__title">Мои скидки</h1>
+        <h1 className="page__title">{ t('my_discounts') }</h1>
         <DiscountsDescription />
         <hr className="page__divider"/>
         <DiscountsBalance balance={ balance } />
@@ -39,5 +41,7 @@ function mapStateToProps(state) {
     balance
   };
 }
+Discounts = withNamespaces()(Discounts);
+
 
 export default connect(mapStateToProps)(Discounts);

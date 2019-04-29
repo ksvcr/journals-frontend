@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, FieldArray, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 import Checkbox from '~/components/Checkbox/Checkbox';
@@ -127,17 +128,17 @@ class ArticleCommonForm extends Component {
   };
 
   render() {
-    const { hasFinancing, hasPrinted, isConflictInterest, useAddressFromProfile } = this.props;
+    const { t, hasFinancing, hasPrinted, isConflictInterest, useAddressFromProfile } = this.props;
 
     return (
       <div className="article-common-form">
-        <h2 className="page__title">Общие сведения</h2>
+        <h2 className="page__title">{ t('common_content') }</h2>
 
         { this.hasPublishAccess && (
           <React.Fragment>
             <div className="form__field">
               <label htmlFor="language" className="form__label">
-                Язык статьи
+                { t('article_language') }
               </label>
               <div className="form__row">
                 <div className="form__col form__col_4">
@@ -161,7 +162,7 @@ class ArticleCommonForm extends Component {
               <div className="form__col form__col_4">
                 <div className="form__field">
                   <label htmlFor="rubric_set[0]" className="form__label">
-                    Направление
+                    { t('direction') }
                   </label>
                   <Field name="rubric_set[0]" id="rubric_set[0]" options={ this.rubricsOptions[0] }
                          onChange={ (e, val) => this.handleRubricChange(0, val) } component={ Select } />
@@ -171,7 +172,7 @@ class ArticleCommonForm extends Component {
                 <div className="form__col form__col_4">
                   <div className="form__field">
                     <label htmlFor="rubric_set[1]" className="form__label">
-                      Категория
+                      { t('category') }
                     </label>
                     <Field name="rubric_set[1]" id="rubric_set[1]" options={ this.rubricsOptions[1] }
                            onChange={ (e, val) => this.handleRubricChange(1, val) } component={ Select } />
@@ -182,7 +183,7 @@ class ArticleCommonForm extends Component {
                 <div className="form__col form__col_4">
                   <div className="form__field">
                     <label htmlFor="rubric_set[2]" className="form__label">
-                      Подкатегория
+                      { t('subcategory') }
                     </label>
                     <Field name="rubric_set[2]" id="rubric_set[2]" options={ this.rubricsOptions[2] }
                            onChange={ (e, val) => this.handleRubricChange(2, val) } component={ Select } />
@@ -228,7 +229,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_keywords" className="form__label">
-            Ключевые слова (через запятую) <ReqMark />
+            { t('keywords_with_comma') } <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
           <Field name="text_to_keywords" id="text_to_keywords"
@@ -238,7 +239,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_description" className="form__label">
-            Аннотация <ReqMark />
+            { t('annotation') } <ReqMark />
           </label>
           <Field name="text_to_description" id="text_to_description"
                  textarea minRows={ 2 } component={ TextField }
@@ -247,7 +248,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label className="form__label">
-            Конфликт интересов <ReqMark />
+            { t('conflict_of_interest') } <ReqMark />
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
@@ -262,7 +263,7 @@ class ArticleCommonForm extends Component {
         </div>
 
         <div className="form__field">
-          <label className="form__label">Финансирование</label>
+          <label className="form__label">{ t('financing') }</label>
           <div className="form__switcher">
             <Field name="has_financing" id="has_financing" type="checkbox"
                    component={ Switcher } />
@@ -278,7 +279,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label className="form__label">
-            Нужна печатная копия
+            { t('need_printed_copy') }
           </label>
           <div className="form__switcher">
             <Field name="has_printed" id="has_printed" type="checkbox"
@@ -344,6 +345,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   change
 };
+
+ArticleCommonForm = withNamespaces()(ArticleCommonForm);
 
 export default connect(
   mapStateToProps,

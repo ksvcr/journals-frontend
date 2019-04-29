@@ -40,14 +40,14 @@ class AuthorArticleList extends Component {
 
     if (data.state_article !== 'CALL_OFF' && data.state_article !== 'DRAFT') {
       items.push({
-        title: 'Отозвать',
+        title: t('revoke'),
         handler: this.handleCallOff
       });
     }
 
     if (data.state_article === 'AWAIT_PAYMENT') {
       items.push({
-        title: 'Оплатить',
+        title: t('to_pay'),
         handler: this.handlePaymentShow
       });
     }
@@ -55,7 +55,7 @@ class AuthorArticleList extends Component {
     items = [
       ...items,
       {
-        title: 'Просмотр',
+        title: t('view'),
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
@@ -66,10 +66,11 @@ class AuthorArticleList extends Component {
   }
 
   get dateTitle() {
+    const { t } = this.props;
     return {
-      date_create: 'Создана',
-      date_send_to_review: 'Отправлена',
-      last_change: 'Изменена'
+      date_create: t('created'),
+      date_send_to_review: t('sended'),
+      last_change: t('changed')
     };
   }
 
@@ -123,7 +124,7 @@ class AuthorArticleList extends Component {
           },
           isMain: true,
           head: () => t('title'),
-          render: data => data.title || 'Название статьи не указано'
+          render: data => data.title || t('title_of_article_not_found')
         },
         {
           style: {

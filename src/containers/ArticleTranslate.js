@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
 import ArticleTranslateForm from '~/components/ArticleTranslateForm/ArticleTranslateForm';
 import * as articlesActions from '~/store/articles/actions';
@@ -37,11 +38,11 @@ class ArticleTranslate extends Component {
   };
 
   render() {
-    const { articleId, isFulfilled } = this.props;
+    const { t, articleId, isFulfilled } = this.props;
 
     return (
       <React.Fragment>
-        <h1 className="page__title">Перевод статьи</h1>
+        <h1 className="page__title">{ t('article_translation') }</h1>
 
         { isFulfilled &&
           <ArticleTranslateForm id={ articleId }
@@ -72,6 +73,8 @@ const mapDispatchToProps = {
   fetchArticleTranslation: articlesActions.fetchArticleTranslation,
   editArticleTranslation: articlesActions.editArticleTranslation
 };
+
+ArticleTranslate = withNamespaces()(ArticleTranslate);
 
 export default connect(
   mapStateToProps,

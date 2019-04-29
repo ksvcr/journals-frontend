@@ -55,11 +55,12 @@ class CorrectorArticles extends Component {
   };
 
   get selectTagsProps() {
+    const { t } = this.props;
     return {
       async: true,
       name: 'tags',
       loadOptions: this.loadOptions,
-      placeholder: 'Выберите тег',
+      placeholder: t('select_tag'),
       normalize: option => option.value,
       onChange: ({ value }) => {
         this.handleRequest({ filter: { tag_ids: value } });

@@ -77,18 +77,18 @@ class CorrectorArticleList extends Component {
           isMain: true,
           head: () => t('title'),
           render: (data) =>
-            data.title || 'Название статьи не указано'
+            data.title || t('title_of_article_not_found')
         },
         {
           style: {
             width: '20%'
           },
           sort: 'site',
-          head: () => 'Журнал',
+          head: () => t('jornal'),
           render: (data) => {
             const siteId = data.site;
             const site = sitesData[siteId];
-            return site ? site.name : 'Журнал не найден';
+            return site ? site.name : t('journal_not_found');
           }
         },
         {
@@ -96,7 +96,7 @@ class CorrectorArticleList extends Component {
             width: '15%'
           },
           sort: 'date_create',
-          head: () => 'Отправлена',
+          head: () => t('sended'),
           render: (data) => formatDate.toString(data.date_create)
         },
         {

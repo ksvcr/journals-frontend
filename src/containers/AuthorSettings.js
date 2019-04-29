@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import AuthorSettingsForm from '~/components/AuthorSettingsForm/AuthorSettingsForm';
+import { withNamespaces } from 'react-i18next';
 
 import * as userActions from '~/store/user/actions';
 import * as usersActions from '~/store/users/actions';
@@ -39,10 +40,10 @@ class AuthorSettings extends Component {
   };
 
   render() {
-    const { userId, form } = this.props;
+    const { t, userId, form } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Настройки</h1>
+        <h1 className="page__title">{ t('settings') }</h1>
 
         <div className="page__tools">
           <AuthorSitesList form={ form } userId={ userId } />
@@ -71,5 +72,7 @@ const mapDispatchToProps = {
   updateUser: usersActions.updateUser,
   fetchCountries: countriesActions.fetchCountries
 };
+AuthorSettings = withNamespaces()(AuthorSettings);
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);
