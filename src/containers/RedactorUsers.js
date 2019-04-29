@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
-import Select from '~/components/Select/Select';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
@@ -11,6 +10,7 @@ import * as usersActions from '~/store/users/actions';
 import { getUsersParams } from '~/store/users/selector';
 import { getSitesArray } from '~/store/sites/selector';
 import apiClient from '~/services/apiClient';
+import SiteSelect from '~/components/SiteSelect/SiteSelect';
 
 class RedactorUsers extends Component {
   componentDidMount() {
@@ -18,13 +18,13 @@ class RedactorUsers extends Component {
   }
 
   handleRequest = (params = {}) => {
-    const { fetchUsers, usersParams } = this.props;
+    const { siteId, fetchUsers, usersParams } = this.props;
     const data = {
       ...usersParams,
       ...params,
       search: params.search_query || usersParams.search
     };
-    fetchUsers(data);
+    fetchUsers(siteId, data);
   };
 
   get searchTargets() {
@@ -38,20 +38,6 @@ class RedactorUsers extends Component {
         title: 'По научным данным'
       }
     ];
-  }
-
-  get selectSiteProps() {
-    const { sitesArray } = this.props;
-    const options = sitesArray.map(item => ({
-      title: item.name,
-      value: item.id
-    }));
-
-    return {
-      name: 'site',
-      options,
-      onChange: event => {}
-    };
   }
 
   loadOptions = inputValue => {
@@ -99,7 +85,7 @@ class RedactorUsers extends Component {
               <div className="form__col form__col_6">
                 <div className="form__field">
                   <label className="form__label">Журнал</label>
-                  <Select { ...this.selectSiteProps } />
+                  <SiteSelect id="sites-list" onChange={ this.handleRequest } />
                 </div>
               </div>
               <div className="form__col form__col_6">
@@ -127,10 +113,11 @@ class RedactorUsers extends Component {
 }
 
 function mapStateToProps(state) {
-  const { users } = state;
+  const { users, sites } = state;
   const { total, paginate } = users;
   return {
     usersParams: getUsersParams(state),
+    siteId: sites.current,
     total,
     paginate,
     sitesArray: getSitesArray(state)

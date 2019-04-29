@@ -30,7 +30,7 @@ class RedactorReviewerList extends Component {
       search: params.search_query || usersParams.search,
       role: 'REVIEWER'
     };
-    fetchUsers(data);
+    fetchUsers(null, data);
   };
 
   renderName = ({ last_name, first_name, middle_name }) =>
