@@ -121,6 +121,7 @@ class ArticlePublish extends Component {
           data.state_article = 'SENT';
           break;
         case 'REVISION':
+        case 'PRELIMINARY_REVISION':
           // Доработка
           data.state_article = 'MODIFIED';
           break;
