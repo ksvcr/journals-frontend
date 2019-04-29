@@ -59,8 +59,8 @@ class InvitedReviewersList extends Component {
 
     return {
       data: reviewInvites,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } onClose={ onClose } />
       ),
       box: this.renderBox,
       cells: [

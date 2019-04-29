@@ -5,9 +5,9 @@ import './point-menu-button.scss';
 
 class PointMenuButton extends Component {
   handleClick = () => {
-    const { onClick, index } = this.props;
+    const { onClick, id } = this.props;
     if (onClick) {
-      onClick(index);
+      onClick(id);
     }
   };
 
