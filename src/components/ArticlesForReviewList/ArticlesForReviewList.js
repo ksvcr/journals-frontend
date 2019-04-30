@@ -73,8 +73,8 @@ class ArticlesForReviewList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) }  onClose={ onClose } />
       ),
       cells: [
         {

@@ -33,6 +33,7 @@ const routes = () => (
       <Route exact path="/" component={ Articles } />
       <Route exact path="/article" component={ ArticlePublishWithAccess } />
       <Route exact path="/article/:articleId" component={ ArticlePreview } />
+      <Route exact path="/article/:articleId/version/:version" component={ ArticlePreview } />
       <Route path="/article/:articleId/edit" component={ ArticleEditWithAccess } />
       <Route exact path="/article/:articleId/review" component={ ReviewCreateWithAccess } />
       <Route path="/article/:articleId/review/:reviewId" component={ ReviewPreview } />

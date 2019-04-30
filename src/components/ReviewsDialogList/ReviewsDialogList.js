@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Collapse from '~/components/Collapse/Collapse';
 import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';
+import * as articlesActions from '~/store/articles/actions';
 
 import './reviews-dialog-list.scss';
 
@@ -18,8 +20,8 @@ class ReviewsDialogList extends Component {
   };
 
   handleEditReview = (id, formData) => {
-    const { onSubmit } = this.props;
-    onSubmit(id, formData);
+    const { articleId, createArticleReviewAnswer } = this.props;
+    createArticleReviewAnswer(articleId, id, formData);
   };
 
   render() {
@@ -31,4 +33,11 @@ class ReviewsDialogList extends Component {
   }
 }
 
-export default ReviewsDialogList;
+const mapDispatchToProps = {
+  createArticleReviewAnswer: articlesActions.createArticleReviewAnswer
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ReviewsDialogList);

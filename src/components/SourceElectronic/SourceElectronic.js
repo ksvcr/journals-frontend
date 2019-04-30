@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import moment from 'moment';
 
 import TextField from '~/components/TextField/TextField';
@@ -7,34 +7,19 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import * as validate from '~/utils/validate';
 import Calendar from '~/components/Calendar/Calendar';
 import Select from '~/components/Select/Select';
+import SourceAuthorsFields from '~/components/SourceAuthorsFields/SourceAuthorsFields';
 
 const SourceElectronic = ({ rubricsOptions }) => {
   return (
     <React.Fragment>
+      <FieldArray name="authors" component={ SourceAuthorsFields } />
+
       <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_4">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author[0].lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_4">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author[0].initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_4">
-            <label htmlFor="source_rubric" className="form__label">
-              Направление <ReqMark />
-            </label>
-            <Field name="rubric" id="source_rubric" className="select_white" validate={ [validate.required] }
-                   component={ props => <Select options={ rubricsOptions } { ...props } /> } />
-          </div>
-        </div>
+        <label htmlFor="source_rubric" className="form__label">
+          Направление <ReqMark />
+        </label>
+        <Field name="rubric" id="source_rubric" className="select_white" validate={ [validate.required] }
+               component={ props => <Select options={ rubricsOptions } { ...props } /> } />
       </div>
 
       <div className="form__field">

@@ -28,7 +28,7 @@ class HeaderTools extends Component {
 
     return [{
       title: t('our_journals'),
-      href: '/journals',
+      href: '/',
       native: true
     }];
   };

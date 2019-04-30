@@ -1,0 +1,24 @@
+.article-versions {
+  &__title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 10px;
+    margin-bottom: 15px;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 -15px;
+    padding: 0;
+  }
+
+  &__item {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 5px 15px;
+  }
+
+  &__link {
+    color: $link-color
+  }
+}

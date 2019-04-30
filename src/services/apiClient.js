@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import fetchService from '~/utils/fetchService';
 
 const fetchInstance = new fetchService({
-  baseURL: process.env.REACT_APP_API_URL
+  baseURL: process.env.REACT_APP_API_URL || '/api'
 });
 
 const apiClient = {
@@ -16,9 +16,10 @@ const apiClient = {
   logout: () => fetchInstance.request('/users/auth/logout'),
   getCurrentUser: () => fetchInstance.request('/users/me/'),
   updateCurrentUser: (data) => fetchInstance.request('/users/me/', { method: 'put', data }),
-  getUsers: (userId = null, params) => {
+  getUsers: (siteId = null, userId = null, params) => {
+    const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
     const tail = userId !== null ? `${userId}/` : '';
-    return fetchInstance.request(`/users/${tail}`, { params });
+    return fetchInstance.request(`${sitePrefix}/users/${tail}`, { params });
   },
   updateUser: (userId, data) =>
     fetchInstance.request(`/users/${userId}/`, { method: 'put', data }),
@@ -26,7 +27,8 @@ const apiClient = {
     fetchInstance.request('/users/auth/register/', { method: 'post', data }),
   lockUser: data =>
     fetchInstance.request('/users/lock/', { method: 'post', data }),
-
+  sendMail: data =>
+    fetchInstance.request('/users/mass-mailing/', { method: 'post', data }),
   getUserStatistics: (params) =>
     fetchInstance.request('/users/me/statistic/', { params }),
   getUserStatisticsCounter: () =>
@@ -132,6 +134,8 @@ const apiClient = {
       { method: 'put', data }
     );
   },
+  createArticleReviewAnswer: (articleId, reviewId, data) =>
+    fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/answer/`, { method: 'put', data }),
   getArticleTags: (params) => fetchInstance.request('articles/tags/', { params }),
   getUserTags: (params) => fetchInstance.request('users/tags/', { params }),
 

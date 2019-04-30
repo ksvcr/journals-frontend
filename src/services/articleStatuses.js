@@ -18,6 +18,8 @@ export const statusMap = {
   DELETE: 'Удалена'
 };
 
+export const allowEditStatuses = ['DRAFT', 'PRELIMINARY_REVISION', 'REVISION', 'CALL_OFF'];
+
 export const articleStatusOptions = Object.keys(statusMap).map(key => ({ label: statusMap[key], value: key }));
 
 export function getArticleStatusTitle(status) {

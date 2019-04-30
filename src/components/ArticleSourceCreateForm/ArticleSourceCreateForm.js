@@ -172,7 +172,7 @@ class ArticleSourceCreateForm extends Component {
                 URL публикации
               </label>
               <Field name="url" id="source_url" className="text-field_white" component={ TextField }
-                     placeholder="Введите URL" />
+                     placeholder="Введите URL" validate={ [validate.url] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="source_doi" className="form__label">
@@ -233,6 +233,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
+      authors: [{}],
       category: '1',
       defense_date: defaultDate,
       statement_date: defaultDate,

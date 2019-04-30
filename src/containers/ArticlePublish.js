@@ -11,6 +11,7 @@ import PreviewLink from '~/components/PreviewLink/PreviewLink';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
 import ReviewsDialogList from '~/components/ReviewsDialogList/ReviewsDialogList';
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
+import PreliminaryReviewComment from '~/components/PreliminaryReviewComment/PreliminaryReviewComment';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rolesActions from '~/store/roles/actions';
@@ -21,8 +22,9 @@ import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
 
 import { serializeArticleData } from '~/services/articleFormat';
+import { allowEditStatuses } from '~/services/articleStatuses';
 import apiClient from '~/services/apiClient';
-import PreliminaryReviewComment from '~/components/PreliminaryReviewComment/PreliminaryReviewComment';
+
 
 class ArticlePublish extends Component {
   constructor(props) {
@@ -66,22 +68,29 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCountries, fetchUser, fetchRoles } = this.props;
+            fetchCountries, fetchUser, fetchRoles, userId } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
       promises.push(
         fetchArticle(articleId)
           .then(({ value: articleData }) => {
-            const userIds = articleData.collaborators.map(item => item.user.id);
-            if (articleData.author) {
-              userIds.push(articleData.author.user.id);
+            const isLocked = articleData.locked_by !== null && articleData.locked_by !== userId;
+            const isAllowEdit = ~allowEditStatuses.indexOf(articleData.state_article);
+
+            if (isLocked && isAllowEdit) {
+              push('/');
+            } else {
+              const userIds = articleData.collaborators.map(item => item.user.id);
+              if (articleData.author) {
+                userIds.push(articleData.author.user.id);
+              }
+              const userPromises = userIds.map(id => fetchUser(id));
+              return Promise.all([
+                ...userPromises,
+                fetchRubrics(articleData.site)
+              ]);
             }
-            const userPromises = userIds.map(id => fetchUser(id));
-            return Promise.all([
-              ...userPromises,
-              fetchRubrics(articleData.site)
-            ]);
           })
       );
     } else {
@@ -112,6 +121,7 @@ class ArticlePublish extends Component {
           data.state_article = 'SENT';
           break;
         case 'REVISION':
+        case 'PRELIMINARY_REVISION':
           // Доработка
           data.state_article = 'MODIFIED';
           break;
@@ -156,11 +166,6 @@ class ArticlePublish extends Component {
         })
         .catch(error => console.error(error));
     }
-  };
-
-  handleEditArticleReview = (reviewId, formData) => {
-    const { articleId, editArticleReview } = this.props;
-    editArticleReview(articleId, reviewId, formData);
   };
 
   handleAutoSave = (formData) => {
@@ -216,9 +221,7 @@ class ArticlePublish extends Component {
 
           { articleStatus === 'REVISION' && (
             <ReviewsDialogList articleId={ articleId }
-                               reviews={ articleData.reviews }
-                               onSubmit={ this.handleEditArticleReview }
-            />
+                               reviews={ articleData.reviews } />
           ) }
 
           { articleStatus === 'PRELIMINARY_REVISION' &&

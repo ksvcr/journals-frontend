@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
-import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import TagEditor from '~/components/TagEditor/TagEditor';
 import ListChecker from '~/components/ListChecker/ListChecker';
+import RedactorUsersListMenu from '~/components/RedactorUsersListMenu/RedactorUsersListMenu';
+import InterestList from '~/components/InterestList/InterestList';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersArray } from '~/store/users/selector';
 
 import * as userRoles from '~/services/userRoles';
-import apiClient from '~/services/apiClient';
 
 import './redactor-users-list.scss';
 
@@ -57,32 +57,12 @@ class RedactorUsersList extends Component {
       }));
   }
 
-  handleUserLock = userId => {
-    const { usersData } = this.props;
-    const { email } = usersData[userId];
-    return apiClient.lockUser({ email });
-  };
-
-  getToolsMenuItems = (data) => {
-    const { t } = this.props;
-    return [
-      {
-        title: 'Войти',
-        link: `/settings/${data.id}`
-      },
-      {
-        title: t('block'),
-        handler: this.handleUserLock
-      }
-    ];
-  };
-
   get listProps() {
     const { usersArray } = this.props;
     return {
       data: usersArray,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <RedactorUsersListMenu data={ data } onClose={ onClose } />
       ),
       head: true,
       box: this.renderBox,
@@ -119,7 +99,12 @@ class RedactorUsersList extends Component {
             textAlign: 'right'
           },
           head: () => 'Категории наук',
-          render: data => null
+          render: ({ sphere_scientific_interests }) => (
+            sphere_scientific_interests ?
+              <div className="redactor-users-list__interests">
+                <InterestList data={ sphere_scientific_interests } />
+              </div> : null
+          )
         }
       ]
     };
@@ -135,10 +120,9 @@ RedactorUsersList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, users } = state;
+  const { user } = state;
   return {
     currentUserId: user.data.id,
-    usersData: users.data,
     usersArray: getUsersArray(state)
   };
 }

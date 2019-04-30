@@ -22,7 +22,7 @@ class ArticleInfo extends Component {
     const { t, articleData, sitesData, rubricsData } = this.props;
     const site = sitesData[articleData.site];
     const types = getArticleTypes();
-
+    const rubric = rubricsData[articleData.rubric];
     return [
       {
         title: t('for_journals'),
@@ -30,7 +30,7 @@ class ArticleInfo extends Component {
       },
       {
         title: t('article_category'),
-        value: rubricsData[articleData.rubric].name
+        value: rubric ? rubric.name : 'Рубрика не найдена'
       },
       {
         title: t('type_category'),

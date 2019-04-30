@@ -14,6 +14,7 @@ import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
+import { allowEditStatuses } from '~/services/articleStatuses';
 
 class AuthorArticleList extends Component {
   state = {
@@ -28,7 +29,6 @@ class AuthorArticleList extends Component {
 
     let items = [];
 
-    const allowEditStatuses = ['DRAFT', 'PRELIMINARY_REVISION', 'CALL_OFF'];
     const isAllowEdit = ~allowEditStatuses.indexOf(data.state_article);
 
     if (!isLocked && isAllowEdit) {
@@ -113,8 +113,8 @@ class AuthorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } onClose={ onClose } />
       ),
       box: this.renderBox,
       cells: [

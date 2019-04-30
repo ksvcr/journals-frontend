@@ -21,7 +21,7 @@ class RedactorArticles extends Component {
   handleInitialRequest = () => {
     const { fetchUsers } = this.props;
     return Promise.all([
-      fetchUsers({ role: 'REVIEWER' }),
+      fetchUsers(null, { role: 'REVIEWER' }),
       this.handleRequest()
     ]);
   };

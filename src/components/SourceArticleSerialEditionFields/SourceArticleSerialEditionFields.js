@@ -1,31 +1,16 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import SourceAuthorsFields from '~/components/SourceAuthorsFields/SourceAuthorsFields';
 
 const SourceArticleSerialEditionFields = () => {
   return (
     <React.Fragment>
-      <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author[0].lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_6">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author[0].initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-        </div>
-      </div>
+      <FieldArray name="authors" component={ SourceAuthorsFields } />
 
       <div className="form__field">
         <label htmlFor="source_issue_title" className="form__label">
@@ -63,10 +48,11 @@ const SourceArticleSerialEditionFields = () => {
         <div className="form__row">
           <div className="form__col form__col_4">
             <label htmlFor="source_year_publication" className="form__label">
-              Год публикации <ReqMark />
+              Год публикации<ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="year_publication" id="source_year_publication" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="source_issue_number" className="form__label">

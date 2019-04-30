@@ -13,10 +13,14 @@ import './assets/preview.svg';
 class ToolsMenu extends Component {
   handleClick = (event) => {
     const { index } = event.currentTarget.dataset;
-    const { id, items } = this.props;
+    const { id, items, onClose } = this.props;
     const item = items[index];
     if (item && item.handler) {
       item.handler(id);
+
+      if (onClose) {
+        onClose(id);
+      }
     }
   };
 
@@ -62,7 +66,8 @@ class ToolsMenu extends Component {
 }
 
 ToolsMenu.propTypes = {
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  onClose: PropTypes.func
 };
 
 export default ToolsMenu;
