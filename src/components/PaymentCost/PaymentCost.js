@@ -1,19 +1,22 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 class PaymentCost extends PureComponent {
   render() {
-    const { cost } = this.props;
+    const { t, cost } = this.props;
     return (
       <div className="payment-cost">
-        Стоимость публикации статьи в выбранном журнале составляет <b>{ cost || 0 } руб</b>
+        { t('publication_cost') } <b>{ cost || 0 } { t('rub') }</b>
       </div>
     );
   }
 }
 
 PaymentCost.propTypes = {
-  cost: PropTypes.number
+  cost: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 };
+
+PaymentCost = withNamespaces()(PaymentCost);
 
 export default PaymentCost;

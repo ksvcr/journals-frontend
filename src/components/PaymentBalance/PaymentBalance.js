@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 
 import './payment-balance.scss';
 
-const PaymentBalance = ({ balance, ...rest }) => {
+const PaymentBalance = ({ t, balance, value, onChange }) => {
   return (
     <div className="payment-balance">
       <h3 className="payment-balance__balance">
-        Ваш скидочный баланс: { balance } руб.
+        { t('your_discount_balance') }: { balance } { t('rub') }.
       </h3>
       <div className="form__field">
         <label htmlFor="payment_value" className="form__label payment-balance__label">
-          Списать для оплаты статьи (руб)
+          { t('charge_for_payment') } ({ t('rub') })
         </label>
         <TextField id="payment_value" type="number"
-                   className="payment-balance__input text-field_small" { ...rest } />
+                   className="payment-balance__input text-field_small" value={ value } onChange={ onChange } />
       </div>
     </div>
   );
@@ -24,8 +25,8 @@ const PaymentBalance = ({ balance, ...rest }) => {
 
 PaymentBalance.propTypes = {
   balance: PropTypes.number.isRequired,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func.isRequired
 };
 
-export default PaymentBalance;
+export default withNamespaces()(PaymentBalance);

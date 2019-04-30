@@ -163,6 +163,14 @@ const en_translation = {
   name: 'Name',
   middle_name: 'Middle name',
   clear_fields: 'Clear fields',
+  payment: 'Payment',
+  total_cost: 'Total cost',
+  rub: 'rub',
+  your_discount_balance: 'Your discount balance',
+  charge_for_payment : 'Charge for payment',
+  publication_cost: 'Publication cost',
+  name_reminder: 'When paying, do not forget to include your name and publication name',
+  requisites_for_payment: 'You can pay this amount by the following requisites'
 };
 
 export default en_translation;

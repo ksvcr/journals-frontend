@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ru_translation = {
   support: 'Поддержка сайта',
   our_journals: 'Наши журналы',
@@ -165,6 +167,14 @@ const ru_translation = {
   name: 'Имя',
   middle_name: 'Отчество',
   clear_fields: 'Очистить поля',
+  payment: 'Оплата',
+  total_cost: 'Итого к оплате',
+  rub: 'руб',
+  your_discount_balance: 'Ваш скидочный баланс',
+  charge_for_payment : 'Списать для оплаты статьи',
+  publication_cost: 'Стоимость публикации статьи в выбранном журнале составляет',
+  name_reminder: 'При оплате не забывайте указывать ваше имя и название публикации',
+  requisites_for_payment: 'Оплатить данную сумму Вы можете по следующим реквизитам'
 };
 
 export default ru_translation;
