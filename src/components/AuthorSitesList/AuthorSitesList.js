@@ -59,7 +59,7 @@ class AuthorSitesList extends Component {
             onClick={ this.handleRemove }
           >
             <Icon name="cancel" className="author-sites-list__remove-icon" />
-            { t('delete_jornal') }
+            { t('delete_journal') }
           </button>
         </div>
       );

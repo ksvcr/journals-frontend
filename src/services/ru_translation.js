@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ru_translation = {
   support: 'Поддержка сайта',
   our_journals: 'Наши журналы',
@@ -74,8 +72,8 @@ const ru_translation = {
   add_table: 'Добавить таблицу',
   add_autor: 'Добавить автора',
   article_translation: 'Перевод статьи',
-  choose_jornal: 'Выбрать журнал',
-  delete_jornal: 'Удалить журнал',
+  choose_journal: 'Выбрать журнал',
+  delete_journal: 'Удалить журнал',
   delete: 'Удалить',
   select_several_files: 'Вы можете выбрать несколько файлов. Для каждого из них нужно будет заполнить описание',
   time: 'Время',
@@ -108,7 +106,7 @@ const ru_translation = {
   enter_country: 'Введите страну',
   enter_orcid: 'Введите ORCID',
   enter_email: 'Введите e-mail',
-  email: 'e-mail',
+  email: 'E-mail',
   save_autor: 'Сохранить автора',
   add_other_jornal: 'Добавить другие журналы',
   сancel: 'Отмена',
@@ -174,7 +172,20 @@ const ru_translation = {
   charge_for_payment : 'Списать для оплаты статьи',
   publication_cost: 'Стоимость публикации статьи в выбранном журнале составляет',
   name_reminder: 'При оплате не забывайте указывать ваше имя и название публикации',
-  requisites_for_payment: 'Оплатить данную сумму Вы можете по следующим реквизитам'
+  requisites_for_payment: 'Оплатить данную сумму Вы можете по следующим реквизитам',
+  password: 'Пароль',
+  enter_password: 'Введите пароль',
+  repeat_password: 'Повторите пароль',
+  country_in_english: 'Страна по английски',
+  choose_country: 'Выберите страну',
+  city_in_english: 'Город по английски',
+  code_rinc: 'РИНЦ Author ID',
+  enter_code_rinc: 'Введите Author ID',
+  enter_researcher_id: 'Введите Researcher ID',
+  mail_address: 'Почтовый адрес',
+  full_name: 'ФИО',
+  enter_fullname: 'Введите ФИО',
+  region: 'Область'
 };
 
 export default ru_translation;

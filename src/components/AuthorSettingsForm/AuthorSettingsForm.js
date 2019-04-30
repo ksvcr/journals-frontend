@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
@@ -36,33 +37,33 @@ class AuthorSettingsForm extends Component {
   }
 
   render() {
-    const { handleSubmit, countriesOptions, countriesData } = this.props;
+    const { t, handleSubmit, countriesOptions, countriesData } = this.props;
     return (
       <form className="author-settings-form form" onSubmit={ handleSubmit }>
         <div className="form__field">
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="last_name" className="form__label">
-                Фамилия
+                { t('last_name') }
               </label>
               <Field name="last_name" id="last_name"
-                     component={ TextField } placeholder="Введите фамилию"
+                     component={ TextField } placeholder={ t('enter_last_name') }
                      validate={ [validate.required] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="first_name" className="form__label">
-                Имя
+                { t('name') }
               </label>
               <Field name="first_name" id="first_name"
-                     component={ TextField } placeholder="Введите имя"
+                     component={ TextField } placeholder={ t('enter_name') }
                      validate={ [validate.required] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="middle_name" className="form__label">
-                Отчество
+                { t('middle_name') }
               </label>
               <Field name="middle_name" id="middle_name"
-                     component={ TextField } placeholder="Введите отчество"
+                     component={ TextField } placeholder={ t('enter_middle_name') }
                      validate={ [validate.required] }
               />
             </div>
@@ -72,72 +73,72 @@ class AuthorSettingsForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="email" className="form__label">
-                E-mail
+                { t('email') }
               </label>
               <Field type="email" name="email"
                      id="email" component={ TextField }
-                     placeholder="Введите e-mail"
+                     placeholder={ t('enter_email') }
                      validate={ [validate.email] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="password" className="form__label">
-                Пароль
+                { t('password') }
               </label>
               <Field disabled={ true } name="password" id="password"
                      component={ TextField } type="password"
-                     placeholder="Введите пароль" />
+                     placeholder={ t('enter_password') } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="password_confirm" className="form__label">
-                Повторите пароль
+                { t('repeat_password') }
               </label>
               <Field disabled={ true } name="password_confirm" id="password_confirm"
                      component={ TextField } type="password"
-                     placeholder="Повторите пароль" />
+                     placeholder={ t('repeat_password') } />
             </div>
           </div>
         </div>
         <div className="form__field">
           <label htmlFor="work_place" className="form__label">
-            Место работы (учебы)
+            { t('place_of_work') }
           </label>
           <Field name="work_place" id="work_place"
                  component={ TextField }
-                 placeholder="Введите место работы/учебы"
+                 placeholder={ t('enter_place_of_work') }
           />
         </div>
         <div className="form__field">
           <label htmlFor="work_place_en" className="form__label">
-            Место работы по английски
+            { t('place_of_work_in_english') }
           </label>
           <Field name="work_place_en" id="work_place_en"
                  component={ TextField }
-                 placeholder="Введите место работы/учебы"
+                 placeholder={ t('enter_place_of_work') }
           />
         </div>
         <div className="form__field">
           <div className="form__row">
             <div className="form__col form__col_6">
               <label htmlFor="country" className="form__label">
-                Cтрана
+                { t('country') }
               </label>
               <Field name="country" id="country"
                      format={ value =>
                        value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
                      normalize={ option => option.value }
-                     placeholder="Выберите страну"
+                     placeholder={ t('enter_country') }
                      options={ countriesOptions }
                      component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city" className="form__label">
-                Город
+                { t('city') }
               </label>
               <Field
                 name="city"
                 id="city"
                 component={ TextField }
-                placeholder="Введите город"
+                placeholder={ t('enter_city') }
               />
             </div>
           </div>
@@ -146,7 +147,7 @@ class AuthorSettingsForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_6">
               <label htmlFor="country_en" className="form__label">
-                Страна по английски
+                { t('country_in_english') }
               </label>
               <Field
                 name="country_en"
@@ -154,17 +155,17 @@ class AuthorSettingsForm extends Component {
                 format={ value =>
                   value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
                 normalize={ option => option.value }
-                placeholder="Выберите страну"
+                placeholder={ t('choose_country') }
                 options={ countriesOptions }
                 component={ SearchableSelect }
               />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="city_en" className="form__label">
-                Город по английски
+                { t('city_in_english') }
               </label>
               <Field name="city_en" id="city_en"
-                     component={ TextField } placeholder="Введите город" />
+                     component={ TextField } placeholder={ t('enter_city') } />
             </div>
           </div>
         </div>
@@ -178,18 +179,18 @@ class AuthorSettingsForm extends Component {
                 ORCID
               </label>
               <Field name="code_orcid" id="code_orcid" component={ TextField }
-                     placeholder="Введите ORCID"
+                     placeholder={ t('enter_orcid') }
               />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="code_rinc" className="form__label">
-                РИНЦ Author ID
+                { t('code_rinc') }
               </label>
               <Field
                 name="code_rinc"
                 id="code_rinc"
                 component={ TextField }
-                placeholder="Введите Author ID"
+                placeholder={ t('enter_code_rinc') }
               />
             </div>
             <div className="form__col form__col_4">
@@ -200,7 +201,7 @@ class AuthorSettingsForm extends Component {
                 name="code_researcher"
                 id="code_researcher"
                 component={ TextField }
-                placeholder="Введите Researcher ID"
+                placeholder={ t('enter_researcher_id') }
               />
             </div>
           </div>
@@ -208,18 +209,18 @@ class AuthorSettingsForm extends Component {
 
         <hr className="page__divider" />
 
-        <h2 className="form__subtitle">Почтовый адрес:</h2>
+        <h2 className="form__subtitle">{ t('mail_address') }</h2>
         <div className="form__field">
           <div className="form__row">
             <div className="form__col form__col_8">
               <label htmlFor="mail_address_fio" className="form__label">
-                ФИО
+                { t('full_name') }
               </label>
               <Field
                 name="mail_address_fio"
                 id="mail_address_fio"
                 component={ TextField }
-                placeholder="Введите ФИО"
+                placeholder={ t('enter_fullname') }
               />
             </div>
           </div>
@@ -228,14 +229,14 @@ class AuthorSettingsForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_country" className="form__label">
-                Страна
+                { t('country') }
               </label>
               <Field name="mail_address_country" id="mail_address_country"
                      format={ value =>
                        value && countriesData[value] ? { label: countriesData[value].name, value } : ''
                      }
                      normalize={ option => option.value }
-                     placeholder="Выберите страну"
+                     placeholder={ t('choose_country') }
                      options={ countriesOptions } component={ SearchableSelect } />
             </div>
             <div className="form__col form__col_4">
@@ -356,5 +357,7 @@ function mapStateToProps(state, props) {
     initialValues
   };
 }
+
+AuthorSettingsForm = withNamespaces()(AuthorSettingsForm);
 
 export default connect(mapStateToProps)(AuthorSettingsForm);
