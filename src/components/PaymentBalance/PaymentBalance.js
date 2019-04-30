@@ -24,7 +24,7 @@ const PaymentBalance = ({ balance, ...rest }) => {
 
 PaymentBalance.propTypes = {
   balance: PropTypes.number.isRequired,
-  value: PropTypes.number,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
 

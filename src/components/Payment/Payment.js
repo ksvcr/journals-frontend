@@ -27,7 +27,7 @@ class Payment extends Component {
   };
 
   render() {
-    const { onClose, user } = this.props;
+    const { onClose, data, user } = this.props;
     const { value } = this.state;
 
     return (
@@ -43,7 +43,7 @@ class Payment extends Component {
         </div>
         <div className="payment__body">
           <div className="payment__body__cost">
-            <PaymentCost cost={ 100 } />
+            <PaymentCost cost={ data.cost_without_discounts } />
           </div>
           <div className="payment__body__balance">
             <PaymentBalance
@@ -57,7 +57,7 @@ class Payment extends Component {
             Итого к оплате:
           </h2>
           <span className="payment__total">
-            5 000 руб.
+            { data.cost_with_discounts || 0 } руб.
           </span>
         </div>
         <hr className="payment__divider" />

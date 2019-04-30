@@ -6,7 +6,7 @@ class PaymentCost extends PureComponent {
     const { cost } = this.props;
     return (
       <div className="payment-cost">
-        Стоимость публикации статьи в выбранном журнале составляет <b>{ cost } руб</b>
+        Стоимость публикации статьи в выбранном журнале составляет <b>{ cost || 0 } руб</b>
       </div>
     );
   }

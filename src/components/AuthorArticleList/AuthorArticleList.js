@@ -164,7 +164,7 @@ class AuthorArticleList extends Component {
     const { box } = this.state;
     if (box && box.id === data.id) {
       if (box.type === 'payment') {
-        return <Payment onClose={ this.handlePaymentClose } />;
+        return <Payment data={ data } onClose={ this.handlePaymentClose } />;
       }
     }
 
