@@ -242,6 +242,7 @@ function mapStateToProps(state, props) {
       approval_date: defaultDate,
       patent_application_date: defaultDate,
       publication_date: defaultDate,
+      accessed_date: defaultDate,
       ...data
     },
     isCorrector: user.data.role === 'CORRECTOR'

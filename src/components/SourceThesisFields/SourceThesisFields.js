@@ -48,10 +48,10 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, c
 
       <div className="form__field">
         <label htmlFor="second_name" className="form__label">
-          Название на английском языке
+          Название на английском языке  <ReqMark />
         </label>
         <Field name="second_name" id="second_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
@@ -65,10 +65,10 @@ const SourceThesisFields = ({ rubricsOptions, languagesOptions, countriesData, c
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="specialty_code" className="form__label">
-              Шифр специальности
+              Шифр специальности <ReqMark />
             </label>
             <Field name="specialty_code" id="specialty_code" className="text-field_white" component={ TextField }
-                   placeholder="Введите шифр" />
+                   placeholder="Введите шифр" validate={ [validate.required] } />
           </div>
         </div>
       </div>

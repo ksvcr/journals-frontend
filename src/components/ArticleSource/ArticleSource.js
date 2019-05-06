@@ -12,16 +12,20 @@ class ArticleSource extends Component {
     const { data } = this.props;
     let resultString = '';
 
-    if (data.author && lang === 'ru') {
-      if (typeof data.author === 'string') {
-        resultString = data.author;
-      } else {
-        const author = Array.isArray(data.author) && data.author.length
-          ? data.author[0]
-          : data.author;
+    if (lang === 'ru') {
+      if (data.author) {
+        getName(data.author);
+      } else if (data.authors) {
+        data.authors.forEach(author => getName(author))
+      }
+    }
 
+    function getName(author) {
+      if (typeof author === 'string') {
+        resultString += author;
+      } else {
         const { lastname, initials } = author;
-        resultString = `${lastname} ${initials} `;
+        resultString += `${lastname} ${initials}, `;
       }
     }
 

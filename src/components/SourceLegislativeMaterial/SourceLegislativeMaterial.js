@@ -14,25 +14,6 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
   return (
     <React.Fragment>
       <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_6">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-        </div>
-      </div>
-
-      <div className="form__field">
         <label htmlFor="original_name" className="form__label">
           Название на языке оригинала <ReqMark />
         </label>
@@ -42,10 +23,10 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
 
       <div className="form__field">
         <label htmlFor="second_name" className="form__label">
-          Название на английском языке
+          Название на английском языке <ReqMark />
         </label>
         <Field name="second_source_name" id="second_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
@@ -108,21 +89,14 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
 
       <div className="form__field">
         <div className="form__row">
-          <div className="form__col form__col_4">
+          <div className="form__col form__col_6">
             <label htmlFor="adopted_authority" className="form__label">
               Принявший орган
             </label>
             <Field name="adopted_authority" id="adopted_authority" className="text-field_white" component={ TextField }
                    placeholder="Введите принявший орган" />
           </div>
-          <div className="form__col form__col_4">
-            <label htmlFor="adopted_authority_translate" className="form__label">
-              Перевод принявшего органа
-            </label>
-            <Field name="adopted_authority_translate" id="adopted_authority_translate"
-                   className="text-field_white" component={ TextField } placeholder="Введите перевод" />
-          </div>
-          <div className="form__col form__col_4">
+          <div className="form__col form__col_6">
             <label htmlFor="adoption_date" className="form__label">
               Дата принятия
             </label>
@@ -145,13 +119,6 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
                    placeholder="Введите одобривший орган" />
           </div>
           <div className="form__col form__col_4">
-            <label htmlFor="approval_authority_translate" className="form__label">
-              Перевод одобрившего органа
-            </label>
-            <Field name="approval_authority_translate" id="approval_authority_translate"
-                   className="text-field_white" component={ TextField } placeholder="Введите перевод" />
-          </div>
-          <div className="form__col form__col_4">
             <label htmlFor="approval_date" className="form__label">
               Дата одобрения
             </label>
@@ -160,6 +127,13 @@ const SourceLegislativeMaterial = ({ countriesData, countriesOptions, lawTypesOp
                    component={ props =>  <Calendar className="text-field_white"
                                                    customInput={ <TextField meta={ props.meta } /> }
                                                    selected={ props.input.value } { ...props } /> } />
+          </div>
+          <div className="form__col form__col_4">
+            <label htmlFor="page_count" className="form__label">
+              Количество страниц
+            </label>
+            <Field name="page_count" id="page_count" className="text-field_white" component={ TextField }
+                   placeholder="Введите количество страниц" />
           </div>
         </div>
       </div>

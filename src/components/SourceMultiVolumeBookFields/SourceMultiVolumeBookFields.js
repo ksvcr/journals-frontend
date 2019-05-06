@@ -22,26 +22,26 @@ const SourceMultiVolumeBookFields = () => {
 
       <div className="form__field">
         <label htmlFor="second_part_name" className="form__label">
-          Название части/тома английском
+          Название части/тома английском <ReqMark />
         </label>
         <Field name="second_part_name" id="second_part_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <label htmlFor="original_source_name" className="form__label">
-          Название на языке оригинала
+          Название на языке оригинала <ReqMark />
         </label>
         <Field name="original_name" id="original_source_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <label htmlFor="second_source_name" className="form__label">
-          Название на английском языке
+          Название на английском языке <ReqMark />
         </label>
         <Field name="second_source_name" id="second_source_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
