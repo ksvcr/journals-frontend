@@ -37,7 +37,7 @@ export function serializeArticleData(data = {}) {
   if (author) {
     serializedData.author = { user: author.id };
 
-    if(author.roles) {
+    if (author.roles) {
       serializedData.author.roles = Object.keys(author.roles)
         .filter(key => author.roles[key])
         .map(role => role.split('-')[0]);
