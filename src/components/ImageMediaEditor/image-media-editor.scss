@@ -6,8 +6,8 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
-    margin-left: -14px;
-    margin-right: -14px;
+    margin-left: -20px;
+    margin-right: -20px;
   }
 
   &__holder {
@@ -19,8 +19,9 @@
   &__item {
     max-width: 16.666%;
     flex-basis: 16.666%;
-    padding: 10px 7px;
+    padding: 10px 10px;
     box-sizing: border-box;
+    position: relative;
   }
 
   &__button {
@@ -52,7 +53,7 @@
     justify-content: center;
     align-items: center;
 
-    #{$root}__item:hover & {
+    #{$root}__zone:hover & {
       box-shadow: inset 0 0 0 2px $orange-color;
     }
   }
@@ -99,8 +100,25 @@
     opacity: 0;
     transition: opacity .2s;
 
-    #{$root}__item:hover & {
+    #{$root}__zone:hover & {
       opacity: 1;
     }
+  }
+
+  &__remove-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    outline: 0;
+  }
+
+  &__remove-icon {
+    width: 11px;
+    height: 11px;
+    fill: $red-color;
   }
 }

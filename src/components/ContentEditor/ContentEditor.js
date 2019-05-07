@@ -99,7 +99,7 @@ class ContentEditor extends Component {
     return null;
   };
 
-  toggleReadOnly = isReadOnly => {
+  toggleReadOnly = (isReadOnly) => {
     const { editorState } = this.state;
     const selection = editorState.getSelection();
 

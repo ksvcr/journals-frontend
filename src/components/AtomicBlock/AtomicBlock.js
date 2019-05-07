@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
-import { EditorState } from 'draft-js';
+import { EditorState, Modifier, SelectionState } from 'draft-js';
 
 class AtomicBlock extends Component {
   handleChange = (data) => {
@@ -30,6 +30,39 @@ class AtomicBlock extends Component {
     blockProps.onInteractChange(false);
   };
 
+  handleRemove = () => {
+    const { blockProps, block } = this.props;
+    const { pluginEditor } = blockProps;
+    const { getEditorState, setEditorState } = pluginEditor;
+
+    const editorState = getEditorState();
+    const contentState = editorState.getCurrentContent();
+
+    const withoutAtomicEntity = Modifier.removeRange(
+      contentState,
+      new SelectionState({
+        anchorKey: block.getKey(),
+        anchorOffset: 0,
+        focusKey: block.getKey(),
+        focusOffset: block.getLength()
+      }),
+      'backward',
+    );
+
+    const blockMap = withoutAtomicEntity.getBlockMap().delete(block.getKey());
+    const selection = editorState.getSelection();
+    const withoutAtomic = withoutAtomicEntity.merge({
+      blockMap,
+      selectionAfter: selection,
+    });
+
+    setEditorState(EditorState.push(
+      editorState,
+      withoutAtomic,
+      'remove-range',
+    ));
+  };
+
   get entity() {
     const { contentState, block } = this.props;
     return contentState.getEntity(
@@ -42,7 +75,7 @@ class AtomicBlock extends Component {
     const type = this.entity.getType();
     switch(type){
       case 'image-list':
-        return <ImageMediaEditor data={ data } onChange={ this.handleChange }
+        return <ImageMediaEditor data={ data } onChange={ this.handleChange } onRemove={ this.handleRemove }
                                  onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
       default:
         return null;

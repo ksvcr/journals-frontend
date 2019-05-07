@@ -110,7 +110,7 @@ export function addNewBlockAt(
     insertionTargetSelection = insertionTargetBlock.getSelectionAfter();
   }
 
-  const newContentStateAfterSplit = Modifier.setBlockType(insertionTargetBlock, insertionTargetSelection, 'sticker');
+  const newContentStateAfterSplit = Modifier.setBlockType(insertionTargetBlock, insertionTargetSelection, newBlockType);
 
   const contentStateWithEntity = newContentStateAfterSplit.createEntity(
     newBlockType, 'IMMUTABLE', entityData
@@ -138,7 +138,7 @@ export function addNewBlockAt(
 
   const fragment = BlockMapBuilder.createFromArray(fragmentArray);
 
-  const contentStateWithSticker = Modifier.replaceWithFragment(
+  const contentStateWithNewBlock = Modifier.replaceWithFragment(
     newContentStateAfterSplit,
     insertionTargetSelection,
     fragment
@@ -146,7 +146,7 @@ export function addNewBlockAt(
 
   return EditorState.push(
     editorState,
-    contentStateWithSticker,
+    contentStateWithNewBlock,
     'insert-custom-block'
   );
 }

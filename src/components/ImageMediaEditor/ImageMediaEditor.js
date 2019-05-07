@@ -12,6 +12,7 @@ import formatBytes from '~/utils/formatBytes';
 import fileToBase64 from '~/utils/fileToBase64';
 
 import './assets/edit.svg';
+import './assets/cancel.svg';
 import './image-media-editor.scss';
 
 class ImageMediaEditor extends Component {
@@ -57,52 +58,72 @@ class ImageMediaEditor extends Component {
     onChange(newData);
   };
 
+  handleItemRemove = (event) => {
+    const { data, onChange } = this.props;
+    const { id } = event.currentTarget.dataset;
+    const newData = {
+      ...data,
+      images: data.images.filter(item => item.id !== id)
+    };
+
+    onChange(newData);
+  };
+
   renderImageItems = () => {
     const { t, data, onInteract, onCancelInteract } = this.props;
     return data.images.map(item => (
       <div className="image-media-editor__item" key={ item.id }>
-        <ToolTip
-          className="tooltip"
-          position="right-start"
-          useContext={ true }
-          onShow={ onInteract }
-          onRequestClose={ onCancelInteract }
-          html={
-            <MetaInfoForm
-              id={ item.id }
-              onChange={ this.handleSubmit }
-              initialValues={ item }
-            />
-          }
-        >
-          <button type="button" className="image-media-editor__button">
-            <div className="image-media-editor__view">
-              <img
-                className="image-media-editor__image"
-                src={ item.preview }
-                alt=""
+        <div className="image-media-editor__zone">
+          <ToolTip
+            className="tooltip"
+            position="right-start"
+            useContext={ true }
+            onShow={ onInteract }
+            onRequestClose={ onCancelInteract }
+            html={
+              <MetaInfoForm
+                id={ item.id }
+                onChange={ this.handleSubmit }
+                initialValues={ item }
               />
-              <div className="image-media-editor__box">
-                <Icon name="edit" className="image-media-editor__edit-icon" />
-                { t('edit') }
+            }
+          >
+            <button type="button" className="image-media-editor__button">
+              <div className="image-media-editor__view">
+                <img
+                  className="image-media-editor__image"
+                  src={ item.preview }
+                  alt=""
+                />
+                <div className="image-media-editor__box">
+                  <Icon name="edit" className="image-media-editor__edit-icon" />
+                  { t('edit') }
+                </div>
               </div>
-            </div>
-            <div className="image-media-editor__info">
-              <div className="image-media-editor__title">{ item.title }</div>
-              <div className="image-media-editor__size">
-                { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
-              </div>
-            </div>
-          </button>
-        </ToolTip>
+            </button>
+          </ToolTip>
+        </div>
+        <div className="image-media-editor__info">
+          <div className="image-media-editor__title">{ item.title }</div>
+          <div className="image-media-editor__size">
+            { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
+            <button type="button" data-id={ item.id } className="image-media-editor__remove-button"
+                    onClick={ this.handleItemRemove }>
+              <Icon name="cancel"  className="image-media-editor__remove-icon" />
+            </button>
+          </div>
+        </div>
       </div>
     ));
   };
 
   render() {
-    const { data, onInteract, onCancelInteract } = this.props;
+    const { data, onInteract, onCancelInteract, onRemove } = this.props;
     return (
       <div className="image-media-editor">
+        <button type="button" onClick={ onRemove }>
+          X
+        </button>
         <Dropzone
           className="image-media-editor__dropzone"
           accept="image/*"
