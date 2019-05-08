@@ -105,7 +105,7 @@ class ContentEditor extends Component {
 
     this.setState({
       isReadOnly,
-      editorState: EditorState.forceSelection(editorState, selection)
+      editorState: EditorState.forceSelection(editorState, selection, 'toggle-read-only')
     });
   };
 

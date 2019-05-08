@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
-import { EditorState, Modifier, SelectionState } from 'draft-js';
+import { EditorState } from 'draft-js';
+import { removeRange } from '~/services/customDraftUtils';
 
 class AtomicBlock extends Component {
   handleChange = (data) => {
@@ -31,36 +32,8 @@ class AtomicBlock extends Component {
   };
 
   handleRemove = () => {
-    const { blockProps, block } = this.props;
-    const { pluginEditor } = blockProps;
-    const { getEditorState, setEditorState } = pluginEditor;
-
-    const editorState = getEditorState();
-    const contentState = editorState.getCurrentContent();
-
-    const withoutAtomicEntity = Modifier.removeRange(
-      contentState,
-      new SelectionState({
-        anchorKey: block.getKey(),
-        anchorOffset: 0,
-        focusKey: block.getKey(),
-        focusOffset: block.getLength()
-      }),
-      'backward',
-    );
-
-    const blockMap = withoutAtomicEntity.getBlockMap().delete(block.getKey());
-    const selection = editorState.getSelection();
-    const withoutAtomic = withoutAtomicEntity.merge({
-      blockMap,
-      selectionAfter: selection,
-    });
-
-    setEditorState(EditorState.push(
-      editorState,
-      withoutAtomic,
-      'remove-range',
-    ));
+    const { block, blockProps } = this.props;
+    removeRange(block, blockProps);
   };
 
   get entity() {

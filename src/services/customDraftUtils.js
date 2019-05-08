@@ -1,5 +1,6 @@
 import { List, Map, Repeat } from 'immutable';
-import { CharacterMetadata, ContentBlock, EditorState, BlockMapBuilder, Modifier, genKey } from 'draft-js';
+import { CharacterMetadata, ContentBlock, EditorState,
+         BlockMapBuilder, Modifier, genKey, SelectionState } from 'draft-js';
 import Icon from '~/components/Icon/Icon';
 import React from 'react';
 
@@ -149,4 +150,33 @@ export function addNewBlockAt(
     contentStateWithNewBlock,
     'insert-custom-block'
   );
+}
+
+export function removeRange(block, blockProps) {
+  const { pluginEditor } = blockProps;
+  const { getEditorState, setEditorState } = pluginEditor;
+
+  const editorState = getEditorState();
+  const contentState = editorState.getCurrentContent();
+
+  const withoutAtomicEntity = Modifier.removeRange(
+    contentState,
+    new SelectionState({
+      anchorKey: block.getKey(),
+      anchorOffset: 0,
+      focusKey: block.getKey(),
+      focusOffset: block.getLength()
+    }),
+    'backward',
+  );
+
+  const resetBlock = Modifier.setBlockType(
+    withoutAtomicEntity,
+    withoutAtomicEntity.getSelectionAfter(),
+    'unstyled'
+  );
+
+  const newState = EditorState.push(editorState, resetBlock, 'remove-range');
+
+  setEditorState(EditorState.forceSelection(newState, resetBlock.getSelectionAfter()));
 }

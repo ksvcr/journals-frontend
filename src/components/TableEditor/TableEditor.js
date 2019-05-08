@@ -5,11 +5,14 @@ import Editor from 'draft-js-plugins-editor';
 import { EditorState, genKey } from 'draft-js';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { withNamespaces } from 'react-i18next';
+import nanoid from 'nanoid';
 
 import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
-import nanoid from 'nanoid';
 import ToolTip from '~/components/ToolTip/ToolTip';
+import Icon from '~/components/Icon/Icon';
+import { removeRange } from '~/services/customDraftUtils';
 
+import './assets/cancel.svg';
 import './table-editor.scss';
 
 const Table = FocusDecorator(
@@ -123,12 +126,23 @@ class TableEditor extends Component {
     };
   }
 
+  handleRemove = () => {
+    const { block, blockProps } = this.props;
+    removeRange(block, blockProps);
+  };
+
   render() {
     const { tableKey } = this.state;
     const { t, blockProps } = this.props;
     const { entityData } = blockProps;
     return (
       <div className="table-editor" contentEditable={ false } readOnly>
+        <div className="table-editor__top">
+          <button type="button" onClick={ this.handleRemove } className="table-editor__remove-button">
+            <Icon name="cancel"  className="table-editor__remove-icon" />
+            Удалить
+          </button>
+        </div>
         <div className="table-editor__holder">
           <h3 className="table-editor__title">
             { entityData.title ? entityData.title : t('table_header') }

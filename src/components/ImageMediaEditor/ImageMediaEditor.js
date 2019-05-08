@@ -107,11 +107,11 @@ class ImageMediaEditor extends Component {
           <div className="image-media-editor__title">{ item.title }</div>
           <div className="image-media-editor__size">
             { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
-            <button type="button" data-id={ item.id } className="image-media-editor__remove-button"
-                    onClick={ this.handleItemRemove }>
-              <Icon name="cancel"  className="image-media-editor__remove-icon" />
-            </button>
           </div>
+          <button type="button" data-id={ item.id } className="image-media-editor__remove-button"
+                  onClick={ this.handleItemRemove }>
+            <Icon name="cancel"  className="image-media-editor__remove-icon" />
+          </button>
         </div>
       </div>
     ));
@@ -121,9 +121,12 @@ class ImageMediaEditor extends Component {
     const { data, onInteract, onCancelInteract, onRemove } = this.props;
     return (
       <div className="image-media-editor">
-        <button type="button" onClick={ onRemove }>
-          X
-        </button>
+        <div className="image-media-editor__top">
+          <button type="button" onClick={ onRemove } className="image-media-editor__remove-button">
+            <Icon name="cancel"  className="image-media-editor__remove-icon" />
+            Удалить
+          </button>
+        </div>
         <Dropzone
           className="image-media-editor__dropzone"
           accept="image/*"
