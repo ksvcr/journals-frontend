@@ -35,7 +35,17 @@ class Content extends Component {
     return data.sources.map((item, index) => {
       const author = Array.isArray(item.author) && item.author.length
         ? item.author[0] : item.author;
-      const authorName = author ? `${ author.lastname } ${ author.initials },` : '';
+      const authorName = author ? `${ getName(author) },` : '';
+
+      function getName(author) {
+        if (typeof author === 'string') {
+          return author;
+        } else {
+          const { lastname, initials } = author;
+          return `${lastname} ${initials}, `;
+        }
+      }
+
       return (
         <li key={ index }>
           <p>
