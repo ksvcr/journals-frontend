@@ -32,6 +32,8 @@ class ArticleFilesForm extends Component {
     });
   };
 
+  renderFileList = props => <ArticleFileList { ...props } />;
+
   render() {
     const { t, isProofreading } = this.props;
     return (
@@ -51,7 +53,7 @@ class ArticleFilesForm extends Component {
             </Dropzone>
 
             <FieldArray name="file_atachments"
-                        component={ props => <ArticleFileList { ...props } /> } />
+                        component={ this.renderFileList } />
           </React.Fragment>
         }
 
