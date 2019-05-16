@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import PaymentBalance from '~/components/PaymentBalance/PaymentBalance';
 import PaymentCost from '~/components/PaymentCost/PaymentCost';
 import PaymentRequisites from '~/components/PaymentRequisites/PaymentRequisites';
-
+import { getUserData } from '~/store/user/selector';
 import * as userActions from '~/store/user/actions';
 
 import './payment.scss';
 import './assets/cancel.svg';
-import { withNamespaces } from 'react-i18next';
 
 class Payment extends Component {
   state = {
@@ -35,9 +35,9 @@ class Payment extends Component {
   };
 
   render() {
-    const { onClose, data, user, t } = this.props;
+    const { onClose, data, userData, t } = this.props;
     const { discountValue } = this.state;
-    const { balance } = user.data;
+    const { balance } = userData;
     return (
       <div className="payment">
         <div className="payment__head">
@@ -78,10 +78,8 @@ class Payment extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
-
   return {
-    user
+    userData: getUserData(state)
   };
 }
 

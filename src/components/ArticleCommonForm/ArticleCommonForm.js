@@ -18,6 +18,7 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getCountriesOptions } from '~/store/countries/selector';
+import { getUserData } from '~/store/user/selector';
 
 import * as validate from '~/utils/validate';
 
@@ -313,9 +314,10 @@ class ArticleCommonForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-  const { user, countries, rubrics } = state;
-  const formSelector = formValueSelector(formName);
+  const { countries, rubrics } = state;
 
+  const formSelector = formValueSelector(formName);
+  const userData = getUserData(state);
   const hasFinancing = formSelector(state, 'has_financing');
   const printed = formSelector(state, 'printed');
   const hasPrinted = formSelector(state, 'has_printed');
@@ -327,7 +329,7 @@ function mapStateToProps(state, props) {
   const countriesOptions = getCountriesOptions(state);
 
   return {
-    userData: user.data,
+    userData,
     countriesData: countries.data,
     rubricsData: rubrics.data,
     rubricSet,

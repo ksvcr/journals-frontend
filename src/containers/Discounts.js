@@ -8,13 +8,13 @@ import { withNamespaces } from 'react-i18next';
 
 
 import * as discountsActions from '~/store/discounts/actions';
-
 import { getIncomingOperations, getOutcomingOperations } from '~/store/discounts/selector';
+import { getUserData } from '~/store/user/selector';
 
 class Discounts extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(discountsActions.fetchDiscounts());
+    const { fetchDiscounts, userId } = this.props;
+    fetchDiscounts(userId);
   }
 
   render() {
@@ -35,13 +35,21 @@ class Discounts extends Component {
 function mapStateToProps(state) {
   const { discounts } = state;
   const { balance } = discounts;
+  const { id:userId } = getUserData(state);
+
   return {
+    userId,
+    balance,
     incomingOperations: getIncomingOperations(state),
-    outcomingOperations: getOutcomingOperations(state),
-    balance
+    outcomingOperations: getOutcomingOperations(state)
   };
 }
+
+const mapDispatchToProps = {
+  fetchDiscounts: discountsActions.fetchDiscounts
+};
+
 Discounts = withNamespaces()(Discounts);
 
 
-export default connect(mapStateToProps)(Discounts);
+export default connect(mapStateToProps, mapDispatchToProps)(Discounts);

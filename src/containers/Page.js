@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Header from '~/components/Header/Header';
 import MainMenu from '~/components/MainMenu/MainMenu';
 import Footer from '~/components/Footer/Footer';
+import ResetControlledButton from '~/components/ResetControlledButton/ResetControlledButton';
 
 import * as userActions from '~/store/user/actions';
 import * as sitesActions from '~/store/sites/actions';
@@ -23,19 +24,32 @@ class Page extends Component {
     });
   }
 
+  fetchUser = () => {
+    const { controlledUser, fetchCurrentUser, fetchControlledUser } = this.props;
+    return fetchCurrentUser().then((response) => {
+      if (response) {
+        const { role } = response.value;
+        if (controlledUser && role === 'REDACTOR') {
+          return fetchControlledUser(controlledUser);
+        }
+      }
+    });
+  };
+
   authUser = () => {
-    const { login, fetchCurrentUser } = this.props;
+    const { login } = this.props;
     if (hasToken()) {
-      return fetchCurrentUser();
+      return this.fetchUser();
     } else {
       return login().then(() => {
-        return fetchCurrentUser();
+        return this.fetchUser();
       });
     }
   };
 
   render() {
-    const { isFulfilled } = this.props;
+    const { isFulfilled, controlledUser, controlledData, userRole } = this.props;
+    const isControlled = controlledUser && controlledData && userRole === 'REDACTOR';
     return (
       <div className="page">
         <Header />
@@ -44,6 +58,10 @@ class Page extends Component {
             <div className="page__holder">
               <aside className="page__sidebar">
                 <MainMenu />
+                {
+                  isControlled &&
+                    <ResetControlledButton />
+                }
               </aside>
               <article className="page__content">
                 { this.props.children }
@@ -59,7 +77,12 @@ class Page extends Component {
 
 function mapStateToProps(state) {
   const { sites, user } = state;
+  const { data:userData, controlledUser, controlledData } = user;
+
   return {
+    controlledUser,
+    controlledData,
+    userRole: userData.role,
     isFulfilled: sites.isFulfilled && user.isFulfilled
   };
 }
@@ -67,6 +90,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   fetchSites: sitesActions.fetchSites,
   fetchCurrentUser: userActions.fetchCurrentUser,
+  fetchControlledUser: userActions.fetchControlledUser,
   login: userActions.login
 };
 

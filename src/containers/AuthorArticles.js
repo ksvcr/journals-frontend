@@ -8,6 +8,7 @@ import SearchPanel from '~/components/SearchPanel/SearchPanel';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
+import { getUserData } from '~/store/user/selector';
 
 class AuthorArticles extends Component {
   componentDidMount() {
@@ -63,9 +64,10 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites, user } = state;
+  const { sites } = state;
+  const { id:userId } = getUserData(state);
   return {
-    userId: user.data.id,
+    userId,
     siteId: sites.current,
     articlesParams: getArticlesParams(state)
   };

@@ -6,6 +6,7 @@ import Menu from '~/components/Menu/Menu';
 import Button from '~/components/Button/Button';
 
 import i18n from '~/services/i18n';
+import { getUserData } from '~/store/user/selector';
 
 import './header-tools.scss';
 
@@ -62,9 +63,9 @@ class HeaderTools extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { role:userRole } = getUserData(state);
   return {
-    userRole: user.data.role
+    userRole
   };
 }
 

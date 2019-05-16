@@ -11,6 +11,7 @@ import InterestList from '~/components/InterestList/InterestList';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersArray } from '~/store/users/selector';
+import { getUserData } from '~/store/user/selector';
 
 import * as userRoles from '~/services/userRoles';
 
@@ -120,9 +121,10 @@ RedactorUsersList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { id:currentUserId } = getUserData(state);
+
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     usersArray: getUsersArray(state)
   };
 }

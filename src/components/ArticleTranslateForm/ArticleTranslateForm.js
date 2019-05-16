@@ -10,6 +10,7 @@ import ArticleCommonTranslateForm from '~/components/ArticleCommonTranslateForm/
 import ArticleSourcesTranslateForm from '~/components/ArticleSourcesTranslateForm/ArticleSourcesTranslateForm';
 
 import { deserializeArticleData } from '~/services/articleFormat';
+import { getUserData } from '~/store/user/selector';
 
 import './article-translate-form.scss';
 import './assets/save.svg';
@@ -69,15 +70,15 @@ ArticleTranslateForm = reduxForm({
 })(ArticleTranslateForm);
 
 function mapStateToProps(state, props) {
-  const { user } = state;
   const isInvalidForm = isInvalid(FORM_NAME)(state);
   const formValues = getFormValues(FORM_NAME)(state);
+  const { userRole } = getUserData(state);
 
   return {
     isInvalidForm,
     formValues,
     initialValues: getInitialValues(state, props),
-    isTranslator: user.data.role === 'TRANSLATOR'
+    isTranslator: userRole === 'TRANSLATOR'
   };
 }
 

@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import Icon from '~/components/Icon/Icon';
 
 import * as userActions from '../../store/user/actions';
+import { getUserData } from '~/store/user/selector';
 
 import './user-panel.scss';
 import './assets/logout.svg';
@@ -40,7 +41,7 @@ function mapStateToProps(state) {
 
   return {
     isFulfilled: user.isFulfilled,
-    user: user.data,
+    user: getUserData(state)
   };
 }
 

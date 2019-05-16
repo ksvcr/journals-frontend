@@ -9,6 +9,7 @@ import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import * as articlesActions from '~/store/articles/actions';
 import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 import { getArticlesParams } from '~/store/articles/selector';
+import { getUserData } from '~/store/user/selector';
 
 class ArticlesForReview extends Component {
   componentWillMount() {
@@ -74,10 +75,10 @@ class ArticlesForReview extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { userId } = getUserData(state);
   return {
     articlesParams: getArticlesParams(state),
-    userId: user.data.id
+    userId
   };
 }
 

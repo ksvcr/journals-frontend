@@ -22,6 +22,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLawtypesArray } from '~/store/lawtypes/selector';
 import { getCountriesOptions } from '~/store/countries/selector';
+import { getUserData } from '~/store/user/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -208,7 +209,8 @@ const defaultDate = moment().format('YYYY-MM-DD');
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
-  const { user, countries } = state;
+  const { countries } = state;
+  const { role:userRole } = getUserData(state);
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
   const countriesOptions = getCountriesOptions(state);
@@ -245,7 +247,7 @@ function mapStateToProps(state, props) {
       accessed_date: defaultDate,
       ...data
     },
-    isCorrector: user.data.role === 'CORRECTOR'
+    isCorrector: userRole === 'CORRECTOR'
   };
 }
 

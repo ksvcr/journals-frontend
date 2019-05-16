@@ -20,11 +20,11 @@ import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
+import { getUserData } from '~/store/user/selector';
 
 import { serializeArticleData } from '~/services/articleFormat';
 import { allowEditStatuses } from '~/services/articleStatuses';
 import apiClient from '~/services/apiClient';
-
 
 class ArticlePublish extends Component {
   constructor(props) {
@@ -239,8 +239,7 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, languages, rubrics,
-          user, countries } = state;
+  const { sites, articles, languages, rubrics, countries } = state;
 
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
@@ -248,6 +247,7 @@ function mapStateToProps(state, props) {
   const articleData = articleId && articles.data[articleId];
   const articleStatus = articleData && articleData.state_article;
   const isEdit = articleId !== undefined;
+  const { id:userId, role:userRole } = getUserData(state);
 
   const isFulfilledCommon =
     languages.isFulfilled &&
@@ -257,9 +257,9 @@ function mapStateToProps(state, props) {
 
   return {
     isEdit,
+    userId,
+    userRole,
     siteId: isEdit && articleData ? articleData.site : sites.current,
-    userId: user.data.id,
-    userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled:
       (isFulfilledCommon && !isEdit) ||

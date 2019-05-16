@@ -15,6 +15,7 @@ import * as articlesActions from '~/store/articles/actions';
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
 import { allowEditStatuses } from '~/services/articleStatuses';
+import { getUserData } from '~/store/user/selector';
 
 class AuthorArticleList extends Component {
   state = {
@@ -189,11 +190,13 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user, articles } = state;
+  const { articles } = state;
   const { total, paginate } = articles;
+  const { id:userId } = getUserData(state);
+
   return {
     articlesArray: getArticlesArray(state),
-    userId: user.data.id,
+    userId,
     total,
     paginate
   };
