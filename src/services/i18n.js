@@ -13,14 +13,15 @@ const resources = {
   }
 };
 
+const userLang = navigator.language || navigator.userLanguage;
+const lng = userLang === 'ru-RU' || userLang === 'ru' ? 'ru' : 'en';
+
 i18n
   .use(reactI18nextModule) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'ru',
-
+    lng,
     keySeparator: false, // we do not use keys in form messages.welcome
-
     interpolation: {
       escapeValue: false // react already safes from xss
     }
