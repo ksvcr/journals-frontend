@@ -185,7 +185,9 @@ const en_translation = {
   mail_address: 'Mail address',
   full_name: 'Full name',
   enter_fullname: 'Enter full name',
-  region: 'Region'
+  region: 'Region',
+  enter_region: 'Enter region',
+  no_financing: 'The authors did not receive financial support for research, writing and publication of the article.',
 };
 
 export default en_translation;

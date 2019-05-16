@@ -63,7 +63,6 @@ class Content extends Component {
     const { content_blocks = [], financing_sources = [] } = data;
     const recommendationId = data.state_article === 'DISAPPROVED' ? 3 : 1;
     const reviews = data.reviews.filter(item => item.recommendation === recommendationId);
-
     return (
       <div className="content">
         { data.text_to_description && (
@@ -90,13 +89,12 @@ class Content extends Component {
           </div>
           <div className="content__financing">
             <h3>{ t('financing') }</h3>
-            { financing_sources ? (
+            { financing_sources && financing_sources.length ? (
               <ul> { this.renderFinancingSources(financing_sources) } </ul>
             ) : (
               <p>
                 { ' ' }
-                Авторы не получали финансовой поддержки для проведения
-                исследования, написания и публикации статьи
+                { t('no_financing') }
               </p>
             ) }
           </div>
@@ -109,7 +107,7 @@ class Content extends Component {
             { data.conflict_interest ? (
               <p>{ data.conflict_interest }</p>
             ) : (
-              <p>Не указан</p>
+              <p>{ t('not_specified') }</p>
             ) }
           </div>
           { data.sources && (

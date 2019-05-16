@@ -185,7 +185,9 @@ const ru_translation = {
   mail_address: 'Почтовый адрес',
   full_name: 'ФИО',
   enter_fullname: 'Введите ФИО',
-  region: 'Область'
+  region: 'Область',
+  enter_region: 'Введите область',
+  no_financing: 'Авторы не получали финансовой поддержки для проведения исследования, написания и публикации статьи'
 };
 
 export default ru_translation;

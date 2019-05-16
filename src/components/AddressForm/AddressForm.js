@@ -1,48 +1,49 @@
 import React from 'react';
 import { Field } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import Numeric from '~/components/Numeric/Numeric';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 
-const AddressForm = ({ field, countriesOptions, countriesData }) => {
+const AddressForm = ({ field, countriesOptions, countriesData, t }) => {
   return (
     <React.Fragment>
       <div className="form__row">
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.last_name` } className="form__label">
-              Фамилия
+              { t('last_name') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.last_name` }
                    id={ `${field}.last_name` }
                    component={ TextField }
-                   placeholder="Введите фамилию" />
+                   placeholder={ t('enter_last_name') } />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.first_name` } className="form__label">
-              Имя
+              { t('name') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.first_name` }
                    id={ `${field}.first_name` }
                    component={ TextField }
-                   placeholder="Введите имя" />
+                   placeholder={ t('enter_name') } />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.middle_name` } className="form__label">
-              Отчество
+              { t('middle_name') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.middle_name` }
                    id={ `${field}.middle_name` }
                    component={ TextField }
-                   placeholder="Введите имя" />
+                   placeholder={ t('enter_middle_name') } />
           </div>
         </div>
       </div>
@@ -51,14 +52,14 @@ const AddressForm = ({ field, countriesOptions, countriesData }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_country` }
                    className="form__label" >
-              Страну
+              { t('country') }
             </label>
             <Field className="searchable-select-wrapper_white"
                    name={ `${field}.mail_address_country` }
                    id={ `${field}.mail_address_country` }
                    format={ value => value ? { label: countriesData[value].name, value } : '' }
                    normalize={ option => option.value }
-                   placeholder="Выберите страну"
+                   placeholder={ t('choose_country') }
                    options={ countriesOptions }
                    component={ SearchableSelect } />
           </div>
@@ -67,26 +68,26 @@ const AddressForm = ({ field, countriesOptions, countriesData }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_state` }
                    className="form__label" >
-              Область/Край
+              { t('region') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_state` }
                    id={ `${field}.mail_address_state` }
                    component={ TextField }
-                   placeholder="Введите область" />
+                   placeholder={ t('enter_region') } />
           </div>
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_city` }
                    className="form__label" >
-              Город
+              { t('city') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_city` }
                    id={ `${field}.mail_address_city` }
                    component={ TextField }
-                   placeholder="Введите город" />
+                   placeholder={ t('enter_city') } />
           </div>
         </div>
       </div>
@@ -165,4 +166,4 @@ const AddressForm = ({ field, countriesOptions, countriesData }) => {
   );
 };
 
-export default AddressForm;
+export default withNamespaces()(AddressForm);
