@@ -12,14 +12,14 @@ import Checkbox from '~/components/Checkbox/Checkbox';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
-
+import { getUserData } from '~/store/user/selector';
 import { getUsersArray, getUsersParams } from '~/store/users/selector';
 
 import getNoun from '~/utils/getNoun';
+import apiClient from '~/services/apiClient';
 
 import './redactor-reviewer-list.scss';
 import './assets/arrow.svg';
-import apiClient from '~/services/apiClient';
 
 class RedactorReviewerList extends Component {
   handleRequest = (params = {}) => {
@@ -194,9 +194,9 @@ class RedactorReviewerList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { id:currentUserId } = getUserData(state);
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     usersArray: getUsersArray(state),
     usersParams: getUsersParams(state)
   };

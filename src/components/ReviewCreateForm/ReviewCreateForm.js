@@ -162,7 +162,6 @@ function mapStateToProps(state, props) {
   const author = articleData && users.data[articleData.author.user];
 
   return {
-    push,
     articleData,
     recommendation,
     rubricsData: rubrics.data,
@@ -174,8 +173,12 @@ function mapStateToProps(state, props) {
   };
 }
 
+const mapDispatchToProps = {
+  push
+};
+
 ReviewCreateForm = withNamespaces()(ReviewCreateForm);
 
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(ReviewCreateForm);

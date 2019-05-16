@@ -1,5 +1,6 @@
 import apiClient from '~/services/apiClient';
-import { LOGIN, LOGOUT, FETCH_CURRENT_USER, UPDATE_CURRENT_USER } from './constants';
+import { LOGIN, LOGOUT, FETCH_CURRENT_USER, UPDATE_CURRENT_USER,
+         SET_CONTROLLED_USER, FETCH_CONTROLLED_USER, RESET_CONTROLLED_USER } from './constants';
 
 export function login() {
   return (dispatch) => {
@@ -42,4 +43,29 @@ export function logout() {
       payload
     }).catch(error => console.error(error));
   }
+}
+
+export function fetchControlledUser(id) {
+  return dispatch => {
+    const payload = apiClient.getUsers(null, id);
+    return dispatch({
+      type: FETCH_CONTROLLED_USER,
+      payload
+    }).catch(error => console.error(error));
+  };
+}
+
+export function setControlledUser(id) {
+  localStorage.setItem('controlledUser', id);
+  return {
+    type: SET_CONTROLLED_USER,
+    id
+  };
+}
+
+export function resetControlledUser() {
+  localStorage.removeItem('controlledUser');
+  return {
+    type: RESET_CONTROLLED_USER
+  };
 }

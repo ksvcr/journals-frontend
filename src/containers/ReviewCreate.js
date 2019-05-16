@@ -8,6 +8,7 @@ import { withNamespaces } from 'react-i18next';
 import * as rubricsActions from '~/store/rubrics/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
+import { getUserData } from '~/store/user/selector';
 
 class ReviewCreate extends Component {
   componentDidMount() {
@@ -76,10 +77,10 @@ class ReviewCreate extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { user, articles } = state;
+  const { articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
-  const currentUserId = user.data.id;
+  const { id:currentUserId } = getUserData(state);
   const reviews = articles.data[articleId]
     ? articles.data[articleId].reviews
     : [];

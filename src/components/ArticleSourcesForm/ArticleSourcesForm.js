@@ -8,10 +8,11 @@ import { withNamespaces } from 'react-i18next';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';
+import DownloadLink from '~/components/DownloadLink/DownloadLink';
 
 import fileToBase64 from '~/utils/fileToBase64';
 import * as validate from '~/utils/validate';
-import DownloadLink from '~/components/DownloadLink/DownloadLink';
+import { getUserData } from '~/store/user/selector';
 
 import './article-sources-form.scss';
 
@@ -111,11 +112,12 @@ class ArticleSourcesForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { user, articles } = state;
+  const { articles } = state;
   const { formName, articleId } = props;
   const formSelector = formValueSelector(formName);
   const list_literature_file = formSelector(state, 'list_literature_file');
-  const isCorrector = user.data.role === 'CORRECTOR';
+  const { role:userRole } = getUserData(state);
+  const isCorrector = userRole === 'CORRECTOR';
   const articleData = articles.data[articleId];
 
   return {

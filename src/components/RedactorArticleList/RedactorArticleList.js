@@ -13,6 +13,7 @@ import RedactorActions from '~/components/RedactorActions/RedactorActions';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import * as formatDate from '~/services/formatDate';
 import { articleStatusOptions } from '~/services/articleStatuses';
@@ -190,11 +191,12 @@ class RedactorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites, articles, user } = state;
+  const { sites, articles } = state;
   const { total, paginate } = articles;
+  const { id:userId, userRole } = getUserData(state);
   return {
-    userId: user.data.id,
-    userRole: user.data.role,
+    userId,
+    userRole,
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
     total, paginate

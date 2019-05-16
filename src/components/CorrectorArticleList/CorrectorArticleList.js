@@ -10,6 +10,7 @@ import TagEditor from '~/components/TagEditor/TagEditor';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import * as formatDate from '~/services/formatDate';
 
@@ -142,12 +143,14 @@ class CorrectorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { articles, sites, user } = state;
+  const { articles, sites } = state;
   const { total, paginate } = articles;
+  const userData = getUserData(state);
+
   return {
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
-    userData: user.data,
+    userData,
     total, paginate
   };
 }

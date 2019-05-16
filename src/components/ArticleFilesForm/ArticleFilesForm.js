@@ -6,6 +6,7 @@ import { withNamespaces } from 'react-i18next';
 
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
+import { getUserData } from '~/store/user/selector';
 
 import fileToBase64 from '~/utils/fileToBase64';
 
@@ -64,12 +65,13 @@ class ArticleFilesForm extends Component {
 
 function mapStateToProps(state, props) {
   const { articleId } = props;
-  const { articles, user } = state;
+  const { articles } = state;
   const articleData = articles.data[articleId];
+  const userData = getUserData(state);
 
   return {
-    userData: user.data,
-    isProofreading: user.data.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
+    userData,
+    isProofreading: userData.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
   };
 }
 

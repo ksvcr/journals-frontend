@@ -24,6 +24,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
+import { getUserData } from '~/store/user/selector';
 
 const FORM_NAME_BASE = 'article-publish';
 
@@ -37,9 +38,9 @@ class ArticleForm extends Component {
   }
 
   get wizardSteps() {
-    const { t, userData } = this.props;
+    const { t, userRole } = this.props;
 
-    switch (userData.role) {
+    switch (userRole) {
       case 'CORRECTOR':
         return [
           {
@@ -160,18 +161,20 @@ ArticleForm = reduxForm({
 const initialAuthorHash = nanoid();
 
 function mapStateToProps(state, props) {
-  const { user, articles } = state;
+  const { articles } = state;
   const { id='new' } = props;
   const formName = `${FORM_NAME_BASE}-${id}`;
   const isInvalidForm = isInvalid(formName)(state);
   const formValues = getFormValues(formName)(state);
+  const { role:userRole } = getUserData(state);
+
   return {
     id,
-    form: formName,
     formValues,
     isInvalidForm,
+    userRole,
+    form: formName,
     initialValues: getInitialValues(state, props),
-    userData: user.data,
     isRejected: articles.isRejected,
     articlesError: articles.error,
     articleData: articles.data[id]
@@ -195,13 +198,15 @@ function getRubricSet(rubric, rubricsData) {
 }
 
 function getInitialValues(state, props) {
-  const { user, articles, rubrics } = state;
+  const { articles, rubrics } = state;
   const { id } = props;
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const financingIds = getFinancingIds();
   const data = deserializeArticleData(articles.data[id]);
   const defaultRubric = rubricsArray.find(item => item.parent === null);
+  const userData = getUserData(state);
+
   const initialValues = {
     language: languagesArray.length ? languagesArray[0].twochar_code : null,
     is_conflict_interest: true,
@@ -211,7 +216,7 @@ function getInitialValues(state, props) {
       type: financingIds[0]
     }],
     authors: [{
-      id: user.data.id,
+      id: userData.id,
       isCurrent: true,
       source: 'search',
       hash: initialAuthorHash

@@ -7,9 +7,12 @@ import TextField from '~/components/TextField/TextField';
 import Radio from '~/components/Radio/Radio';
 import Button from '~/components/Button/Button';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import ReqMark from '~/components/ReqMark/ReqMark';
 
 import { roleMap, getUserRoleTitle } from '~/services/userRoles';
 import { getCountriesOptions } from '~/store/countries/selector';
+import { getUserData } from '~/store/user/selector';
+
 import * as validate from '~/utils/validate';
 
 import './author-settings-form.scss';
@@ -44,7 +47,7 @@ class AuthorSettingsForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="last_name" className="form__label">
-                { t('last_name') }
+                { t('last_name') } <ReqMark />
               </label>
               <Field name="last_name" id="last_name"
                      component={ TextField } placeholder={ t('enter_last_name') }
@@ -52,7 +55,7 @@ class AuthorSettingsForm extends Component {
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="first_name" className="form__label">
-                { t('name') }
+                { t('name') } <ReqMark />
               </label>
               <Field name="first_name" id="first_name"
                      component={ TextField } placeholder={ t('enter_name') }
@@ -64,7 +67,6 @@ class AuthorSettingsForm extends Component {
               </label>
               <Field name="middle_name" id="middle_name"
                      component={ TextField } placeholder={ t('enter_middle_name') }
-                     validate={ [validate.required] }
               />
             </div>
           </div>
@@ -345,13 +347,15 @@ AuthorSettingsForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { userId } = props;
-  const { user, users, countries } = state;
-  const initialValues = userId ? users.data[userId] : user.data;
+  const { users, countries } = state;
+  const userData = getUserData(state);
+
+  const initialValues = userId ? users.data[userId] : userData;
 
   const countriesOptions = getCountriesOptions(state);
 
   return {
-    userData: user.data,
+    userData,
     countriesOptions,
     countriesData: countries.data,
     initialValues

@@ -12,6 +12,7 @@ import DownloadLink from '~/components/DownloadLink/DownloadLink';
 
 import fileToBase64 from '~/utils/fileToBase64';
 import getArticleTypes from '~/services/getArticleTypes';
+import { getUserData } from '~/store/user/selector';
 
 import './article-content-form.scss';
 import * as validate from '~/utils/validate';
@@ -91,13 +92,14 @@ class ArticleContentForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName, articleId } = props;
-  const { articles, user } = state;
+  const { articles } = state;
   const articleData = articles.data[articleId];
   const formSelector = formValueSelector(formName);
   const is_send_as_file = formSelector(state, 'is_send_as_file');
+  const userData = getUserData(state);
 
   return {
-    userData: user.data,
+    userData,
     articleData,
     is_send_as_file
   };

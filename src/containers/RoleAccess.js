@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import NotFound from '~/containers/NotFound';
+import { getUserData } from '~/store/user/selector';
 
 export default function(RouteComponent, roles) {
   class RoleAccess extends Component {
@@ -16,9 +17,9 @@ export default function(RouteComponent, roles) {
   }
 
   function mapStateToProps(state) {
-    const { user } = state;
+    const { role:userRole } = getUserData(state);
     return {
-      userRole: user.data.role
+      userRole
     };
   }
 

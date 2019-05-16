@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import Menu from '~/components/Menu/Menu';
+import { getUserData } from '~/store/user/selector';
 
 import './main-menu.scss';
 
@@ -106,9 +107,10 @@ class MainMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user, router } = state;
+  const { router } = state;
+  const { role:userRole } = getUserData(state);
   return {
-    userRole: user.data.role,
+    userRole,
     pathname: router.location.pathname
   };
 }

@@ -1,14 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import MailForm from '~/components/MailForm/MailForm';
 
 import apiClient from '~/services/apiClient';
+import * as userActions from '~/store/user/actions';
 
 class RedactorUsersListMenu extends Component {
   state = {
     showMail: false
+  };
+
+  getToolsMenuItems = (data) => {
+    const menuArr = [];
+
+    menuArr.push({
+      title: 'Написать',
+      handler: this.handleMailToggle
+    });
+
+    if (data.role !== 'REDACTOR') {
+      menuArr.push({
+        title: 'Войти',
+        handler: this.handleUserLogin
+      });
+
+      menuArr.push({
+        title: 'Заблокировать',
+        handler: this.handleUserLock
+      });
+    }
+
+    return menuArr;
   };
 
   handleMailToggle = () => {
@@ -19,21 +44,12 @@ class RedactorUsersListMenu extends Component {
     }, 0); // хак, чтобы тултип не успевал закрыться при смене контента
   };
 
-  getToolsMenuItems = (data) => {
-    return [
-      {
-        title: 'Написать',
-        handler: this.handleMailToggle
-      },
-      {
-        title: 'Войти',
-        link: `/settings/${data.id}`
-      },
-      {
-        title: 'Заблокировать',
-        handler: this.handleUserLock
-      }
-    ];
+  handleUserLogin = userId => {
+    const { setControlledUser, fetchControlledUser, push } = this.props;
+    setControlledUser(userId);
+    fetchControlledUser(userId).then(() => {
+      push('/');
+    });
   };
 
   handleUserLock = userId => {
@@ -71,7 +87,12 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  push,
+  setControlledUser : userActions.setControlledUser,
+  fetchControlledUser : userActions.fetchControlledUser
+};
 
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(RedactorUsersListMenu);

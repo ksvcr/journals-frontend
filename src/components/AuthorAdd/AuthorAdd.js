@@ -4,16 +4,18 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
-import Radio from '~/components/Radio/Radio';
 import AuthorChooser from '~/components/AuthorChooser/AuthorChooser';
+import Collapse from '~/components/Collapse/Collapse';
 import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
+import Checkbox from '~/components/Checkbox/Checkbox';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import Radio from '~/components/Radio/Radio';
+
 import { getRolesArray } from '~/store/roles/selector';
+import { getUserData } from '~/store/user/selector';
 import { searchUsers, createUser, insertUser } from '~/store/users/actions';
 
 import './author-add.scss';
-import Checkbox from '~/components/Checkbox/Checkbox';
-import FieldHint from '~/components/FieldHint/FieldHint';
-import Collapse from '~/components/Collapse/Collapse';
 
 class AuthorAdd extends Component {
   get sources() {
@@ -165,7 +167,7 @@ AuthorAdd.defaultProps = {
 
 function mapStateToProps(state, props) {
   const { formName, field, data } = props;
-  const { users, user } = state;
+  const { users } = state;
   const { isCurrent } = data;
 
   const formSelector = formValueSelector(formName);
@@ -173,10 +175,10 @@ function mapStateToProps(state, props) {
   const id = formSelector(state, `${field}.id`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
   const authorRolesArray = getRolesArray(state);
-
+  const userData = getUserData(state);
   return {
     correspondingAuthor,
-    authorData: isCurrent ? user.data : users.data[id],
+    authorData: isCurrent ? userData : userData[id],
     authorsArray: users.searchData[hash],
     searchData: users.searchData,
     authorRolesArray,

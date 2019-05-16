@@ -9,6 +9,7 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import * as usersActions from '~/store/users/actions';
 import * as reviewInvitesActions from '~/store/reviewInvites/actions';
 import * as articleActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import './invited-reviewers-list.scss';
 
@@ -110,10 +111,11 @@ class InvitedReviewersList extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { articles, user } = state;
+  const { articles } = state;
   const { articleId } = props;
+  const { id:currentUserId } = getUserData(state);
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     reviewers: articles.reviewers,
     articleData: articles.data[articleId]
   };

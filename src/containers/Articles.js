@@ -6,6 +6,8 @@ import RedactorArticles from '~/containers/RedactorArticles';
 import CorrectorArticles from '~/containers/CorrectorArticles';
 import TranslatorArticles from '~/containers/TranslatorArticles';
 
+import { getUserData } from '~/store/user/selector';
+
 class Articles extends Component {
   render() {
     const { userRole } = this.props;
@@ -26,9 +28,9 @@ class Articles extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { role:userRole } = getUserData(state);
   return {
-    userRole: user.data.role
+    userRole
   };
 }
 
