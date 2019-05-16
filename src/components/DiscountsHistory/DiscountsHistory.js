@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { withNamespaces } from 'react-i18next';
 
 import DiscountsOperations from '~/components/DiscountsOperations/DiscountsOperations';
 
@@ -12,15 +13,15 @@ class DiscountsHistory extends Component {
   };
 
   get tabs() {
-    const { incomingOperations, outcomingOperations } = this.props;
+    const { t, incomingOperations, outcomingOperations } = this.props;
 
     return [
       {
-        title: 'История получения',
+        title: t('payment_history'),
         component: <DiscountsOperations operations={ incomingOperations } />
       },
       {
-        title: 'История использования',
+        title: t('usage_history'),
         component: <DiscountsOperations operations={ outcomingOperations } />
       }
     ];
@@ -69,5 +70,7 @@ DiscountsHistory.propTypes = {
   incomingOperations: PropTypes.array.isRequired,
   outcomingOperations: PropTypes.array.isRequired
 };
+
+DiscountsHistory = withNamespaces()(DiscountsHistory);
 
 export default DiscountsHistory;

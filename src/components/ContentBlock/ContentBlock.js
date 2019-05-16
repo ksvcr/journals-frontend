@@ -35,7 +35,7 @@ class ContentBlock extends Component {
     tmp.innerHTML = value;
     value = tmp.textContent;
     value = value ? value : 'Заголовок поля';
-    change(formName, `blocks[${index}].title`, value);
+    change(formName, `content_blocks[${index}].title`, value);
   };
 
   handleTitleEditToogle = () => {

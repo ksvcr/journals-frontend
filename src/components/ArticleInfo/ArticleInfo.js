@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import ArticleSpec from '~/components/ArticleSpec/ArticleSpec';
 import TagEditor from '~/components/TagEditor/TagEditor';
 
 import * as articlesActions from '~/store/articles/actions';
+import getArticleTypes from '~/services/getArticleTypes';
+
+import { getUserData } from '~/store/user/selector';
 
 import './article-info.scss';
-import getArticleTypes from '~/services/getArticleTypes';
 
 class ArticleInfo extends Component {
   handleTagAdd = (article, text) => {
@@ -18,21 +21,21 @@ class ArticleInfo extends Component {
   };
 
   get specData() {
-    const { articleData, sitesData, rubricsData } = this.props;
+    const { t, articleData, sitesData, rubricsData } = this.props;
     const site = sitesData[articleData.site];
     const types = getArticleTypes();
-
+    const rubric = rubricsData[articleData.rubric];
     return [
       {
-        title: 'Для журнала',
-        value: site ? site.name : 'Журнал не найден'
+        title: t('for_journals'),
+        value: site ? site.name : t('journal_not_found')
       },
       {
-        title: 'Категория статьи:',
-        value: rubricsData[articleData.rubric].name
+        title: t('article_category'),
+        value: rubric ? rubric.name : 'Рубрика не найдена'
       },
       {
-        title: 'Тип статьи:',
+        title: t('type_category'),
         value: types[articleData.article_type]
       }
     ];
@@ -55,14 +58,16 @@ class ArticleInfo extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { user, articles, sites, rubrics } = state;
+  const { articles, sites, rubrics } = state;
   const { id } = props;
+  const { id:userId, role:userRole } = getUserData(state);
+
   return {
     rubricsData: rubrics.data,
     sitesData: sites.data,
     articleData: articles.isFulfilled && articles.data[id],
-    userId: user.data.id,
-    userRole: user.data.role
+    userId,
+    userRole
   };
 }
 
@@ -74,6 +79,8 @@ const mapDispatchToProps = {
 ArticleInfo.propTypes = {
   id: PropTypes.number.isRequired
 };
+
+ArticleInfo = withNamespaces()(ArticleInfo);
 
 export default connect(
   mapStateToProps,

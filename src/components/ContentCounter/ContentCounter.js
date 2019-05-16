@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import punycode from 'punycode';
+import { withNamespaces } from 'react-i18next';
 
 import './content-counter.scss';
 
@@ -26,11 +27,12 @@ class ContentCounter extends Component {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <div className="content-counter">
         <div className="content-counter__item">
           <div className="content-counter__label">
-            Символов:
+            { t('characters') }:
           </div>
           <div className="content-counter__value">
             { this.countChar() }
@@ -38,7 +40,7 @@ class ContentCounter extends Component {
         </div>
         <div className="content-counter__item">
           <div className="content-counter__label">
-            Слов:
+            { t('words') }:
           </div>
           <div className="content-counter__value">
             { this.countWord() }
@@ -46,7 +48,7 @@ class ContentCounter extends Component {
         </div>
         <div className="content-counter__item">
           <div className="content-counter__label">
-            Пробелов:
+            { t('spaces') }:
           </div>
           <div className="content-counter__value">
             { this.countSpace() }
@@ -57,5 +59,7 @@ class ContentCounter extends Component {
     );
   }
 }
+
+ContentCounter = withNamespaces()(ContentCounter);
 
 export default ContentCounter;

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 
 class DiscountsOperations extends Component {
   get listProps() {
-    const { operations } = this.props;
+    const { t, operations } = this.props;
     return {
       data: operations,
       head: true,
@@ -15,7 +16,7 @@ class DiscountsOperations extends Component {
           style: {
             width: '65%'
           },
-          head: () => 'Комментарий',
+          head: () => t('comment'),
           render: (data) => data.comment
         },
         {
@@ -32,7 +33,7 @@ class DiscountsOperations extends Component {
           style: {
             width: '15%'
           },
-          head: () => 'Сумма',
+          head: () => t('amount'),
           render: (data) => Math.abs(data.amount)
         }
       ]
@@ -51,5 +52,7 @@ class DiscountsOperations extends Component {
 DiscountsOperations.propTypes = {
   operations: PropTypes.array.isRequired
 };
+
+DiscountsOperations = withNamespaces()(DiscountsOperations);
 
 export default DiscountsOperations;

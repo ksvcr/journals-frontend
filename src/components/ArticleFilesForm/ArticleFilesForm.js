@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import { FieldArray, arrayPush } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleFileList from '~/components/ArticleFileList/ArticleFileList';
+import { getUserData } from '~/store/user/selector';
 
 import fileToBase64 from '~/utils/fileToBase64';
 
@@ -31,20 +33,19 @@ class ArticleFilesForm extends Component {
     });
   };
 
+  renderFileList = props => <ArticleFileList { ...props } />;
+
   render() {
-    const { isProofreading } = this.props;
+    const { t, isProofreading } = this.props;
     return (
       <div className="article-files-form">
-        <h2 className="page__title">Файлы к статье</h2>
+        <h2 className="page__title">{ t('files_to_article') }</h2>
 
         { isProofreading ?
           <FieldArray name="file_atachments"
                       component={ props => <ArticleFileList download { ...props } /> } /> :
           <React.Fragment>
-            <p className="article-files-form__description">
-              Вы можете выбрать несколько файлов. Для каждого из них нужно будет
-              заполнить описание
-            </p>
+            <p className="article-files-form__description">{ t('select_several_files') }</p>
             <Dropzone className="article-files-form__dropzone"
                       accept=".doc, .docx, .rtf"
                       maxSize={ 50 * Math.pow(1024, 2) }
@@ -53,7 +54,7 @@ class ArticleFilesForm extends Component {
             </Dropzone>
 
             <FieldArray name="file_atachments"
-                        component={ props => <ArticleFileList { ...props } /> } />
+                        component={ this.renderFileList } />
           </React.Fragment>
         }
 
@@ -64,18 +65,21 @@ class ArticleFilesForm extends Component {
 
 function mapStateToProps(state, props) {
   const { articleId } = props;
-  const { articles, user } = state;
+  const { articles } = state;
   const articleData = articles.data[articleId];
+  const userData = getUserData(state);
 
   return {
-    userData: user.data,
-    isProofreading: user.data.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
+    userData,
+    isProofreading: userData.role === 'CORRECTOR' && articleData.state_article === 'AWAIT_PROOFREADING'
   };
 }
 
 const mapDispatchToProps = {
   arrayPush
 };
+
+ArticleFilesForm = withNamespaces()(ArticleFilesForm);
 
 export default connect(
   mapStateToProps,

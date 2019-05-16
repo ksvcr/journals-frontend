@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import fetchService from '~/utils/fetchService';
 
 const fetchInstance = new fetchService({
-  baseURL: process.env.REACT_APP_API_URL
+  baseURL: process.env.REACT_APP_API_URL || '/api'
 });
 
 const apiClient = {
@@ -16,9 +16,10 @@ const apiClient = {
   logout: () => fetchInstance.request('/users/auth/logout'),
   getCurrentUser: () => fetchInstance.request('/users/me/'),
   updateCurrentUser: (data) => fetchInstance.request('/users/me/', { method: 'put', data }),
-  getUsers: (userId = null, params) => {
+  getUsers: (siteId = null, userId = null, params) => {
+    const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
     const tail = userId !== null ? `${userId}/` : '';
-    return fetchInstance.request(`/users/${tail}`, { params });
+    return fetchInstance.request(`${sitePrefix}/users/${tail}`, { params });
   },
   updateUser: (userId, data) =>
     fetchInstance.request(`/users/${userId}/`, { method: 'put', data }),
@@ -26,6 +27,12 @@ const apiClient = {
     fetchInstance.request('/users/auth/register/', { method: 'post', data }),
   lockUser: data =>
     fetchInstance.request('/users/lock/', { method: 'post', data }),
+  sendMail: data =>
+    fetchInstance.request('/users/mass-mailing/', { method: 'post', data }),
+  getUserStatistics: (params) =>
+    fetchInstance.request('/users/me/statistic/', { params }),
+  getUserStatisticsCounter: () =>
+    fetchInstance.request('/users/me/statistic/agg'),
 
   createUserTag: data =>
     fetchInstance.request('/users/tags/', { method: 'post', data }),
@@ -34,10 +41,8 @@ const apiClient = {
 
   createSources: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'post', data }),
-  editSource: (articleId, data) =>
-    fetchInstance.request(`/articles/${articleId}/sources/${data.id}/`, { method: 'put', data }),
-  removeSource: (articleId, sourceId) =>
-    fetchInstance.request(`/articles/${articleId}/sources/${sourceId}/`, { method: 'delete' }),
+  editSources: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/sources/`, { method: 'put', data }),
 
   getArticles: (siteId = null, articleId = null, params) => {
     const sitePrefix = siteId !== null ? `sites/${siteId}` : '';
@@ -52,18 +57,22 @@ const apiClient = {
     return fetchInstance.request(`/articles/${articleId}/`, { method: 'put', data });
   },
   lockArticle: articleId => fetchInstance.request(`/articles/${articleId}/lock/`),
+  getArticleHistory: articleId => fetchInstance.request(`/articles/${articleId}/states`),
   createArticleAttachment: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'post', data }),
-  editArticleAttachment: (id, data) =>
-    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'put', data }),
-  removeArticleAttachment: id =>
-    fetchInstance.request(`/articles/attachments/${id}/`, { method: 'delete' }),
+  editArticleAttachment: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/attachments/`, { method: 'put', data }),
   createBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'post', data }),
   editBlocks: (articleId, data) =>
     fetchInstance.request(`/articles/${articleId}/blocks/`, { method: 'put', data }),
-
-  createFinancingSources: data => fetchInstance.request('/financing/', { method: 'post', data }),
+  getFinancingSources: (articleId, params) =>
+    fetchInstance.request(`/articles/${articleId}/financing/`, { params }),
+  createFinancingSources: (articleId, data) =>
+    fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'post', data }),
+  editFinancingSources: (articleId, data) => {
+    return fetchInstance.request(`/articles/${articleId}/financing/`, { method: 'put', data });
+  },
   editFinancingSource: (id, data) => {
     return fetchInstance.request(`/financing/${id}/`, { method: 'put', data });
   },
@@ -91,7 +100,7 @@ const apiClient = {
   editReviewInvite: (id, data) => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'put', data }),
   removeReviewInvite: id => fetchInstance.request(`/reviews/invites/${id}/`, { method: 'delete' }),
   createArticleTranslation: (articleId, data) => {
-    return fetchInstance.request(`/articles/${articleId}/translations/`, {
+    return fetchInstance.request(`/articles/${articleId}/translations/${data.language_code}/`, {
       method: 'post',
       data
     });
@@ -100,11 +109,14 @@ const apiClient = {
     const tail = languageCode !== null ? `${languageCode}/` : '';
     return fetchInstance.request(`/articles/${articleId}/translations/${tail}`);
   },
-  editArticleTranslation: (articleId, languageCode, data) => {
+  editArticleTranslation: (articleId, data) => {
     return fetchInstance.request(
-      `/articles/${articleId}/translations/${languageCode}/`,
+      `/articles/${articleId}/translations/${data.language_code}/`,
       { method: 'put', data }
     );
+  },
+  commitArticleTranslation: (articleId, languageCode) => {
+    return fetchInstance.request(`/articles/${articleId}/translations/${languageCode}/commit/`, { method: 'post' });
   },
   getDiscountsInfo: userId =>
     fetchInstance.request(`users/${userId}/balance`),
@@ -122,6 +134,8 @@ const apiClient = {
       { method: 'put', data }
     );
   },
+  createArticleReviewAnswer: (articleId, reviewId, data) =>
+    fetchInstance.request(`/articles/${articleId}/reviews/${reviewId}/answer/`, { method: 'put', data }),
   getArticleTags: (params) => fetchInstance.request('articles/tags/', { params }),
   getUserTags: (params) => fetchInstance.request('users/tags/', { params }),
 
@@ -131,11 +145,8 @@ const apiClient = {
   },
   getAvailableRoles: (siteId) => fetchInstance.request(`sites/${siteId}/author-roles/`),
   createArticlePrinted: (articleId, data) => fetchInstance.request(`/articles/${articleId}/printed/`, { method: 'post', data }),
-  editArticlePrinted: (articleId, printedId, data) => {
-    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'put', data })
-  },
-  removeArticlePrinted: (articleId, printedId) => {
-    return fetchInstance.request(`articles/${articleId}/printed/${printedId}/`, { method: 'delete' })
+  editArticlePrinted: (articleId, data) => {
+    return fetchInstance.request(`articles/${articleId}/printed/`, { method: 'put', data })
   },
   getPrinted: (articleId, printedId=null) => {
     const tail = printedId !== null ? `${printedId}/` : '';
@@ -147,6 +158,7 @@ fetchInstance.instance.interceptors.response.use(null, error => {
   if (error.config && error.response && error.response.status === 403) {
     if (process.env.NODE_ENV === 'production') {
       Cookies.remove('csrftoken');
+      Cookies.remove('sessionid');
       window.location.replace('/');
     }
   }

@@ -12,7 +12,10 @@ class SiteSelect extends Component {
     let { value:currentSite } = event.target;
     currentSite = parseInt(currentSite, 10);
     setCurrentSite(currentSite);
-    onChange && onChange();
+    setTimeout(() => {
+      // OnСhange нужен только только обновления стора
+      onChange && onChange();
+    }, 0);
   };
 
   get sitesOptions() {

@@ -1,31 +1,16 @@
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import * as validate from '~/utils/validate';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import SourceAuthorsFields from '~/components/SourceAuthorsFields/SourceAuthorsFields';
 
 const SourceMultiVolumeBookFields = () => {
   return (
     <React.Fragment>
-      <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_6">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author[0].lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_6">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author[0].initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-        </div>
-      </div>
+      <FieldArray name="authors" component={ SourceAuthorsFields } />
 
       <div className="form__field">
         <label htmlFor="original_part_name" className="form__label">
@@ -37,26 +22,26 @@ const SourceMultiVolumeBookFields = () => {
 
       <div className="form__field">
         <label htmlFor="second_part_name" className="form__label">
-          Название части/тома английском
+          Название части/тома английском <ReqMark />
         </label>
         <Field name="second_part_name" id="second_part_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <label htmlFor="original_source_name" className="form__label">
-          Название на языке оригинала
+          Название на языке оригинала <ReqMark />
         </label>
         <Field name="original_name" id="original_source_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <label htmlFor="second_source_name" className="form__label">
-          Название на английском языке
+          Название на английском языке <ReqMark />
         </label>
         <Field name="second_source_name" id="second_source_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
@@ -83,9 +68,10 @@ const SourceMultiVolumeBookFields = () => {
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="page_count" className="form__label">

@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import Icon from '~/components/Icon/Icon';
 
 import * as userActions from '../../store/user/actions';
+import { getUserData } from '~/store/user/selector';
 
 import './user-panel.scss';
 import './assets/logout.svg';
@@ -15,6 +16,7 @@ class UserPanel extends Component {
 
     logout().then(() => {
       Cookies.remove('csrftoken');
+      Cookies.remove('sessionid');
       window.location.replace('/');
     });
   };
@@ -25,7 +27,7 @@ class UserPanel extends Component {
 
     return isFulfilled ? (
       <div className="user-panel">
-        { `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.` }
+        { `${last_name} ${first_name.charAt(0)}. ${ middle_name ? middle_name.charAt(0) + '.' : ''}` }
         <button className="user-panel__logout" onClick={ this.handleLogout }>
           <Icon name="logout" className="user-panel__icon" />
         </button>
@@ -39,7 +41,7 @@ function mapStateToProps(state) {
 
   return {
     isFulfilled: user.isFulfilled,
-    user: user.data,
+    user: getUserData(state)
   };
 }
 

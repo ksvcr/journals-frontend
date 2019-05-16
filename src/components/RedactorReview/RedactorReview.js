@@ -11,6 +11,7 @@ import RedactorCollapseButton from '~/components/RedactorCollapseButton/Redactor
 import Collapse from '~/components/Collapse/Collapse';
 
 import * as articlesActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import './redactor-review.scss';
 
@@ -121,10 +122,11 @@ RedactorReview.propTypes = {
 };
 
 function mapStateToProps(state, props) {
-  const { articles, user } = state;
+  const { articles } = state;
   const { articleId } = props;
+  const { id:currentUserId } = getUserData(state);
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     articleData: articles.data[articleId]
   };
 }

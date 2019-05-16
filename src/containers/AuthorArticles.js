@@ -8,6 +8,7 @@ import SearchPanel from '~/components/SearchPanel/SearchPanel';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
+import { getUserData } from '~/store/user/selector';
 
 class AuthorArticles extends Component {
   componentDidMount() {
@@ -40,7 +41,7 @@ class AuthorArticles extends Component {
         <h1 className="page__title">{ t('my_articles') }</h1>
 
         <div className="page__tools">
-          <form className="form">
+          <div className="form">
             <div className="form__field">
               <label htmlFor="sites-list" className="form__label">
                 { t('for_journals') }
@@ -53,7 +54,7 @@ class AuthorArticles extends Component {
                            onChange={ this.handleRequest }
               />
             </div>
-          </form>
+          </div>
         </div>
 
         <AuthorArticleList onUpdateRequest={ this.handleRequest } />
@@ -63,9 +64,10 @@ class AuthorArticles extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sites, user } = state;
+  const { sites } = state;
+  const { id:userId } = getUserData(state);
   return {
-    userId: user.data.id,
+    userId,
     siteId: sites.current,
     articlesParams: getArticlesParams(state)
   };

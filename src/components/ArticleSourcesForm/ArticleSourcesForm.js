@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { change, Field, FieldArray, formValueSelector, getFormValues } from 'redux-form';
+import { change, Field, FieldArray, formValueSelector } from 'redux-form';
 import nanoid from 'nanoid';
 import Dropzone from 'react-dropzone';
+import { withNamespaces } from 'react-i18next';
 
 import Checkbox from '~/components/Checkbox/Checkbox';
 import FileDropPlaceholder from '~/components/FileDropPlaceholder/FileDropPlaceholder';
 import ArticleSourceList from '~/components/ArticleSourceList/ArticleSourceList';
+import DownloadLink from '~/components/DownloadLink/DownloadLink';
 
 import fileToBase64 from '~/utils/fileToBase64';
 import * as validate from '~/utils/validate';
-import DownloadLink from '~/components/DownloadLink/DownloadLink';
+import { getUserData } from '~/store/user/selector';
 
 import './article-sources-form.scss';
 
@@ -53,20 +55,20 @@ class ArticleSourcesForm extends Component {
 
   render() {
     const { isFile } = this.state;
-    const { isProofreading, articleData } = this.props;
+    const { t, isProofreading, articleData } = this.props;
     return (
       <div className="article-sources-form">
-        <h2 className="page__title">Список литературы</h2>
+        <h2 className="page__title">{ t('source_list') }</h2>
 
         { isProofreading && isFile ?
           <div className="article-sources-form__file">
-            <DownloadLink file={ articleData.list_literature_file } name="Список литературы" />
+            <DownloadLink file={ articleData.list_literature_file } name={ t('source_list') } />
           </div>
           :
           <div className="form__field">
             <Checkbox value={ isFile } checked={ isFile }
                       onChange={ this.handleChange }>
-              Хочу добавить список литературы файлом
+              { t('add_file_with_list') }
             </Checkbox>
             <div className="article-content-form__description">
               При добавлении списка литературы файлом, стоимость размещения увеличится на 30%
@@ -90,21 +92,35 @@ class ArticleSourcesForm extends Component {
                         component={ this.renderSourceList } />
           </div>
         }
+
+        { !isProofreading &&
+          <React.Fragment>
+            <hr className="article-sources-form__divider" />
+            <div className="form__field">
+              <Field name="publicationAllowed" validate={ [validate.required] } component={ Checkbox }>
+                Материал разрешен к публикации
+              </Field>
+              <div className="article-sources-form__allowed-description">
+                Я подтверждаю, что данная статья не нарушает права третьих лиц и не противоречит данным мною обязательствам о неразглашении информации.
+              </div>
+            </div>
+          </React.Fragment>
+        }
       </div>
     );
   }
 }
 
 function mapStateToProps(state, props) {
-  const { user, articles } = state;
+  const { articles } = state;
   const { formName, articleId } = props;
   const formSelector = formValueSelector(formName);
   const list_literature_file = formSelector(state, 'list_literature_file');
-  const isCorrector = user.data.role === 'CORRECTOR';
+  const { role:userRole } = getUserData(state);
+  const isCorrector = userRole === 'CORRECTOR';
   const articleData = articles.data[articleId];
 
   return {
-    formValues: getFormValues(formName)(state),
     isProofreading: isCorrector && articleData.state_article === 'AWAIT_PROOFREADING',
     list_literature_file,
     articleData
@@ -114,6 +130,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   change
 };
+
+ArticleSourcesForm = withNamespaces()(ArticleSourcesForm);
 
 export default connect(
   mapStateToProps,

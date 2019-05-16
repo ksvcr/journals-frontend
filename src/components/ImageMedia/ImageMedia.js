@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import Icon from '~/components/Icon/Icon';
-
 import './assets/download.svg';
 import './image-media.scss';
 
@@ -25,10 +23,6 @@ class ImageMedia extends Component {
             <div className="image-media__doi">
               DOI: <a href="/" className="image-media__doi-link">https://doi.org/10.18454/IRJ.2016.44.041</a>
             </div>
-            <a className="image-media__download" href="/">
-              <Icon className="image-media__icon" name="download"/>
-              TIFF
-            </a>
           </div>
         </div>
       </div>

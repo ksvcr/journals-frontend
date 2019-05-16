@@ -13,7 +13,6 @@ import './reviews-history.scss';
 class ReviewsHistory extends Component {
   renderList = () => {
     const { reviews, isCollapse } = this.props;
-
     return reviews.map((item, index) => {
       return isCollapse ? (
         <Collapse key={ index } title={ item.review_round + ' раунд рецензирования' } >

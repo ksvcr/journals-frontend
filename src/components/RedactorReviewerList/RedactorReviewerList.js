@@ -12,14 +12,14 @@ import Checkbox from '~/components/Checkbox/Checkbox';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
-
+import { getUserData } from '~/store/user/selector';
 import { getUsersArray, getUsersParams } from '~/store/users/selector';
 
 import getNoun from '~/utils/getNoun';
+import apiClient from '~/services/apiClient';
 
 import './redactor-reviewer-list.scss';
 import './assets/arrow.svg';
-import apiClient from '~/services/apiClient';
 
 class RedactorReviewerList extends Component {
   handleRequest = (params = {}) => {
@@ -30,11 +30,11 @@ class RedactorReviewerList extends Component {
       search: params.search_query || usersParams.search,
       role: 'REVIEWER'
     };
-    fetchUsers(data);
+    fetchUsers(null, data);
   };
 
   renderName = ({ last_name, first_name, middle_name }) =>
-    `${last_name} ${first_name.charAt(0)}. ${middle_name.charAt(0)}.`;
+    `${last_name} ${first_name.charAt(0)}. ${ middle_name ? middle_name.charAt(0) + '.' : ''}`;
 
   handleChoose = event => {
     const { articleId, inviteArticleReviewer, fetchArticleReviewInvites } = this.props;
@@ -74,7 +74,7 @@ class RedactorReviewerList extends Component {
           },
           head: () => 'Научные интересы',
           render: ({ sphere_scientific_interests }) => (
-            <InterestList data={ sphere_scientific_interests } />
+            sphere_scientific_interests ? <InterestList data={ sphere_scientific_interests } /> : null
           )
         },
         {
@@ -146,7 +146,7 @@ class RedactorReviewerList extends Component {
       loadOptions: this.loadOptions,
       placeholder: 'Выберите тег',
       normalize: option => option.value,
-      onChange: tag => this.handleRequest({ filter: { tag_ids: tag } })
+      onChange: ({ value }) => this.handleRequest({ filter: { tag_ids: value } })
     };
   }
 
@@ -194,9 +194,9 @@ class RedactorReviewerList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state;
+  const { id:currentUserId } = getUserData(state);
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     usersArray: getUsersArray(state),
     usersParams: getUsersParams(state)
   };

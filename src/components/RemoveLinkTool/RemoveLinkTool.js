@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EditorUtils from 'draft-js-plugins-utils';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 
@@ -14,13 +15,16 @@ class RemoveLinkTool extends Component {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <button type="button" className="remove-link-tool editor-button" onClick={ this.handleRemove }>
-        Удалить ссылку
+        { t('delete_link') }
         <Icon name="unlink" className="remove-link-tool__icon editor-button__icon" />
       </button>
     );
   }
 }
+
+RemoveLinkTool = withNamespaces()(RemoveLinkTool);
 
 export default RemoveLinkTool;

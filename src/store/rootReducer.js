@@ -3,9 +3,9 @@ import { reducer as formReducer } from 'redux-form'
 
 import languages from './languages/reducer';
 import rubrics from './rubrics/reducer';
-import categories from './categories/reducer';
 import sites from './sites/reducer';
 import articles from './articles/reducer';
+import articleHistory from './articleHistory/reducer';
 import user from './user/reducer';
 import users from './users/reducer';
 import reviewInvites from './reviewInvites/reducer';
@@ -14,14 +14,15 @@ import lawtypes from './lawtypes/reducer';
 import countries from './countries/reducer';
 import reviews from './reviews/reducer';
 import roles from './roles/reducer';
+import stats from './stats/reducer';
 
 export default combineReducers({
   form: formReducer,
   languages,
   rubrics,
-  categories,
   sites,
   articles,
+  articleHistory,
   user,
   users,
   reviewInvites,
@@ -30,5 +31,6 @@ export default combineReducers({
   countries,
   reviews,
   roles,
+  stats
 });
 

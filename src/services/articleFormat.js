@@ -1,12 +1,18 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, financing_sources, blocks, sources,
-          file_atachments, ...rest } = data;
+  const { authors = [], has_financing, has_printed, financing_sources, blocks, sources,
+          file_atachments, use_address_from_profile, printed, rubric_set, ...rest } = data;
 
   const serializedData = {
     ...rest,
     text_to_title: data.title,
     article_type: 1
   };
+
+  rubric_set.forEach(item => {
+    if (item) {
+      serializedData.rubric = item;
+    }
+  });
 
   if (has_financing && financing_sources) {
     serializedData.financing_sources = financing_sources.filter(item => {
@@ -18,12 +24,20 @@ export function serializeArticleData(data = {}) {
     }
   }
 
+  if (has_printed) {
+    if (use_address_from_profile) {
+      serializedData.printed = [{ use_address_from_profile: true }];
+    } else {
+      serializedData.printed = printed;
+    }
+  }
+
   const author = authors.find(author => author.id !== undefined);
 
   if (author) {
     serializedData.author = { user: author.id };
 
-    if(author.roles) {
+    if (author.roles) {
       serializedData.author.roles = Object.keys(author.roles)
         .filter(key => author.roles[key])
         .map(role => role.split('-')[0]);
@@ -65,7 +79,9 @@ export function serializeArticleData(data = {}) {
   }
 
   if (sources) {
-    serializedData.sources = sources.filter(item => item.resourcetype);
+    serializedData.sources = sources.filter(item => item.resourcetype).map(item => {
+      return item.author ? item : { ...item, author: item.authors }
+    });
   }
 
   // Удаляем загруженные файлы, так как апи принимает только base64
@@ -84,8 +100,9 @@ export function serializeArticleData(data = {}) {
 }
 
 export function deserializeArticleData(data = {}) {
-  const { author, collaborators, ...rest } = data;
+  const { author, collaborators, sources, ...rest } = data;
   const deserializedData = rest;
+
   if (author && collaborators) {
     deserializedData.authors = [
       {
@@ -98,6 +115,21 @@ export function deserializeArticleData(data = {}) {
       }))
     ];
   }
+
+  if (sources) {
+    deserializedData.sources = sources.map(item => {
+      const newItem = { ...item };
+      if (Array.isArray(item.author)) {
+        newItem.authors = item.author;
+        delete newItem.author;
+      }
+
+      return newItem;
+    });
+  }
+
+  deserializedData.has_printed = Boolean(data.printed);
+  deserializedData.use_address_from_profile = data.printed && data.printed[0] && data.printed[0].use_address_from_profile;
   return deserializedData;
 }
 

@@ -22,14 +22,17 @@ class AuthorChooser extends Component {
       <div className="author-chooser__item" key={ item.id }>
         <div className="author-chooser__box">
           <div className="author-chooser__name">
-            { `${item.last_name} ${item.first_name} ${item.middle_name}` }
+            { `${item.last_name} ${item.first_name} ${item.middle_name || ''}` }
           </div>
-          <div className="author-chooser__info">
-            НИИ УХИМВАДЕ, Екатеринбург, Россия
-          </div>
+          { (item.workplace || item.study_place) &&
+            <div className="author-chooser__info">
+              { item.workplace || item.study_place }
+            </div>
+          }
         </div>
         <div className="author-chooser__button">
-          <Button className="button_small" data-id={ item.id } data-index={ index } onClick={ this.handleClick }>
+          <Button className="button_small" data-id={ item.id } data-index={ index }
+                  onClick={ this.handleClick }>
             Выбрать
           </Button>
         </div>

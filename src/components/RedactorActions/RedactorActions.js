@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import RedactorReview from '~/components/RedactorReview/RedactorReview';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
+import ArticleHistory from '~/components/ArticleHistory/ArticleHistory';
 
 import isShowDecision from '~/services/isShowDecision';
 
@@ -15,18 +17,22 @@ class RedactorActions extends Component {
   };
 
   get actions() {
-    const { articleId, articleState } = this.props;
+    const { t, articleId, articleState } = this.props;
 
     const actions = [
       {
         title: 'Рецензировать',
         component: <RedactorReview articleId={ articleId } />
+      },
+      {
+        title: t('history'),
+        component: <ArticleHistory articleId={ articleId } />
       }
     ];
 
     if (isShowDecision(articleState)) {
       actions.push({
-        title: 'Решение',
+        title: t('decision'),
         component: <div className="redactor-actions__decision">
           <RedactorDecision articleId={ articleId } />
         </div>
@@ -93,6 +99,8 @@ function mapStateToProps(state, props) {
     articleState: articles.data[articleId] && articles.data[articleId].state_article
   };
 }
+
+RedactorActions = withNamespaces()(RedactorActions);
 
 export default connect(
   mapStateToProps

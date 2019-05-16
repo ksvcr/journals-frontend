@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
 import ReviewContent from '~/components/ReviewContent/ReviewContent';
+import { withNamespaces } from 'react-i18next';
 
 import * as reviewsActions from '~/store/reviews/actions';
 import * as articlesActions from '~/store/articles/actions';
@@ -26,17 +27,17 @@ class ReviewPreview extends Component {
   };
 
   render() {
-    const { isFulfilled, articleId, reviewData, articleData } = this.props;
+    const { t, isFulfilled, articleId, reviewData, articleData } = this.props;
 
     return isFulfilled && (
       <React.Fragment>
-        <h1 className="page__title">Рецензия</h1>
+        <h1 className="page__title">{ t('review') }</h1>
 
         <ArticleInfo id={ articleId } />
 
         <hr className="page__divider" />
 
-        <ReviewContent data={ reviewData }
+        <ReviewContent data={ reviewData } articleId={ articleId }
                        isShowDecision={ isShowDecision(articleData.state_article) } />
       </React.Fragment>
     );
@@ -63,6 +64,8 @@ const mapDispatchToProps = {
   fetchArticle: articlesActions.fetchArticle,
   fetchRubrics: rubricsActions.fetchRubrics,
 };
+
+ReviewPreview = withNamespaces()(ReviewPreview);
 
 export default connect(
   mapStateToProps,

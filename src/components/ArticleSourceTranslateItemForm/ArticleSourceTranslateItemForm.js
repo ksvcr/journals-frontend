@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
@@ -12,6 +13,7 @@ import * as validate from '~/utils/validate';
 class ArticleSourceTranslateItemForm extends Component {
   getFields = (status) => {
     const standartParams = [{ name: 'second_name', original: 'original_name', label: 'Название' }];
+    const { t } = this.props;
 
     switch (status) {
       case 'SourceThesis':
@@ -23,21 +25,21 @@ class ArticleSourceTranslateItemForm extends Component {
         return [ ...standartParams, {
           name: 'issue_english_title',
           original: 'issue_title',
-          label: 'Название издания'
+          label: t('title_of_edition')
         }];
 
       case 'SourceMultiVolumeBook':
         return [ ...standartParams, {
           name: 'second_part_name',
           original: 'original_part_name',
-          label: 'Название части/тома оригинальное'
+          label: t('original_title_of_part')
         }];
 
       case 'SourceElectronic':
         return [ ...standartParams, {
           name: 'second_source_name',
           original: 'original_source_name',
-          label: 'Название источника оригинальное'
+          label: t('original_title_of_source')
         }];
 
       case 'SourceLegislativeMaterial':
@@ -55,7 +57,7 @@ class ArticleSourceTranslateItemForm extends Component {
         return [{
           name: 'second_invention_title',
           original: 'invention_title',
-          label: 'Название изобретения'
+          label: t('title_of_invention')
         }, {
           name: 'person_name_translate',
           original: 'person_name',
@@ -63,11 +65,11 @@ class ArticleSourceTranslateItemForm extends Component {
         }, {
           name: 'organization_name_translate',
           original: 'organization_name',
-          label: 'Название организации'
+          label: t('title_of_organization')
         }, {
           name: 'publication_place_translate',
           original: 'publication_place',
-          label: ' Где опубликован патент'
+          label: 'Где опубликован патент'
         }];
 
       default:
@@ -77,6 +79,7 @@ class ArticleSourceTranslateItemForm extends Component {
 
   renderFields = (source) => {
     const fields = this.getFields(source.resourcetype);
+    const { t } = this.props;
 
     return fields.map((field, index) => {
       let fieldName = field.name;
@@ -91,7 +94,7 @@ class ArticleSourceTranslateItemForm extends Component {
           <TextField className="text-field_preview text-field_dark" textarea value={ fieldValue } readOnly />
           <Field name={ fieldName } id={ fieldName } value={ source[fieldName] }
                  textarea component={ TextField } className="text-field_white"
-                 placeholder="Введите перевод" validate={ [validate.required] } />
+                 placeholder={ t('enter_translation') } validate={ [validate.required] } />
         </div>
       )
     })
@@ -103,7 +106,7 @@ class ArticleSourceTranslateItemForm extends Component {
   };
 
   render() {
-    const { data, handleSubmit } = this.props;
+    const { t, data, handleSubmit } = this.props;
     return (
       <form onSubmit={ handleSubmit(this.handleSubmit) }>
         { this.renderFields(data) }
@@ -111,7 +114,7 @@ class ArticleSourceTranslateItemForm extends Component {
         <div className="form__field">
           <Button type="submit">
             <Icon name="save" className="article-source-create-form__save-icon" />
-            Сохранить
+            { t('save') }
           </Button>
         </div>
       </form>
@@ -131,5 +134,7 @@ function mapStateToProps(state, props) {
     },
   };
 }
+
+ArticleSourceTranslateItemForm = withNamespaces()(ArticleSourceTranslateItemForm);
 
 export default connect(mapStateToProps)(ArticleSourceTranslateItemForm);

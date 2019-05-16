@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 
@@ -32,20 +33,23 @@ class PaymentRequisites extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <div className="payment-requisites">
         <p className="payment-requisites__description">
-          Оплатить данную сумму Вы можете по следующим реквизитам:
+          { t('requisites_for_payment') }:
         </p>
         <div className="payment-requisites__wallets">
           { this.renderWallets() }
         </div>
         <p className="payment-requisites__warning">
-          При оплате не забывайте указывать ваше имя и название публикации!
+          { t('name_reminder') }!
         </p>
       </div>
     );
   }
 }
+
+PaymentRequisites = withNamespaces()(PaymentRequisites);
 
 export default PaymentRequisites;

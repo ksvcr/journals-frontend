@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
 import { EditorState } from 'draft-js';
+import { removeRange } from '~/services/customDraftUtils';
 
 class AtomicBlock extends Component {
   handleChange = (data) => {
@@ -30,6 +31,11 @@ class AtomicBlock extends Component {
     blockProps.onInteractChange(false);
   };
 
+  handleRemove = () => {
+    const { block, blockProps } = this.props;
+    removeRange(block, blockProps);
+  };
+
   get entity() {
     const { contentState, block } = this.props;
     return contentState.getEntity(
@@ -42,7 +48,7 @@ class AtomicBlock extends Component {
     const type = this.entity.getType();
     switch(type){
       case 'image-list':
-        return <ImageMediaEditor data={ data } onChange={ this.handleChange }
+        return <ImageMediaEditor data={ data } onChange={ this.handleChange } onRemove={ this.handleRemove }
                                  onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
       default:
         return null;

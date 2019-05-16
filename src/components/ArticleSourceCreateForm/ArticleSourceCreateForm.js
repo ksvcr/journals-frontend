@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import Button from '~/components/Button/Button';
@@ -21,6 +22,7 @@ import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLawtypesArray } from '~/store/lawtypes/selector';
 import { getCountriesOptions } from '~/store/countries/selector';
+import { getUserData } from '~/store/user/selector';
 
 import getSourceTypes from '~/services/getSourceTypes';
 import getRightholderTypes from '~/services/getRightholderTypes';
@@ -53,11 +55,12 @@ class ArticleSourceCreateForm extends Component {
   }
 
   get thesisCategories() {
+    const { t } = this.props;
     return [{
-      title: 'Кандидатская',
+      title: t('candidates_work'),
       value: '1',
     }, {
-      title: 'Докторская',
+      title: t('doctoral_work'),
       value: '2'
     }]
   }
@@ -124,7 +127,7 @@ class ArticleSourceCreateForm extends Component {
   }
 
   render() {
-    const { handleSubmit, resourceType, isCorrector } = this.props;
+    const { t, handleSubmit, resourceType, isCorrector } = this.props;
     return (
       <form className="article-source-create-form form" onSubmit={ handleSubmit(this.handleSubmit) }>
         {
@@ -134,7 +137,7 @@ class ArticleSourceCreateForm extends Component {
               <div className="form__row">
                 <div className="form__col form__col_6">
                   <label htmlFor="resourcetype" className="form__label">
-                    Тип источника
+                    { t('type_of_source') }
                   </label>
                   <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
                          component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
@@ -142,7 +145,7 @@ class ArticleSourceCreateForm extends Component {
                 { resourceType === 'SourceThesis' ?
                   <div className="form__col form__col_6">
                     <label htmlFor="category" className="form__label">
-                      Тип диссертации
+                      { t('type_of_dissertation') }
                     </label>
                     <div className="form__box form__box_radios">
                       { this.renderThesisCategories() }
@@ -150,7 +153,7 @@ class ArticleSourceCreateForm extends Component {
                   </div> :
                   <div className="form__col form__col_6">
                     <label htmlFor="source_language" className="form__label">
-                      Язык оригинала
+                      { t('original_language') }
                     </label>
                     <Field name="language" id="source_language" className="select_white"
                            component={ props => <Select options={ this.languagesOptions } { ...props } /> } />
@@ -170,7 +173,7 @@ class ArticleSourceCreateForm extends Component {
                 URL публикации
               </label>
               <Field name="url" id="source_url" className="text-field_white" component={ TextField }
-                     placeholder="Введите URL" />
+                     placeholder="Введите URL" validate={ [validate.url] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="source_doi" className="form__label">
@@ -192,7 +195,7 @@ class ArticleSourceCreateForm extends Component {
         <div className="form__field">
           <Button type="submit">
             <Icon name="save" className="article-source-create-form__save-icon" />
-            Сохранить
+            { t('save') }
           </Button>
         </div>
       </form>
@@ -206,7 +209,8 @@ const defaultDate = moment().format('YYYY-MM-DD');
 
 function mapStateToProps(state, props) {
   const { formName, data } = props;
-  const { user, countries } = state;
+  const { countries } = state;
+  const { role:userRole } = getUserData(state);
   const formSelector = formValueSelector(formName);
   const languagesArray = getLanguagesArray(state);
   const countriesOptions = getCountriesOptions(state);
@@ -231,6 +235,7 @@ function mapStateToProps(state, props) {
       rubric: rubricsArray.length ? rubricsArray[0].id : null,
       resourcetype: sourceTypes[0].value,
       rightholder: rightholderTypes[0].value,
+      authors: [{}],
       category: '1',
       defense_date: defaultDate,
       statement_date: defaultDate,
@@ -239,12 +244,14 @@ function mapStateToProps(state, props) {
       approval_date: defaultDate,
       patent_application_date: defaultDate,
       publication_date: defaultDate,
+      accessed_date: defaultDate,
       ...data
     },
-    isCorrector: user.data.role === 'CORRECTOR'
+    isCorrector: userRole === 'CORRECTOR'
   };
 }
 
+ArticleSourceCreateForm = withNamespaces()(ArticleSourceCreateForm);
 
 export default connect(mapStateToProps)(ArticleSourceCreateForm);
 

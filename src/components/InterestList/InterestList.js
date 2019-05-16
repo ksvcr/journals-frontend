@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import './interest-list.scss';
 
 class InterestList extends Component {
@@ -16,5 +16,9 @@ class InterestList extends Component {
     );
   }
 }
+
+InterestList.propTypes = {
+  data: PropTypes.array.isRequired
+};
 
 export default InterestList;

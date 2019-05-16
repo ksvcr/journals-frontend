@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
 import ReqMark from '~/components/ReqMark/ReqMark';
@@ -9,8 +10,11 @@ import Button from '~/components/Button/Button';
 import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import MultiSwitch from '~/components/MultiSwitch/MultiSwitch';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
+import ArticleVersions from '~/components/ArticleVersions/ArticleVersions';
+import ArticleSpec from '~/components/ArticleSpec/ArticleSpec';
 
 import * as validate from '~/utils/validate';
+import getArticleTypes from '~/services/getArticleTypes';
 
 import './review-create-form.scss';
 
@@ -28,19 +32,20 @@ class ReviewCreateForm extends Component {
   };
 
   get recommendationOptions() {
+    const { t } = this.props;
     return [
       {
-        title: 'Принять',
+        title: t('accept'),
         value: 1,
         color: 'green'
       },
       {
-        title: 'Доработать',
+        title: t('finalize'),
         value: 2,
         color: 'orange'
       },
       {
-        title: 'Отклонить',
+        title: t('reject'),
         value: 3,
         color: 'red'
       }
@@ -48,13 +53,35 @@ class ReviewCreateForm extends Component {
   }
 
   get commentForAuthorLabel() {
-    const { reviews, recommendation } = this.props;
-    let label = 'Текст рецензии';
+    const { t, reviews, recommendation } = this.props;
+    let label = t('review_text');
     const review_round = reviews.length + 1;
     if (recommendation !== 1) {
       label = `Замечания после ${review_round} раунда рецензирования`;
     }
     return label;
+  }
+
+
+  get specData() {
+    const { articleData, sitesData, rubricsData } = this.props;
+    const site = sitesData[articleData.site];
+    const types = getArticleTypes();
+    const rubric = rubricsData[articleData.rubric];
+    return [
+      {
+        title: 'Для журнала',
+        value: site ? site.name : 'Журнал не найден'
+      },
+      {
+        title: 'Категория статьи:',
+        value: rubric ? rubric.name : 'Рубрика не найдена'
+      },
+      {
+        title: 'Тип статьи:',
+        value: types[articleData.article_type]
+      }
+    ];
   }
 
   handleRecommendationChange = (value) => {
@@ -64,15 +91,23 @@ class ReviewCreateForm extends Component {
   };
 
   render() {
-    const { articleData, handleSubmit, recommendation, reviews, author } = this.props;
-
+    const { t, articleData, handleSubmit, recommendation, reviews, author } = this.props;
     return articleData ? (
       <form className="review-create-form" onSubmit={ handleSubmit }>
         <h2 className="page__title">{ articleData.title }</h2>
 
+        <div className="review-create-form__spec">
+          <ArticleSpec data={ this.specData } />
+        </div>
+
+        <div className="review-create-form__versions">
+          <ArticleVersions articleId={ articleData.id }
+                           versions={ articleData.versions } />
+        </div>
+
         <div className="form__field">
           <label htmlFor="recommendation" className="form__label">
-            Ваши рекомендации к статье:
+            { t('your_article_recommendations') }:
           </label>
           <MultiSwitch id="recommendation" name="recommendation" options={ this.recommendationOptions }
                        onChange={ this.handleRecommendationChange } value={ recommendation } />
@@ -107,7 +142,7 @@ class ReviewCreateForm extends Component {
         </div>
 
         <div className="form__field">
-          <Button type="submit">Отправить рецензию</Button>
+          <Button type="submit">{ t('send_review') }</Button>
         </div>
       </form>
     ) : null;
@@ -120,16 +155,17 @@ ReviewCreateForm = reduxForm({
 
 function mapStateToProps(state, props) {
   const { id:articleId } = props;
-  const { articles, users } = state;
+  const { articles, users, rubrics, sites } = state;
   const selector = formValueSelector('review-create');
   const recommendation = selector(state, 'recommendation');
   const articleData = articles.data[articleId];
   const author = articleData && users.data[articleData.author.user];
 
   return {
-    push,
     articleData,
     recommendation,
+    rubricsData: rubrics.data,
+    sitesData: sites.data,
     initialValues: {
       recommendation: 1
     },
@@ -137,6 +173,12 @@ function mapStateToProps(state, props) {
   };
 }
 
+const mapDispatchToProps = {
+  push
+};
+
+ReviewCreateForm = withNamespaces()(ReviewCreateForm);
+
 export default connect(
-  mapStateToProps
+  mapStateToProps, mapDispatchToProps
 )(ReviewCreateForm);

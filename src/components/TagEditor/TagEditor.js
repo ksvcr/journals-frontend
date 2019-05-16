@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ContentEditable from 'react-contenteditable';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
+
 
 import Icon from '~/components/Icon/Icon';
 
@@ -86,6 +88,7 @@ class TagEditor extends Component {
   };
 
   render() {
+    const { t } = this.props;
     const { isEdit, newText } = this.state;
     const itemClasses = classNames('tag-editor__item', { 'tag-editor__item_empty': !newText });
     return (
@@ -97,7 +100,7 @@ class TagEditor extends Component {
               <ContentEditable className="tag-editor__box tag-editor__box_field" ref={ this.getRef } html={ newText }
                                onChange={ this.handleChange } onBlur={ this.handleCreate } onKeyDown={ this.handleKeyPressed } /> :
               <button className="tag-editor__add" type="button"
-                      onClick={ this.handleAdd }>Добавить тег</button>
+                      onClick={ this.handleAdd }>{ t('add_tag') }</button>
             }
           </div>
         </div>
@@ -116,5 +119,8 @@ TagEditor.propTypes = {
   onAdd: PropTypes.func,
   onRemove: PropTypes.func
 };
+
+TagEditor = withNamespaces()(TagEditor);
+
 
 export default TagEditor;

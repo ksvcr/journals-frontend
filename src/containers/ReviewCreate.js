@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
 import ReviewCreateForm from '~/components/ReviewCreateForm/ReviewCreateForm';
+import { withNamespaces } from 'react-i18next';
 
+import * as rubricsActions from '~/store/rubrics/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
+import { getUserData } from '~/store/user/selector';
 
 class ReviewCreate extends Component {
   componentDidMount() {
@@ -13,7 +16,7 @@ class ReviewCreate extends Component {
   }
 
   handleInitialRequest = () => {
-    const { articleId, fetchArticle, fetchUser } = this.props;
+    const { articleId, fetchArticle, fetchUser, fetchRubrics } = this.props;
 
     const promises = [];
 
@@ -21,7 +24,12 @@ class ReviewCreate extends Component {
       promises.push(
         fetchArticle(articleId).then(({ value: articleData }) => {
           const authorId = articleData.author.user.id;
-          return fetchUser(authorId);
+          const { site:siteId } = articleData;
+
+          return Promise.all([
+            fetchUser(authorId),
+            fetchRubrics(siteId)
+          ]);
         })
       );
     }
@@ -52,10 +60,10 @@ class ReviewCreate extends Component {
   };
 
   render() {
-    const { articleId, reviewsFromCurrentUser } = this.props;
+    const { t, articleId, reviewsFromCurrentUser } = this.props;
     return (
       <React.Fragment>
-        <h1 className="page__title">Новая рецензия</h1>
+        <h1 className="page__title">{ t('new_review') }</h1>
 
         <ReviewCreateForm
           id={ articleId }
@@ -69,10 +77,10 @@ class ReviewCreate extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { user, articles } = state;
+  const { articles } = state;
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
-  const currentUserId = user.data.id;
+  const { id:currentUserId } = getUserData(state);
   const reviews = articles.data[articleId]
     ? articles.data[articleId].reviews
     : [];
@@ -90,8 +98,11 @@ const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
   createArticleReview: articlesActions.createArticleReview,
-  fetchUser: usersActions.fetchUser
+  fetchUser: usersActions.fetchUser,
+  fetchRubrics: rubricsActions.fetchRubrics
 };
+
+ReviewCreate = withNamespaces()(ReviewCreate);
 
 export default connect(
   mapStateToProps,

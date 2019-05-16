@@ -6,39 +6,21 @@ import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import * as validate from '~/utils/validate';
 import moment from 'moment';
+import FieldHint from '~/components/FieldHint/FieldHint';
 
 const SourceStandart = () => {
   return (
     <React.Fragment>
       <div className="form__field">
-        <div className="form__row">
-          <div className="form__col form__col_4">
-            <label htmlFor="lastname" className="form__label">
-              Фамилия автора <ReqMark />
-            </label>
-            <Field name="author.lastname" id="lastname" className="text-field_white" component={ TextField }
-                   placeholder="Введите фамилию автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_4">
-            <label htmlFor="initials" className="form__label">
-              Инициалы автора <ReqMark />
-            </label>
-            <Field name="author.initials" id="initials" className="text-field_white" component={ TextField }
-                   placeholder="Введите инициалы автора" validate={ [validate.required] } />
-          </div>
-          <div className="form__col form__col_4">
-            <label htmlFor="standart_entry_date" className="form__label">
-              Дата ввода стандарта <ReqMark />
-            </label>
-            <Field name="standart_entry_date" id="standart_entry_date" validate={ [validate.required] }
-                   parse={ value => value.format('YYYY-MM-DD') } format={ value => moment(value, 'YYYY-MM-DD') }
-                   component={ props =>  <Calendar className="text-field_white"
-                                                   customInput={ <TextField meta={ props.meta } /> }
-                                                   selected={ props.input.value } { ...props } /> } />
-          </div>
-        </div>
+        <label htmlFor="standart_entry_date" className="form__label">
+          Дата ввода стандарта <ReqMark />
+        </label>
+        <Field name="standart_entry_date" id="standart_entry_date" validate={ [validate.required] }
+               parse={ value => value.format('YYYY-MM-DD') } format={ value => moment(value, 'YYYY-MM-DD') }
+               component={ props =>  <Calendar className="text-field_white"
+                                               customInput={ <TextField meta={ props.meta } /> }
+                                               selected={ props.input.value } { ...props } /> } />
       </div>
-
       <div className="form__field">
         <label htmlFor="original_name" className="form__label">
           Название на языке оригинала <ReqMark />
@@ -49,10 +31,10 @@ const SourceStandart = () => {
 
       <div className="form__field">
         <label htmlFor="second_name" className="form__label">
-          Название на английском языке
+          Название на английском языке <ReqMark />
         </label>
         <Field name="second_name" id="second_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" />
+               placeholder="Введите название" validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
@@ -79,9 +61,10 @@ const SourceStandart = () => {
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_year" className="form__label">
               Год издания <ReqMark />
+              <FieldHint text={ 'В формате (ГГГГ)' } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
-                   placeholder="Введите название" validate={ [validate.required] } />
+                   placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="page_count" className="form__label">

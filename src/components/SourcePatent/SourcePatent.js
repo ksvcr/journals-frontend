@@ -18,7 +18,7 @@ const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, coun
             <label htmlFor="number" className="form__label">
               Номер патента <ReqMark />
             </label>
-            <Field name="number" id="number" className="text-field_white" component={ TextField }
+            <Field name="number" id="number" className="text-field_white" type="number" component={ TextField }
                    placeholder="Введите номер патента" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_4">
@@ -85,10 +85,10 @@ const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, coun
 
       <div className="form__field">
         <label htmlFor="second_invention_title" className="form__label">
-          Название изобретения на английском
+          Название изобретения на английском <ReqMark />
         </label>
         <Field name="second_invention_title" id="second_invention_title" className="text-field_white" component={ TextField }
-               placeholder="Введите название изобретения на английском" />
+               placeholder="Введите название изобретения на английском" validate={ [validate.required] } />
       </div>
 
       { rightholderType === 1 ?
@@ -159,16 +159,17 @@ const SourcePatent = ({ rightholderType, rightholderOptions, countriesData, coun
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="page_count" className="form__label">
-              Количество страниц
+              Количество страниц <ReqMark />
             </label>
             <Field name="page_count" id="page_count" className="text-field_white" component={ TextField }
-                   placeholder="Введите количество страниц" />
+                   placeholder="Введите количество страниц" validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_4">
             <label htmlFor="country" className="form__label">
               Страна <ReqMark />
             </label>
             <Field name="country" id="country"
+                   validate={ [validate.required] }
                    format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
                    normalize={ option => option.value }
                    placeholder="Выберите страну"

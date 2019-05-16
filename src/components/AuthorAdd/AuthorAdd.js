@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
 import { change, Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
-import Radio from '~/components/Radio/Radio';
 import AuthorChooser from '~/components/AuthorChooser/AuthorChooser';
+import Collapse from '~/components/Collapse/Collapse';
 import AuthorCreateForm from '~/components/AuthorCreateForm/AuthorCreateForm';
+import Checkbox from '~/components/Checkbox/Checkbox';
+import FieldHint from '~/components/FieldHint/FieldHint';
+import Radio from '~/components/Radio/Radio';
+
 import { getRolesArray } from '~/store/roles/selector';
+import { getUserData } from '~/store/user/selector';
 import { searchUsers, createUser, insertUser } from '~/store/users/actions';
 
 import './author-add.scss';
-import Checkbox from '~/components/Checkbox/Checkbox';
-import FieldHint from '~/components/FieldHint/FieldHint';
-import Collapse from '~/components/Collapse/Collapse';
 
 class AuthorAdd extends Component {
   get sources() {
+    const { t } = this.props;
     return [
-      { value: 'search', title: 'Найти в системе' },
-      { value: 'create', title: 'Создать автора' }
+      { value: 'search', title: t('find_in_system') },
+      { value: 'create', title: t('create_author') }
     ];
   }
 
@@ -72,7 +76,7 @@ class AuthorAdd extends Component {
   };
 
   render() {
-    const { field, authorData, correspondingAuthor,
+    const { t, field, authorData, correspondingAuthor,
             authorsArray, data, authorRolesArray } = this.props;
     const { source, isCurrent, hash } = data;
 
@@ -82,11 +86,13 @@ class AuthorAdd extends Component {
           <div className="author-add__current">
             <div className="author-add__person">
               <div className="author-add__name">
-                { `${authorData.last_name} ${authorData.first_name} ${authorData.middle_name}` }
+                { `${authorData.last_name} ${authorData.first_name} ${authorData.middle_name || ''}` }
               </div>
-              <div className="author-add__info">
-                НИИ УХИМВАДЕ, Екатеринбург, Россия
-              </div>
+              { (authorData.workplace || authorData.study_place) &&
+                <div className="author-chooser__info">
+                  { authorData.workplace || authorData.study_place }
+                </div>
+              }
             </div>
             <div className="form__field form__field_inline">
               <Checkbox name="isCorrespondingAuthor" checked={ authorData.id ===  correspondingAuthor }
@@ -100,7 +106,7 @@ class AuthorAdd extends Component {
                 <Collapse
                   title={
                     <React.Fragment>
-                      { isCurrent ? 'Моя роль в подготовке статьи' : 'Роль в подготовке статьи' }
+                      { isCurrent ? t('my_role_in_preparation_article') : t('role_in_preparation_article') }
                       <FieldHint text={ 'Подсказка про роли' } />
                     </React.Fragment>
                   }>
@@ -121,7 +127,7 @@ class AuthorAdd extends Component {
             ) }
           </div> :
           <div className="author-add__form">
-            <h3 className="author-add__title">Добавить автора</h3>
+            <h3 className="author-add__title">{ t('add_autor') }</h3>
             <Field name={ `${field}.id` } type="hidden" component={ TextField } />
 
             <div className="form__field">
@@ -161,7 +167,7 @@ AuthorAdd.defaultProps = {
 
 function mapStateToProps(state, props) {
   const { formName, field, data } = props;
-  const { users, user } = state;
+  const { users } = state;
   const { isCurrent } = data;
 
   const formSelector = formValueSelector(formName);
@@ -169,10 +175,10 @@ function mapStateToProps(state, props) {
   const id = formSelector(state, `${field}.id`);
   const correspondingAuthor = formSelector(state, 'corresponding_author');
   const authorRolesArray = getRolesArray(state);
-
+  const userData = getUserData(state);
   return {
     correspondingAuthor,
-    authorData: isCurrent ? user.data : users.data[id],
+    authorData: isCurrent ? userData : userData[id],
     authorsArray: users.searchData[hash],
     searchData: users.searchData,
     authorRolesArray,
@@ -185,5 +191,8 @@ const mapDispatchToProps = {
   createUser,
   insertUser
 };
+
+AuthorAdd = withNamespaces()(AuthorAdd);
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorAdd);

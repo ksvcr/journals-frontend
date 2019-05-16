@@ -3,10 +3,10 @@ import { FETCH_USERS, FETCH_USER, SEARCH_USERS, CREATE_USER,
 import apiClient from '~/services/apiClient';
 import getFlatParams from '~/services/getFlatParams';
 
-export function fetchUsers(params) {
+export function fetchUsers(siteId, params) {
   return dispatch => {
     const flatParams = getFlatParams(params);
-    const payload = apiClient.getUsers(null, flatParams);
+    const payload = apiClient.getUsers(siteId, null, flatParams);
     return dispatch({
       type: FETCH_USERS,
       meta: params,
@@ -17,7 +17,7 @@ export function fetchUsers(params) {
 
 export function fetchUser(id) {
   return dispatch => {
-    const payload = apiClient.getUsers(id);
+    const payload = apiClient.getUsers(null, id);
     return dispatch({
       type: FETCH_USER,
       payload
@@ -37,7 +37,7 @@ export function updateUser(id, data) {
 
 export function searchUsers(key, params = {}) {
   return dispatch => {
-    const payload = apiClient.getUsers(null, params);
+    const payload = apiClient.getUsers(null, null, params);
     return dispatch({
       type: SEARCH_USERS,
       meta: { key },

@@ -1,9 +1,21 @@
 import uniqBy from 'lodash/uniqBy';
 
-import { FETCH_ARTICLES, FETCH_ARTICLE, CREATE_ARTICLE_TAG, FETCH_ARTICLE_REVIEW_INVITES,
-         REMOVE_ARTICLE_TAG, INVITE_ARTICLE_REVIEWER, RESET_ARTICLES, FETCH_ARTICLE_PRINTED,
-         ACCEPT_ARTICLE_REVIEW_INVITE, EDIT_ARTICLE, CREATE_ARTICLE, FETCH_ARTICLE_TRANSLATION } from './constants';
-import { CREATE_USER_TAG, REMOVE_USER_TAG } from '~/store/users/constants';
+import {
+  FETCH_ARTICLES,
+  FETCH_ARTICLE,
+  CREATE_ARTICLE_TAG,
+  FETCH_ARTICLE_REVIEW_INVITES,
+  REMOVE_ARTICLE_TAG,
+  INVITE_ARTICLE_REVIEWER,
+  RESET_ARTICLES,
+  ACCEPT_ARTICLE_REVIEW_INVITE,
+  EDIT_ARTICLE,
+  CREATE_ARTICLE,
+  FETCH_ARTICLE_TRANSLATION,
+  COMMIT_ARTICLE_TRANSLATION,
+  REMOVE_ARTICLE_REVIEWER_TAG
+} from './constants';
+import { CREATE_USER_TAG } from '~/store/users/constants';
 import { REMOVE_REVIEW_INVITE } from '~/store/reviewInvites/constants';
 
 import * as entityNormalize from '~/utils/entityNormalize';
@@ -30,6 +42,7 @@ function articles(state = initialState, action) {
         ...state,
         isPending: true,
         isRejected: false,
+        isFulfilled: false,
         ...action.meta
       };
 
@@ -174,7 +187,7 @@ function articles(state = initialState, action) {
         }
       };
 
-    case `${REMOVE_USER_TAG}_PENDING`:
+    case `${REMOVE_ARTICLE_REVIEWER_TAG}_PENDING`:
       return {
         ...state,
         reviewers: {
@@ -200,6 +213,18 @@ function articles(state = initialState, action) {
         }
       };
 
+    case COMMIT_ARTICLE_TRANSLATION:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.meta.article]: {
+            ...state.data[action.meta.article],
+            state_article: 'AWAIT_PUBLICATION'
+          }
+        }
+      };
+
     case `${CREATE_ARTICLE}_FULFILLED`:
     case `${EDIT_ARTICLE}_FULFILLED`:
       return {
@@ -218,27 +243,6 @@ function articles(state = initialState, action) {
 
     case `${RESET_ARTICLES}`:
       return initialState;
-
-    case `${FETCH_ARTICLE_PRINTED}_PENDING`:
-      return {
-        ...state,
-        isPending: true,
-        isFulfilled: false,
-      };
-
-    case `${FETCH_ARTICLE_PRINTED}_FULFILLED`:
-      return {
-        ...state,
-        isPending: false,
-        isFulfilled: true,
-        data: {
-          ...state.data,
-          [ action.meta.article ]: {
-            ...state.data[action.meta.article],
-            printed: action.payload.results
-          }
-        }
-      };
 
     default:
       return state;

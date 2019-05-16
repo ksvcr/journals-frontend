@@ -2,4 +2,18 @@
   &__file {
     margin-bottom: 40px;
   }
+
+  &__divider {
+    border: none;
+    height: 2px;
+    background-color: #FF9900;
+    margin: 40px 0 25px;
+  }
+
+  &__allowed-description {
+    padding: 0 36px;
+    margin: 5px 0;
+    font-size: 12px;
+    opacity: .5;
+  }
 }

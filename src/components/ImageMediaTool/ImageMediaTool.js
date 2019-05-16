@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AtomicBlockUtils, EditorState } from 'draft-js';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 
@@ -35,13 +36,16 @@ class ImageMediaTool extends Component {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <button type="button" className="image-media-tool editor-button" onClick={ this.handleImageBlockAdd }>
-        Загрузить фото
+        { t('upload_photo') }
         <Icon name="picture-small" className="image-media-tool__icon editor-button__icon" />
       </button>
     );
   }
 }
+
+ImageMediaTool = withNamespaces()(ImageMediaTool);
 
 export default ImageMediaTool;

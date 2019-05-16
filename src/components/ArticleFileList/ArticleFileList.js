@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Field } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import TextField from '~/components/TextField/TextField';
@@ -19,7 +20,7 @@ class ArticleFileList extends PureComponent {
   };
 
   renderItems = () => {
-    const { fields, download } = this.props;
+    const { t, fields, download } = this.props;
     return fields.map((field, index) => {
       const data = fields.get(index);
       return (
@@ -40,14 +41,14 @@ class ArticleFileList extends PureComponent {
                   </div>
                 </div>
                 <div className="article-file-list__info">
-                  { formatBytes(data.file_size) }, { getFileExtension(data.name) || 'неизвестно' }
+                  { formatBytes(data.file_size) }, { getFileExtension(data.name) || t('unknown') }
                 </div>
               </div>
             }
           </div>
 
           <div className="article-file-list__description form__field">
-            <label htmlFor={ `${field}.text_to_description` } className="form__label">Описание файла</label>
+            <label htmlFor={ `${field}.text_to_description` } className="form__label">{ t('file_description') }</label>
             <Field name={ `${field}.text_to_description` } id={ `${field}.text_to_description` }
                    component={ TextField } placeholder="Введите описание" />
           </div>
@@ -64,5 +65,7 @@ class ArticleFileList extends PureComponent {
     );
   }
 }
+
+ArticleFileList = withNamespaces()(ArticleFileList);
 
 export default ArticleFileList;

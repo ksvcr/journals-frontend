@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import ReviewEstimate from '~/components/ReviewEstimate/ReviewEstimate';
 import RedactorDecision from '~/components/RedactorDecision/RedactorDecision';
@@ -7,15 +8,16 @@ import './review-content.scss';
 
 class ReviewContent extends Component {
   get recomendationMap() {
+    const { t } = this.props;
     return {
-      1: 'Принять',
-      2: 'Доработать',
-      3: 'Отклонить'
+      1: t('accept'),
+      2: t('finalize'),
+      3: t('reject')
     };
   }
 
   render() {
-    const { data, isShowDecision } = this.props;
+    const { t, data, isShowDecision, articleId } = this.props;
     return (
       <div className="review-content">
         <div className="review-content__item">
@@ -29,7 +31,7 @@ class ReviewContent extends Component {
 
         <div className="review-content__item">
           <div className="review-content__label">
-            Текст рецензии
+            { t('review_text') }
           </div>
           <div className="review-content__value">
             { data.comment_for_author }
@@ -38,7 +40,7 @@ class ReviewContent extends Component {
 
         <div className="review-content__item">
           <div className="review-content__head">
-            Мнение рецензента о статье
+            { t('reviewers_opinion_about_article') }
           </div>
           <div className="review-content__estimate">
             <ReviewEstimate values={ data } disabled={ true } />
@@ -60,12 +62,14 @@ class ReviewContent extends Component {
             <div className="review-content__label">
               Вынести решение по статье
             </div>
-            <RedactorDecision articleId={ data.article } />
+            <RedactorDecision articleId={ articleId } />
           </div>
         }
       </div>
     );
   }
 }
+
+ReviewContent = withNamespaces()(ReviewContent);
 
 export default ReviewContent;

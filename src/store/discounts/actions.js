@@ -1,10 +1,8 @@
 import { FETCH_DISCOUNTS, TRANSFER_BONUS } from './constants';
 import apiClient from '~/services/apiClient';
 
-export function fetchDiscounts() {
-  return (dispatch, state) => {
-    const { user } = state();
-    const { id: userId } = user.data;
+export function fetchDiscounts(userId) {
+  return dispatch => {
     const payload = apiClient.getDiscountsInfo(userId);
     return dispatch({
       type: FETCH_DISCOUNTS,

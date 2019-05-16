@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import * as articlesActions from '~/store/articles/actions';
 
@@ -30,23 +31,23 @@ class RedactorDecision extends Component {
   };
 
   get options() {
-    const { currentArticleState } = this.props;
+    const { t, currentArticleState } = this.props;
 
     switch (currentArticleState) {
       case 'AWAIT_REDACTOR':
         return [
           {
-            title: 'Принять',
+            title: t('accept'),
             value: 'AWAIT_PAYMENT',
             color: 'green'
           },
           {
-            title: 'Доработать',
+            title: t('finalize'),
             value: 'REVISION',
             color: 'orange'
           },
           {
-            title: 'Отклонить',
+            title: t('reject'),
             value: 'DISAPPROVED',
             color: 'red'
           }
@@ -56,7 +57,7 @@ class RedactorDecision extends Component {
       case 'AWAIT_PAYMENT':
         return [
           {
-            title: 'Подтвердить оплату',
+            title: t('confirm_payment'),
             value: 'AWAIT_PROOFREADING',
             color: 'green'
           }
@@ -65,7 +66,7 @@ class RedactorDecision extends Component {
       case 'AWAIT_PUBLICATION':
         return [
           {
-            title: 'Опубликовать',
+            title: t('publish'),
             value: 'PUBLISHED',
             color: 'green'
           }
@@ -142,6 +143,8 @@ const mapDispatchToProps = {
   editArticleReview: articlesActions.editArticleReview,
   fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
+
+RedactorDecision = withNamespaces()(RedactorDecision);
 
 export default connect(
   mapStateToProps,

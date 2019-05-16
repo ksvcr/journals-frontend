@@ -10,9 +10,12 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import Payment from '~/components/Payment/Payment';
 
 import { getArticlesArray } from '~/store/articles/selector';
+import * as articlesActions from '~/store/articles/actions';
 
 import * as formatDate from '~/services/formatDate';
 import { getArticleStageTitle } from '~/services/articleStages';
+import { allowEditStatuses } from '~/services/articleStatuses';
+import { getUserData } from '~/store/user/selector';
 
 class AuthorArticleList extends Component {
   state = {
@@ -24,23 +27,36 @@ class AuthorArticleList extends Component {
     const { locked_by } = data;
     const { t, userId } = this.props;
     const isLocked = locked_by !== null && locked_by !== userId;
+
     let items = [];
 
-    if (!isLocked) {
+    const isAllowEdit = ~allowEditStatuses.indexOf(data.state_article);
+
+    if (!isLocked && isAllowEdit) {
       items.push({
         title: t('edit'),
         link: `/article/${data.id}/edit/`
       });
     }
 
+    if (data.state_article !== 'CALL_OFF' && data.state_article !== 'DRAFT') {
+      items.push({
+        title: t('revoke'),
+        handler: this.handleCallOff
+      });
+    }
+
+    if (data.state_article === 'AWAIT_PAYMENT') {
+      items.push({
+        title: t('to_pay'),
+        handler: this.handlePaymentShow
+      });
+    }
+
     items = [
       ...items,
       {
-        title: 'Оплатить',
-        handler: this.handlePaymentShow
-      },
-      {
-        title: 'Просмотр',
+        title: t('view'),
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
@@ -51,12 +67,18 @@ class AuthorArticleList extends Component {
   }
 
   get dateTitle() {
+    const { t } = this.props;
     return {
-      date_create: 'Создана',
-      date_send_to_review: 'Отправлена',
-      last_change: 'Изменена'
+      date_create: t('created'),
+      date_send_to_review: t('sended'),
+      last_change: t('changed')
     };
   }
+
+  handleCallOff = id => {
+    const { editArticle } = this.props;
+    editArticle(id, { state_article: 'CALL_OFF' })
+  };
 
   handleSortChange = ordering => {
     const { onUpdateRequest } = this.props;
@@ -92,8 +114,8 @@ class AuthorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } onClose={ onClose } />
       ),
       box: this.renderBox,
       cells: [
@@ -103,7 +125,7 @@ class AuthorArticleList extends Component {
           },
           isMain: true,
           head: () => t('title'),
-          render: data => data.title || 'Название статьи не указано'
+          render: data => data.title || t('title_of_article_not_found')
         },
         {
           style: {
@@ -143,7 +165,7 @@ class AuthorArticleList extends Component {
     const { box } = this.state;
     if (box && box.id === data.id) {
       if (box.type === 'payment') {
-        return <Payment onClose={ this.handlePaymentClose } />;
+        return <Payment data={ data } onClose={ this.handlePaymentClose } />;
       }
     }
 
@@ -168,18 +190,25 @@ class AuthorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user, articles } = state;
+  const { articles } = state;
   const { total, paginate } = articles;
+  const { id:userId } = getUserData(state);
+
   return {
     articlesArray: getArticlesArray(state),
-    userId: user.data.id,
+    userId,
     total,
     paginate
   };
 }
 
+const mapDispatchToProps = {
+  editArticle: articlesActions.editArticle
+};
+
 AuthorArticleList = withNamespaces()(AuthorArticleList);
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AuthorArticleList);

@@ -48,4 +48,29 @@
     cursor: pointer;
     margin-right: 20px;
   }
+
+  &__top {
+    display: flex;
+    padding: 0 10px;
+    margin-bottom: 10px;
+  }
+
+  &__remove-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    outline: 0;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: auto;
+    font-size: 12px;
+  }
+
+  &__remove-icon {
+    width: 11px;
+    height: 11px;
+    fill: $red-color;
+    margin-right: 5px;
+  }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 
@@ -11,16 +12,20 @@ class ArticleSource extends Component {
     const { data } = this.props;
     let resultString = '';
 
-    if (data.author && lang === 'ru') {
-      if (typeof data.author === 'string') {
-        resultString = data.author;
-      } else {
-        const author = Array.isArray(data.author)
-          ? data.author[0]
-          : data.author;
-        const { lastname, initials } = author;
+    if (lang === 'ru') {
+      if (data.author) {
+        getName(data.author);
+      } else if (data.authors) {
+        data.authors.forEach(author => getName(author))
+      }
+    }
 
-        resultString = `${lastname} ${initials} `;
+    function getName(author) {
+      if (typeof author === 'string') {
+        resultString += author;
+      } else {
+        const { lastname, initials } = author;
+        resultString += `${lastname} ${initials}, `;
       }
     }
 
@@ -54,7 +59,7 @@ class ArticleSource extends Component {
   };
 
   render() {
-    const { index, onRemove } = this.props;
+    const { t, index, onRemove } = this.props;
     return (
       <div className="article-source">
         <div className="article-source__box">
@@ -73,7 +78,7 @@ class ArticleSource extends Component {
                   type="button" onClick={ this.handleEdit } >
             <Icon name="edit"
                   className="article-source__icon article-source__icon_edit" />
-            Редактировать
+            { t('edit') }
           </button>
 
           { onRemove && (
@@ -81,7 +86,7 @@ class ArticleSource extends Component {
                     onClick={ this.handleRemove } >
               <Icon name="cancel"
                     className="article-source__icon article-source__icon_remove" />
-              Удалить
+              { t('delete') }
             </button>
           ) }
         </div>
@@ -89,5 +94,6 @@ class ArticleSource extends Component {
     );
   }
 }
+ArticleSource = withNamespaces()(ArticleSource);
 
 export default ArticleSource;

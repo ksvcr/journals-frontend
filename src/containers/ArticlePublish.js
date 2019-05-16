@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { reset, destroy } from 'redux-form';
+import { destroy } from 'redux-form';
 import { withNamespaces } from 'react-i18next';
 
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
@@ -11,19 +11,20 @@ import PreviewLink from '~/components/PreviewLink/PreviewLink';
 import ArticleForm from '~/components/ArticleForm/ArticleForm';
 import ReviewsDialogList from '~/components/ReviewsDialogList/ReviewsDialogList';
 import ArticleInfo from '~/components/ArticleInfo/ArticleInfo';
+import PreliminaryReviewComment from '~/components/PreliminaryReviewComment/PreliminaryReviewComment';
 
 import * as languagesActions from '~/store/languages/actions';
 import * as rolesActions from '~/store/roles/actions';
 import * as rubricsActions from '~/store/rubrics/actions';
-import * as categoriesActions from '~/store/categories/actions';
 import * as usersActions from '~/store/users/actions';
 import * as articlesActions from '~/store/articles/actions';
 import * as lawtypesActions from '~/store/lawtypes/actions';
 import * as countriesActions from '~/store/countries/actions';
+import { getUserData } from '~/store/user/selector';
 
 import { serializeArticleData } from '~/services/articleFormat';
+import { allowEditStatuses } from '~/services/articleStatuses';
 import apiClient from '~/services/apiClient';
-import PreliminaryReviewComment from '~/components/PreliminaryReviewComment/PreliminaryReviewComment';
 
 class ArticlePublish extends Component {
   constructor(props) {
@@ -67,29 +68,33 @@ class ArticlePublish extends Component {
 
   handleRequest = () => {
     const { articleId, siteId, isEdit, push, fetchArticle, fetchRubrics,
-            fetchCategories, fetchCountries, fetchUser, fetchRoles, fetchArticlePrinted } = this.props;
+            fetchCountries, fetchUser, fetchRoles, userId } = this.props;
     const promises = [fetchCountries()];
 
     if (isEdit) {
       promises.push(
         fetchArticle(articleId)
           .then(({ value: articleData }) => {
-            const userIds = articleData.collaborators.map(item => item.user.id);
-            if (articleData.author) {
-              userIds.push(articleData.author.user.id);
+            const isLocked = articleData.locked_by !== null && articleData.locked_by !== userId;
+            const isAllowEdit = ~allowEditStatuses.indexOf(articleData.state_article);
+
+            if (isLocked && isAllowEdit) {
+              push('/');
+            } else {
+              const userIds = articleData.collaborators.map(item => item.user.id);
+              if (articleData.author) {
+                userIds.push(articleData.author.user.id);
+              }
+              const userPromises = userIds.map(id => fetchUser(id));
+              return Promise.all([
+                ...userPromises,
+                fetchRubrics(articleData.site)
+              ]);
             }
-            const userPromises = userIds.map(id => fetchUser(id));
-            return Promise.all([
-              ...userPromises,
-              fetchRubrics(articleData.site),
-              fetchCategories(articleData.site)
-            ]);
           })
       );
-      promises.push(fetchArticlePrinted(articleId));
     } else {
       promises.push(fetchRubrics(siteId));
-      promises.push(fetchCategories(siteId));
       promises.push(fetchRoles(siteId));
     }
 
@@ -111,16 +116,14 @@ class ArticlePublish extends Component {
     if (isEdit) {
       switch (data.state_article) {
         case 'DRAFT':
+        case 'CALL_OFF':
           // Отправка
           data.state_article = 'SENT';
           break;
         case 'REVISION':
+        case 'PRELIMINARY_REVISION':
           // Доработка
           data.state_article = 'MODIFIED';
-          break;
-        case 'AWAIT_PROOFREADING':
-          // Корректировка
-          data.state_article = 'AWAIT_TRANSLATE';
           break;
         default:
           delete data.state_article;
@@ -128,46 +131,41 @@ class ArticlePublish extends Component {
 
       editArticle(this.tempArticleId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     } else {
       data.state_article = 'SENT';
       createArticle(siteId, data)
         .then(() => {
-          destroy(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     }
   };
 
   handleDraftSubmit = (formData, formName) => {
-    const { siteId, createArticle, editArticle, push, reset } = this.props;
+    const { siteId, createArticle, editArticle, push, destroy } = this.props;
     const data = serializeArticleData(formData);
 
     if (this.tempArticleId !== undefined) {
       editArticle(this.tempArticleId, data)
         .then(() => {
-          reset(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     } else {
       data.state_article = 'DRAFT';
       createArticle(siteId, data)
         .then(() => {
-          reset(formName);
           push('/');
+          destroy(formName);
         })
         .catch(error => console.error(error));
     }
-  };
-
-  handleEditArticleReview = (reviewId, formData) => {
-    const { articleId, editArticleReview } = this.props;
-    editArticleReview(articleId, reviewId, formData);
   };
 
   handleAutoSave = (formData) => {
@@ -208,14 +206,14 @@ class ArticlePublish extends Component {
 
           <div className="page__tools">
             { isShowSiteChange && (
-              <form className="form">
+              <div className="form">
                 <div className="form__field">
                   <label htmlFor="sites-list" className="form__label">
                     { t('for_journals') }
                   </label>
                   <SiteSelect id="sites-list" onChange={ this.handleRequest } />
                 </div>
-              </form>
+              </div>
             ) }
 
             { isShowArticleInfo && <ArticleInfo id={ articleId } /> }
@@ -223,9 +221,7 @@ class ArticlePublish extends Component {
 
           { articleStatus === 'REVISION' && (
             <ReviewsDialogList articleId={ articleId }
-                               reviews={ articleData.reviews }
-                               onSubmit={ this.handleEditArticleReview }
-            />
+                               reviews={ articleData.reviews } />
           ) }
 
           { articleStatus === 'PRELIMINARY_REVISION' &&
@@ -243,8 +239,7 @@ class ArticlePublish extends Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  const { sites, articles, languages, rubrics,
-          categories, user, countries } = state;
+  const { sites, articles, languages, rubrics, countries } = state;
 
   let { articleId } = match.params;
   articleId = articleId ? parseInt(articleId, 10) : articleId;
@@ -252,19 +247,19 @@ function mapStateToProps(state, props) {
   const articleData = articleId && articles.data[articleId];
   const articleStatus = articleData && articleData.state_article;
   const isEdit = articleId !== undefined;
+  const { id:userId, role:userRole } = getUserData(state);
 
   const isFulfilledCommon =
     languages.isFulfilled &&
     rubrics.isFulfilled &&
     countries.isFulfilled &&
-    categories.isFulfilled &&
     sites.isFulfilled;
 
   return {
     isEdit,
+    userId,
+    userRole,
     siteId: isEdit && articleData ? articleData.site : sites.current,
-    userId: user.data.id,
-    userRole: user.data.role,
     notFound: articles.isFulfilled && !articles.data[articleId],
     isFulfilled:
       (isFulfilledCommon && !isEdit) ||
@@ -277,19 +272,17 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   push,
-  reset, destroy,
+  destroy,
   fetchArticle: articlesActions.fetchArticle,
   fetchLanguages: languagesActions.fetchLanguages,
   fetchRubrics: rubricsActions.fetchRubrics,
-  fetchCategories: categoriesActions.fetchCategories,
   fetchUser: usersActions.fetchUser,
   createArticle: articlesActions.createArticle,
   editArticle: articlesActions.editArticle,
   editArticleReview: articlesActions.editArticleReview,
   fetchLawtypes: lawtypesActions.fetchLawtypes,
   fetchCountries: countriesActions.fetchCountries,
-  fetchRoles: rolesActions.fetchRoles,
-  fetchArticlePrinted: articlesActions.fetchArticlePrinted
+  fetchRoles: rolesActions.fetchRoles
 };
 
 ArticlePublish = withNamespaces()(ArticlePublish);

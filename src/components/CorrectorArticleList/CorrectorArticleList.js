@@ -10,6 +10,7 @@ import TagEditor from '~/components/TagEditor/TagEditor';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import * as formatDate from '~/services/formatDate';
 
@@ -23,12 +24,25 @@ class CorrectorArticleList extends Component {
         link: `/article/${data.id}/correct`
       },
       {
+        title: 'Отправить редактору',
+        handler: id => this.handleProofreadingCommit(id, data)
+      },
+      {
         title: 'Просмотр',
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
       }
     ];
+  };
+
+  handleProofreadingCommit = (id, data) => {
+    const { editArticle } = this.props;
+    const commitData = {
+      state_article: data.need_translation ? 'AWAIT_TRANSLATE' : 'AWAIT_PUBLICATION'
+    };
+
+    editArticle(id, commitData);
   };
 
   handlePaginateChange = (paginate) => {
@@ -54,7 +68,9 @@ class CorrectorArticleList extends Component {
       data: articlesArray,
       onSortChange: this.handleSortChange,
       head: true,
-      menuTooltip: (data) => <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />,
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } onClose={ onClose } />
+      ),
       box: this.renderBox,
       cells: [
         {
@@ -64,44 +80,31 @@ class CorrectorArticleList extends Component {
           isMain: true,
           head: () => t('title'),
           render: (data) =>
-            data.title || 'Название статьи не указано'
+            data.title || t('title_of_article_not_found')
         },
         {
           style: {
             width: '20%'
           },
           sort: 'site',
-          head: () => 'Журнал',
+          head: () => t('jornal'),
           render: (data) => {
             const siteId = data.site;
             const site = sitesData[siteId];
-            return site ? site.name : 'Журнал не найден';
+            return site ? site.name : t('journal_not_found');
           }
         },
         {
           style: {
             width: '15%'
           },
-          sort: 'date_send_to_review',
-          head: () => 'Отправлена',
-          render: (data) =>
-            formatDate.toString(data.date_send_to_review)
+          sort: 'date_create',
+          head: () => t('sended'),
+          render: (data) => formatDate.toString(data.date_create)
         },
         {
           style: {
-            width: '10%',
-            textAlign: 'center'
-          },
-          sort: '',
-          head: () => 'Знаков',
-          render: (data) => {
-            // TODO: Количество символов из апи
-            return data.count || 0;
-          }
-        },
-        {
-          style: {
-            width: '15%'
+            width: '25%'
           },
           head: () => t('state'),
           render: (data) =>
@@ -140,19 +143,22 @@ class CorrectorArticleList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { articles, sites, user } = state;
+  const { articles, sites } = state;
   const { total, paginate } = articles;
+  const userData = getUserData(state);
+
   return {
     articlesArray: getArticlesArray(state),
     sitesData: sites.data,
-    userData: user.data,
+    userData,
     total, paginate
   };
 }
 
 const mapDispatchToProps = {
   createArticleTag: articlesActions.createArticleTag,
-  removeArticleTag: articlesActions.removeArticleTag
+  removeArticleTag: articlesActions.removeArticleTag,
+  editArticle: articlesActions.editArticle
 };
 
 CorrectorArticleList = withNamespaces()(CorrectorArticleList);

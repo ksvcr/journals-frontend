@@ -8,6 +8,8 @@ import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 
 import * as usersActions from '~/store/users/actions';
 import * as reviewInvitesActions from '~/store/reviewInvites/actions';
+import * as articleActions from '~/store/articles/actions';
+import { getUserData } from '~/store/user/selector';
 
 import './invited-reviewers-list.scss';
 
@@ -58,8 +60,8 @@ class InvitedReviewersList extends Component {
 
     return {
       data: reviewInvites,
-      menuTooltip: data => (
-        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } />
+      menuTooltip: (data, onClose) => (
+        <ToolsMenu id={ data.id } items={ this.getToolsMenuItems(data) } onClose={ onClose } />
       ),
       box: this.renderBox,
       cells: [
@@ -84,7 +86,7 @@ class InvitedReviewersList extends Component {
   }
 
   renderBox = (data) => {
-    const { reviewers, removeUserTag } = this.props;
+    const { reviewers, removeArticleReviewerTag } = this.props;
     const reviewer = reviewers[data.reviewer.id];
     return reviewer && (
       <div className="invited-reviewers-list__box">
@@ -92,7 +94,7 @@ class InvitedReviewersList extends Component {
           <TagEditor entityId={ reviewer.id }
                      data={ reviewer.tags }
                      onAdd={ this.handleTagAdd }
-                     onRemove={ removeUserTag }
+                     onRemove={ removeArticleReviewerTag }
           />
         </div>
       </div>
@@ -109,10 +111,11 @@ class InvitedReviewersList extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { articles, user } = state;
+  const { articles } = state;
   const { articleId } = props;
+  const { id:currentUserId } = getUserData(state);
   return {
-    currentUserId: user.data.id,
+    currentUserId,
     reviewers: articles.reviewers,
     articleData: articles.data[articleId]
   };
@@ -120,7 +123,7 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   createUserTag: usersActions.createUserTag,
-  removeUserTag: usersActions.removeUserTag,
+  removeArticleReviewerTag: articleActions.removeArticleReviewerTag,
   removeReviewInvite: reviewInvitesActions.removeReviewInvite,
   editReviewInvite: reviewInvitesActions.editReviewInvite
 };

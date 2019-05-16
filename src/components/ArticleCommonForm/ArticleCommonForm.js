@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, FieldArray, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Select from '~/components/Select/Select';
 import Checkbox from '~/components/Checkbox/Checkbox';
@@ -16,40 +17,15 @@ import AddressForm from '~/components/AddressForm/AddressForm';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
-import {
-  getCategoriesArray,
-  getRootCategoriesArray
-} from '~/store/categories/selector';
 import { getCountriesOptions } from '~/store/countries/selector';
+import { getUserData } from '~/store/user/selector';
 
 import * as validate from '~/utils/validate';
 
 class ArticleCommonForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visibleFields: {
-        conflicts: true,
-        addressRadio: Boolean(props.isPrinted),
-        addressList: props.isPrinted || false
-      }
-    };
-  }
-
-  componentDidUpdate(prevProps) {
-    this.setInitialCategory(prevProps.rootCategory);
-  }
-
-  get childCategories() {
-    const { rootCategoriesArray, categoriesArray, rootCategory } = this.props;
-    let rootId;
-    if (rootCategory !== undefined) {
-      rootId = rootCategory;
-    } else if (rootCategoriesArray[0]) {
-      rootId = rootCategoriesArray[0].id;
-    }
-
-    return categoriesArray.filter(item => item.parent === rootId);
+  componentDidMount() {
+    const { rubricSet } = this.props;
+    this.handleRubricChange(rubricSet.length, rubricSet[rubricSet.length-1]);
   }
 
   get languagesOptions() {
@@ -61,26 +37,30 @@ class ArticleCommonForm extends Component {
   }
 
   get rubricsOptions() {
-    const { rubricsArray } = this.props;
-    return rubricsArray.map(item => ({
-      title: item.name,
-      value: item.id
-    }));
-  }
+    const { rubricsArray, rubricSet, rubricsData } = this.props;
 
-  get rootCategoriesOptions() {
-    const { rootCategoriesArray } = this.props;
-    return rootCategoriesArray.map(item => ({
-      title: item.translations['ru'].name,
-      value: item.id
-    }));
-  }
+    return rubricSet.map((id, index) => {
+      const rubric = rubricsData[id];
 
-  get childCategoriesOptions() {
-    return this.childCategories.map(item => ({
-      title: item.translations['ru'].name,
-      value: item.id
-    }));
+      if (rubric) {
+        const parentId = index > 0 ? rubric.parent : null;
+        return getOptionsByParent(parentId);
+      } else {
+        return null;
+      }
+    });
+
+    function getOptionsByParent(parent) {
+      const filtered = rubricsArray.filter(item => item.parent === parent);
+      return getOptions(filtered);
+    }
+
+    function getOptions(array) {
+      return array.map(item => ({
+        title: item.name,
+        value: item.id
+      }));
+    }
   }
 
   get hasPublishAccess() {
@@ -89,30 +69,38 @@ class ArticleCommonForm extends Component {
     return Boolean(~roles.indexOf(userData.role));
   }
 
-  setInitialCategory = prevRootCategory => {
-    const { rootCategory, change } = this.props;
-    if (rootCategory !== prevRootCategory) {
-      if (this.childCategories.length) {
-        change('category', this.childCategories[0].id);
+
+  handleHasPrintedChange = () => {
+    const { change, formName } = this.props;
+    change(formName, 'printed[0].use_address_from_profile', true);
+  };
+
+  handleRubricChange = (level, value) => {
+    const { change, formName, rubricSet, rubricsArray } = this.props;
+    const newRubricSet = rubricSet.map((item, index) => {
+      if (index < level) {
+        return item;
+      } else if (index > level) {
+        return null;
       } else {
-        change('category', null);
+        return value;
+      }
+    });
+
+    setDefaultRubric(level, value);
+
+    change(formName, 'rubric_set', newRubricSet);
+
+    function setDefaultRubric(level, value) {
+      if (level < 2) {
+        const rubricId = parseInt(value, 10);
+        const rubric = rubricsArray.find(item => item.parent === rubricId);
+        if (rubric) {
+          newRubricSet[level+1]= rubric.id;
+          setDefaultRubric(level+1, rubric.id);
+        }
       }
     }
-  };
-
-  handleFieldToggle = event => {
-    const { checked, name } = event.target;
-    this.setState(prevState => ({
-      visibleFields: { ...prevState.visibleFields, [name]: checked }
-    }));
-  };
-
-  handleAddressToggle = event => {
-    const { value } = event.target;
-    const isChecked = value === 'custom-address';
-    this.setState(prevState => ({
-      visibleFields: { ...prevState.visibleFields, addressList: isChecked }
-    }));
   };
 
   renderFinancingSourcesList = props => {
@@ -141,18 +129,17 @@ class ArticleCommonForm extends Component {
   };
 
   render() {
-    const { visibleFields } = this.state;
-    const { hasFinancing, isConflictInterest } = this.props;
+    const { t, hasFinancing, hasPrinted, isConflictInterest, useAddressFromProfile } = this.props;
 
     return (
       <div className="article-common-form">
-        <h2 className="page__title">Общие сведения</h2>
+        <h2 className="page__title">{ t('common_content') }</h2>
 
         { this.hasPublishAccess && (
           <React.Fragment>
             <div className="form__field">
               <label htmlFor="language" className="form__label">
-                Язык статьи
+                { t('article_language') }
               </label>
               <div className="form__row">
                 <div className="form__col form__col_4">
@@ -175,33 +162,35 @@ class ArticleCommonForm extends Component {
             <div className="form__row">
               <div className="form__col form__col_4">
                 <div className="form__field">
-                  <label htmlFor="rubric" className="form__label">
-                    Направление
+                  <label htmlFor="rubric_set[0]" className="form__label">
+                    { t('direction') }
                   </label>
-                  <Field name="rubric" id="rubric" options={ this.rubricsOptions } component={ Select } />
+                  <Field name="rubric_set[0]" id="rubric_set[0]" options={ this.rubricsOptions[0] }
+                         onChange={ (e, val) => this.handleRubricChange(0, val) } component={ Select } />
                 </div>
               </div>
-              <div className="form__col form__col_4">
-                <div className="form__field">
-                  <label htmlFor="root_category" className="form__label">
-                    Категория
-                  </label>
-                  <Field name="root_category" id="root_category"
-                         options={ this.rootCategoriesOptions }
-                         component={ Select } />
-                </div>
-              </div>
-              { this.childCategoriesOptions.length > 0 && (
+              { this.rubricsOptions[1] &&
                 <div className="form__col form__col_4">
                   <div className="form__field">
-                    <label htmlFor="category" className="form__label">
-                      Подкатегория
+                    <label htmlFor="rubric_set[1]" className="form__label">
+                      { t('category') }
                     </label>
-                    <Field name="category" id="category" options={ this.childCategoriesOptions }
-                           component={ Select } />
+                    <Field name="rubric_set[1]" id="rubric_set[1]" options={ this.rubricsOptions[1] }
+                           onChange={ (e, val) => this.handleRubricChange(1, val) } component={ Select } />
                   </div>
                 </div>
-              ) }
+              }
+              { this.rubricsOptions[2] &&
+                <div className="form__col form__col_4">
+                  <div className="form__field">
+                    <label htmlFor="rubric_set[2]" className="form__label">
+                      { t('subcategory') }
+                    </label>
+                    <Field name="rubric_set[2]" id="rubric_set[2]" options={ this.rubricsOptions[2] }
+                           onChange={ (e, val) => this.handleRubricChange(2, val) } component={ Select } />
+                  </div>
+                </div>
+              }
             </div>
 
             <div className="form__field form__field_inline">
@@ -241,7 +230,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_keywords" className="form__label">
-            Ключевые слова (через запятую) <ReqMark />
+            { t('keywords_with_comma') } <ReqMark />
             <FieldHint text={ 'Подсказка про Ключевые слова' } />
           </label>
           <Field name="text_to_keywords" id="text_to_keywords"
@@ -251,7 +240,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label htmlFor="text_to_description" className="form__label">
-            Аннотация <ReqMark />
+            { t('annotation') } <ReqMark />
           </label>
           <Field name="text_to_description" id="text_to_description"
                  textarea minRows={ 2 } component={ TextField }
@@ -260,7 +249,7 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label className="form__label">
-            Конфликт интересов <ReqMark />
+            { t('conflict_of_interest') } <ReqMark />
             <FieldHint text={ 'Подсказка про Конфликт интересов' } />
           </label>
           <div className="form__switcher">
@@ -275,7 +264,7 @@ class ArticleCommonForm extends Component {
         </div>
 
         <div className="form__field">
-          <label className="form__label">Финансирование</label>
+          <label className="form__label">{ t('financing') }</label>
           <div className="form__switcher">
             <Field name="has_financing" id="has_financing" type="checkbox"
                    component={ Switcher } />
@@ -291,27 +280,29 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label className="form__label">
-            Нужна печатная копия
+            { t('need_printed_copy') }
           </label>
           <div className="form__switcher">
-            <Switcher checked={ Boolean(visibleFields.addressRadio) } name="addressRadio"
-                      onChange={ this.handleFieldToggle } />
+            <Field name="has_printed" id="has_printed" type="checkbox"
+                   component={ Switcher } onChange={ this.handleHasPrintedChange } />
           </div>
 
-          { visibleFields.addressRadio && (
+          { hasPrinted && (
             <div className="form__switcher">
-              <Radio name="addressList" value="profile-address"
-                     checked={ !Boolean(visibleFields.addressList) } onChange={ this.handleAddressToggle } >
+              <Field name="use_address_from_profile" value={ true }
+                     component={ Radio } type="radio" format={ value => Boolean(value) }
+                     parse={ value => value === 'true' } >
                 Адрес, указанный в профиле
-              </Radio>
-              <Radio name="addressList" value="custom-address" checked={ Boolean(visibleFields.addressList) }
-                     onChange={ this.handleAddressToggle }>
+              </Field>
+              <Field name="use_address_from_profile" value={ false }
+                     component={ Radio } type="radio" format={ value => Boolean(value) }
+                     parse={ value => value === 'true' } >
                 Другой адрес
-              </Radio>
+              </Field>
             </div>
           ) }
 
-          { visibleFields.addressList &&
+          { hasPrinted && !useAddressFromProfile &&
             <FieldArray name="printed"
                         component={ this.renderAddressList } />
           }
@@ -323,42 +314,41 @@ class ArticleCommonForm extends Component {
 
 function mapStateToProps(state, props) {
   const { formName } = props;
-  const { user, countries } = state;
+  const { countries, rubrics } = state;
+
   const formSelector = formValueSelector(formName);
-
-  let rootCategory = formSelector(state, 'root_category');
-  rootCategory = rootCategory && parseInt(rootCategory, 10);
-  let category = formSelector(state, 'category');
-  category = category && parseInt(category, 10);
-
+  const userData = getUserData(state);
   const hasFinancing = formSelector(state, 'has_financing');
+  const printed = formSelector(state, 'printed');
+  const hasPrinted = formSelector(state, 'has_printed');
+  const rubricSet = formSelector(state, 'rubric_set');
+  const useAddressFromProfile = formSelector(state, 'use_address_from_profile');
   const isConflictInterest = formSelector(state, 'is_conflict_interest');
-  const isPrinted = formSelector(state, 'printed');
-  const rootCategoriesArray = getRootCategoriesArray(state);
-  const categoriesArray = getCategoriesArray(state);
   const rubricsArray = getRubricsArray(state);
   const languagesArray = getLanguagesArray(state);
   const countriesOptions = getCountriesOptions(state);
 
   return {
-    userData: user.data,
+    userData,
+    countriesData: countries.data,
+    rubricsData: rubrics.data,
+    rubricSet,
+    useAddressFromProfile,
     hasFinancing,
+    hasPrinted,
     isConflictInterest,
-    rootCategory,
-    category,
-    rootCategoriesArray,
-    categoriesArray,
     rubricsArray,
     languagesArray,
     countriesOptions,
-    countriesData: countries.data,
-    isPrinted
+    printed
   };
 }
 
 const mapDispatchToProps = {
   change
 };
+
+ArticleCommonForm = withNamespaces()(ArticleCommonForm);
 
 export default connect(
   mapStateToProps,
