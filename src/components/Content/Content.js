@@ -33,13 +33,14 @@ class Content extends Component {
   renderSourcesList = () => {
     const { data } = this.props;
     return data.sources.map((item, index) => {
-      const author = Array.isArray(item.author) && item.author.length
-        ? item.author[0] : item.author;
-      const authorName = author ? `${ getName(author) },` : '';
+      const author = Array.isArray(item.author) ?
+        (item.author.length ? item.author[0] : '') :
+        item.author;
+      const authorName = author ? `${ getName(author) }` : '';
 
       function getName(author) {
         if (typeof author === 'string') {
-          return author;
+          return `${author},`;
         } else {
           const { lastname, initials } = author;
           return `${lastname} ${initials}, `;
