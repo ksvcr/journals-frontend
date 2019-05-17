@@ -187,7 +187,25 @@ const ru_translation = {
   enter_fullname: 'Введите ФИО',
   region: 'Область',
   enter_region: 'Введите область',
-  no_financing: 'Авторы не получали финансовой поддержки для проведения исследования, написания и публикации статьи'
+  no_financing: 'Авторы не получали финансовой поддержки для проведения исследования, написания и публикации статьи',
+  street: 'Улица',
+  enter_street: 'Введите улицу',
+  house: 'Дом',
+  housing: 'Корпус',
+  room: 'Квартира',
+  index: 'Индекс',
+  rubric_not_found: 'Рубрика не найдена',
+  illustrations: 'Иллюстрации',
+  save_changes: 'Сохранить изменения',
+  registered_as: 'Вы зарегистрированы как',
+  available_magazines: 'Журналы, в которые вы можете писать статьи',
+  role: 'Роль',
+  science_categories: 'Категории наук',
+  transaction_date: 'Дата перечисления',
+  balance: 'Баланс',
+  user_0: 'пользователь',
+  user_1: 'пользователя',
+  user_2: 'пользователей'
 };
 
 export default ru_translation;

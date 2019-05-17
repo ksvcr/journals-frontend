@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import CancelLink from '~/components/CancelLink/CancelLink';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
@@ -9,8 +10,6 @@ import DiscountsTransferForm from '~/components/DiscountsTransferForm/DiscountsT
 
 import * as usersActions from '~/store/users/actions';
 import * as discountsActions from '~/store/discounts/actions';
-
-import getNoun from '~/utils/getNoun';
 
 import './discounts-transfer.scss';
 
@@ -57,7 +56,7 @@ class DiscountsTransfer extends Component {
   };
 
   render() {
-    const { searchResults } = this.props;
+    const { searchResults, t } = this.props;
     const { user } = this.state;
     return (
       <div className="discounts-transfer">
@@ -70,12 +69,7 @@ class DiscountsTransfer extends Component {
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
                 Найдено { searchResults.length }{ ' ' }
-                { getNoun(
-                  searchResults.length,
-                  'пользователь',
-                  'пользователя',
-                  'пользователей'
-                ) }
+                { t('user', { count: searchResults.length }) }
                 :
               </p>
               <DiscountsTransferSelect
@@ -107,5 +101,7 @@ function mapStateToProps(state) {
     searchResults: searchData[SEARCH_KEY] || []
   };
 }
+
+DiscountsTransfer = withNamespaces()(DiscountsTransfer);
 
 export default connect(mapStateToProps)(DiscountsTransfer);

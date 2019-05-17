@@ -31,7 +31,7 @@ class DiscountsBalance extends Component {
     return (
       <div className="discounts-balance">
         <h3 className="discounts-balance__text">
-          Баланс (руб): <span className="discounts-balance__value">{ this.balanceText }</span>
+          { `${ t('balance') } (${ t('rub') })` }: <span className="discounts-balance__value">{ this.balanceText }</span>
         </h3>
         <a href="#transfer" className="discounts-balance__transfer" onClick={ this.handleTrasnferClick }>
           { t('give_to_another_user') }

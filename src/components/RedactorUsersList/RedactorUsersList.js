@@ -59,7 +59,7 @@ class RedactorUsersList extends Component {
   }
 
   get listProps() {
-    const { usersArray } = this.props;
+    const { usersArray, t } = this.props;
     return {
       data: usersArray,
       menuTooltip: (data, onClose) => (
@@ -73,14 +73,14 @@ class RedactorUsersList extends Component {
             width: '45%'
           },
           isMain: true,
-          head: () => 'Имя',
+          head: () => t('name'),
           render: this.renderName
         },
         {
           style: {
             width: '25%'
           },
-          head: () => 'Роль',
+          head: () => t('role'),
           headToolTip: () => (
             <ListChecker
               name="role"
@@ -99,7 +99,7 @@ class RedactorUsersList extends Component {
             width: '30%',
             textAlign: 'right'
           },
-          head: () => 'Категории наук',
+          head: () => t('science_categories'),
           render: ({ sphere_scientific_interests }) => (
             sphere_scientific_interests ?
               <div className="redactor-users-list__interests">

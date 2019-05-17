@@ -96,20 +96,20 @@ const AddressForm = ({ field, countriesOptions, countriesData, t }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_street` }
                    className="form__label" >
-              Улица
+              { t('street') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_street` }
                    id={ `${field}.mail_address_street` }
                    component={ TextField }
-                   placeholder="Введите улицу" />
+                   placeholder={ t('enter_street') } />
           </div>
         </div>
         <div className="form__col form__col_2">
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_house` }
                    className="form__label">
-              Дом
+              { t('house') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_house` }
@@ -122,7 +122,7 @@ const AddressForm = ({ field, countriesOptions, countriesData, t }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_housing` }
                    className="form__label">
-              Корпус
+              { t('housing') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_housing` }
@@ -134,7 +134,7 @@ const AddressForm = ({ field, countriesOptions, countriesData, t }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_room` }
                    className="form__label" >
-              Квартира
+              { t('room') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_room` }
@@ -147,7 +147,7 @@ const AddressForm = ({ field, countriesOptions, countriesData, t }) => {
           <div className="form__field">
             <label htmlFor={ `${field}.mail_address_index` }
                    className="form__label">
-              Индекс
+              { t('index') }
             </label>
             <Field className="text-field_white"
                    name={ `${field}.mail_address_index` }

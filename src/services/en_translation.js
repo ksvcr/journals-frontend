@@ -188,6 +188,24 @@ const en_translation = {
   region: 'Region',
   enter_region: 'Enter region',
   no_financing: 'The authors did not receive financial support for research, writing and publication of the article.',
+  street: 'Street',
+  enter_street: 'Enter street',
+  house: 'House',
+  housing: 'Housing',
+  room: 'Room',
+  index: 'Index',
+  rubric_not_found: 'Rubric not found',
+  illustrations: 'Illustrations',
+  save_changes: 'Save changes',
+  registered_as: 'You are registered as',
+  available_magazines: 'Available magazines',
+  role: 'Role',
+  science_categories: 'Science categories',
+  transaction_date: 'Transaction date',
+  balance: 'Balance',
+  user_0: 'user',
+  user_1: 'users',
+  user_2: 'users'
 };
 
 export default en_translation;

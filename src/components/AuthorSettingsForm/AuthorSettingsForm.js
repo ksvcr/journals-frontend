@@ -35,10 +35,6 @@ class AuthorSettingsForm extends Component {
     ));
   };
 
-  get isCurrentUser() {
-    return !this.props.userId;
-  }
-
   render() {
     const { t, handleSubmit, countriesOptions, countriesData } = this.props;
     return (
@@ -101,19 +97,19 @@ class AuthorSettingsForm extends Component {
           </div>
         </div>
         <div className="form__field">
-          <label htmlFor="work_place" className="form__label">
+          <label htmlFor="workplace" className="form__label">
             { t('place_of_work') }
           </label>
-          <Field name="work_place" id="work_place"
+          <Field name="workplace" id="workplace"
                  component={ TextField }
                  placeholder={ t('enter_place_of_work') }
           />
         </div>
         <div className="form__field">
-          <label htmlFor="work_place_en" className="form__label">
+          <label htmlFor="workplace_en" className="form__label">
             { t('place_of_work_in_english') }
           </label>
-          <Field name="work_place_en" id="work_place_en"
+          <Field name="workplace_en" id="workplace_en"
                  component={ TextField }
                  placeholder={ t('enter_place_of_work') }
           />
@@ -243,24 +239,24 @@ class AuthorSettingsForm extends Component {
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_state" className="form__label">
-                Область
+                { t('region') }
               </label>
               <Field
                 name="mail_address_state"
                 id="mail_address_state"
                 component={ TextField }
-                placeholder="Введите область"
+                placeholder={ t('enter_region') }
               />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_city" className="form__label">
-                Город
+                { t('city') }
               </label>
               <Field
                 name="mail_address_city"
                 id="mail_address_city"
                 component={ TextField }
-                placeholder="Введите город"
+                placeholder={ t('enter_city') }
               />
             </div>
           </div>
@@ -269,18 +265,18 @@ class AuthorSettingsForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="mail_address_street" className="form__label">
-                Улица
+                { t('street') }
               </label>
               <Field
                 name="mail_address_street"
                 id="mail_address_street"
                 component={ TextField }
-                placeholder="Введите улицу"
+                placeholder={ t('enter_street') }
               />
             </div>
             <div className="form__col form__col_2">
               <label htmlFor="mail_address_house" className="form__label">
-                Дом
+                { t('house') }
               </label>
               <Field
                 name="mail_address_house"
@@ -290,7 +286,7 @@ class AuthorSettingsForm extends Component {
             </div>
             <div className="form__col form__col_2">
               <label htmlFor="mail_address_housing" className="form__label">
-                Корпус
+                { t('housing') }
               </label>
               <Field
                 name="mail_address_housing"
@@ -300,7 +296,7 @@ class AuthorSettingsForm extends Component {
             </div>
             <div className="form__col form__col_2">
               <label htmlFor="mail_address_room" className="form__label">
-                Квартира
+                { t('room') }
               </label>
               <Field
                 name="mail_address_room"
@@ -310,7 +306,7 @@ class AuthorSettingsForm extends Component {
             </div>
             <div className="form__col form__col_2">
               <label htmlFor="mail_address_index" className="form__label">
-                Индекс
+                { t('index') }
               </label>
               <Field
                 name="mail_address_index"
@@ -324,16 +320,14 @@ class AuthorSettingsForm extends Component {
         <hr className="page__divider" />
 
         <h2 className="form__subtitle">
-          { this.isCurrentUser
-            ? 'Вы зарегистрированы как:'
-            : 'Пользователь зарегистрирован как:' }
+          { t('registered_as') }:
         </h2>
         <div className="author-settings-form__role form__field form__field_inline">
           { this.renderRoleFields() }
         </div>
 
         <div className="form__field">
-          <Button type="submit">Сохранить изменения</Button>
+          <Button type="submit">{ t('save_changes') }</Button>
         </div>
       </form>
     );
@@ -345,12 +339,11 @@ AuthorSettingsForm = reduxForm({
   enableReinitialize: true
 })(AuthorSettingsForm);
 
-function mapStateToProps(state, props) {
-  const { userId } = props;
-  const { users, countries } = state;
+function mapStateToProps(state) {
+  const { countries } = state;
   const userData = getUserData(state);
 
-  const initialValues = userId ? users.data[userId] : userData;
+  const initialValues = userData;
 
   const countriesOptions = getCountriesOptions(state);
 

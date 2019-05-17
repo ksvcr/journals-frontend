@@ -67,13 +67,12 @@ class AuthorSitesList extends Component {
   };
 
   render() {
-    const { t, userId } = this.props;
+    const { t } = this.props;
     const { openAdd } = this.state;
     return (
       <div className="author-sites-list">
         <p className="author-sites-list__header">
-          Журналы, в которые { userId ? 'пользователь может' : 'Вы можете' }{ ' ' }
-          писать статьи:
+          { t('available_magazines') }
         </p>
 
         <div className="author-sites-list__content">{ this.renderItems() }</div>
