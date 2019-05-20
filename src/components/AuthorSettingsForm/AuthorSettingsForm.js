@@ -218,7 +218,7 @@ class AuthorSettingsForm extends Component {
                 name="mail_address_fio"
                 id="mail_address_fio"
                 component={ TextField }
-                placeholder={ t('enter_fullname') }
+                placeholder={ t('enter_full_name') }
               />
             </div>
           </div>

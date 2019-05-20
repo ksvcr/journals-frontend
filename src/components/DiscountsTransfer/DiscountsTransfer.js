@@ -68,7 +68,7 @@ class DiscountsTransfer extends Component {
             <SearchPanel onChange={ this.handleSearchChange } />
             <div className="discounts-transfer__search__results">
               <p className="discounts-transfer__search__count">
-                Найдено { searchResults.length }{ ' ' }
+                { t('find', { count: searchResults.length }) } { searchResults.length }{ ' ' }
                 { t('user', { count: searchResults.length }) }
                 :
               </p>

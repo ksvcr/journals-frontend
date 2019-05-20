@@ -127,7 +127,7 @@ class AuthorAdd extends Component {
             ) }
           </div> :
           <div className="author-add__form">
-            <h3 className="author-add__title">{ t('add_autor') }</h3>
+            <h3 className="author-add__title">{ t('add_author') }</h3>
             <Field name={ `${field}.id` } type="hidden" component={ TextField } />
 
             <div className="form__field">
