@@ -3,6 +3,7 @@ import { Field, change } from 'redux-form';
 import { connect } from 'react-redux';
 import ContentEditable from 'react-contenteditable';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import FieldHint from '~/components/FieldHint/FieldHint';
@@ -49,7 +50,7 @@ class ContentBlock extends Component {
   };
 
   render() {
-    const { fields, data, index, field, isEditable, onAdd } = this.props;
+    const { fields, data, index, field, isEditable, onAdd, t } = this.props;
     const editClasses = classNames('content-block__edit', {
       'content-block__edit_active': isEditable
     });
@@ -78,7 +79,7 @@ class ContentBlock extends Component {
               onClick={ this.handleTitleEditToogle }
             >
               <Icon className="content-block__edit-icon" name="pen" />
-              Изменить
+              { t('change') }
             </button>
             <button
               className="content-block__remove"
@@ -86,7 +87,7 @@ class ContentBlock extends Component {
               onClick={ this.handleRemove }
             >
               <Icon className="content-block__remove-icon" name="cancel" />
-              Удалить
+              { t('delete') }
             </button>
           </div>
         ) }
@@ -105,7 +106,9 @@ class ContentBlock extends Component {
 
         <div className="content-block__add">
           { index === fields.length - 2 && (
-            <FieldAddButton onAdd={ onAdd }>Добавить поле</FieldAddButton>
+            <FieldAddButton onAdd={ onAdd }>
+              { t('add_field') }
+            </FieldAddButton>
           ) }
         </div>
       </div>
@@ -116,6 +119,8 @@ class ContentBlock extends Component {
 const mapDispatchToProps = {
   change
 };
+
+ContentBlock = withNamespaces()(ContentBlock);
 
 export default connect(
   null,

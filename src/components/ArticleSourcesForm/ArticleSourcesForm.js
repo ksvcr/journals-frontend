@@ -26,7 +26,7 @@ class ArticleSourcesForm extends Component {
   }
 
   renderSourceList = (props) => {
-    const { formName } = this.props;
+    const { formName, t } = this.props;
 
     const initialValues = {
       isEdit: true,
@@ -34,7 +34,7 @@ class ArticleSourcesForm extends Component {
     };
 
     return (
-      <ArticleSourceList formName={ formName } legend="Источник" addText="Добавить источник"
+      <ArticleSourceList formName={ formName } legend={ t('source') } addText={ t('add_source') }
                          initialValues={ initialValues } { ...props } />
     );
   };
@@ -98,10 +98,10 @@ class ArticleSourcesForm extends Component {
             <hr className="article-sources-form__divider" />
             <div className="form__field">
               <Field name="publicationAllowed" validate={ [validate.required] } component={ Checkbox }>
-                Материал разрешен к публикации
+                { t('publication_allowed') }
               </Field>
               <div className="article-sources-form__allowed-description">
-                Я подтверждаю, что данная статья не нарушает права третьих лиц и не противоречит данным мною обязательствам о неразглашении информации.
+                { t('article_send_agreement') }
               </div>
             </div>
           </React.Fragment>

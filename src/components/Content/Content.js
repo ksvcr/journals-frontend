@@ -99,7 +99,7 @@ class Content extends Component {
             ) }
           </div>
           <div className="content__thanks">
-            <h3>Благодарности</h3>
+            <h3>{ t('thanks_text') }</h3>
             { data.thanks_text ? <p>{ data.thanks_text }</p> : <p>{ t('not_specified') }</p> }
           </div>
           <div className="content__conflict">

@@ -64,7 +64,7 @@ class ArticleSource extends Component {
       <div className="article-source">
         <div className="article-source__box">
           <div className="article-source__legend">
-            { `Источник №${index + 1}` }
+            { `${ t('source') } №${index + 1}` }
           </div>
           <div className="article-source__title">
             { this.getTitle(['original_name', 'page_count'], 'ru') }

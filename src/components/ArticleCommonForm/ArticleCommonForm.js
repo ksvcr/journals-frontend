@@ -295,12 +295,12 @@ class ArticleCommonForm extends Component {
               <Field name="use_address_from_profile" value={ true }
                      component={ Radio } type="radio" format={ value => Boolean(value) }
                      parse={ value => value === 'true' } >
-                Адрес, указанный в профиле
+                { t('address_from_profile') }
               </Field>
               <Field name="use_address_from_profile" value={ false }
                      component={ Radio } type="radio" format={ value => Boolean(value) }
                      parse={ value => value === 'true' } >
-                Другой адрес
+                { t('another_address') }
               </Field>
             </div>
           ) }

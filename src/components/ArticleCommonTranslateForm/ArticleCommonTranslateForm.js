@@ -18,7 +18,7 @@ class ArticleCommonTranslateForm extends Component {
         <div className="form__field">
           <label htmlFor={ `financing_sources[${index}].organization` }
                  className="form__label">
-            { t('title_of_organization') } <ReqMark />
+            { t('organization_name') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview text-field_dark" textarea
@@ -36,7 +36,7 @@ class ArticleCommonTranslateForm extends Component {
           <TextField className="text-field_preview text-field_dark" textarea
                      value={ item.grant_name } readOnly />
           <Field name={ `financing_sources[${index}].grant_name` } id={ `financing_sources[${index}].grant_name` }
-                 textarea component={ TextField } className="text-field_white" placeholder="Введите перевод"
+                 textarea component={ TextField } className="text-field_white" placeholder={ t('enter_translation') }
                  validate={ [validate.required] } />
         </div>
       </FieldSet>
@@ -51,25 +51,25 @@ class ArticleCommonTranslateForm extends Component {
 
         <div className="form__field">
           <label htmlFor="title" className="form__label">
-            Название статьи <ReqMark />
+            { t('article_title') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview" textarea
                      value={ articleData.title } readOnly />
           <Field name="title" id="title" textarea
-                 component={ TextField } placeholder="Введите перевод"
+                 component={ TextField } placeholder={ t('enter_translation') }
                  validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
           <label htmlFor="thanks_text" className="form__label">
-            Благодарности <ReqMark />
+            { t('thanks_text') } <ReqMark />
           </label>
 
           <TextField className="text-field_preview" textarea
                      value={ articleData.thanks_text } readOnly />
           <Field name="thanks_text" id="thanks_text"
-                 component={ TextField } placeholder="Введите перевод"
+                 component={ TextField } placeholder={ t('enter_translation') }
                  validate={ [validate.required] } />
         </div>
 
@@ -81,7 +81,7 @@ class ArticleCommonTranslateForm extends Component {
           <TextField className="text-field_preview" textarea
                      value={ articleData.text_to_keywords } readOnly />
           <Field name="text_to_keywords" id="text_to_keywords"
-                 component={ TextField } placeholder="Введите перевод"
+                 component={ TextField } placeholder={ t('enter_translation') }
                  validate={ [validate.required] } />
         </div>
 
@@ -93,7 +93,7 @@ class ArticleCommonTranslateForm extends Component {
           <TextField className="text-field_preview" textarea
                      value={ articleData.text_to_description } readOnly />
           <Field name="text_to_description" id="text_to_description"
-                 component={ TextField } placeholder="Введите перевод"
+                 component={ TextField } placeholder={ t('enter_translation') }
                  validate={ [validate.required] } />
         </div>
 
@@ -106,7 +106,7 @@ class ArticleCommonTranslateForm extends Component {
             <TextField className="text-field_preview" readOnly
                        textarea value={ articleData.conflict_interest } />
             <Field name="conflict_interest" id="conflict_interest"
-                   component={ TextField } placeholder="Введите перевод"
+                   component={ TextField } placeholder={ t('enter_translation') }
                    validate={ [validate.required] } />
           </div>
         ) }

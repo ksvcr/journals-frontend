@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -10,29 +11,30 @@ import './meta-info-form.scss';
 
 class MetaInfoForm extends Component {
   render() {
+    const { t } = this.props;
     const fieldClasses = classNames('text-field_small', { 'text-field_white': this.props.whiteFields });
     return (
       <div className="meta-info-form form">
         <div className="form__field form__field_small">
           <label htmlFor="media-name" className="form__label form__label_small">
-            Название
+            { t('title') }
           </label>
           <Field name="title" id="media-name" className={ fieldClasses } component={ TextField }
-                 placeholder="Введите название" />
+                 placeholder={ t('enter_title') } />
         </div>
         <div className="form__field form__field_small">
           <label htmlFor="media-additional" className="form__label form__label_small">
-            Примечания
+            { t('note') }
           </label>
           <Field name="additional" id="media-additional" className={ fieldClasses }
-                 component={ TextField } placeholder="Введите примечания" />
+                 component={ TextField } placeholder={ t('enter_note') } />
         </div>
         <div className="form__field form__field_small">
           <label htmlFor="media-keywords" className="form__label form__label_small">
-            Ключевые слова
+            { t('keywords') }
           </label>
           <Field name="keywords" id="media-keywords" className={ fieldClasses }
-                 component={ TextField } placeholder="Введите ключевые слова" />
+                 component={ TextField } placeholder={ t('enter_keywords') } />
         </div>
       </div>
     );
@@ -48,6 +50,8 @@ function mapStateToProps(state, props) {
     onChange: onChange.bind(null, id)
   };
 }
+
+MetaInfoForm = withNamespaces()(MetaInfoForm);
 
 export default connect(mapStateToProps)(MetaInfoForm);
 

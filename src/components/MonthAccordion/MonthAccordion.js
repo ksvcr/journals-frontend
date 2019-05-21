@@ -53,7 +53,7 @@ class MonthAccordion extends PureComponent {
             width: '60%'
           },
           isMain: true,
-          head: () => t('title_of_article'),
+          head: () => t('article_title'),
           render: data => (
             <React.Fragment>
               <div className={ `${accClass}__article-title` }>{ data.article.title || t('title_of_article_not_found') }</div>
