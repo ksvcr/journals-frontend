@@ -284,7 +284,13 @@ const en_translation = {
   defense_city: 'Defense city',
   enter_defense_city: 'Enter defense city',
   defense_date: 'Defense date',
-  statement_date: 'Statement_date'
+  statement_date: 'Statement_date',
+  thanks_text: 'Thank text',
+  enter_thanks_text: 'Enter thank text',
+  article_title: 'Article title',
+  enter_article_title: 'Enter article title',
+  article: 'Article',
+  need_translation: 'Need translation'
 };
 
 export default en_translation;

@@ -284,7 +284,13 @@ const ru_translation = {
   defense_city: 'Город защиты',
   enter_defense_city: 'Введите город защиты',
   defense_date: 'Дата защиты',
-  statement_date: 'Дата утверждения'
+  statement_date: 'Дата утверждения',
+  thanks_text: 'Благодарности',
+  enter_thanks_text: 'Введите благодарности',
+  article_title: 'Название статьи',
+  enter_article_title: 'Введите название статьи',
+  article: 'Статья',
+  need_translation: 'Нужен перевод сопроводительной информации на русский'
 };
 
 export default ru_translation;

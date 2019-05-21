@@ -195,7 +195,7 @@ class ArticlePublish extends Component {
         <React.Fragment>
           { !isEdit && (
             <ArticleTopTools>
-              <CancelLink />
+              <CancelLink text={ t('cancel') } />
               <PreviewLink href="/article/new" />
             </ArticleTopTools>
           ) }

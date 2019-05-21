@@ -89,7 +89,7 @@ class AuthorSitesList extends Component {
             </button>
           ) : (
             <React.Fragment>
-              <CancelLink onClick={ this.handleCancelClick } />
+              <CancelLink onClick={ this.handleCancelClick } text={ t('cancel') } />
 
               <div className="form">
                 <div className="form__field form__field_small">

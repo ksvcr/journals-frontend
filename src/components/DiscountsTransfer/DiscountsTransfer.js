@@ -61,7 +61,7 @@ class DiscountsTransfer extends Component {
     return (
       <div className="discounts-transfer">
         <div className="discounts-transfer__cancel">
-          <CancelLink onClick={ this.handleCancelClick } />
+          <CancelLink onClick={ this.handleCancelClick } text={ t('cancel') } />
         </div>
         { !user ? (
           <div className="discounts-transfer__search">
