@@ -3,11 +3,14 @@ import cx from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types';
+
 import * as formatDate from '~/services/formatDate';
 import { getStatsByDate, getCountInMonth } from '~/store/stats/selector';
 import { getSitesArray } from '~/store/sites/selector';
+
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
+
 import './month-accordion.scss';
 
 const propTypes = {
@@ -82,7 +85,7 @@ class MonthAccordion extends PureComponent {
           style: {
             width: '20%'
           },
-          head: () => 'Знаков',
+          head: () => t('symbols'),
           render: data => (
             <div className={ `${accClass}__article-count` }>
               { data.counter || 0 }
@@ -113,7 +116,7 @@ class MonthAccordion extends PureComponent {
   };
 
   render() {
-    const { date, articles, articlesCount } = this.props;
+    const { date, articles, articlesCount, t } = this.props;
     const { isOpen, paginate } = this.state;
     const accHeadClasses = cx({
       [`${accClass}__head`]: true,
@@ -124,7 +127,7 @@ class MonthAccordion extends PureComponent {
       <div className={ accClass }>
         <button className={ accHeadClasses } type="button" onClick={ this.handleToggleClick }>
           <div className={ `${accClass}__label` }>
-            { date.isCurrent && <small className={ `${accClass}__label-current` }>Текущий месяц: </small> }
+            { date.isCurrent && <small className={ `${accClass}__label-current` }>{ t('current_month') }: </small> }
             <span className={ `${accClass}__label-date` }>{ date.month } { date.year }</span>
           </div>
         </button>
@@ -142,7 +145,7 @@ class MonthAccordion extends PureComponent {
                   }
                 </React.Fragment>
               )
-              : <div className={ `${accClass}__empty` }>Нет записей</div>
+              : <div className={ `${accClass}__empty` }>{ t('no_entries') }</div>
             }
           </section>
         ) }

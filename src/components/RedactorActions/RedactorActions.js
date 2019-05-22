@@ -21,7 +21,7 @@ class RedactorActions extends Component {
 
     const actions = [
       {
-        title: 'Рецензировать',
+        title: t('review_action'),
         component: <RedactorReview articleId={ articleId } />
       },
       {

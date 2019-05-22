@@ -58,17 +58,19 @@ class RedactorReview extends Component {
   };
 
   renderCollapseButton = props => {
+    const { t } = this.props;
     return (
       <RedactorCollapseButton { ...props }>
-        { `Рецензенты (${this.invitesCount})` }
+        { `${ t('reviewers') } (${this.invitesCount})` }
       </RedactorCollapseButton>
     );
   };
 
   renderCollapsePreliminaryButton = props => {
+    const { t } = this.props;
     return (
       <RedactorCollapseButton { ...props }>
-        Предварительная доработка
+        { t('preliminary_revision') }
       </RedactorCollapseButton>
     );
   };

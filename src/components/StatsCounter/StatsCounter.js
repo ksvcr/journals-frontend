@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import './stats-counter.scss';
 
@@ -10,10 +11,10 @@ const defaultProps = {
   counter: 0
 };
 
-const StatsCounter = ({ counter }) => {
+const StatsCounter = ({ counter, t }) => {
   return (
     <div className="stats-counter">
-      <div className="stats-counter__label">всего знаков:</div>
+      <div className="stats-counter__label">{ t('total_characters') }:</div>
       <div className="stats-counter__value">
         <b>{ counter.toLocaleString() }</b>
         <small>(без пробелов)</small>
@@ -25,4 +26,4 @@ const StatsCounter = ({ counter }) => {
 StatsCounter.propTypes = propTypes;
 StatsCounter.defaultProps = defaultProps;
 
-export default StatsCounter;
+export default withNamespaces()(StatsCounter);

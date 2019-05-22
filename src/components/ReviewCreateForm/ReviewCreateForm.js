@@ -57,28 +57,28 @@ class ReviewCreateForm extends Component {
     let label = t('review_text');
     const review_round = reviews.length + 1;
     if (recommendation !== 1) {
-      label = `Замечания после ${review_round} раунда рецензирования`;
+      label = t('comment_after_review_round', { review_round });
     }
     return label;
   }
 
 
   get specData() {
-    const { articleData, sitesData, rubricsData } = this.props;
+    const { articleData, sitesData, rubricsData, t } = this.props;
     const site = sitesData[articleData.site];
     const types = getArticleTypes();
     const rubric = rubricsData[articleData.rubric];
     return [
       {
-        title: 'Для журнала',
-        value: site ? site.name : 'Журнал не найден'
+        title: `${ t('for_journals') }:`,
+        value: site ? site.name : t('journal_not_found')
       },
       {
-        title: 'Категория статьи:',
-        value: rubric ? rubric.name : 'Рубрика не найдена'
+        title: `${ t('article_category') }:`,
+        value: rubric ? rubric.name : t('rubric_not_found')
       },
       {
-        title: 'Тип статьи:',
+        title: `${ t('article_type') }:`,
         value: types[articleData.article_type]
       }
     ];
@@ -123,7 +123,7 @@ class ReviewCreateForm extends Component {
           </label>
           <Field name="comment_for_author" id="comment_for_author" component={ TextField } textarea
                  minRows={ recommendation === 1 ? 20 : 6 }
-                 placeholder="Введите текст рецензии" />
+                 placeholder={ t('enter_review_text') } />
         </div>
 
         { recommendation === 1 &&
@@ -134,11 +134,11 @@ class ReviewCreateForm extends Component {
 
         <div className="form__field">
           <label htmlFor="comment_for_redactor" className="form__label">
-            Замечания для редактора по доработке статьи (не показываются автору) <ReqMark />
+            { t('comment_for_redactor') } ({ t('not_shown_to_author') }) <ReqMark />
           </label>
           <Field name="comment_for_redactor" id="comment_for_redactor" component={ TextField } textarea
                  minRows={ 6 }
-                 placeholder="Введите комментарий для редактора" validate={ [validate.required] } />
+                 placeholder={ t('enter_comment_for_redactor') } validate={ [validate.required] } />
         </div>
 
         <div className="form__field">

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Field, change } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Radio from '~/components/Radio/Radio';
 import TextField from '~/components/TextField/TextField';
@@ -20,7 +21,7 @@ class ReviewApprove extends Component {
   };
 
   renderItems = () => {
-    const { reviews, reviewInvites } = this.props;
+    const { reviews, reviewInvites, t } = this.props;
     return reviews.map(review => {
       const invite = reviewInvites.find(item => review.invite === item.id);
       const { reviewer } = invite;
@@ -34,7 +35,7 @@ class ReviewApprove extends Component {
             parse={ value => parseInt(value, 10) }
             onChange={ this.handleReviewChange }
           >
-            { `Включить рецензию ${reviewer.first_name} ${reviewer.last_name}` }
+            { `${ t('include_review') } ${reviewer.first_name} ${reviewer.last_name}` }
           </Field>
         </div>
       );
@@ -79,6 +80,8 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   change
 };
+
+ReviewApprove = withNamespaces()(ReviewApprove);
 
 export default connect(
   mapStateToProps,

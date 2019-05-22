@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import TagEditor from '~/components/TagEditor/TagEditor';
@@ -33,10 +34,11 @@ class InvitedReviewersList extends Component {
   getToolsMenuItems(data) {
     const hasReview = data.reviews && data.reviews.length;
     const articleId = data.article.id;
+    const { t } = this.props;
 
     let items = [
       {
-        title: 'Отменить',
+        title: t('cancel'),
         handler: this.handleInviteRemove.bind(null, articleId)
       }
     ];
@@ -44,7 +46,7 @@ class InvitedReviewersList extends Component {
     if (hasReview) {
       const reviewId = data.reviews[data.reviews.length-1].id;
       items.push({
-        title: 'Просмотр рецензии',
+        title: t('view_review'),
         type: 'preview',
         icon: 'preview',
         link: `/article/${articleId}/review/${reviewId}`
@@ -127,6 +129,8 @@ const mapDispatchToProps = {
   removeReviewInvite: reviewInvitesActions.removeReviewInvite,
   editReviewInvite: reviewInvitesActions.editReviewInvite
 };
+
+InvitedReviewersList = withNamespaces()(InvitedReviewersList);
 
 export default connect(
   mapStateToProps,

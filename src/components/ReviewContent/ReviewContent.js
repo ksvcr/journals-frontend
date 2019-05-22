@@ -22,7 +22,7 @@ class ReviewContent extends Component {
       <div className="review-content">
         <div className="review-content__item">
           <div className="review-content__label">
-            Рекомендация рецензента
+            { t('reviewer_recommendation') }
           </div>
           <div className="review-content__head">
             { this.recomendationMap[data.recommendation] }
@@ -50,7 +50,7 @@ class ReviewContent extends Component {
 
         <div className="review-content__item">
           <div className="review-content__label">
-            Замечания для редактора по доработке статьи
+            { t('comment_for_redactor') }
           </div>
           <div className="review-content__value">
             { data.comment_for_redactor }
@@ -60,7 +60,7 @@ class ReviewContent extends Component {
         { isShowDecision &&
           <div className="review-content__item">
             <div className="review-content__label">
-              Вынести решение по статье
+              { t('make_decision') }
             </div>
             <RedactorDecision articleId={ articleId } />
           </div>

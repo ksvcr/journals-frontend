@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Collapse from '~/components/Collapse/Collapse';
 import ReviewsDialog from '~/components/ReviewsDialog/ReviewsDialog';
@@ -9,10 +10,10 @@ import './reviews-dialog-list.scss';
 
 class ReviewsDialogList extends Component {
   renderList = () => {
-    const { reviews } = this.props;
+    const { reviews, t } = this.props;
 
     return reviews.map((item, i) => (
-      <Collapse key={ i } title={ i+1 + ' рецензент' }>
+      <Collapse key={ i } title={ i+1 + ` ${ t('reviewer') }` }>
         <ReviewsDialog formName={ `reviews-dialog-${item.id}` }
                        onSubmit={ this.handleEditReview } item={ item } />
       </Collapse>
@@ -36,6 +37,8 @@ class ReviewsDialogList extends Component {
 const mapDispatchToProps = {
   createArticleReviewAnswer: articlesActions.createArticleReviewAnswer
 };
+
+ReviewsDialogList = withNamespaces()(ReviewsDialogList);
 
 export default connect(
   null,

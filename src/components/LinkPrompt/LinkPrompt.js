@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import './link-prompt.scss';
+import { withNamespaces } from 'react-i18next';
+
 import TextField from '~/components/TextField/TextField';
+
+import './link-prompt.scss';
 
 class LinkPrompt extends Component {
   constructor(props) {
@@ -23,16 +26,18 @@ class LinkPrompt extends Component {
   };
 
   render() {
-    const { value } = this.state;
+    const { value, t } = this.state;
     return (
       <div className="link-prompt">
         <TextField onChange={ this.handleChange } value={ value } className="link-prompt__input" />
         <button className="link-prompt__button button button_small" type="button" onClick={ this.handleConfirm }>
-          Сохранить
+          { t('save') }
         </button>
       </div>
     );
   }
 }
+
+LinkPrompt = withNamespaces()(LinkPrompt);
 
 export default LinkPrompt;

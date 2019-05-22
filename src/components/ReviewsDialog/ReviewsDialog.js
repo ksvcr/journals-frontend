@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, getFormValues, reduxForm } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import FieldHint from '~/components/FieldHint/FieldHint';
 import TextField from '~/components/TextField/TextField';
@@ -26,7 +27,7 @@ class ReviewsDialog extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, t } = this.props;
     const { answerValue } = this.state;
     const answer = item.author_answer || answerValue;
 
@@ -36,12 +37,9 @@ class ReviewsDialog extends Component {
         <form className="reviews-dialog__answer" onSubmit={ this.handleSubmit }>
           <div className="form__field">
             <label htmlFor="author_answer" className="form__label">
-              ваш ответ (будет опубликован вместе со статьей)
+              { t('your_answer') } ({ t('will_be_published') })
               <FieldHint
-                text={
-                  'Когда статья будет опубликована в журнале, в ее составе ' +
-                  'будет текст рецензии и ваш ответ на нее'
-                }
+                text={ t('review_publish_hint') }
               />
             </label>
             { answer ? (
@@ -53,14 +51,14 @@ class ReviewsDialog extends Component {
                 textarea
                 minRows={ 5 }
                 component={ TextField }
-                placeholder="Введите Ваш ответ"
+                placeholder={ t('enter_your_answer') }
                 validate={ [validate.required] }
               />
             ) }
           </div>
           { !answer && (
             <button className="reviews-dialog__button" type="submit">
-              Ответить
+              { t('reply') }
             </button>
           ) }
         </form>
@@ -96,5 +94,7 @@ function getInitialValues(props) {
 
   return initialValues;
 }
+
+ReviewsDialog = withNamespaces()(ReviewsDialog);
 
 export default connect(mapStateToProps)(ReviewsDialog);
