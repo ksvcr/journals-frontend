@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { genKey } from 'draft-js';
+import { AtomicBlockUtils, EditorState, genKey } from 'draft-js';
 import Icon from '~/components/Icon/Icon';
 
 import { addNewBlockAt } from '~/services/customDraftUtils';
@@ -18,7 +18,7 @@ class TableTool extends Component {
             blocks: [
               {
                 key: genKey(),
-                text: ' ',
+                text: 'Jopa',
                 type: 'unstyled',
                 depth: 0,
                 inlineStyleRanges: [],
@@ -48,11 +48,28 @@ class TableTool extends Component {
     const { getEditorState, setEditorState } = this.props;
     const editorState = getEditorState();
     const blockKey = 'block-table';
-    setEditorState(addNewBlockAt(
-      editorState,
+
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
       blockKey,
+      'MUTABLE',
       entityData
-    ))
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(
+      editorState,
+      { currentContent: contentStateWithEntity }
+    );
+
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        blockKey
+      )
+    );
+
   };
 
   render() {

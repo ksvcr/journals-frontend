@@ -1,4 +1,4 @@
-.table-editor {
+.table-editor-wrapper {
   padding: 10px 0;
 
   &__title {
@@ -13,29 +13,6 @@
 
   &__toolbar {
     margin-bottom: 20px;
-  }
-
-  &__box {
-    width: 100%;
-    border: 1px solid #dcdcdc;
-    background: #fff;
-
-    td {
-      border-left: 1px solid #dcdcdc;
-      border-top: 1px solid #dcdcdc;
-
-      &:first-child {
-        border-left: 0;
-      }
-    }
-
-    tr:first-child td {
-      border-top: 0;
-    }
-
-    .public-DraftEditor-content {
-      padding: 18px;
-    }
   }
 
   &__button {

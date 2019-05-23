@@ -120,7 +120,7 @@ class ImageMediaEditor extends Component {
   render() {
     const { data, onInteract, onCancelInteract, onRemove, t } = this.props;
     return (
-      <div className="image-media-editor">
+      <div className="image-media-editor" contentEditable={ false } readOnly>
         <div className="image-media-editor__top">
           <button type="button" onClick={ onRemove } className="image-media-editor__remove-button">
             <Icon name="cancel"  className="image-media-editor__remove-icon" />

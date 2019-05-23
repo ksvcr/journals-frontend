@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { EditorState, genKey } from 'draft-js';
+import { genKey } from 'draft-js';
 import { withNamespaces } from 'react-i18next';
 import nanoid from 'nanoid';
 
 import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
 import ToolTip from '~/components/ToolTip/ToolTip';
 import Icon from '~/components/Icon/Icon';
-import Table from '~/components/Table/Table';
+import TableEditor from '~/components/TableEditor/TableEditor';
+
 import { removeRange } from '~/services/customDraftUtils';
 
 import './assets/cancel.svg';
-import './table-editor.scss';
+import './table-editor-wrapper.scss';
 
 const cellData = {
   entityMap: {},
@@ -38,35 +39,28 @@ class TableEditorWrapper extends Component {
     };
   }
 
-  // Переопределяем стандартные методы добавления колонки/строки чтобы изменить текст плейсхолдера
-  // Ресетим internal state при помоши обновления key
   addColumn = () => {
-    this.setState(({ rows, tableKey }) => {
-      const newRows = rows.map(row => {
-        row.push(cellData);
-        return row;
-      });
+    const { data, onChange } = this.props;
+    const { rows } = data;
 
-      return {
-        rows: newRows,
-        tableKey: tableKey + 1
-      };
+    const newRows = rows.map(row => {
+      row.push(cellData);
+      return row;
     });
+
+    onChange({ ...data, rows: newRows });
   };
 
   addRow = () => {
-    this.setState(({ rows, tableKey }) => {
-      const numberOfColumns = rows[0].length;
-      const newRow = [];
-      for (let i = 0; i <= numberOfColumns - 1; i++) {
-        newRow.push(cellData);
-      }
-      const newRows = [...rows, newRow];
-      return {
-        rows: newRows,
-        tableKey: tableKey + 1
-      };
-    });
+    const { data, onChange } = this.props;
+    const { rows } = data;
+    const numberOfColumns = rows[0].length;
+    const newRow = [];
+    for (let i = 0; i <= numberOfColumns - 1; i++) {
+      newRow.push(cellData);
+    }
+    const newRows = [...rows, newRow];
+    onChange({ ...data, rows: newRows });
   };
 
   handleMetaChange = (id, formData) => {
@@ -74,17 +68,8 @@ class TableEditorWrapper extends Component {
   };
 
   handleMetaClose = () => {
-    const { contentState, blockProps } = this.props;
-    const { pluginEditor } = blockProps;
-    const { getEditorState, setEditorState } = pluginEditor;
-    const editorState = getEditorState();
-    const selection = editorState.getSelection();
-
-    const data = { ...this.entity.getData(), ...this.meta };
-
-    contentState.replaceEntityData(this.entityKey, data);
-
-    setEditorState(EditorState.forceSelection(editorState, selection));
+    const { data, onChange } = this.props;
+    onChange({ ...data, ...this.meta });
   };
 
   get initialMeta() {
@@ -112,9 +97,9 @@ class TableEditorWrapper extends Component {
   };
 
   render() {
-    const { t, data, onRemove } = this.props;
+    const { t, data, onRemove, editorProps } = this.props;
     return (
-      <div className="table-editor-wrapper" contentEditable={ false } readOnly>
+      <div className="table-editor-wrapper">
         <div className="table-editor-wrapper__top">
           <button type="button" onClick={ onRemove } className="table-editor-wrapper__remove-button">
             <Icon name="cancel"  className="table-editor-wrapper__remove-icon" />
@@ -159,7 +144,7 @@ class TableEditorWrapper extends Component {
               </button>
             </ToolTip>
           </div>
-          <Table data={ data }/>
+          <TableEditor data={ data } editorProps={ editorProps }/>
         </div>
       </div>
     );

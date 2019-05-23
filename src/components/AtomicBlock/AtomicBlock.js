@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+import TableEditor from '~/components/TableEditorWrapper/TableEditorWrapper';
 import { EditorState } from 'draft-js';
 import { removeRange } from '~/services/customDraftUtils';
 
@@ -46,10 +47,15 @@ class AtomicBlock extends Component {
   render() {
     const data = this.entity.getData();
     const type = this.entity.getType();
+    console.log(this.props);
     switch(type){
       case 'image-list':
         return <ImageMediaEditor data={ data } onChange={ this.handleChange } onRemove={ this.handleRemove }
                                  onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
+
+      case 'block-table':
+        return <TableEditor data={ data } editorProps={ this.props }
+                            onChange={ this.handleChange } onRemove={ this.handleRemove } />;
       default:
         return null;
     }

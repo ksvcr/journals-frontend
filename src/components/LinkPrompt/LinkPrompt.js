@@ -26,7 +26,8 @@ class LinkPrompt extends Component {
   };
 
   render() {
-    const { value, t } = this.state;
+    const { value } = this.state;
+    const { t } = this.props;
     return (
       <div className="link-prompt">
         <TextField onChange={ this.handleChange } value={ value } className="link-prompt__input" />

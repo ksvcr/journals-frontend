@@ -3,7 +3,6 @@ import { convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap, EditorState }
 import { merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import createTablePlugin from 'draft-js-table-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
 import createFocusPlugin from 'draft-js-focus-plugin';
 import createUndoPlugin from 'draft-js-undo-plugin';
@@ -20,7 +19,6 @@ import ColorTool from '~/components/ColorTool/ColorTool';
 import ImageMediaTool from '~/components/ImageMediaTool/ImageMediaTool';
 import ExpandTool from '~/components/ExpandTool/ExpandTool';
 import AtomicBlock from '~/components/AtomicBlock/AtomicBlock';
-import TableEditor from '~/components/TableEditor/TableEditor';
 import ContentCounter from '~/components/ContentCounter/ContentCounter';
 import HeadlinesButtons from '~/components/HeadlinesButtons/HeadlinesButtons';
 import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
@@ -49,7 +47,6 @@ class ContentEditor extends Component {
   }
 
   createPlugins = () => {
-    const tablePlugin = createTablePlugin({ component: TableEditor, Editor });
     const toolbarPlugin = createStaticToolbarPlugin({
       theme: toolbarClasses
     });
@@ -69,7 +66,6 @@ class ContentEditor extends Component {
     return [
       createEntityPropsPlugin({}),
       createFocusPlugin({}),
-      tablePlugin,
       toolbarPlugin,
       undoPlugin
     ];
@@ -90,7 +86,7 @@ class ContentEditor extends Component {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
-        editable: false,
+        editable: true,
         props: {
           onInteractChange: this.toggleReadOnly
         }
@@ -164,7 +160,6 @@ class ContentEditor extends Component {
   render() {
     const { editorState, isReadOnly } = this.state;
     const EditorToolbar = this.toolbar;
-
     return (
       <div className="content-editor">
         <Editor
