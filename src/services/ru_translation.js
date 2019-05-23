@@ -369,7 +369,10 @@ const ru_translation = {
   enter_your_answer: 'Введите ваш ответ',
   author_answer: 'Ответ автора',
   loading: 'Загрузка',
-  total_characters: 'всего знаков'
+  total_characters: 'Всего знаков',
+  no_spaces: 'Без пробелов',
+  translation: 'Перевод',
+  translate: 'Перевести'
 };
 
 export default ru_translation;

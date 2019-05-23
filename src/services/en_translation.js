@@ -369,7 +369,10 @@ const en_translation = {
   enter_your_answer: 'Enter your answer',
   author_answer: 'Author answer',
   loading: 'Loading',
-  total_characters: 'всего знаков'
+  total_characters: 'Total characters',
+  no_spaces: 'No spaces',
+  translation: 'Translation',
+  translate: 'Translate'
 };
 
 export default en_translation;

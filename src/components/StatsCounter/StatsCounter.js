@@ -17,7 +17,7 @@ const StatsCounter = ({ counter, t }) => {
       <div className="stats-counter__label">{ t('total_characters') }:</div>
       <div className="stats-counter__value">
         <b>{ counter.toLocaleString() }</b>
-        <small>(без пробелов)</small>
+        <small>({ t('no_spaces') })</small>
       </div>
     </div>
   );
