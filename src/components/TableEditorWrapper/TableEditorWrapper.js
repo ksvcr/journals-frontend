@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { genKey } from 'draft-js';
 import { withNamespaces } from 'react-i18next';
 import nanoid from 'nanoid';
 
@@ -13,19 +12,7 @@ import { removeRange } from '~/services/customDraftUtils';
 import './assets/cancel.svg';
 import './table-editor-wrapper.scss';
 
-const cellData = {
-  entityMap: {},
-  blocks: [
-    {
-      key: genKey(),
-      text: ' ',
-      type: 'unstyled',
-      depth: 0,
-      inlineStyleRanges: [],
-      entityRanges: []
-    }
-  ]
-};
+const cellData = '';
 
 class TableEditorWrapper extends Component {
   constructor(props) {
@@ -34,8 +21,7 @@ class TableEditorWrapper extends Component {
     this.formId = nanoid();
     this.state = {
       meta: {},
-      tableKey: 0,
-      rows: data.rows || [{}]
+      rows: data.rows || ['']
     };
   }
 
@@ -63,6 +49,11 @@ class TableEditorWrapper extends Component {
     onChange({ ...data, rows: newRows });
   };
 
+  handleCellChange = (rows) => {
+    const { data, onChange } = this.props;
+    onChange({ ...data, rows });
+  };
+
   handleMetaChange = (id, formData) => {
     this.meta = formData;
   };
@@ -85,8 +76,7 @@ class TableEditorWrapper extends Component {
       ...blockProps,
       entityData: {
         ...blockProps.entityData,
-        rows,
-        numberOfColumns: rows[0].length
+        rows
       }
     };
   }
@@ -97,7 +87,7 @@ class TableEditorWrapper extends Component {
   };
 
   render() {
-    const { t, data, onRemove, editorProps } = this.props;
+    const { t, data, onRemove, onInteract, onCancelInteract } = this.props;
     return (
       <div className="table-editor-wrapper">
         <div className="table-editor-wrapper__top">
@@ -144,7 +134,8 @@ class TableEditorWrapper extends Component {
               </button>
             </ToolTip>
           </div>
-          <TableEditor data={ data } editorProps={ editorProps }/>
+          <TableEditor data={ data.rows } onChange={ this.handleCellChange }
+                       onInteract={ onInteract } onCancelInteract={ onCancelInteract } />
         </div>
       </div>
     );

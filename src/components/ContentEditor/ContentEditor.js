@@ -4,7 +4,6 @@ import { merge } from 'immutable';
 import Editor from 'draft-js-plugins-editor';
 import createStaticToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
 import createEntityPropsPlugin from 'draft-js-entity-props-plugin';
-import createFocusPlugin from 'draft-js-focus-plugin';
 import createUndoPlugin from 'draft-js-undo-plugin';
 
 import editorWithStyles from '~/components/EditorToolbar/EditorToolbar';
@@ -65,7 +64,6 @@ class ContentEditor extends Component {
     this.toolbar = editorWithStyles(Toolbar);
     return [
       createEntityPropsPlugin({}),
-      createFocusPlugin({}),
       toolbarPlugin,
       undoPlugin
     ];
@@ -86,7 +84,7 @@ class ContentEditor extends Component {
     if (block.getType() === 'atomic') {
       return {
         component: AtomicBlock,
-        editable: true,
+        editable: false,
         props: {
           onInteractChange: this.toggleReadOnly
         }
@@ -160,6 +158,7 @@ class ContentEditor extends Component {
   render() {
     const { editorState, isReadOnly } = this.state;
     const EditorToolbar = this.toolbar;
+
     return (
       <div className="content-editor">
         <Editor

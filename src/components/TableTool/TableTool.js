@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { AtomicBlockUtils, EditorState, genKey } from 'draft-js';
+import { AtomicBlockUtils, EditorState } from 'draft-js';
 import Icon from '~/components/Icon/Icon';
 
-import { addNewBlockAt } from '~/services/customDraftUtils';
 import { withNamespaces } from 'react-i18next';
 
 import './table-tool.scss';
@@ -13,36 +12,11 @@ class TableTool extends Component {
     const entityData =  {
       rows: [
         [
-          {
-            entityMap: {},
-            blocks: [
-              {
-                key: genKey(),
-                text: 'Jopa',
-                type: 'unstyled',
-                depth: 0,
-                inlineStyleRanges: [],
-                entityRanges: []
-              }
-            ]
-          },
-          {
-            entityMap: {},
-            blocks: [
-              {
-                key: genKey(),
-                text: ' ',
-                type: 'unstyled',
-                depth: 0,
-                inlineStyleRanges: [],
-                entityRanges: []
-              }
-            ]
-          }
+          'text1',
+          'text2'
         ]
       ],
-      title: 'Заголовок таблицы',
-      numberOfColumns: 2
+      title: 'Заголовок таблицы'
     };
 
     const { getEditorState, setEditorState } = this.props;
