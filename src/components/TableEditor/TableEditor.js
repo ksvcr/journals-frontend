@@ -33,7 +33,7 @@ class TableEditorContent extends PureComponent {
     const { content, onInteract } = this.props;
     return (
       <ContentEditable html={ content } onFocus={ onInteract } onBlur={ this.handleBlur }
-                       onChange={ this.handleChange } />
+                       onChange={ this.handleChange }  className="table-editor__content" />
     );
   }
 }
@@ -41,23 +41,81 @@ class TableEditorContent extends PureComponent {
 class TableEditor extends Component {
   handleChange = ({ row, cell, value }) => {
     const { data, onChange, onCancelInteract } = this.props;
-    console.log(value);
     if (value) {
       const newData = [ ...data ];
-      newData[row][cell] = value;
+      newData[row][cell].content = value;
       onChange(newData);
     } else {
-      onCancelInteract()
+      onCancelInteract();
     }
+  };
+  // TODO: Смещаются индексы на следующей строке. Возможный вариант решения осталять пустую ячейку вместо удаления
+  handleMergeCol = (row, cell) => {
+    const { data, onChange } = this.props;
+    const newData = [ ...data ];
+
+    const currentCell = newData[row][cell];
+
+    const nextCells = [];
+
+    for (let i = 0; i < currentCell.rowspan; i++) {
+      const newCell = newData[row + i][cell + 1];
+      if (newCell) {
+        nextCells.push(newCell);
+      }
+    }
+
+    currentCell.content = nextCells.reduce((result, item) => {
+      return `${result} ${item.content}`;
+    }, currentCell.content);
+
+    currentCell.colspan = nextCells.reduce((result, item) => {
+      return result + item.colspan;
+    }, currentCell.colspan);
+    
+    for (let i = 0; i < currentCell.rowspan; i++) {
+      newData[row + i].splice(cell + 1, 1);
+    }
+
+    onChange(newData);
+  };
+
+  handleMergeRow = (row, cell) => {
+    const { data, onChange } = this.props;
+    const newData = [ ...data ];
+
+    const currentCell = newData[row][cell];
+
+    const nextCells = [];
+
+    for (let i = 0; i < currentCell.colspan; i++) {
+      const newCell = newData[row + 1][cell + i];
+      if (newCell) nextCells.push(newCell);
+    }
+
+
+    currentCell.content = nextCells.reduce((result, item) => {
+      return `${result} ${item.content}`;
+    }, currentCell.content);
+
+    currentCell.rowspan = currentCell.rowspan + newData[row + 1][cell].rowspan;
+
+    newData[row + (currentCell.rowspan-1)].splice(cell, currentCell.colspan);
+
+    onChange(newData);
   };
 
   renderCells = (data, rowIndex) => {
     const { onInteract } = this.props;
 
     return data.map((item, index) => (
-      <td key={ index }>
-        <TableEditorContent content={ item } row={ rowIndex } cell={ index }
-                            onChange={ this.handleChange } onInteract={ onInteract } />
+      <td key={ index } colSpan={ item.colspan } rowSpan={ item.rowspan }>
+        <div className="table-editor__cell">
+          <button type="button" onClick={ () => this.handleMergeRow(rowIndex, index) }>merge row</button>
+          <button type="button" onClick={ () => this.handleMergeCol(rowIndex, index) }>merge cell</button>
+          <TableEditorContent content={ item.content } row={ rowIndex } cell={ index }
+                              onChange={ this.handleChange } onInteract={ onInteract } />
+        </div>
       </td>
     ));
   };

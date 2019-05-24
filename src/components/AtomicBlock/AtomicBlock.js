@@ -19,6 +19,7 @@ class AtomicBlock extends Component {
       data
     );
     setEditorState(EditorState.forceSelection(editorState, selection));
+
     blockProps.onInteractChange(false);
   };
 

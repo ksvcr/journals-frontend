@@ -12,7 +12,7 @@ import { removeRange } from '~/services/customDraftUtils';
 import './assets/cancel.svg';
 import './table-editor-wrapper.scss';
 
-const cellData = '';
+const cellData = { content: 'text', colspan: 1, rowspan: 1 };
 
 class TableEditorWrapper extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class TableEditorWrapper extends Component {
     this.formId = nanoid();
     this.state = {
       meta: {},
-      rows: data.rows || ['']
+      rows: data.rows || [{ ...cellData }]
     };
   }
 
@@ -30,7 +30,7 @@ class TableEditorWrapper extends Component {
     const { rows } = data;
 
     const newRows = rows.map(row => {
-      row.push(cellData);
+      row.push({ ...cellData });
       return row;
     });
 
@@ -43,7 +43,7 @@ class TableEditorWrapper extends Component {
     const numberOfColumns = rows[0].length;
     const newRow = [];
     for (let i = 0; i <= numberOfColumns - 1; i++) {
-      newRow.push(cellData);
+      newRow.push({ ...cellData });
     }
     const newRows = [...rows, newRow];
     onChange({ ...data, rows: newRows });

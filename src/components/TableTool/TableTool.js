@@ -12,8 +12,21 @@ class TableTool extends Component {
     const entityData =  {
       rows: [
         [
-          'text1',
-          'text2'
+          {
+            content: 'text1',
+            colspan: 1,
+            rowspan: 1
+          },
+          {
+            content: 'text2',
+            colspan: 1,
+            rowspan: 1
+          },
+          {
+            content: 'text3',
+            colspan: 1,
+            rowspan: 1
+          }
         ]
       ],
       title: 'Заголовок таблицы'

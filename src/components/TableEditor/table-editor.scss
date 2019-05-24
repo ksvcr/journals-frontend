@@ -3,6 +3,7 @@
     width: 100%;
     border: 1px solid #dcdcdc;
     background: #fff;
+    border-collapse: collapse;
 
     td {
       border-left: 1px solid #dcdcdc;
@@ -16,9 +17,9 @@
     tr:first-child td {
       border-top: 0;
     }
+  }
 
-    .public-DraftEditor-content {
-      padding: 18px;
-    }
+  &__content {
+    padding: 18px;
   }
 }
