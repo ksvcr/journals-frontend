@@ -1,25 +1,70 @@
 .table-editor {
+  $root: &;
+
+  height: 100%;
+
   &__box {
     width: 100%;
     border: 1px solid #dcdcdc;
     background: #fff;
     border-collapse: collapse;
+    height: 100%;
 
     td {
       border-left: 1px solid #dcdcdc;
       border-top: 1px solid #dcdcdc;
-
-      &:first-child {
-        border-left: 0;
-      }
-    }
-
-    tr:first-child td {
-      border-top: 0;
+      height: 100%;
+      padding: 0;
     }
   }
 
+  &__cell {
+    position: relative;
+    height: 100%;
+  }
+
+  &__merge-button {
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    outline: 0;
+    font-size: 0;
+    padding: 3px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .2s;
+
+    &_col {
+      top: 50%;
+      margin-top: -12px;
+      right: -12px;
+    }
+
+    &_row {
+      bottom: -12px;
+      left: 50%;
+      margin-left: -12px;
+    }
+
+    #{$root}__cell:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__merge-icon {
+    margin-top: -1px;
+    width: 17px;
+    height: 18px;
+    fill: $text-color;
+  }
+
   &__content {
+    outline: 0;
     padding: 18px;
+    box-sizing: border-box;
   }
 }
