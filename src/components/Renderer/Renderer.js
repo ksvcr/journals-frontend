@@ -82,10 +82,6 @@ class Renderer extends Component {
         atomic: children =>
           children.map((child, index) => (
             <React.Fragment key={ index }>{ child }</React.Fragment>
-          )),
-        'block-table': children =>
-          children.map((child, index) => (
-            <React.Fragment key={ index }>{ child }</React.Fragment>
           ))
       },
       entities: {

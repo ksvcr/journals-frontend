@@ -82,6 +82,7 @@ class TableTool extends Component {
         className="tooltip"
         position="bottom-end"
         useContext={ true }
+        unmountHTMLWhenHide={ true }
         open={ showForm }
         onRequestClose={ this.handleFormToggle }
         html={

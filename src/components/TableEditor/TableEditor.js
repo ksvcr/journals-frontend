@@ -117,7 +117,7 @@ class TableEditor extends Component {
   renderCells = (data, rowIndex) => {
     const { onInteract } = this.props;
     return data.map((item, index) => {
-      return item.content ? (
+      return !item.merged ? (
         <td key={ index } colSpan={ item.colspan } rowSpan={ item.rowspan }>
           <div className="table-editor__cell">
             { this.canRowMerge(rowIndex, index) &&

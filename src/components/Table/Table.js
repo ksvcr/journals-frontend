@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import Renderer from '~/components/Renderer/Renderer';
 
 import './table.scss';
 
 class Table extends Component {
   renderCells = (data) => {
-    return data.map((item, index) => (
-      <td key={ index }>
-        <Renderer raw={ item }/>
+    return data.map((item, index) => !item.merged ? (
+      <td key={ index } colSpan={ item.colspan } rowSpan={ item.rowspan }>
+        { item.content }
       </td>
-    ));
+    ) : null);
   };
 
   renderRows = (data) => {
