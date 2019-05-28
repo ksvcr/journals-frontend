@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { AtomicBlockUtils, EditorState } from 'draft-js';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import ToolTip from '~/components/ToolTip/ToolTip';
 import TableCreateForm from '~/components/TableCreateForm/TableCreateForm';
-
-import { withNamespaces } from 'react-i18next';
+import { addAtomicBlock } from '~/services/customDraftUtils';
 
 import './table-tool.scss';
 import './assets/table.svg';
@@ -45,27 +44,11 @@ class TableTool extends Component {
     const editorState = getEditorState();
     const blockKey = 'block-table';
 
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity(
-      blockKey,
-      'MUTABLE',
-      entityData
-    );
-
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(
+    setEditorState(addAtomicBlock(
       editorState,
-      { currentContent: contentStateWithEntity }
-    );
-
-    setEditorState(
-      AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        blockKey
-      )
-    );
-
+      blockKey,
+      entityData
+    ));
   };
 
   handleFormToggle = () => {
