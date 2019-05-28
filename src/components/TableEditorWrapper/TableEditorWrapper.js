@@ -12,7 +12,7 @@ import { removeRange } from '~/services/customDraftUtils';
 import './assets/cancel.svg';
 import './table-editor-wrapper.scss';
 
-const cellData = { content: 'text', colspan: 1, rowspan: 1 };
+const cellData = { content: ' ', colspan: 1, rowspan: 1 };
 
 class TableEditorWrapper extends Component {
   constructor(props) {

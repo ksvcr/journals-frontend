@@ -372,7 +372,11 @@ const en_translation = {
   total_characters: 'Total characters',
   no_spaces: 'No spaces',
   translation: 'Translation',
-  translate: 'Translate'
+  translate: 'Translate',
+  create_table: 'Create table',
+  enter_count: 'Enter count',
+  row_count: 'Row count',
+  col_count: 'Col count'
 };
 
 export default en_translation;

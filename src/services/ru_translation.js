@@ -372,7 +372,11 @@ const ru_translation = {
   total_characters: 'Всего знаков',
   no_spaces: 'Без пробелов',
   translation: 'Перевод',
-  translate: 'Перевести'
+  translate: 'Перевести',
+  create_table: 'Создать таблицу',
+  enter_count: 'Введите кол-во',
+  row_count: 'Строк',
+  col_count: 'Столбцов'
 };
 
 export default ru_translation;
