@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import RedactorReviewerList from '~/components/RedactorReviewerList/RedactorReviewerList';
 import RedactorReviewTools from '~/components/RedactorReviewTools/RedactorReviewTools';
@@ -137,6 +138,8 @@ const mapDispatchToProps = {
   inviteArticleReviewer: articlesActions.inviteArticleReviewer,
   fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
+
+RedactorReview =  withNamespaces()(RedactorReview);
 
 export default connect(
   mapStateToProps,
