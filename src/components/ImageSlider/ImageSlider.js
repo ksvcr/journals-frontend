@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Swiper from 'react-id-swiper';
+import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import ImageMedia from '~/components/ImageMedia/ImageMedia';
@@ -72,14 +73,14 @@ class ImageSlider extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, t } = this.props;
     const { modal, activeItem } = this.state;
     const slidesCount = data.images.length;
 
     return (
       <div className="image-slider">
         <div className="image-slider__title">
-          Иллюстрации ({ slidesCount })
+          { t('illustrations') } ({ slidesCount })
         </div>
         <div className="image-slider__swiper">
           <Swiper { ...this.sliderParams }>
@@ -95,5 +96,7 @@ class ImageSlider extends Component {
     );
   }
 }
+
+ImageSlider = withNamespaces()(ImageSlider);
 
 export default ImageSlider;

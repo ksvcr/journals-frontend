@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
@@ -15,8 +16,7 @@ class DiscountsTransferSelect extends Component {
   };
 
   renderItems = () => {
-    const { items } = this.props;
-
+    const { items, t } = this.props;
     return items.map((item, index) => (
       <li key={ index } className="discounts-transfer-select__item">
         <div className="discounts-transfer-select__item__infobox">
@@ -24,14 +24,13 @@ class DiscountsTransferSelect extends Component {
             <b>{ item.last_name }</b> { item.first_name } { item.middle_name }
           </p>
           <p className="discounts-transfer-select__item__info">
-            { /* TODO: Заменить на реальные данные */ }
-            НИИ УХИМВАДЕ, Екатеринбург, Россия
+            { item.workplace }
           </p>
         </div>
         <div className="discounts-transfer-select__item__actions">
           <Button className="discounts-transfer-select__item__button button_small"
                   data-id={ item.id } onClick={ this.handleItemSelect }>
-            Выбрать
+            { t('choose') }
             <Icon className="discounts-transfer-select__item__button__icon" name="arrow_right" />
           </Button>
         </div>
@@ -52,5 +51,7 @@ DiscountsTransferSelect.propTypes = {
   onSelect: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired
 };
+
+DiscountsTransferSelect = withNamespaces()(DiscountsTransferSelect);
 
 export default DiscountsTransferSelect;

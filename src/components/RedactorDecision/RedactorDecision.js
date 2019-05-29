@@ -78,7 +78,7 @@ class RedactorDecision extends Component {
   }
 
   render() {
-    const { articleId, state_article, handleSubmit, form, currentArticleState } = this.props;
+    const { articleId, state_article, handleSubmit, form, currentArticleState, t } = this.props;
     return (
       <div className="redactor-decision">
         <form
@@ -104,7 +104,7 @@ class RedactorDecision extends Component {
           { state_article && (
             <div className="redactor-decision__bottom">
               <Button type="submit" className="button_orange">
-                Отправить
+                { t('send') }
               </Button>
             </div>
           ) }

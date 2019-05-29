@@ -46,7 +46,7 @@ class AuthorCreateForm extends Component {
                 { t('middle_name') } <ReqMark />
               </label>
               <Field name="middle_name" id="middle_name" className="text-field_white" component={ TextField }
-                     placeholder="Введите отчество" />
+                     placeholder={ t('enter_middle_name') } />
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@ class AuthorCreateForm extends Component {
               <Field name="country" id="country" validate={ [validate.required] }
                      format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
                      normalize={ option => option.value }
-                     placeholder="Выберите страну"
+                     placeholder={ t('choose_country') }
                      options={ countriesOptions }
                      className="searchable-select-wrapper_white"
                      component={ SearchableSelect } />

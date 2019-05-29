@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
+
 import List from '~/components/List/List';
 import Icon from '~/components/Icon/Icon';
 
@@ -23,24 +25,24 @@ class FieldSet extends Component {
   };
 
   render() {
-    const { legend, fieldsTitle, index, isLast, children, onMove, onRemove } = this.props;
+    const { legend, fieldsTitle, index, isLast, children, onMove, onRemove, t } = this.props;
     return (
       <fieldset className="field-set">
         <div className="field-set__tools">
           { onMove && index > 0 &&
             <button className="field-set__tool field-set__tool_up" type="button" onClick={ this.handleMoveUp }>
-              Сместить на уровень выше
+              { t('move_up') }
             </button>
           }
           { onMove && !isLast &&
             <button className="field-set__tool field-set__tool_down" type="button" onClick={ this.handleMoveDown }>
-              Сместить на уровень ниже
+              { t('move_down') }
             </button>
           }
           { onRemove &&
             <button className="field-set__tool field-set__tool_remove" type="button" onClick={ this.handleRemove }>
               <Icon name="cancel" className="field-set__icon field-set__icon_remove" />
-              Удалить
+              { t('remove') }
             </button>
           }
         </div>
@@ -64,5 +66,7 @@ List.propTypes = {
   onMove: PropTypes.func,
   onRemove: PropTypes.func
 };
+
+FieldSet = withNamespaces()(FieldSet);
 
 export default FieldSet;

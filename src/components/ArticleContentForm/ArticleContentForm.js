@@ -48,16 +48,16 @@ class ArticleContentForm extends Component {
         <h2 className="page__title">{ t('article_text') }</h2>
         { isProofreading && is_send_as_file ?
           <div className="article-content-form__file">
-            <DownloadLink file={ articleData.incoming_file } name="Скачать контент статьи" />
+            <DownloadLink file={ articleData.incoming_file } name={ t('download_article_content') } />
           </div>
           :
           <div className="form__field">
             <Field name="is_send_as_file" id="is_send_as_file" type="checkbox"
                    component={ Checkbox } >
-              Хочу добавить статью файлом
+              { t('add_article_as_file') }
             </Field>
             <div className="article-content-form__description">
-              При добавлении текста статьи файлом, стоимость размещения увеличится на 30%
+              { t('file_cost_condition') }
             </div>
           </div>
         }
@@ -77,7 +77,7 @@ class ArticleContentForm extends Component {
           <Fragment>
             <div className="form__field">
               <label htmlFor="article_type" className="form__label">
-                Тип статьи
+                { t('article_type') }
               </label>
               <Field name="article_type" id="article_type"
                      options={ this.typeOptions } component={ Select } />

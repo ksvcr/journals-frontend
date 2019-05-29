@@ -33,13 +33,14 @@ class Content extends Component {
   renderSourcesList = () => {
     const { data } = this.props;
     return data.sources.map((item, index) => {
-      const author = Array.isArray(item.author) && item.author.length
-        ? item.author[0] : item.author;
-      const authorName = author ? `${ getName(author) },` : '';
+      const author = Array.isArray(item.author) ?
+        (item.author.length ? item.author[0] : '') :
+        item.author;
+      const authorName = author ? `${ getName(author) }` : '';
 
       function getName(author) {
         if (typeof author === 'string') {
-          return author;
+          return `${author},`;
         } else {
           const { lastname, initials } = author;
           return `${lastname} ${initials}, `;
@@ -62,7 +63,6 @@ class Content extends Component {
     const { content_blocks = [], financing_sources = [] } = data;
     const recommendationId = data.state_article === 'DISAPPROVED' ? 3 : 1;
     const reviews = data.reviews.filter(item => item.recommendation === recommendationId);
-
     return (
       <div className="content">
         { data.text_to_description && (
@@ -89,18 +89,17 @@ class Content extends Component {
           </div>
           <div className="content__financing">
             <h3>{ t('financing') }</h3>
-            { financing_sources ? (
+            { financing_sources && financing_sources.length ? (
               <ul> { this.renderFinancingSources(financing_sources) } </ul>
             ) : (
               <p>
                 { ' ' }
-                Авторы не получали финансовой поддержки для проведения
-                исследования, написания и публикации статьи
+                { t('no_financing') }
               </p>
             ) }
           </div>
           <div className="content__thanks">
-            <h3>Благодарности</h3>
+            <h3>{ t('thanks_text') }</h3>
             { data.thanks_text ? <p>{ data.thanks_text }</p> : <p>{ t('not_specified') }</p> }
           </div>
           <div className="content__conflict">
@@ -108,7 +107,7 @@ class Content extends Component {
             { data.conflict_interest ? (
               <p>{ data.conflict_interest }</p>
             ) : (
-              <p>Не указан</p>
+              <p>{ t('not_specified') }</p>
             ) }
           </div>
           { data.sources && (

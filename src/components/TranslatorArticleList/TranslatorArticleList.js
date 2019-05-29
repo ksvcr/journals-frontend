@@ -21,7 +21,7 @@ class TranslatorArticleList extends Component {
     const { t, commitArticleTranslation } = this.props;
     return [
       {
-        title: 'Перевести',
+        title: t('translate'),
         link: `/article/${data.id}/translate`
       },
       {
@@ -32,7 +32,7 @@ class TranslatorArticleList extends Component {
         }
       },
       {
-        title: 'Просмотр',
+        title: t('view'),
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
@@ -73,7 +73,7 @@ class TranslatorArticleList extends Component {
             width: '26%'
           },
           isMain: true,
-          head: () => t('title_of_article'),
+          head: () => t('article_title'),
           render: data => data.title || t('title_of_article_not_found')
         },
         {
@@ -100,7 +100,7 @@ class TranslatorArticleList extends Component {
           style: {
             width: '12%'
           },
-          head: () => 'Перевод',
+          head: () => t('translation'),
           render: data => <TranslateDirection language={ data.language } />
         },
         {

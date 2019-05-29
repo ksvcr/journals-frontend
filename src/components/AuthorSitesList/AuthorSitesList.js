@@ -67,13 +67,12 @@ class AuthorSitesList extends Component {
   };
 
   render() {
-    const { t, userId } = this.props;
+    const { t } = this.props;
     const { openAdd } = this.state;
     return (
       <div className="author-sites-list">
         <p className="author-sites-list__header">
-          Журналы, в которые { userId ? 'пользователь может' : 'Вы можете' }{ ' ' }
-          писать статьи:
+          { t('available_magazines') }
         </p>
 
         <div className="author-sites-list__content">{ this.renderItems() }</div>
@@ -90,7 +89,7 @@ class AuthorSitesList extends Component {
             </button>
           ) : (
             <React.Fragment>
-              <CancelLink onClick={ this.handleCancelClick } />
+              <CancelLink onClick={ this.handleCancelClick } text={ t('cancel') } />
 
               <div className="form">
                 <div className="form__field form__field_small">

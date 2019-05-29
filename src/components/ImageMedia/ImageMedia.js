@@ -5,6 +5,7 @@ import './image-media.scss';
 
 class ImageMedia extends Component {
   renderItem = (item, index=0) => {
+    // TODO: Подставить DOI из АПИ
     return (
       <div className="image-media__item" key={ index }>
         <div className="image-media__box">

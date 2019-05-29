@@ -50,7 +50,7 @@ class ArticleFileList extends PureComponent {
           <div className="article-file-list__description form__field">
             <label htmlFor={ `${field}.text_to_description` } className="form__label">{ t('file_description') }</label>
             <Field name={ `${field}.text_to_description` } id={ `${field}.text_to_description` }
-                   component={ TextField } placeholder="Введите описание" />
+                   component={ TextField } placeholder={ t('enter_description') } />
           </div>
         </div>
       );

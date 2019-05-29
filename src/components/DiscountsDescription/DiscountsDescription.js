@@ -1,16 +1,19 @@
 import React, { PureComponent } from 'react';
+import { withNamespaces } from 'react-i18next';
 
 import './discounts-description.scss';
 
 class DiscountsDescription extends PureComponent {
   render() {
+    const { t } = this.props;
     return (
       <p className="discounts-description">
-        Скидки на публикации могут быть предоставлены Вам другими пользователями.
-        Вы можете использовать их для оплаты собственных публикаций в наших изданиях, либо передать другим авторам, зарегистрированным в системе.
+        { t('discounts_description') }
       </p>
     );
   }
 }
+
+DiscountsDescription = withNamespaces()(DiscountsDescription);
 
 export default DiscountsDescription;

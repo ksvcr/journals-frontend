@@ -25,43 +25,43 @@ class ArticleSourceTranslateItemForm extends Component {
         return [ ...standartParams, {
           name: 'issue_english_title',
           original: 'issue_title',
-          label: t('title_of_edition')
+          label: t('issue_title')
         }];
 
       case 'SourceMultiVolumeBook':
         return [ ...standartParams, {
           name: 'second_part_name',
           original: 'original_part_name',
-          label: t('original_title_of_part')
+          label: t('original_part_name')
         }];
 
       case 'SourceElectronic':
         return [ ...standartParams, {
           name: 'second_source_name',
           original: 'original_source_name',
-          label: t('original_title_of_source')
+          label: t('original_source_name')
         }];
 
       case 'SourceLegislativeMaterial':
         return [ ...standartParams, {
           name: 'adopted_authority_translate',
           original: 'adopted_authority',
-          label: 'Принявший орган'
+          label: t('adopted_authority')
         }, {
           name: 'approval_authority_translate',
           original: 'approval_authority',
-          label: 'Одобривший орган'
+          label: t('approval_authority')
         }];
 
       case 'SourcePatent':
         return [{
           name: 'second_invention_title',
           original: 'invention_title',
-          label: t('title_of_invention')
+          label: t('invention_title')
         }, {
           name: 'person_name_translate',
           original: 'person_name',
-          label: 'ФИО персоны'
+          label: t('rightholder_name')
         }, {
           name: 'organization_name_translate',
           original: 'organization_name',
@@ -69,7 +69,7 @@ class ArticleSourceTranslateItemForm extends Component {
         }, {
           name: 'publication_place_translate',
           original: 'publication_place',
-          label: 'Где опубликован патент'
+          label: t('publication_place')
         }];
 
       default:

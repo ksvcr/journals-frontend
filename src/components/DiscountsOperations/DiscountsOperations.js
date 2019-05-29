@@ -23,7 +23,7 @@ class DiscountsOperations extends Component {
           style: {
             width: '20%'
           },
-          head: () => 'Дата перечисления',
+          head: () => t('transaction_date'),
           render: (data) => {
             const { transfer_date:date } = data;
             return moment(date).format('DD.MM.YYYY');

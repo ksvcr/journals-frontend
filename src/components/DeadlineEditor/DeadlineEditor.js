@@ -40,7 +40,7 @@ class DeadlineEditor extends Component {
       <div className="deadline-editor">
         <div className="deadline-editor__holder">
           <div className="deadline-editor__value">
-            { `До ${formatDate.toString(date)}` }
+            { `${ t('until') } ${formatDate.toString(date)}` }
           </div>
           <ToolTip
             className="tooltip"

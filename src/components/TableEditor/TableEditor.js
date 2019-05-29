@@ -140,7 +140,7 @@ class TableEditor extends Component {
         <div className="table-editor__top">
           <button type="button" onClick={ this.handleRemove } className="table-editor__remove-button">
             <Icon name="cancel"  className="table-editor__remove-icon" />
-            Удалить
+            { t('delete') }
           </button>
         </div>
         <div className="table-editor__holder">

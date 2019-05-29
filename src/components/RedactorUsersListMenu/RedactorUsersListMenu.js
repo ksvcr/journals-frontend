@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import MailForm from '~/components/MailForm/MailForm';
@@ -15,20 +16,21 @@ class RedactorUsersListMenu extends Component {
 
   getToolsMenuItems = (data) => {
     const menuArr = [];
+    const { t } = this.props;
 
     menuArr.push({
-      title: 'Написать',
+      title: t('write'),
       handler: this.handleMailToggle
     });
 
     if (data.role !== 'REDACTOR') {
       menuArr.push({
-        title: 'Войти',
+        title: t('login'),
         handler: this.handleUserLogin
       });
 
       menuArr.push({
-        title: 'Заблокировать',
+        title: t('block'),
         handler: this.handleUserLock
       });
     }
@@ -92,6 +94,8 @@ const mapDispatchToProps = {
   setControlledUser : userActions.setControlledUser,
   fetchControlledUser : userActions.fetchControlledUser
 };
+
+RedactorUsersListMenu = withNamespaces()(RedactorUsersListMenu);
 
 export default connect(
   mapStateToProps, mapDispatchToProps

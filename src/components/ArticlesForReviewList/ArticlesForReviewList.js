@@ -82,7 +82,7 @@ class ArticlesForReviewList extends Component {
             width: '50%'
           },
           isMain: true,
-          head: () => t('title_of_article'),
+          head: () => t('article_title'),
           render: data => data.title || t('title_of_article_not_found')
         },
         {

@@ -1,19 +1,20 @@
 import React from 'react';
 import { Field } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
+import moment from 'moment';
 
 import ReqMark from '~/components/ReqMark/ReqMark';
 import TextField from '~/components/TextField/TextField';
 import Calendar from '~/components/Calendar/Calendar';
 import * as validate from '~/utils/validate';
-import moment from 'moment';
 import FieldHint from '~/components/FieldHint/FieldHint';
 
-const SourceStandart = () => {
+const SourceStandart = ({ t }) => {
   return (
     <React.Fragment>
       <div className="form__field">
         <label htmlFor="standart_entry_date" className="form__label">
-          Дата ввода стандарта <ReqMark />
+          { t('standart_entry_date') } <ReqMark />
         </label>
         <Field name="standart_entry_date" id="standart_entry_date" validate={ [validate.required] }
                parse={ value => value.format('YYYY-MM-DD') } format={ value => moment(value, 'YYYY-MM-DD') }
@@ -23,35 +24,35 @@ const SourceStandart = () => {
       </div>
       <div className="form__field">
         <label htmlFor="original_name" className="form__label">
-          Название на языке оригинала <ReqMark />
+          { t('original_title') } <ReqMark />
         </label>
         <Field name="original_name" id="original_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" validate={ [validate.required] } />
+               placeholder={ t('enter_title') } validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <label htmlFor="second_name" className="form__label">
-          Название на английском языке <ReqMark />
+          { t('title_in_english') } <ReqMark />
         </label>
         <Field name="second_name" id="second_name" className="text-field_white" component={ TextField }
-               placeholder="Введите название" validate={ [validate.required] } />
+               placeholder={ t('enter_title') } validate={ [validate.required] } />
       </div>
 
       <div className="form__field">
         <div className="form__row">
           <div className="form__col form__col_6">
             <label htmlFor="source_issue" className="form__label">
-              Издательство <ReqMark />
+              { t('issue') } <ReqMark />
             </label>
             <Field name="issue" id="source_issue" className="text-field_white" component={ TextField }
-                   placeholder="Введите Издательство" validate={ [validate.required] } />
+                   placeholder={ t('enter_issue') } validate={ [validate.required] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_city" className="form__label">
-              Город издания <ReqMark />
+              { t('issue_city') } <ReqMark />
             </label>
             <Field name="issue_city" id="source_issue_city" className="text-field_white" component={ TextField }
-                   placeholder="Введите город" validate={ [validate.required] } />
+                   placeholder={ t('enter_city') } validate={ [validate.required] } />
           </div>
         </div>
       </div>
@@ -60,15 +61,15 @@ const SourceStandart = () => {
         <div className="form__row">
           <div className="form__col form__col_6">
             <label htmlFor="source_issue_year" className="form__label">
-              Год издания <ReqMark />
-              <FieldHint text={ 'В формате (ГГГГ)' } />
+              { t('issue_year') } <ReqMark />
+              <FieldHint text={ t('year_format') } />
             </label>
             <Field name="issue_year" id="source_issue_year" className="text-field_white" component={ TextField }
                    placeholder="Введите год" validate={ [validate.required, validate.year] } />
           </div>
           <div className="form__col form__col_6">
             <label htmlFor="page_count" className="form__label">
-              Количество стр. <ReqMark />
+              { t('page_count') } <ReqMark />
             </label>
             <Field name="page_count" id="page_count" className="text-field_white" component={ TextField }
                    placeholder="0 стр." validate={ [validate.required] } />
@@ -79,4 +80,4 @@ const SourceStandart = () => {
   );
 };
 
-export default SourceStandart;
+export default withNamespaces()(SourceStandart);

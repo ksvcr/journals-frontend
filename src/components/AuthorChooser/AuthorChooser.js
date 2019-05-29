@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { withNamespaces } from 'react-i18next';
 
 import Button from '~/components/Button/Button';
-import getNoun from '~/utils/getNoun';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import './author-chooser.scss';
 
@@ -17,7 +17,7 @@ class AuthorChooser extends Component {
   };
 
   renderItems = () => {
-    const { data } = this.props;
+    const { data, t } = this.props;
     return data.map((item, index) => (
       <div className="author-chooser__item" key={ item.id }>
         <div className="author-chooser__box">
@@ -33,7 +33,7 @@ class AuthorChooser extends Component {
         <div className="author-chooser__button">
           <Button className="button_small" data-id={ item.id } data-index={ index }
                   onClick={ this.handleClick }>
-            Выбрать
+            { t('choose') }
           </Button>
         </div>
       </div>
@@ -41,12 +41,12 @@ class AuthorChooser extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, t } = this.props;
     return (
       <div className="author-chooser">
         { data.length > 0 &&
           <div className="author-chooser__count">
-            Найдено { data.length } { getNoun(data.length, 'автор', 'автора', 'авторов') }
+            { t('find', { count: data.length }) } { data.length } { t('author', { count: data.length }) }
           </div>
         }
         <div className="author-chooser__list">
@@ -60,6 +60,8 @@ class AuthorChooser extends Component {
     );
   }
 }
+
+AuthorChooser = withNamespaces()(AuthorChooser);
 
 AuthorChooser.propTypes = {
   data: PropTypes.array

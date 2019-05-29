@@ -18,17 +18,18 @@ import './corrector-article-list.scss';
 
 class CorrectorArticleList extends Component {
   getToolsMenuItems(data) {
+    const { t } = this.props;
     return [
       {
-        title: 'Править',
+        title: t('correct'),
         link: `/article/${data.id}/correct`
       },
       {
-        title: 'Отправить редактору',
+        title: t('send_to_editor'),
         handler: id => this.handleProofreadingCommit(id, data)
       },
       {
-        title: 'Просмотр',
+        title: t('view'),
         type: 'preview',
         icon: 'preview',
         link: `/article/${data.id}`
@@ -87,7 +88,7 @@ class CorrectorArticleList extends Component {
             width: '20%'
           },
           sort: 'site',
-          head: () => t('jornal'),
+          head: () => t('journal'),
           render: (data) => {
             const siteId = data.site;
             const site = sitesData[siteId];

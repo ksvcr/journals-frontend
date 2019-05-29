@@ -149,7 +149,7 @@ class ArticleCommonForm extends Component {
                 <div className="form__col form__col_8">
                   <Field name="need_translation" id="need_translation"
                          type="checkbox" component={ Checkbox }>
-                    Нужен перевод сопроводительной информации на русский
+                    { t('need_translation') }
                   </Field>
                   <FieldHint position={ 'top-end' }
                              text={ `Наши переводчики быстро и грамотно переведут на русский язык
@@ -196,7 +196,7 @@ class ArticleCommonForm extends Component {
             <div className="form__field form__field_inline">
               <Field name="agris_unload" id="agris_unload" type="checkbox"
                      component={ Checkbox }>
-                Статья AGRIS
+                { t('article') } AGRIS
               </Field>
               <FieldHint text={ 'Подсказка про AGRIS' } />
             </div>
@@ -204,7 +204,7 @@ class ArticleCommonForm extends Component {
             <div className="form__field form__field_inline">
               <Field name="georef_unload" id="georef_unload" type="checkbox"
                      component={ Checkbox } >
-                Статья GEOREF
+                { t('article') } GEOREF
               </Field>
               <FieldHint text={ 'Подсказка про GEOREF' } />
             </div>
@@ -213,19 +213,19 @@ class ArticleCommonForm extends Component {
 
         <div className="form__field">
           <label htmlFor="title" className="form__label">
-            Название статьи <ReqMark />
+            { t('article_title') } <ReqMark />
           </label>
           <Field name="title" id="title" textarea minRows={ 2 } component={ TextField }
-                 placeholder="Введите название" validate={ [validate.required] } />
+                 placeholder={ t('enter_article_title') } validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
           <label htmlFor="thanks_text" className="form__label">
-            Благодарности <ReqMark />
+            { t('thanks_text') } <ReqMark />
             <FieldHint text={ 'Подсказка про Благодарности' } />
           </label>
           <Field name="thanks_text" id="thanks_text" component={ TextField }
-                 placeholder="Введите благодарности" validate={ [validate.required] } />
+                 placeholder={ t('enter_thanks_text') } validate={ [validate.required] } />
         </div>
 
         <div className="form__field">
@@ -254,6 +254,7 @@ class ArticleCommonForm extends Component {
           </label>
           <div className="form__switcher">
             <Field name="is_conflict_interest" id="is_conflict_interest"
+                   trueLabel={ t('yes') } falseLabel={ t('no') }
                    type="checkbox" component={ Switcher } />
           </div>
           { isConflictInterest && (
@@ -267,6 +268,7 @@ class ArticleCommonForm extends Component {
           <label className="form__label">{ t('financing') }</label>
           <div className="form__switcher">
             <Field name="has_financing" id="has_financing" type="checkbox"
+                   trueLabel={ t('yes') } falseLabel={ t('no') }
                    component={ Switcher } />
           </div>
 
@@ -284,6 +286,7 @@ class ArticleCommonForm extends Component {
           </label>
           <div className="form__switcher">
             <Field name="has_printed" id="has_printed" type="checkbox"
+                   trueLabel={ t('yes') } falseLabel={ t('no') }
                    component={ Switcher } onChange={ this.handleHasPrintedChange } />
           </div>
 
@@ -292,12 +295,12 @@ class ArticleCommonForm extends Component {
               <Field name="use_address_from_profile" value={ true }
                      component={ Radio } type="radio" format={ value => Boolean(value) }
                      parse={ value => value === 'true' } >
-                Адрес, указанный в профиле
+                { t('address_from_profile') }
               </Field>
               <Field name="use_address_from_profile" value={ false }
                      component={ Radio } type="radio" format={ value => Boolean(value) }
                      parse={ value => value === 'true' } >
-                Другой адрес
+                { t('another_address') }
               </Field>
             </div>
           ) }

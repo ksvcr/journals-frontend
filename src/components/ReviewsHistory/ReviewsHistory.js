@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 
 import Collapse from '~/components/Collapse/Collapse';
 import FieldHint from '~/components/FieldHint/FieldHint';
@@ -15,7 +16,7 @@ class ReviewsHistory extends Component {
     const { reviews, isCollapse } = this.props;
     return reviews.map((item, index) => {
       return isCollapse ? (
-        <Collapse key={ index } title={ item.review_round + ' раунд рецензирования' } >
+        <Collapse key={ index } title={ item.review_round + ` ${'review_round'}` } >
           { this.renderItem(item) }
         </Collapse>
       ) : (
@@ -27,7 +28,7 @@ class ReviewsHistory extends Component {
   };
 
   renderItem = item => {
-    const { author, isCollapse, usersArray } = this.props;
+    const { author, isCollapse, usersArray, t } = this.props;
     const authorName =
       author &&
       `${author.last_name} ${author.first_name} ${author.middle_name}`;
@@ -40,16 +41,16 @@ class ReviewsHistory extends Component {
       <div className="reviews-history__content">
         { !isCollapse && reviewer && (
           <div className="reviews-history__info">
-            <span className="reviews-history__info-title">Рецензент:</span>
+            <span className="reviews-history__info-title">{ t('reviewer') }:</span>
             { reviewerName }
           </div>
         ) }
 
         <div className="reviews-history__review">
           <div className="reviews-history__title">
-            Текст рецензии
+            { t('review_text') }
             { isCollapse && (
-              <FieldHint text={ 'Будет опубликован вместе с текстом статьи' } />
+              <FieldHint text={ t('will_be_published') } />
             ) }
           </div>
           <div className="reviews-history__text">{ item.comment_for_author }</div>
@@ -61,7 +62,7 @@ class ReviewsHistory extends Component {
         ) }
         { item.author_answer && (
           <div className="reviews-history__answer">
-            <div className="reviews-history__title">Ответ автора</div>
+            <div className="reviews-history__title">{ t('author_answer') }</div>
             { author && (
               <div className="reviews-history__author">{ authorName }</div>
             ) }
@@ -85,5 +86,7 @@ function mapStateToProps(state) {
     usersArray: getUsersArray(state)
   };
 }
+
+ReviewsHistory = withNamespaces()(ReviewsHistory);
 
 export default connect(mapStateToProps)(ReviewsHistory);

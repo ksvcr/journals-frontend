@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { getFormValues } from 'redux-form';
+import { withNamespaces } from 'react-i18next';
 
 import Content from '~/components/Content/Content';
 import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
@@ -46,13 +47,13 @@ class ArticlePreview extends Component {
   };
 
   render() {
-    const { articleId, articleData, author } = this.props;
+    const { articleId, articleData, author, t } = this.props;
 
     return articleData ? (
       <React.Fragment>
         { articleId === 'new' &&
           <ArticleTopTools>
-            <CancelLink href="/article"/>
+            <CancelLink href="/article" text={ t('cancel') } />
           </ArticleTopTools>
         }
 
@@ -97,6 +98,8 @@ const mapDispatchToProps = {
   fetchArticle: articlesActions.fetchArticle,
   fetchUser: usersActions.fetchUser
 };
+
+ArticlePreview = withNamespaces()(ArticlePreview);
 
 export default connect(
   mapStateToProps,

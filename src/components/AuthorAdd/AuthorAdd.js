@@ -97,9 +97,9 @@ class AuthorAdd extends Component {
             <div className="form__field form__field_inline">
               <Checkbox name="isCorrespondingAuthor" checked={ authorData.id ===  correspondingAuthor }
                         onChange={ this.handleCorrespondingAuthor }>
-                { isCurrent ? 'Я являюсь автором-корреспондентом' : 'Автор-корреспондент' }
+                { isCurrent ? t('i_am_corresponding_author') : t('corresponding_author') }
               </Checkbox>
-              <FieldHint text={ 'Подсказка про корреспонденту' } />
+              <FieldHint text={ 'Подсказка про корреспондента' } />
             </div>
             { authorRolesArray.length > 0 && (
               <div className="author-add__roles">
@@ -127,7 +127,7 @@ class AuthorAdd extends Component {
             ) }
           </div> :
           <div className="author-add__form">
-            <h3 className="author-add__title">{ t('add_autor') }</h3>
+            <h3 className="author-add__title">{ t('add_author') }</h3>
             <Field name={ `${field}.id` } type="hidden" component={ TextField } />
 
             <div className="form__field">
@@ -138,7 +138,7 @@ class AuthorAdd extends Component {
               <React.Fragment>
                 <div className="form__field">
                   <Field name={ `${field}.search` } id="search" icon="search" component={ TextField }
-                         placeholder="Поиск" className="text-field_white text-field_search"
+                         placeholder={ t('search') } className="text-field_white text-field_search"
                          onChange={ this.handleSearchChange } />
                 </div>
 

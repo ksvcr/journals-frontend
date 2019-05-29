@@ -170,24 +170,24 @@ class ArticleSourceCreateForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_4">
               <label htmlFor="source_url" className="form__label">
-                URL публикации
+                { t('publication_url') }
               </label>
               <Field name="url" id="source_url" className="text-field_white" component={ TextField }
-                     placeholder="Введите URL" validate={ [validate.url] } />
+                     placeholder={ t('enter_url') } validate={ [validate.url] } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="source_doi" className="form__label">
                 DOI
               </label>
               <Field name="doi" id="source_doi" className="text-field_white" component={ TextField }
-                     placeholder="Введите DOI" />
+                     placeholder={ t('enter_doi') } />
             </div>
             <div className="form__col form__col_4">
               <label htmlFor="source_position" className="form__label">
-                № в списке
+                { t('number_in_list') }
               </label>
               <Field name="position" id="source_position" className="text-field_white" component={ TextField }
-                     placeholder="Введите номер" />
+                     placeholder={ t('enter_number') } />
             </div>
           </div>
         </div>

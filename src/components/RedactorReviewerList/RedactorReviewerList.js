@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import Button from '~/components/Button/Button';
@@ -15,7 +16,6 @@ import * as usersActions from '~/store/users/actions';
 import { getUserData } from '~/store/user/selector';
 import { getUsersArray, getUsersParams } from '~/store/users/selector';
 
-import getNoun from '~/utils/getNoun';
 import apiClient from '~/services/apiClient';
 
 import './redactor-reviewer-list.scss';
@@ -54,7 +54,7 @@ class RedactorReviewerList extends Component {
   };
 
   get listProps() {
-    const { usersArray } = this.props;
+    const { usersArray, t } = this.props;
 
     return {
       data: usersArray,
@@ -65,14 +65,14 @@ class RedactorReviewerList extends Component {
           style: {
             width: '25%'
           },
-          head: () => 'ФИО',
+          head: () => t('full_name'),
           render: this.renderName
         },
         {
           style: {
             width: '30%'
           },
-          head: () => 'Научные интересы',
+          head: () => t('scientific_interests'),
           render: ({ sphere_scientific_interests }) => (
             sphere_scientific_interests ? <InterestList data={ sphere_scientific_interests } /> : null
           )
@@ -81,7 +81,7 @@ class RedactorReviewerList extends Component {
           style: {
             width: '15%'
           },
-          head: () => 'Рецензий в мес.',
+          head: () => t('review_per_month'),
           render: ({ count_reviews_month }) => count_reviews_month
         },
         {
@@ -92,7 +92,7 @@ class RedactorReviewerList extends Component {
             <div className="redactor-reviewer-list__choose-wrapper">
               <Button type="button" className="button_small redactor-reviewer-list__choose"
                       data-id={ data.id } onClick={ this.handleChoose } >
-                Выбрать
+                { t('choose') }
                 <Icon name="arrow" className="redactor-reviewer-list__choose-icon" />
               </Button>
             </div>
@@ -119,14 +119,9 @@ class RedactorReviewerList extends Component {
   };
 
   get countText() {
-    const { usersArray } = this.props;
+    const { usersArray, t } = this.props;
     const count = usersArray.length;
-    return getNoun(
-      count,
-      `Найден ${count} рецензент:`,
-      `Найдено ${count} рецензента:`,
-      `Найдено ${count} рецензентов:`
-    );
+    return `${ t('find', { count }) } ${ count } ${ t('reviewer', { count }) }`;
   }
 
   loadOptions = inputValue => {
@@ -140,18 +135,19 @@ class RedactorReviewerList extends Component {
   };
 
   get selectTagsProps() {
+    const { t } = this.props;
     return {
       async: true,
       name: 'tags',
       loadOptions: this.loadOptions,
-      placeholder: 'Выберите тег',
+      placeholder: t('choose_tag'),
       normalize: option => option.value,
       onChange: ({ value }) => this.handleRequest({ filter: { tag_ids: value } })
     };
   }
 
   renderSearchBox = () => {
-    const { onClose } = this.props;
+    const { onClose, t } = this.props;
     return (
       <div className="redactor-reviewer-list__search-box">
         <button
@@ -159,12 +155,12 @@ class RedactorReviewerList extends Component {
           type="button"
           className="redactor-reviewer-list__cancel"
         >
-          Отмена
+          { t('cancel') }
         </button>
         <SearchPanel onChange={ this.handleRequest } />
         <div className="redactor-reviewer-list__search-form form">
           <div className="form__field">
-            <label className="form__label">Искать по:</label>
+            <label className="form__label">{ t('search_by') }:</label>
             <div className="form__row">
               <div className="form__col form__col_6">
                 <div className="form__field">
@@ -172,7 +168,9 @@ class RedactorReviewerList extends Component {
                 </div>
               </div>
               <div className="form__col form__col_6">
-                <Checkbox name="strict">Точное соответствие</Checkbox>
+                <Checkbox name="strict">
+                  { t('exact_match') }
+                </Checkbox>
               </div>
             </div>
           </div>
@@ -209,6 +207,8 @@ const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers,
   fetchArticleReviewInvites: articlesActions.fetchArticleReviewInvites
 };
+
+RedactorReviewerList = withNamespaces()(RedactorReviewerList);
 
 export default connect(
   mapStateToProps,

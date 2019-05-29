@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import Radio from '~/components/Radio/Radio';
@@ -28,31 +29,34 @@ class ReviewEstimate extends Component {
   };
 
   get estimateFields() {
+    const { t } = this.props;
     return [
       {
         id: 'estimate_actual_problem',
-        title: 'Рассматриваемая в статье научная проблема является актуальной'
+        title: t('estimate_actual_problem')
       },
       {
         id: 'estimate_sci_style',
-        title: 'Статья профессионально и грамотно написана, изложение соответствует научному стилю'
+        title: t('estimate_sci_style')
       },
       {
         id: 'estimate_methods_conformity',
-        title: 'Используемые методы и подходы соответствуют целям и задачам исследования'
+        title: t('estimate_methods_conformity')
       },
       {
         id: 'estimate_sci_novelty',
-        title: 'Статья имеет научную новизну, а результаты значимы'
+        title: t('estimate_sci_novelty')
       },
       {
         id: 'estimate_citation_actuality',
-        title: 'Цитируемая в статье литература актуальна и в достаточной степени отражает современное состояние рассматриваемой в работе проблемы'
+        title: t('estimate_citation_actuality')
       }
     ];
   }
 
   get estimateProps() {
+    const { t } = this.props;
+
     const radioCellStyle = {
       display: 'flex',
       justifyContent: 'center',
@@ -67,7 +71,7 @@ class ReviewEstimate extends Component {
           style: {
             width: '25%'
           },
-          head: () => 'Ваше мнение о статье',
+          head: () => t('your_opinion'),
           render: (data) => <p className="review-estimate__title">{ data.title }</p>
         },
         {
@@ -75,7 +79,7 @@ class ReviewEstimate extends Component {
             width: '13%',
             ...radioCellStyle
           },
-          head: () => 'Не согласен',
+          head: () => t('disagree'),
           render: this.renderEstimateRadio(1)
         },
         {
@@ -83,7 +87,7 @@ class ReviewEstimate extends Component {
             width: '20%',
             ...radioCellStyle
           },
-          head: () => 'Скорее не согласен',
+          head: () => t('rather_disagree'),
           render: this.renderEstimateRadio(2)
         },
         {
@@ -91,7 +95,7 @@ class ReviewEstimate extends Component {
             width: '12%',
             ...radioCellStyle
           },
-          head: () => 'Нейтрален',
+          head: () => t('neutral'),
           render: this.renderEstimateRadio(3)
         },
         {
@@ -99,7 +103,7 @@ class ReviewEstimate extends Component {
             width: '20%',
             ...radioCellStyle
           },
-          head: () => 'Скорее согласен',
+          head: () => t('rather_agree'),
           render: this.renderEstimateRadio(4)
         },
         {
@@ -107,7 +111,7 @@ class ReviewEstimate extends Component {
             width: '10%',
             ...radioCellStyle
           },
-          head: () => 'Согласен',
+          head: () => t('agree'),
           render: this.renderEstimateRadio(5)
         }
       ]
@@ -133,5 +137,7 @@ ReviewEstimate.propTypes = {
   disabled: PropTypes.bool,
   onChange: PropTypes.func
 };
+
+ReviewEstimate = withNamespaces()(ReviewEstimate);
 
 export default ReviewEstimate;

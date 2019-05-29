@@ -3,6 +3,7 @@ import Select, { components } from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import { withNamespaces } from 'react-i18next';
 
 import './searchable-select.scss';
 
@@ -40,7 +41,7 @@ class SearchableSelect extends Component {
   };
 
   get selectProps() {
-    const { input = {}, meta, id, options, required, placeholder, className } = this.props;
+    const { input = {}, meta, id, options, required, placeholder, className, t } = this.props;
     const hasError = meta && meta.submitFailed && meta.error;
     const wrapperClasses = classNames(
       'searchable-select-wrapper', className,
@@ -56,8 +57,8 @@ class SearchableSelect extends Component {
       components: { Option },
       className: wrapperClasses,
       classNamePrefix: 'searchable-select',
-      noOptionsMessage: () => 'Ничего не найдено',
-      loadingMessage: () => 'Загрузка...',
+      noOptionsMessage: () => t('no_entries'),
+      loadingMessage: () => `${ t('loading') }...`,
       getOptionValue: this.getOptionValue,
       getOptionLabel: this.getOptionLabel,
       onChange: this.handleChange,
@@ -88,4 +89,4 @@ class SearchableSelect extends Component {
   }
 }
 
-export default SearchableSelect;
+export default withNamespaces()(SearchableSelect);

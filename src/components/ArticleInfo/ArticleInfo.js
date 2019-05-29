@@ -32,7 +32,7 @@ class ArticleInfo extends Component {
       },
       {
         title: t('article_category'),
-        value: rubric ? rubric.name : 'Рубрика не найдена'
+        value: rubric ? rubric.name : t('rubric_not_found')
       },
       {
         title: t('type_category'),

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import redraft from 'redraft';
 import { convertFromRaw, EditorState } from 'draft-js';
+import { withNamespaces } from 'react-i18next';
+
 import { exporter } from '~/services/editorCustomStyler';
 import { styleMap } from '~/services/customDraftUtils';
 
@@ -106,7 +108,8 @@ class Renderer extends Component {
   }
 
   renderWarning() {
-    return <div>Нет блоков.</div>;
+    const { t } = this.props;
+    return <div>{ t('no_blocks') }</div>;
   }
 
   render() {
@@ -122,5 +125,7 @@ class Renderer extends Component {
     return <div>{ rendered }</div>;
   }
 }
+
+Renderer = withNamespaces()(Renderer);
 
 export default Renderer;
