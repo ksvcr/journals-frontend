@@ -1,6 +1,8 @@
 import { List, Map, Repeat } from 'immutable';
-import { CharacterMetadata, ContentBlock, EditorState,
-         BlockMapBuilder, Modifier, genKey, SelectionState } from 'draft-js';
+import {
+  CharacterMetadata, ContentBlock, EditorState,
+  BlockMapBuilder, Modifier, genKey, SelectionState, AtomicBlockUtils
+} from 'draft-js';
 import Icon from '~/components/Icon/Icon';
 import React from 'react';
 
@@ -179,4 +181,25 @@ export function removeRange(block, blockProps) {
   const newState = EditorState.push(editorState, resetBlock, 'remove-range');
 
   setEditorState(EditorState.forceSelection(newState, resetBlock.getSelectionAfter()));
+}
+
+export function addAtomicBlock(editorState, blockKey, entityData) {
+  const contentState = editorState.getCurrentContent();
+  const contentStateWithEntity = contentState.createEntity(
+    blockKey,
+    'IMMUTABLE',
+    entityData
+  );
+
+  const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+  const newEditorState = EditorState.set(
+    editorState,
+    { currentContent: contentStateWithEntity }
+  );
+
+  return AtomicBlockUtils.insertAtomicBlock(
+    newEditorState,
+    entityKey,
+    blockKey
+  );
 }

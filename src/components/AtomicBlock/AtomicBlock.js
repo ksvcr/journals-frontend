@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+import TableEditorWrapper from '~/components/TableEditorWrapper/TableEditorWrapper';
 import { EditorState } from 'draft-js';
 import { removeRange } from '~/services/customDraftUtils';
 
@@ -12,13 +13,14 @@ class AtomicBlock extends Component {
     const editorState = getEditorState();
     const selection = editorState.getSelection();
 
-    blockProps.onInteractChange(false);
 
     contentState.replaceEntityData(
       block.getEntityAt(0),
       data
     );
     setEditorState(EditorState.forceSelection(editorState, selection));
+
+    blockProps.onInteractChange(false);
   };
 
   handleInteract = () => {
@@ -50,6 +52,10 @@ class AtomicBlock extends Component {
       case 'image-list':
         return <ImageMediaEditor data={ data } onChange={ this.handleChange } onRemove={ this.handleRemove }
                                  onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
+
+      case 'block-table':
+        return <TableEditorWrapper data={ data } onChange={ this.handleChange } onRemove={ this.handleRemove }
+                                   onInteract={ this.handleInteract } onCancelInteract={ this.handleInteractCancel } />;
       default:
         return null;
     }

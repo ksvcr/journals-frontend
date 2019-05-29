@@ -178,7 +178,7 @@ function mapStateToProps(state, props) {
   const userData = getUserData(state);
   return {
     correspondingAuthor,
-    authorData: isCurrent ? userData : userData[id],
+    authorData: isCurrent ? userData : users.data[id],
     authorsArray: users.searchData[hash],
     searchData: users.searchData,
     authorRolesArray,

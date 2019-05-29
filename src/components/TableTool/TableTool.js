@@ -1,67 +1,82 @@
 import React, { Component } from 'react';
-import { genKey } from 'draft-js';
-import Icon from '~/components/Icon/Icon';
-
-import { addNewBlockAt } from '~/services/customDraftUtils';
 import { withNamespaces } from 'react-i18next';
+
+import Icon from '~/components/Icon/Icon';
+import ToolTip from '~/components/ToolTip/ToolTip';
+import TableCreateForm from '~/components/TableCreateForm/TableCreateForm';
+import { addAtomicBlock } from '~/services/customDraftUtils';
 
 import './table-tool.scss';
 import './assets/table.svg';
 
 class TableTool extends Component {
-  handleBlockAdd = () => {
-    const entityData =  {
-      rows: [
-        [
-          {
-            entityMap: {},
-            blocks: [
-              {
-                key: genKey(),
-                text: ' ',
-                type: 'unstyled',
-                depth: 0,
-                inlineStyleRanges: [],
-                entityRanges: []
-              }
-            ]
-          },
-          {
-            entityMap: {},
-            blocks: [
-              {
-                key: genKey(),
-                text: ' ',
-                type: 'unstyled',
-                depth: 0,
-                inlineStyleRanges: [],
-                entityRanges: []
-              }
-            ]
-          }
-        ]
-      ],
-      title: 'Заголовок таблицы',
-      numberOfColumns: 2
+  state = {
+    showForm: false
+  };
+
+  handleBlockAdd = (formData) => {
+    const { row_count=1, col_count=3 , ...meta } = formData;
+    const defaultCell = {
+      content: ' ',
+      colspan: 1,
+      rowspan: 1
     };
+
+    const rows = [];
+
+    for (let i = 0; i < row_count; i++) {
+      rows.push([]);
+
+      for (let j = 0; j < col_count; j++) {
+        rows[i].push({ ...defaultCell });
+      }
+    }
+    
+    const entityData =  {
+      rows,
+      title: 'Заголовок таблицы',
+      ...meta
+    };
+
+    this.handleFormToggle();
 
     const { getEditorState, setEditorState } = this.props;
     const editorState = getEditorState();
     const blockKey = 'block-table';
-    setEditorState(addNewBlockAt(
+
+    setEditorState(addAtomicBlock(
       editorState,
       blockKey,
       entityData
-    ))
+    ));
+  };
+
+  handleFormToggle = () => {
+    this.setState(({ showForm }) => ({
+      showForm: !showForm
+    }));
   };
 
   render() {
-    const { t } =this.props;
+    const { t } = this.props;
+    const { showForm } = this.state;
     return (
-      <button type="button" className="table-tool editor-button" onClick={ this.handleBlockAdd }>
-        { t('add_table') }
-        <Icon name="table" className="table-tool__icon editor-button__icon" />
-      </button>
+      <ToolTip
+        className="tooltip"
+        position="bottom-end"
+        useContext={ true }
+        unmountHTMLWhenHide={ true }
+        open={ showForm }
+        onRequestClose={ this.handleFormToggle }
+        html={
+          <TableCreateForm onSubmit={ this.handleBlockAdd } />
+        }
+      >
+        <button type="button" className="table-tool editor-button" onClick={ this.handleFormToggle }>
+          { t('add_table') }
+          <Icon name="table" className="table-tool__icon editor-button__icon" />
+        </button>
+      </ToolTip>
     );
   }
 }

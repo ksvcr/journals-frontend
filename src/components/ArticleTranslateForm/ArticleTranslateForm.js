@@ -72,7 +72,7 @@ ArticleTranslateForm = reduxForm({
 function mapStateToProps(state, props) {
   const isInvalidForm = isInvalid(FORM_NAME)(state);
   const formValues = getFormValues(FORM_NAME)(state);
-  const { userRole } = getUserData(state);
+  const { role:userRole } = getUserData(state);
 
   return {
     isInvalidForm,

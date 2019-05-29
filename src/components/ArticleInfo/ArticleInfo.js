@@ -35,7 +35,7 @@ class ArticleInfo extends Component {
         value: rubric ? rubric.name : t('rubric_not_found')
       },
       {
-        title: t('type_category'),
+        title: t('article_type'),
         value: types[articleData.article_type]
       }
     ];

@@ -9,7 +9,7 @@ import ReqMark from '~/components/ReqMark/ReqMark';
 import FieldHint from '~/components/FieldHint/FieldHint';
 import FieldAddButton from '~/components/FieldAddButton/FieldAddButton';
 import Icon from '~/components/Icon/Icon';
-import ContentEditor from '~/components/ContentEditor/ContentEditor';
+import ContentEditorField from '~/components/ContentEditorField/ContentEditorField';
 
 import * as validate from '~/utils/validate';
 
@@ -100,7 +100,7 @@ class ContentBlock extends Component {
         <Field
           name={ `${field}.content` }
           id={ `block-${index}` }
-          component={ ContentEditor }
+          component={ ContentEditorField }
           validate={ [validate.required] }
         />
 

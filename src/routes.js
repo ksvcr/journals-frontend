@@ -16,6 +16,7 @@ import Discounts from '~/containers/Discounts';
 import RedactorUsers from '~/containers/RedactorUsers';
 import Stats from '~/containers/Stats';
 import ReviewCreate from '~/containers/ReviewCreate';
+import EditorExample from '~/containers/EditorExample';
 
 const ArticlePublishWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER']);
 const ArticleEditWithAccess = RoleAccess(ArticlePublish, ['AUTHOR', 'REVIEWER', 'REDACTOR']);
@@ -43,6 +44,7 @@ const routes = () => (
       <Route path="/settings" component={ AuthorSettings } />
       <Route path="/discounts" component={ Discounts } />
       <Route path="/stats" component={ StatsWithAccess } />
+      <Route path="/editor-example" component={ EditorExample } />
       <Route component={ NotFound } />
     </Switch>
   </Page>
