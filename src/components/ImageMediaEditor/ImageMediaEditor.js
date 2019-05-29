@@ -16,6 +16,12 @@ import './assets/cancel.svg';
 import './image-media-editor.scss';
 
 class ImageMediaEditor extends Component {
+  constructor() {
+    super();
+
+    this.meta = {};
+  }
+
   handleDropFile = files => {
     const { data, onChange } = this.props;
     const newImagesPromises = files.map(file => {
@@ -43,15 +49,18 @@ class ImageMediaEditor extends Component {
     });
   };
 
-  handleSubmit = (id, formData) => {
-    const { data, onChange } = this.props;
+  handleMetaChange = (id, formData) => {
+    this.meta[id] = formData;
+  };
+
+  handleMetaClose = () => {
+    const { data, onChange, onCancelInteract } = this.props;
+    onCancelInteract();
     const newData = {
       ...data,
       images: data.images.map(item => {
-        if (item.id !== id) {
-          return item;
-        }
-        return { ...item, ...formData };
+        const metaData = this.meta[item.id];
+        return metaData ? { ...item, ...this.meta[item.id] } : item;
       })
     };
 
@@ -70,7 +79,7 @@ class ImageMediaEditor extends Component {
   };
 
   renderImageItems = () => {
-    const { t, data, onInteract, onCancelInteract } = this.props;
+    const { t, data, onInteract } = this.props;
     return data.images.map(item => (
       <div className="image-media-editor__item" key={ item.id }>
         <div className="image-media-editor__zone">
@@ -79,11 +88,11 @@ class ImageMediaEditor extends Component {
             position="right-start"
             useContext={ true }
             onShow={ onInteract }
-            onRequestClose={ onCancelInteract }
+            onRequestClose={ this.handleMetaClose }
             html={
               <MetaInfoForm
                 id={ item.id }
-                onChange={ this.handleSubmit }
+                onChange={ this.handleMetaChange }
                 initialValues={ item }
               />
             }
@@ -120,7 +129,7 @@ class ImageMediaEditor extends Component {
   render() {
     const { data, onInteract, onCancelInteract, onRemove, t } = this.props;
     return (
-      <div className="image-media-editor" contentEditable={ false } readOnly>
+      <div className="image-media-editor" contentEditable={ false }>
         <div className="image-media-editor__top">
           <button type="button" onClick={ onRemove } className="image-media-editor__remove-button">
             <Icon name="cancel"  className="image-media-editor__remove-icon" />
