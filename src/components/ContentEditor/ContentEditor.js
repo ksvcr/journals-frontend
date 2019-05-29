@@ -70,8 +70,7 @@ class ContentEditor extends Component {
   };
 
   initEditorState = () => {
-    const { input } = this.props;
-    const value = input && input.value;
+    const { value } = this.props;
     if (value) {
       const contentFromRaw = convertFromRaw(value);
       return EditorState.createWithContent(contentFromRaw);
@@ -111,16 +110,15 @@ class ContentEditor extends Component {
 
   handleChange = editorState => {
     this.setState({ editorState });
-    this.changeValue(editorState);
   };
 
-  changeValue(editorState) {
-    const { input } = this.props;
-    const onChange = input ? input.onChange : this.props.onChange;
+  changeValue = () => {
+    const { editorState } = this.state;
+    const { onChange } = this.props;
     const contentState = editorState.getCurrentContent();
     const value = convertToRaw(contentState);
     onChange(value);
-  }
+  };
 
   renderButtons = externalProps => {
     const { isExpanded } = this.state;
@@ -172,6 +170,7 @@ class ContentEditor extends Component {
           onChange={ this.handleChange }
           blockStyleFn={ getBlockStyle }
           blockRendererFn={ this.mediaBlockRenderer }
+          onBlur={ this.changeValue }
           ref={ element => {
             this.editor = element;
           } }
