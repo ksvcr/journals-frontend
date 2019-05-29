@@ -25,7 +25,6 @@ import FontSizeTool from '~/components/FontSizeTool/FontSizeTool';
 import { customStyleFn } from '~/services/editorCustomStyler';
 import { styleMap, blockRenderMap, toolbarClasses, getBlockStyle, undoParams } from '~/services/customDraftUtils';
 
-import 'draft-js-table-plugin/lib/plugin.css';
 import './content-editor.scss';
 
 const decorators = [linkDecorator];
