@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
-import ContentEditor from '~/components/ContentEditor/ContentEditor';
+
+import RichTextEditor from '~/components/RichTextEditor/RichTextEditor'
 
 class EditorExample extends Component {
-  handleChange = (data) => {
-    console.log(data);
+  state = {
+    editorState: null
+  };
+
+  handleChange = (editorState) => {
+    console.log(JSON.stringify(editorState.doc.toJSON()));
+
+    this.setState({ editorState });
   };
   
   render() {
+    const { editorState } = this.state;
     return (
       <div>
-        <ContentEditor onChange={ this.handleChange }/>
+        <RichTextEditor editorState={ editorState } onChange={ this.handleChange } />
       </div>
     );
   }
