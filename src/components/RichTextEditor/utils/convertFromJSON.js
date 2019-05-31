@@ -1,10 +1,8 @@
 import { EditorState } from 'prosemirror-state';
-import { exampleSetup } from 'prosemirror-example-setup';
 
 import createEmptyEditorState from './createEmptyEditorState';
 import EditorSchema from './EditorSchema';
-
-
+import buildEditorPlugins from './buildEditorPlugins';
 
 export default function convertFromJSON(
   json,
@@ -12,7 +10,7 @@ export default function convertFromJSON(
   plugins
 ) {
   const effectiveSchema = schema || EditorSchema;
-  const effectivePlugins = plugins || exampleSetup({ schema: effectiveSchema });
+  const effectivePlugins = plugins || buildEditorPlugins();
   if (typeof json === 'string') {
     try {
       json = JSON.parse(json);

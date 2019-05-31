@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { DOMSerializer } from 'prosemirror-model';
-import CustomEditorView from './CustomEditorView';
-import CustomNodeView from './CustomNodeView';
+import CustomEditorView from '../utils/CustomEditorView';
+import CustomNodeView from '../utils/CustomNodeView';
+
 import 'prosemirror-view/style/prosemirror.css';
+import 'prosemirror-gapcursor/style/gapcursor.css';
 
 const AUTO_FOCUS_DELAY = 350;
 
@@ -77,8 +79,6 @@ class ExampleComponentNodeView extends CustomNodeView {
   }
 }
 
-
-
 const DEFAULT_NODE_VIEWS = Object.freeze({
   customNode: ExampleComponentNodeView,
 });
@@ -101,12 +101,12 @@ class Editor extends Component {
           boundNodeViews[nodeName] = bindNodeView(nodeView);
         }
       });
-      console.log(boundNodeViews);
 
       // Reference: http://prosemirror.net/examples/basic/
       this._editorView = new CustomEditorView(editorNode, {
         clipboardSerializer: DOMSerializer.fromSchema(schema),
         dispatchTransaction,
+        editable: this._isEditable,
         nodeViews: boundNodeViews,
         state: editorState
       });
@@ -130,6 +130,7 @@ class Editor extends Component {
         placeholder,
         readOnly,
         disabled,
+        onReady
       } = this.props;
 
       const state = editorState;
@@ -139,6 +140,8 @@ class Editor extends Component {
       view.disabled = !!disabled;
       view.updateState(state);
 
+      onReady && onReady(view);
+
       this._autoFocusTimer && clearTimeout(this._autoFocusTimer);
       this._autoFocusTimer =
         !prevProps.autoFocus && this.props.autoFocus
@@ -147,11 +150,32 @@ class Editor extends Component {
     }
   }
 
+  _onBlur = () => {
+    const { onBlur } = this.props;
+    const view = this._editorView;
+    if (view && !view.disabled && !view.readOnly && onBlur) {
+      onBlur();
+    }
+  };
+
+  focus = () => {
+    const view = this._editorView;
+    if (view && !view.disabled && !view.readOnly) {
+      view.focus();
+    }
+  };
+
+  _isEditable = () => {
+    const { disabled, readOnly } = this.props;
+    return !!this._editorView && !readOnly && !disabled;
+  };
+
   render() {
     const { id } = this.props;
     return (
       <div className="rich-text-editor"
-           id={ id } />
+           id={ id }
+           onBlur={ this._onBlur } />
     );
   }
 }

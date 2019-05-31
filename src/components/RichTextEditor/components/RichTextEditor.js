@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import nanoid from 'nanoid';
 
-import createEmptyEditorState from './createEmptyEditorState';
+import createEmptyEditorState from '../utils/createEmptyEditorState';
 
 import Editor from './Editor';
 import EditorToolbar from './EditorToolbar';
@@ -34,6 +34,14 @@ class RichTextEditor extends PureComponent {
     }
   };
 
+  _onReady = (editorView) => {
+    if (editorView !== this.state.editorView) {
+      this.setState({ editorView });
+      const { onReady } = this.props;
+      onReady && onReady(editorView);
+    }
+  };
+
   render() {
     const { editorView } = this.state;
     let { editorState } = this.props;
@@ -43,10 +51,12 @@ class RichTextEditor extends PureComponent {
     return (
       <div>
         <EditorToolbar editorState={ editorState }
+                       editorView={ editorView }
                        dispatchTransaction={ this._dispatchTransaction } />
         <Editor id={ this._id }
                 editorView={ editorView }
                 dispatchTransaction={ this._dispatchTransaction }
+                onReady={ this._onReady }
                 editorState={ editorState } />
       </div>
     );

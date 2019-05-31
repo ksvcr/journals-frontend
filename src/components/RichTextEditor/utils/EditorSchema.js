@@ -1,6 +1,5 @@
-import { Schema, Block } from 'prosemirror-model';
+import { Schema } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic'
-import React from 'react';
 
 const customNode = {
   customNode: {
@@ -14,7 +13,6 @@ const customNode = {
     },
   }
 };
-
 
 const EditorSchema = new Schema({
   nodes: schema.spec.nodes.append(customNode),
