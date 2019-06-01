@@ -21,7 +21,18 @@ function dryRunEditorStateProxySetter(
   return true;
 }
 
+const EventType = {
+  CLICK: 'mouseup',
+  MOUSEENTER: 'mouseenter',
+};
+
 class UICommand {
+  static EventType = EventType;
+
+  shouldRespondToUIEvent = (e) => {
+    return e.type === UICommand.EventType.CLICK;
+  };
+
   renderLabel = (state) => {
     return null;
   };

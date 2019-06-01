@@ -1,5 +1,6 @@
 import { Schema } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic'
+import editorMarks from './editorMarks';
 
 const customNode = {
   customNode: {
@@ -16,7 +17,7 @@ const customNode = {
 
 const EditorSchema = new Schema({
   nodes: schema.spec.nodes.append(customNode),
-  marks: schema.spec.marks,
+  marks: editorMarks,
 });
 
 export default EditorSchema;

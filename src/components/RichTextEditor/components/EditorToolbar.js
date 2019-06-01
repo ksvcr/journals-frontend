@@ -6,8 +6,9 @@ import * as EditorCommands from '../utils/EditorCommands';
 
 const {
   H1, H2, H3, H4,
-  HISTORY_REDO,
-  HISTORY_UNDO } = EditorCommands;
+  HISTORY_REDO, HISTORY_UNDO,
+  STRONG, EM, UNDERLINE, STRIKE,
+  TEXT_ALIGN_CENTER } = EditorCommands;
 
 class EditorToolbar extends Component {
   handleInsert = () => {
@@ -49,6 +50,60 @@ class EditorToolbar extends Component {
           editorState={ editorState }
           editorView={ editorView }
           title="H2"
+        />
+        <CommandButton
+          command={ H3 }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="H3"
+        />
+        <CommandButton
+          command={ H4 }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="H4"
+        />
+
+        <CommandButton
+          command={ STRONG }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="B"
+        />
+
+        <CommandButton
+          command={ EM }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="I"
+        />
+
+        <CommandButton
+          command={ UNDERLINE }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="U"
+        />
+
+        <CommandButton
+          command={ STRIKE }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="S"
+        />
+
+        <CommandButton
+          command={ TEXT_ALIGN_CENTER }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="Align center"
         />
 
         <CommandButton

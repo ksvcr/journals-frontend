@@ -150,6 +150,12 @@ class Editor extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this._autoFocusTimer && clearTimeout(this._autoFocusTimer);
+    this._editorView && this._editorView.destroy();
+    this._editorView = null;
+  }
+
   _onBlur = () => {
     const { onBlur } = this.props;
     const view = this._editorView;

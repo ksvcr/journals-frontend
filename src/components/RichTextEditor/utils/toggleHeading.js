@@ -21,13 +21,15 @@ export default function toggleHeading(
   const { from, to } = tr.selection;
   let startWithHeadingBlock = null;
   const poses = [];
-  doc.nodesBetween(from, to, (node) => {
+  doc.nodesBetween(from, to, (node, pos) => {
     const nodeType = node.type;
 
     if (startWithHeadingBlock === null) {
       startWithHeadingBlock =
         nodeType === heading && node.attrs.level === level;
     }
+
+    poses.push(pos);
     return false;
   });
   // Update from the bottom to avoid disruptive changes in pos.

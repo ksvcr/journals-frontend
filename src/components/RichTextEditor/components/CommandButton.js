@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PointerSurface from './PointerSurface'
 
 class CommandButton extends PureComponent {
   render() {
@@ -14,18 +15,18 @@ class CommandButton extends PureComponent {
     }
     const active = command.isActive(editorState);
     return (
-      <button disabled={ disabled }
-              onClick={ this._onUIEnter }
-              type="button">
+      <PointerSurface disabled={ disabled } active={ active } value={ command }
+                      onClick={ this._onUIEnter } onMouseEnter={ this._onUIEnter } >
         { title }
         { active ? 'active' : 'passive' }
-      </button>
+      </PointerSurface>
     );
   }
 
-  _onUIEnter = (event) => {
-    const { command } = this.props;
-    this._execute(command, event);
+  _onUIEnter = (command, event) => {
+    if (command.shouldRespondToUIEvent(event)) {
+      this._execute(command, event);
+    }
   };
 
   _execute = (value, event) => {
