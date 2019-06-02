@@ -15,11 +15,14 @@ class CommandButton extends PureComponent {
     }
     const active = command.isActive(editorState);
     return (
-      <PointerSurface disabled={ disabled } active={ active } value={ command }
-                      onClick={ this._onUIEnter } onMouseEnter={ this._onUIEnter } >
-        { title }
-        { active ? 'active' : 'passive' }
-      </PointerSurface>
+      <div className="command-button">
+        <PointerSurface disabled={ disabled } active={ active } value={ command }
+                        onClick={ this._onUIEnter } onMouseEnter={ this._onUIEnter } >
+          { title }
+          { active ? 'active' : 'passive' }
+        </PointerSurface>
+        { this.props.renderBox() }
+      </div>
     );
   }
 
@@ -27,11 +30,6 @@ class CommandButton extends PureComponent {
     if (command.shouldRespondToUIEvent(event)) {
       this._execute(command, event);
     }
-  };
-
-  _execute = (value, event) => {
-    const { command, editorState, dispatch, editorView } = this.props;
-    command.execute(editorState, dispatch, editorView, event);
   };
 }
 

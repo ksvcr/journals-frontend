@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Fragment } from 'prosemirror-model';
 import CommandButton from './CommandButton';
-
+import CommandWithPopup from './CommandWithPopup';
 import * as EditorCommands from '../utils/EditorCommands';
+
+const CommandButtonWithPopup = CommandWithPopup(CommandButton);
 
 const {
   H1, H2, H3, H4,
   HISTORY_REDO, HISTORY_UNDO,
   STRONG, EM, UNDERLINE, STRIKE,
-  TEXT_ALIGN_CENTER } = EditorCommands;
+  TEXT_ALIGN_CENTER, TEXT_ALIGN_JUSTIFY, TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT,
+  TEXT_COLOR } = EditorCommands;
 
 class EditorToolbar extends Component {
   handleInsert = () => {
@@ -104,6 +107,38 @@ class EditorToolbar extends Component {
           editorState={ editorState }
           editorView={ editorView }
           title="Align center"
+        />
+
+        <CommandButton
+          command={ TEXT_ALIGN_JUSTIFY }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="Align JUSTIFY"
+        />
+
+        <CommandButton
+          command={ TEXT_ALIGN_LEFT }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="Align LEFT"
+        />
+
+        <CommandButton
+          command={ TEXT_ALIGN_RIGHT }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="Align RIGHT"
+        />
+
+        <CommandButtonWithPopup
+          command={ TEXT_COLOR }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="Align color"
         />
 
         <CommandButton

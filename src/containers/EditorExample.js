@@ -20,7 +20,8 @@ const customTypeMap = {
 const customMarkType = {
   ...ProseMirrorDocument.markMap,
   underline: 'u',
-  strike: strikeMark
+  strike: strikeMark,
+  'mark-text-color': textColorMark
 };
 
 class EditorExample extends Component {
@@ -76,6 +77,14 @@ function headingView(props) {
 function strikeMark(props) {
   return (
     <span style={ { textDecoration: 'line-through' } }>
+      { props.children }
+    </span>
+  );
+}
+
+function textColorMark(props) {
+  return (
+    <span style={ { color: props.color } }>
       { props.children }
     </span>
   );
