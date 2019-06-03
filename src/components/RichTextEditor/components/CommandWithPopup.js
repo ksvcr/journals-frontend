@@ -1,9 +1,9 @@
 import React, { Component, createElement } from 'react';
 
-export default function (WrappedComponent, config) {
-  return class onClickOutside extends Component {
+export default function (WrappedComponent, params) {
+  return class CommandWithPopup extends Component {
     state = {
-      showBox: false
+      isRenderedBox: false
     };
     /**
      * Access the WrappedComponent's instance.
@@ -18,7 +18,6 @@ export default function (WrappedComponent, config) {
 
     _execute = (value, event) => {
       const { command, editorState, dispatch, editorView } = this.props;
-      this.setState({ showBox: true });
       command.execute(editorState, dispatch, editorView, event, this.renderBox);
     };
 
@@ -27,9 +26,10 @@ export default function (WrappedComponent, config) {
       instance._execute = this._execute;
     }
 
-    renderBox = ({ onChange }) => {
-      console.log('render');
-      return this.state.showBox ? <div onClick={ onChange.bind(null, '#eee') }>jopa</div> : null
+    renderBox = (props) => {
+      const Content = params.content;
+      this.box = <Content { ...props } />;
+      this.setState({ isRenderedBox: true });
     };
 
     getRef = ref => (this.instanceRef = ref);
@@ -38,9 +38,11 @@ export default function (WrappedComponent, config) {
      * Pass-through render
      */
     render() {
+      const { isRenderedBox } = this.state;
+
       const props = {
         ...this.props,
-        renderBox: this.renderBox
+        box: isRenderedBox ? this.box : null
       };
 
       if (WrappedComponent.prototype.isReactComponent) {

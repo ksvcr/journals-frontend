@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Fragment } from 'prosemirror-model';
 import CommandButton from './CommandButton';
-import CommandWithPopup from './CommandWithPopup';
+import CommandButtonWithColopicker from './CommandButtonWithColopicker';
 import * as EditorCommands from '../utils/EditorCommands';
-
-const CommandButtonWithPopup = CommandWithPopup(CommandButton);
 
 const {
   H1, H2, H3, H4,
@@ -133,7 +131,7 @@ class EditorToolbar extends Component {
           title="Align RIGHT"
         />
 
-        <CommandButtonWithPopup
+        <CommandButtonWithColopicker
           command={ TEXT_COLOR }
           dispatch={ dispatchTransaction }
           editorState={ editorState }

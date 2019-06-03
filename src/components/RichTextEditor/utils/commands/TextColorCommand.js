@@ -27,15 +27,14 @@ class TextColorCommand extends UICommand {
 
     const { doc, selection, schema } = state;
     const markType = schema.marks['mark-text-color'];
-    const anchor = event ? event.currentTarget : null;
     const { from, to } = selection;
     const result = findNodesWithSameMark(doc, from, to, markType);
-    const hex = result ? result.mark.attrs.color : null;
+    const color = result ? result.mark.attrs.color : null;
 
     return new Promise(resolve => {
 
       if (renderBox) {
-        renderBox({ onChange: resolve });
+        renderBox({ color, onChange: ({ r, g, b, a }) => { resolve(`rgba(${r},${g},${b},${a})`) } });
       }
     });
   };

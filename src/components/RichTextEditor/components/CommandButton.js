@@ -21,7 +21,7 @@ class CommandButton extends PureComponent {
           { title }
           { active ? 'active' : 'passive' }
         </PointerSurface>
-        { this.props.renderBox() }
+        { this.props.box }
       </div>
     );
   }
