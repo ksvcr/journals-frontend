@@ -1,0 +1,28 @@
+.color-editor {
+  background: #fff;
+  padding: 4px 10px;
+
+  &__button {
+    border: solid 1px #fff;
+    display: block;
+    height: 18px;
+    margin: 1px;
+    padding: 0;
+    width: 18px;
+
+    &_transparent {
+      display: block;
+      height: auto;
+      margin: 2px;
+      padding: 6px;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  &__section {
+    margin: 8px 0;
+    width: 200px;
+  }
+}
+

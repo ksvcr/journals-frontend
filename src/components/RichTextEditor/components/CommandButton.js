@@ -21,10 +21,14 @@ class CommandButton extends PureComponent {
           { title }
           { active ? 'active' : 'passive' }
         </PointerSurface>
-        { this.props.box }
       </div>
     );
   }
+
+  _execute = (value, event) => {
+    const { command, editorState, dispatch, editorView } = this.props;
+    command.execute(editorState, dispatch, editorView, event);
+  };
 
   _onUIEnter = (command, event) => {
     if (command.shouldRespondToUIEvent(event)) {

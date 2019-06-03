@@ -20,6 +20,7 @@ class ColorPicker extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <div className="color-picker">
         <div

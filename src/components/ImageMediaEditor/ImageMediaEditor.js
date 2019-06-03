@@ -16,8 +16,9 @@ import './assets/cancel.svg';
 import './image-media-editor.scss';
 
 class ImageMediaEditor extends Component {
-  constructor() {
-    super();
+
+  constructor(props) {
+    super(props);
 
     this.meta = {};
   }
@@ -50,17 +51,11 @@ class ImageMediaEditor extends Component {
   };
 
   handleMetaChange = (id, formData) => {
-    this.meta[id] = formData;
-  };
-
-  handleMetaClose = () => {
-    const { data, onChange, onCancelInteract } = this.props;
-    onCancelInteract();
+    const { data, onChange } = this.props;
     const newData = {
       ...data,
       images: data.images.map(item => {
-        const metaData = this.meta[item.id];
-        return metaData ? { ...item, ...this.meta[item.id] } : item;
+        return item.id === id ? { ...item, ...formData } : item;
       })
     };
 
@@ -79,21 +74,19 @@ class ImageMediaEditor extends Component {
   };
 
   renderImageItems = () => {
-    const { t, data, onInteract } = this.props;
+    const { t, data } = this.props;
     return data.images.map(item => (
       <div className="image-media-editor__item" key={ item.id }>
         <div className="image-media-editor__zone">
           <ToolTip
             className="tooltip"
             position="right-start"
-            useContext={ true }
-            onShow={ onInteract }
             onRequestClose={ this.handleMetaClose }
             html={
               <MetaInfoForm
                 id={ item.id }
                 onChange={ this.handleMetaChange }
-                initialValues={ item }
+                data={ item }
               />
             }
           >
@@ -127,7 +120,7 @@ class ImageMediaEditor extends Component {
   };
 
   render() {
-    const { data, onInteract, onCancelInteract, onRemove, t } = this.props;
+    const { data, onRemove, t } = this.props;
     return (
       <div className="image-media-editor" contentEditable={ false }>
         <div className="image-media-editor__top">
@@ -140,8 +133,6 @@ class ImageMediaEditor extends Component {
           className="image-media-editor__dropzone"
           accept="image/*"
           multiple={ true }
-          onFileDialogCancel={ onCancelInteract }
-          onClick={ onInteract }
           onDrop={ this.handleDropFile }
         >
           <ImageDropPlaceholder />

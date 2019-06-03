@@ -1,9 +1,9 @@
 import { Schema } from 'prosemirror-model';
-import { schema } from 'prosemirror-schema-basic';
 
 import editorMarks from './editorMarks';
 import ParagraphNodeSpec from './nodeSpecs/ParagraphNodeSpec';
 import HeadingNodeSpec from './nodeSpecs/HeadingNodeSpec';
+import ImageListSpec from './nodeSpecs/ImageListSpec';
 
 export const nodes = {
   doc: {
@@ -14,23 +14,12 @@ export const nodes = {
   text: {
     group: 'inline'
   },
-  customNode: {
-    group: 'block',
-    attrs: {
-      images: { default: [] },
-    },
-    parseDOM: [{ tag: 'div' }],
-    toDOM(node) {
-      return ['div', node.attrs];
-    },
-  }
+  'image-list': ImageListSpec
 };
 
 const EditorSchema = new Schema({
   nodes,
   marks: editorMarks,
 });
-
-console.log(schema.spec.nodes);
 
 export default EditorSchema;

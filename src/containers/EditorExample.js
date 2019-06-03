@@ -13,7 +13,7 @@ function customNodeView(props) {
 
 const customTypeMap = {
   ...ProseMirrorDocument.typeMap,
-  customNode: customNodeView,
+  'image-list': customNodeView,
   heading: headingView
 };
 
@@ -21,7 +21,9 @@ const customMarkType = {
   ...ProseMirrorDocument.markMap,
   underline: 'u',
   strike: strikeMark,
-  'mark-text-color': textColorMark
+  'mark-text-color': textColorMark,
+  'mark-text-hightlight': textHightlightMark,
+  'mark-font-size': fontSizeMark
 };
 
 class EditorExample extends Component {
@@ -85,6 +87,22 @@ function strikeMark(props) {
 function textColorMark(props) {
   return (
     <span style={ { color: props.color } }>
+      { props.children }
+    </span>
+  );
+}
+
+function textHightlightMark(props) {
+  return (
+    <span style={ { backgroundColor: props.highlightColor, display: 'inline-block' } }>
+      { props.children }
+    </span>
+  );
+}
+
+function fontSizeMark(props) {
+  return (
+    <span style={ { fontSize: `${props.pt}pt` } }>
       { props.children }
     </span>
   );

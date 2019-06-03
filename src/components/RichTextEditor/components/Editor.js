@@ -3,6 +3,8 @@ import { DOMSerializer } from 'prosemirror-model';
 import CustomEditorView from '../utils/CustomEditorView';
 import CustomNodeView from '../utils/CustomNodeView';
 
+import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+
 import 'prosemirror-view/style/prosemirror.css';
 import 'prosemirror-gapcursor/style/gapcursor.css';
 
@@ -50,37 +52,42 @@ class ExampleComponent extends React.Component {
 }
 
 class ExampleComponentNodeView extends CustomNodeView {
-  // @override
   createDOMElement() {
-    const el = document.createElement('span');
-    this._updateDOM(el);
-    return el;
+    return document.createElement('span');
   }
 
-  // @override
   update(node, decorations) {
     super.update(node, decorations);
-    this._updateDOM(this.dom);
     return true;
   }
 
-  // @override
-  renderReactComponent(){
-    return <ExampleComponent { ...this.props } />;
-  }
+  remove = () => {
+    const { editorView } = this.props;
+    let tr = editorView.state.tr;
+    const { from, to } = tr.selection;
+    tr = tr.delete(from, to);
+    editorView.dispatch(tr);
+  };
 
-  _updateDOM(el) {
-    const { align } = this.props.node.attrs;
-    let className = 'czi-image-view';
-    if (align) {
-      className += ' align-' + align;
-    }
-    el.className = className;
+  changeAttrs = (attrs) => {
+    const { getPos, editorView } = this.props;
+    const pos = getPos();
+    let tr = editorView.state.tr;
+    const { selection } = editorView.state;
+    tr = tr.setNodeMarkup(pos, null, attrs);
+    tr = tr.setSelection(selection);
+    editorView.dispatch(tr);
+  };
+
+  renderReactComponent() {
+    const { node } = this.props;
+    const { attrs } = node;
+    return <ImageMediaEditor data={ attrs } onChange={ this.changeAttrs } onRemove={ this.remove } />
   }
 }
 
 const DEFAULT_NODE_VIEWS = Object.freeze({
-  customNode: ExampleComponentNodeView,
+  'image-list': ExampleComponentNodeView,
 });
 
 class Editor extends Component {

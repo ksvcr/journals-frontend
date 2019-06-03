@@ -1,43 +1,26 @@
 import React, { Component } from 'react';
 import { Fragment } from 'prosemirror-model';
 import CommandButton from './CommandButton';
-import CommandButtonWithColopicker from './CommandButtonWithColopicker';
 import * as EditorCommands from '../utils/EditorCommands';
+import FontSizeCommandMenuButton from './FontSizeCommandMenuButton';
 
 const {
   H1, H2, H3, H4,
   HISTORY_REDO, HISTORY_UNDO,
   STRONG, EM, UNDERLINE, STRIKE,
   TEXT_ALIGN_CENTER, TEXT_ALIGN_JUSTIFY, TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT,
-  TEXT_COLOR } = EditorCommands;
+  TEXT_COLOR, TEXT_HIGHLIGHT,
+  LINK_SET_URL, LINK_REMOVE, IMAGE_LIST } = EditorCommands;
 
 class EditorToolbar extends Component {
-  handleInsert = () => {
-    const { editorState,  dispatchTransaction } = this.props;
-    let { tr, schema } = editorState;
-    const { selection } = tr;
-    if (!selection) {
-      return tr;
-    }
-    const { from, to } = selection;
-    if (from !== to) {
-      return tr;
-    }
-
-    const custom = schema.nodes['customNode'];
-    const node = custom.create({}, null, null);
-    const frag = Fragment.from(node);
-
-    tr = tr.insert(from, frag);
-
-    dispatchTransaction(tr)
-  };
-
   render() {
     const { editorState, editorView, dispatchTransaction } = this.props;
     return (
       <div className="editor-toolbar">
-        <button type="button" onClick={ this.handleInsert }/>
+        <FontSizeCommandMenuButton
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView } />
         <CommandButton
           command={ H1 }
           dispatch={ dispatchTransaction }
@@ -131,12 +114,35 @@ class EditorToolbar extends Component {
           title="Align RIGHT"
         />
 
-        <CommandButtonWithColopicker
+        <CommandButton
           command={ TEXT_COLOR }
           dispatch={ dispatchTransaction }
           editorState={ editorState }
           editorView={ editorView }
-          title="Align color"
+          title="text color"
+        />
+        <CommandButton
+          command={ TEXT_HIGHLIGHT }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="text HIGHLIGHT"
+        />
+
+        <CommandButton
+          command={ LINK_SET_URL }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="set url"
+        />
+
+        <CommandButton
+          command={ LINK_REMOVE }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="remove url"
         />
 
         <CommandButton
@@ -152,6 +158,14 @@ class EditorToolbar extends Component {
           editorState={ editorState }
           editorView={ editorView }
           title="Redo"
+        />
+
+        <CommandButton
+          command={ IMAGE_LIST }
+          dispatch={ dispatchTransaction }
+          editorState={ editorState }
+          editorView={ editorView }
+          title="image list"
         />
       </div>
     );

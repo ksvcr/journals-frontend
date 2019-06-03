@@ -1,35 +1,39 @@
+// @flow
+
+import ColorEditor from '../../components/ColorEditor';
 import UICommand from '../UICommand';
 import applyMark from '../applyMark';
+import createPopUp from '../createPopUp';
 import findNodesWithSameMark from '../findNodesWithSameMark';
 import isTextStyleMarkCommandEnabled from '../isTextStyleMarkCommandEnabled';
-import createPopUp from '../createPopUp';
-import ColorEditor from '../../components/ColorEditor';
 
-class TextColorCommand extends UICommand {
+class TextHighlightCommand extends UICommand {
   _popUp = null;
 
   isEnabled = (state) => {
-    return isTextStyleMarkCommandEnabled(state, 'mark-text-color');
+    return isTextStyleMarkCommandEnabled(state, 'mark-text-hightlight');
   };
 
   waitForUserInput = (
     state,
     dispatch,
     view,
-    event,
+    event
   ) => {
+    if (this._popUp) {
+      return Promise.resolve(undefined);
+    }
     const target = event.currentTarget;
     if (!(target instanceof HTMLElement)) {
       return Promise.resolve(undefined);
     }
 
     const { doc, selection, schema } = state;
-    const markType = schema.marks['mark-text-color'];
-    const anchor = event ? event.currentTarget : null;
+    const markType = schema.marks['mark-text-hightlight'];
     const { from, to } = selection;
     const result = findNodesWithSameMark(doc, from, to, markType);
-    const hex = result ? result.mark.attrs.color : null;
-
+    const hex = result ? result.mark.attrs.highlightColor : null;
+    const anchor = event ? event.currentTarget : null;
     return new Promise(resolve => {
       this._popUp = createPopUp(
         ColorEditor,
@@ -56,14 +60,9 @@ class TextColorCommand extends UICommand {
     if (dispatch && color !== undefined) {
       const { schema } = state;
       let { tr } = state;
-      const markType = schema.marks['mark-text-color'];
-      const attrs = color ? { color } : null;
-      tr = applyMark(
-        state.tr.setSelection(state.selection),
-        schema,
-        markType,
-        attrs
-      );
+      const markType = schema.marks['mark-text-hightlight'];
+      const attrs = color ? { highlightColor: color } : null;
+      tr = applyMark(tr.setSelection(state.selection), schema, markType, attrs);
       if (tr.docChanged || tr.storedMarksSet) {
         // If selection is empty, the color is added to `storedMarks`, which
         // works like `toggleMark`
@@ -76,4 +75,4 @@ class TextColorCommand extends UICommand {
   };
 }
 
-export default TextColorCommand;
+export default TextHighlightCommand;
