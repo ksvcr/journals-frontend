@@ -82,6 +82,7 @@ class CommandMenuButton extends PureComponent {
       ...this.props,
       onCommand: this._onCommand,
     };
+
     if (menu) {
       menu.update(menuProps);
     } else {

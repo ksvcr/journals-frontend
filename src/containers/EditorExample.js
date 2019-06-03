@@ -42,7 +42,7 @@ class EditorExample extends Component {
     return (
       <div>
         <RichTextEditor editorState={ editorState } onChange={ this.handleChange } />
-        { jsonData && <ProseMirrorDocument document={ jsonData } typeMap={ customTypeMap } markMap={ customMarkType } /> }
+        { /*{ jsonData && <ProseMirrorDocument document={ jsonData } typeMap={ customTypeMap } markMap={ customMarkType } /> }*/ }
       </div>
     );
   }

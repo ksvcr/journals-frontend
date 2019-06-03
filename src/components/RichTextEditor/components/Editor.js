@@ -51,7 +51,7 @@ class ExampleComponent extends React.Component {
   }
 }
 
-class ExampleComponentNodeView extends CustomNodeView {
+class ImageListNodeView extends CustomNodeView {
   createDOMElement() {
     return document.createElement('span');
   }
@@ -87,7 +87,7 @@ class ExampleComponentNodeView extends CustomNodeView {
 }
 
 const DEFAULT_NODE_VIEWS = Object.freeze({
-  'image-list': ExampleComponentNodeView,
+  'image-list': ImageListNodeView,
 });
 
 class Editor extends Component {

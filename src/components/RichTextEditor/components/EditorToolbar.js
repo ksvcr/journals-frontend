@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Fragment } from 'prosemirror-model';
 import CommandButton from './CommandButton';
 import * as EditorCommands from '../utils/EditorCommands';
 import FontSizeCommandMenuButton from './FontSizeCommandMenuButton';
+import PointerSurface from '~/components/RichTextEditor/components/PointerSurface';
 
 const {
   H1, H2, H3, H4,
@@ -10,9 +10,65 @@ const {
   STRONG, EM, UNDERLINE, STRIKE,
   TEXT_ALIGN_CENTER, TEXT_ALIGN_JUSTIFY, TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT,
   TEXT_COLOR, TEXT_HIGHLIGHT,
-  LINK_SET_URL, LINK_REMOVE, IMAGE_LIST } = EditorCommands;
+  LINK_SET_URL, LINK_REMOVE, IMAGE_LIST,
+  TABLE_ADD_COLUMN_AFTER,
+  TABLE_ADD_COLUMN_BEFORE,
+  TABLE_ADD_ROW_AFTER,
+  TABLE_ADD_ROW_BEFORE,
+  TABLE_DELETE_COLUMN,
+  TABLE_DELETE_ROW,
+  TABLE_DELETE_TABLE,
+  TABLE_INSERT_TABLE,
+  TABLE_MERGE_CELLS,
+  TABLE_SPLIT_ROW } = EditorCommands;
+
+export const TABLE_COMMANDS_GROUP = [
+  {
+    'Insert Table...': TABLE_INSERT_TABLE,
+  },
+  {
+    'Insert Column Before': TABLE_ADD_COLUMN_BEFORE,
+    'Insert Column After': TABLE_ADD_COLUMN_AFTER,
+    'Delete Column': TABLE_DELETE_COLUMN,
+  },
+  {
+    'Insert Row Before': TABLE_ADD_ROW_BEFORE,
+    'Insert Row After': TABLE_ADD_ROW_AFTER,
+    'Delete Row': TABLE_DELETE_ROW,
+  },
+  {
+    'Merge Cells': TABLE_MERGE_CELLS,
+    'Split Row': TABLE_SPLIT_ROW,
+  },
+  {
+    'Delete Table': TABLE_DELETE_TABLE,
+  },
+];
+
 
 class EditorToolbar extends Component {
+  renderTableToolbar = () => {
+    const { editorState, editorView, dispatchTransaction } = this.props;
+    const children = [];
+    TABLE_COMMANDS_GROUP.forEach(group => {
+      Object.keys(group).forEach(label => {
+        const command = group[label];
+        children.push(
+          <CommandButton
+            key={ label }
+            command={ command }
+            dispatch={ dispatchTransaction }
+            editorState={ editorState }
+            editorView={ editorView }
+            title={ label }
+          />
+        );
+      });
+    });
+
+    return children;
+  };
+
   render() {
     const { editorState, editorView, dispatchTransaction } = this.props;
     return (
@@ -167,6 +223,8 @@ class EditorToolbar extends Component {
           editorView={ editorView }
           title="image list"
         />
+
+        { this.renderTableToolbar() }
       </div>
     );
   }

@@ -8,7 +8,6 @@ class CommandMenu extends PureComponent {
   render() {
     const { commandGroups, editorState, editorView } = this.props;
     const children = [];
-
     commandGroups.forEach(group => {
       Object.keys(group).forEach(label => {
         const command = group[label];
@@ -30,6 +29,8 @@ class CommandMenu extends PureComponent {
         );
       });
     });
+    
+    console.log(children);
     return <div>{ children }</div>;
   }
 
