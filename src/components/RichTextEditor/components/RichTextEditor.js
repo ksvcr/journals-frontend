@@ -4,7 +4,7 @@ import nanoid from 'nanoid';
 import createEmptyEditorState from '../utils/createEmptyEditorState';
 
 import Editor from './Editor';
-import EditorToolbar from './EditorToolbar';
+import EditorToolbar from './EditorToolbar/EditorToolbar';
 
 import './styles.scss';
 
@@ -49,7 +49,7 @@ class RichTextEditor extends PureComponent {
     editorState = editorState || EMPTY_EDITOR_STATE;
 
     return (
-      <div>
+      <div className="content-editor">
         <EditorToolbar editorState={ editorState }
                        editorView={ editorView }
                        dispatchTransaction={ this._dispatchTransaction } />

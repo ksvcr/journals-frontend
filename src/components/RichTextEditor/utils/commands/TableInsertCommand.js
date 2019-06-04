@@ -15,19 +15,16 @@ class TableInsertCommand extends UICommand {
   execute = (
     state,
     dispatch,
-    view
+    view,
+    inputs
   ) => {
     if (dispatch) {
       const { selection, schema } = state;
       let { tr } = state;
-      const inputs = {
-        rows: 3,
-        cols: 3
-      };
       if (inputs) {
-        const { rows, cols } = inputs;
+        const { rows=2, cols=3, ...meta } = inputs;
         tr = tr.setSelection(selection);
-        tr = insertTable(tr, schema, rows, cols);
+        tr = insertTable(tr, schema, rows, cols, meta);
       }
       dispatch(tr);
     }

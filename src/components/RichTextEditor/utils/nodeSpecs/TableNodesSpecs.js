@@ -43,6 +43,9 @@ const TableNodesSpecs = tableNodes({
 const TableNodeSpec = Object.assign({}, TableNodesSpecs.table, {
   attrs: {
     marginLeft: { default: null },
+    title: { default: '' },
+    additional: { default: '' },
+    keywords: { default: '' }
   },
   parseDOM: [
     {

@@ -12,6 +12,7 @@ import LinkRemoveCommand from './commands/LinkRemoveCommand';
 import ImageListCommand from './commands/ImageListCommand';
 import TableInsertCommand from './commands/TableInsertCommand';
 import TableMergeCellsCommand from './commands/TableMergeCellsCommand';
+import TableEditMetaCommand from './commands/TableEditMetaCommand';
 import createCommand from '../utils/createCommand';
 
 export const H1 = new HeadingCommand(1);
@@ -57,3 +58,4 @@ export const TABLE_DELETE_COLUMN = createCommand(deleteColumn);
 export const TABLE_DELETE_ROW = createCommand(deleteRow);
 export const TABLE_DELETE_TABLE = createCommand(deleteTable);
 export const TABLE_SPLIT_ROW = createCommand(splitCell);
+export const TABLE_EDIT_META = new TableEditMetaCommand();

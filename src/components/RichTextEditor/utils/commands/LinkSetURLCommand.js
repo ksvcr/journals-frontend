@@ -2,13 +2,9 @@ import { TextSelection } from 'prosemirror-state';
 
 import applyMark from '../applyMark';
 import findNodesWithSameMark from '../findNodesWithSameMark';
-import LinkURLEditor from '../../components/LinkURLEditor';
 import UICommand from '../UICommand';
-import createPopUp from '../createPopUp';
 
 class LinkSetURLCommand extends UICommand {
-  _popUp = null;
-
   isEnabled = (state) => {
     if (!(state.selection instanceof TextSelection)) {
       // Could be a NodeSelection or CellSelection.
@@ -23,44 +19,17 @@ class LinkSetURLCommand extends UICommand {
     return from < to;
   };
 
-  waitForUserInput = (
-    state,
-    dispatch,
-    view,
-    event
+  getHref = (
+    state
   ) => {
-    if (this._popUp) {
-      return Promise.resolve(undefined);
-    }
-
     const { doc, schema, selection } = state;
     const markType = schema.marks['link'];
-    if (!markType) {
-      return Promise.resolve(undefined);
-    }
     const { from, to } = selection;
     const result = findNodesWithSameMark(doc, from, to, markType);
-    const href = result ? result.mark.attrs.href : null;
-    const anchor = event ? event.currentTarget : null;
-
-    return new Promise(resolve => {
-      this._popUp = createPopUp(
-        LinkURLEditor,
-        { href },
-        {
-          anchor,
-          onClose: val => {
-            if (this._popUp) {
-              this._popUp = null;
-              resolve(val);
-            }
-          },
-        }
-      );
-    });
+    return result ? result.mark.attrs.href : '';
   };
 
-  executeWithUserInput = (
+  execute = (
     state,
     dispatch,
     view,

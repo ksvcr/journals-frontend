@@ -3,7 +3,7 @@ import { findParentNodeOfType } from 'prosemirror-utils';
 import findActiveMark from './findActiveMark';
 
 // This should map to `--czi-content-font-size` at `czi-editor.css`.
-const FONT_PT_SIZE_DEFAULT = 11;
+const FONT_PT_SIZE_DEFAULT = 14;
 
 // This should map to `czi-heading.css`.
 const MAP_HEADING_LEVEL_TO_FONT_PT_SIZE = {
@@ -11,8 +11,8 @@ const MAP_HEADING_LEVEL_TO_FONT_PT_SIZE = {
   '2': 18,
   '3': 16,
   '4': 14,
-  '5': 11,
-  '6': 11,
+  '5': 12,
+  '6': 12,
 };
 
 export default function findActiveFontSize(state) {
@@ -34,12 +34,12 @@ export default function findActiveFontSize(state) {
         selection.$cursor.marks()) ||
       [];
     const sm = storedMarks.find(m => m.type === markType);
-    return sm ? String(sm.attrs.pt || defaultSize) : defaultSize;
+    return sm ? String(sm.attrs.px || defaultSize) : defaultSize;
   }
 
   const mark = markType ? findActiveMark(doc, from, to, markType) : null;
   if (mark) {
-    return String(mark.attrs.pt);
+    return String(mark.attrs.px);
   }
   if (!heading) {
     return defaultSize;

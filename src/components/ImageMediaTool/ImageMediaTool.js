@@ -5,7 +5,6 @@ import { withNamespaces } from 'react-i18next';
 import Icon from '~/components/Icon/Icon';
 
 import './image-media-tool.scss';
-import './assets/picture-small.svg';
 
 class ImageMediaTool extends Component {
   handleImageBlockAdd = (event) => {

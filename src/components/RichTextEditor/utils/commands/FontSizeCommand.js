@@ -2,23 +2,22 @@ import UICommand from '../UICommand';
 import applyMark from '../applyMark';
 import isTextStyleMarkCommandEnabled from '../isTextStyleMarkCommandEnabled';
 
-function setFontSize(tr, schema, pt) {
+function setFontSize(tr, schema, px) {
   const markType = schema.marks['mark-font-size'];
   if (!markType) {
     return tr;
   }
-  const attrs = pt ? { pt } : null;
+  const attrs = px ? { px } : null;
   tr = applyMark(tr, schema, markType, attrs);
   return tr;
 }
 
 class FontSizeCommand extends UICommand {
-  _popUp = null;
-  _pt = 0;
+  _px = 0;
 
-  constructor(pt) {
+  constructor(px) {
     super();
-    this._pt = pt;
+    this._px = px;
   }
 
   isEnabled = (state) => {
@@ -31,7 +30,7 @@ class FontSizeCommand extends UICommand {
     view
   ) => {
     const { schema, selection } = state;
-    const tr = setFontSize(state.tr.setSelection(selection), schema, this._pt);
+    const tr = setFontSize(state.tr.setSelection(selection), schema, this._px);
     if (tr.docChanged || tr.storedMarksSet) {
       // If selection is empty, the color is added to `storedMarks`, which
       // works like `toggleMark`

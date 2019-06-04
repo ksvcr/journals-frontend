@@ -1,6 +1,6 @@
 const FontSizeMarkSpec = {
   attrs: {
-    pt: { default: null },
+    px: { default: null },
   },
   inline: true,
   group: 'inline',
@@ -11,10 +11,10 @@ const FontSizeMarkSpec = {
     },
   ],
   toDOM(node) {
-    const { pt } = node.attrs;
+    const { px } = node.attrs;
     let style = '';
-    if (pt) {
-      style += `font-size: ${pt}pt;`;
+    if (px) {
+      style += `font-size: ${px}px;`;
     }
 
     return ['span', { style }, 0];
@@ -28,7 +28,7 @@ function getAttrs(fontSize) {
   }
 
   return {
-    pt: fontSize.replace('pt', ''),
+    px: fontSize.replace('px', ''),
   };
 }
 

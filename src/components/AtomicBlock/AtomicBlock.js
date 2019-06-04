@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+import ImageMediaEditor from '~/components/RichTextEditor/components/ImageMediaEditor/ImageMediaEditor';
 import TableEditorWrapper from '~/components/TableEditorWrapper/TableEditorWrapper';
 import { EditorState } from 'draft-js';
 import { removeRange } from '~/services/customDraftUtils';

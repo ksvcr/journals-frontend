@@ -3,7 +3,7 @@ import { DOMSerializer } from 'prosemirror-model';
 import CustomEditorView from '../utils/CustomEditorView';
 import CustomNodeView from '../utils/CustomNodeView';
 
-import ImageMediaEditor from '~/components/ImageMediaEditor/ImageMediaEditor';
+import ImageMediaEditor from '~/components/RichTextEditor/components/ImageMediaEditor/ImageMediaEditor';
 
 import 'prosemirror-view/style/prosemirror.css';
 import 'prosemirror-gapcursor/style/gapcursor.css';
@@ -14,41 +14,6 @@ function bindNodeView(NodeView) {
   return (node, view, getPos, decorations) => {
     return new NodeView(node, view, getPos, decorations);
   };
-}
-
-class ExampleComponent extends React.Component {
-  state = {
-    show: false
-  };
-
-  handleChange = () => {
-    const { getPos, node, editorView } = this.props;
-    const pos = getPos();
-    const attrs = {
-      images: [...node.attrs.images, { title: 'test' }],
-    };
-
-    let tr = editorView.state.tr;
-    const { selection } = editorView.state;
-    tr = tr.setNodeMarkup(pos, null, attrs);
-    tr = tr.setSelection(selection);
-    editorView.dispatch(tr);
-  };
-
-  render() {
-    const { node } = this.props;
-
-    return (
-      <div style={ { backgroundColor: 'orange', textAlign: 'center', padding: '30px' } }>
-        This is a React component
-
-        { node.attrs.images.map(item => (
-          <div> { item.title } </div>
-        )) }
-
-        <button type="button" onClick={ this.handleChange }> change </button>
-      </div>)
-  }
 }
 
 class ImageListNodeView extends CustomNodeView {

@@ -102,7 +102,7 @@ function textHightlightMark(props) {
 
 function fontSizeMark(props) {
   return (
-    <span style={ { fontSize: `${props.pt}pt` } }>
+    <span style={ { fontSize: `${props.px}px` } }>
       { props.children }
     </span>
   );

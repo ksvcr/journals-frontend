@@ -2,52 +2,23 @@ import UICommand from '../UICommand';
 import applyMark from '../applyMark';
 import findNodesWithSameMark from '../findNodesWithSameMark';
 import isTextStyleMarkCommandEnabled from '../isTextStyleMarkCommandEnabled';
-import createPopUp from '../createPopUp';
-import ColorEditor from '../../components/ColorEditor';
 
 class TextColorCommand extends UICommand {
-  _popUp = null;
-
   isEnabled = (state) => {
     return isTextStyleMarkCommandEnabled(state, 'mark-text-color');
   };
 
-  waitForUserInput = (
-    state,
-    dispatch,
-    view,
-    event,
+  getColor = (
+    state
   ) => {
-    const target = event.currentTarget;
-    if (!(target instanceof HTMLElement)) {
-      return Promise.resolve(undefined);
-    }
-
     const { doc, selection, schema } = state;
     const markType = schema.marks['mark-text-color'];
-    const anchor = event ? event.currentTarget : null;
     const { from, to } = selection;
     const result = findNodesWithSameMark(doc, from, to, markType);
-    const hex = result ? result.mark.attrs.color : null;
-
-    return new Promise(resolve => {
-      this._popUp = createPopUp(
-        ColorEditor,
-        { hex },
-        {
-          anchor,
-          onClose: val => {
-            if (this._popUp) {
-              this._popUp = null;
-              resolve(val);
-            }
-          },
-        }
-      );
-    });
+    return result ? result.mark.attrs.color : null;
   };
 
-  executeWithUserInput = (
+  execute = (
     state,
     dispatch,
     view,
