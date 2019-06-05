@@ -5,9 +5,6 @@ import CustomNodeView from '../utils/CustomNodeView';
 
 import ImageMediaEditor from '~/components/RichTextEditor/components/ImageMediaEditor/ImageMediaEditor';
 
-import 'prosemirror-view/style/prosemirror.css';
-import 'prosemirror-gapcursor/style/gapcursor.css';
-
 const AUTO_FOCUS_DELAY = 350;
 
 function bindNodeView(NodeView) {

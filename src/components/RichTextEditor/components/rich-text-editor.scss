@@ -1,0 +1,65 @@
+.ProseMirror p:first-child,
+.ProseMirror h1:first-child,
+.ProseMirror h2:first-child,
+.ProseMirror h3:first-child,
+.ProseMirror h4:first-child,
+.ProseMirror h5:first-child,
+.ProseMirror h6:first-child {
+  margin-top: 10px;
+}
+
+.ProseMirror {
+  padding: 4px 8px 4px 14px;
+  line-height: 1.2;
+  outline: none;
+}
+
+.ProseMirror p {
+  margin-bottom: 1em;
+}
+
+.ProseMirror .tableWrapper {
+  overflow-x: auto;
+}
+
+.ProseMirror table {
+  border-collapse: initial;
+  border-spacing: 0;
+  border: 1px solid #dcdcdc;
+  border-width: 0 thin thin 0;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  background-color: #fff;
+  border: 1px solid #dcdcdc;
+  border-width: thin 0 0 thin;
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 8px;
+  position: relative;
+  vertical-align: top;
+}
+
+.ProseMirror th {
+  background-color: #000;
+  font-weight: bold;
+  text-align: left;
+}
+
+.ProseMirror .selectedCell::after {
+  background: rgba(239, 238, 234, 0.2);
+  content: '';
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
