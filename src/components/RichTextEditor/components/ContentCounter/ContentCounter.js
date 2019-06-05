@@ -8,7 +8,7 @@ class ContentCounter extends Component {
   get cleanString() {
     const { editorState } = this.props;
     const regex = /(?:\r\n|\r|\n)/g;  // new line, carriage return, line feed
-    const plainText = editorState.getCurrentContent().getPlainText('');
+    const plainText = editorState.doc.textContent;
     return plainText.replace(regex, '').trim(); // replace above characters w/ space
   }
 

@@ -6,10 +6,12 @@ import AddLinkTool from '../AddLinkTool/AddLinkTool';
 import HighlightTool from '../HighlightTool/HighlightTool';
 import ColorTool from '../ColorTool/ColorTool';
 import TableTool from '../TableTool/TableTool';
+import TableEditMetaTool from '../TableEditMetaTool/TableEditMetaTool';
+
 
 import './editor-toolbar.scss'
 import { Separator } from 'draft-js-static-toolbar-plugin';
-import { TABLE_EDIT_META } from '../../utils/EditorCommands';
+import ExpandTool from '~/components/RichTextEditor/components/ExpandTool/ExpandTool';
 
 const {
   H1, H2, H3, H4,
@@ -30,14 +32,14 @@ const {
 
 export const TABLE_COMMANDS_GROUP = [
   {
-    'Col Before': TABLE_ADD_COLUMN_BEFORE,
-    'Col After': TABLE_ADD_COLUMN_AFTER,
-    'Del Col': TABLE_DELETE_COLUMN,
+    '< Col ': TABLE_ADD_COLUMN_BEFORE,
+    'Col >': TABLE_ADD_COLUMN_AFTER,
+    'X Col': TABLE_DELETE_COLUMN,
   },
   {
-    'Row Before': TABLE_ADD_ROW_BEFORE,
-    'Row After': TABLE_ADD_ROW_AFTER,
-    'Del Row': TABLE_DELETE_ROW,
+    '< Row': TABLE_ADD_ROW_BEFORE,
+    'Row >': TABLE_ADD_ROW_AFTER,
+    'X Row': TABLE_DELETE_ROW,
   },
   {
     'Merge': TABLE_MERGE_CELLS,
@@ -50,6 +52,16 @@ export const TABLE_COMMANDS_GROUP = [
 
 
 class EditorToolbar extends Component {
+  state = {
+    isExpanded: false
+  };
+
+  handleExpand = () => {
+    this.setState(({ isExpanded }) => ({
+      isExpanded: !isExpanded
+    }));
+  };
+
   get defaultButtonProps() {
     const { editorState, editorView, dispatchTransaction } = this.props;
     return {
@@ -58,6 +70,25 @@ class EditorToolbar extends Component {
       editorView: editorView
     };
   }
+
+
+  renderHeadings = () => {
+    const headings = [
+      { command: H1, title: 'H1' },
+      { command: H2, title: 'H2' },
+      { command: H3, title: 'H3' },
+      { command: H4, title: 'H4' },
+    ];
+
+    return headings.map(item => (
+      <CommandButton
+        key={ item.title }
+        command={ item.command }
+        title={ item.title }
+        { ...this.defaultButtonProps }
+      />
+    ));
+  };
 
   renderTableToolbar = () => {
     const children = [];
@@ -79,6 +110,7 @@ class EditorToolbar extends Component {
   };
 
   render() {
+    const { isExpanded } = this.state;
     return (
       <div className="editor-toolbar">
         <div className="editor-toolbar__row">
@@ -86,26 +118,7 @@ class EditorToolbar extends Component {
 
           <Separator className="editor-toolbar__separator" />
 
-          <CommandButton
-            command={ H1 }
-            title="H1"
-            { ...this.defaultButtonProps }
-          />
-          <CommandButton
-            command={ H2 }
-            title="H2"
-            { ...this.defaultButtonProps }
-          />
-          <CommandButton
-            command={ H3 }
-            title="H3"
-            { ...this.defaultButtonProps }
-          />
-          <CommandButton
-            command={ H4 }
-            title="H4"
-            { ...this.defaultButtonProps }
-          />
+          { this.renderHeadings() }
 
           <CommandButton
             command={ STRONG }
@@ -168,37 +181,36 @@ class EditorToolbar extends Component {
             icon="redo"
             { ...this.defaultButtonProps }
           />
+
+          <ExpandTool isActive={ isExpanded } onClick={ this.handleExpand } />
         </div>
 
+        { isExpanded &&
+          <div className="editor-toolbar__row">
+            <ColorTool { ...this.defaultButtonProps } />
+            <HighlightTool { ...this.defaultButtonProps } />
+            <AddLinkTool { ...this.defaultButtonProps } />
+            <CommandButton
+              command={ LINK_REMOVE }
+              icon="unlink"
+              { ...this.defaultButtonProps }
+            />
 
-        <div className="editor-toolbar__row">
-          <ColorTool { ...this.defaultButtonProps } />
-          <HighlightTool { ...this.defaultButtonProps } />
-          <AddLinkTool { ...this.defaultButtonProps } />
-          <CommandButton
-            command={ LINK_REMOVE }
-            icon="unlink"
-            { ...this.defaultButtonProps }
-          />
+            <CommandButton
+              command={ IMAGE_LIST }
+              icon="picture-small"
+              { ...this.defaultButtonProps }
+            />
 
-          <CommandButton
-            command={ IMAGE_LIST }
-            icon="picture-small"
-            { ...this.defaultButtonProps }
-          />
+            <Separator className="editor-toolbar__separator" />
 
-          <Separator className="editor-toolbar__separator" />
+            <TableTool { ...this.defaultButtonProps } />
 
-          <TableTool { ...this.defaultButtonProps } />
+            { this.renderTableToolbar() }
 
-          { this.renderTableToolbar() }
-
-          <CommandButton
-            command={ TABLE_EDIT_META }
-            title="edit"
-            { ...this.defaultButtonProps }
-          />
-        </div>
+            <TableEditMetaTool { ...this.defaultButtonProps } />
+          </div>
+        }
       </div>
     );
   }

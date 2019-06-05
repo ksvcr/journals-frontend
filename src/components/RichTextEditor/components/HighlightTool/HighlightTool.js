@@ -44,7 +44,7 @@ class HighlightTool extends Component {
         </button>
 
         { showColorPicker &&
-          <ColorPicker color={ this.currentColor }
+          <ColorPicker color={ command.getColor(editorState) }
                        onChange={ this.handleChange }
                        onCloseRequest={ this.handlePickerClose }
           />

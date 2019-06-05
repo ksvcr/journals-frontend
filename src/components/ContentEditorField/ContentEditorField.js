@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import ContentEditor from '~/components/ContentEditor/ContentEditor';
+import RichTextEditor from '~/components/RichTextEditor';
 
 class ContentEditorField extends Component {
   render() {
     const { input } = this.props;
-    return <ContentEditor value={ input.value } onChange={ input.onChange } />
+    return <RichTextEditor editorStateJson={ input.value } onChange={ input.onChange } />
   }
 }
 

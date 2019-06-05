@@ -5,7 +5,7 @@ import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
 import ToolTip from '~/components/ToolTip/ToolTip';
-import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
+import MetaInfoForm from '~/components/RichTextEditor/components/MetaInfoForm/MetaInfoForm';
 import ImageDropPlaceholder from '~/components/ImageDropPlaceholder/ImageDropPlaceholder';
 
 import formatBytes from '~/utils/formatBytes';
@@ -16,12 +16,29 @@ import './assets/cancel.svg';
 import './image-media-editor.scss';
 
 class ImageMediaEditor extends Component {
-
   constructor(props) {
     super(props);
-
     this.meta = {};
   }
+
+  state = {
+    showForm: false
+  };
+
+  handleFormOpen = (event) => {
+    const { dataset } = event.currentTarget;
+    const { id } = dataset;
+
+    this.setState({
+      showForm: id
+    });
+  };
+
+  handleFormClose = () => {
+    this.setState({
+      showForm: false
+    });
+  };
 
   handleDropFile = files => {
     const { data, onChange } = this.props;
@@ -58,7 +75,7 @@ class ImageMediaEditor extends Component {
         return item.id === id ? { ...item, ...formData } : item;
       })
     };
-
+    this.handleFormClose();
     onChange(newData);
   };
 
@@ -75,22 +92,25 @@ class ImageMediaEditor extends Component {
 
   renderImageItems = () => {
     const { t, data } = this.props;
+    const { showForm } = this.state;
     return data.images.map(item => (
       <div className="image-media-editor__item" key={ item.id }>
         <div className="image-media-editor__zone">
           <ToolTip
             className="tooltip"
             position="right-start"
-            onRequestClose={ this.handleMetaClose }
+            open={ showForm === item.id }
+            onRequestClose={ this.handleFormClose }
             html={
               <MetaInfoForm
                 id={ item.id }
-                onChange={ this.handleMetaChange }
+                onSubmit={ this.handleMetaChange }
                 data={ item }
               />
             }
           >
-            <button type="button" className="image-media-editor__button">
+            <button type="button" className="image-media-editor__button"
+                    data-id={ item.id } onClick={ this.handleFormOpen }>
               <div className="image-media-editor__view">
                 <img
                   className="image-media-editor__image"
@@ -154,3 +174,5 @@ ImageMediaEditor = withNamespaces()(ImageMediaEditor);
 
 
 export default ImageMediaEditor;
+
+

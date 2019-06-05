@@ -1,6 +1,19 @@
 import convertFromJSON from './convertFromJSON';
 
-const EMPTY_DOC_JSON = { 'type':'doc','content':[{ 'type':'paragraph','content':[{ 'type':'text','text':' текст ' },{ 'type':'text','marks':[{ 'type':'em' }],'text':'по' },{ 'type':'text','text':' ' },{ 'type':'text','marks':[{ 'type':'strong' }],'text':'умолчанию' }] }] };
+const EMPTY_DOC_JSON = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: ' ',
+        },
+      ],
+    },
+  ],
+};
 
 
 export default function createEmptyEditorStateSchema(schema, plugins) {

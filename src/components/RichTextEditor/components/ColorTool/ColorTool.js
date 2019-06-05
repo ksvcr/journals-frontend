@@ -45,13 +45,13 @@ class ColorTool extends Component {
           { t('select_text_color') }
           <div
             className="color-tool__box"
-            style={ { background: this.currentColor } }
+            style={ { background: command.getColor(editorState) } }
           />
         </button>
 
         { showColorPicker && (
           <ColorPicker
-            color={ this.currentColor }
+            color={ command.getColor(editorState) }
             onChange={ this.handleChange }
             onCloseRequest={ this.handlePickerClose }
           />

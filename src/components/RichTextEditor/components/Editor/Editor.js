@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { DOMSerializer } from 'prosemirror-model';
-import CustomEditorView from '../utils/CustomEditorView';
-import CustomNodeView from '../utils/CustomNodeView';
+import CustomEditorView from '../../utils/CustomEditorView';
 
-import ImageMediaEditor from '~/components/RichTextEditor/components/ImageMediaEditor/ImageMediaEditor';
+import ImageListNodeView from '../../utils/nodeViews/ImageListNodeView';
+
+import './editor.scss';
 
 const AUTO_FOCUS_DELAY = 350;
 
@@ -11,41 +12,6 @@ function bindNodeView(NodeView) {
   return (node, view, getPos, decorations) => {
     return new NodeView(node, view, getPos, decorations);
   };
-}
-
-class ImageListNodeView extends CustomNodeView {
-  createDOMElement() {
-    return document.createElement('span');
-  }
-
-  update(node, decorations) {
-    super.update(node, decorations);
-    return true;
-  }
-
-  remove = () => {
-    const { editorView } = this.props;
-    let tr = editorView.state.tr;
-    const { from, to } = tr.selection;
-    tr = tr.delete(from, to);
-    editorView.dispatch(tr);
-  };
-
-  changeAttrs = (attrs) => {
-    const { getPos, editorView } = this.props;
-    const pos = getPos();
-    let tr = editorView.state.tr;
-    const { selection } = editorView.state;
-    tr = tr.setNodeMarkup(pos, null, attrs);
-    tr = tr.setSelection(selection);
-    editorView.dispatch(tr);
-  };
-
-  renderReactComponent() {
-    const { node } = this.props;
-    const { attrs } = node;
-    return <ImageMediaEditor data={ attrs } onChange={ this.changeAttrs } onRemove={ this.remove } />
-  }
 }
 
 const DEFAULT_NODE_VIEWS = Object.freeze({
@@ -148,7 +114,7 @@ class Editor extends Component {
   render() {
     const { id } = this.props;
     return (
-      <div className="rich-text-editor"
+      <div className="editor"
            id={ id }
            onBlur={ this._onBlur } />
     );

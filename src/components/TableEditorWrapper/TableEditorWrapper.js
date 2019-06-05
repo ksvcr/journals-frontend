@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withNamespaces } from 'react-i18next';
 import nanoid from 'nanoid';
 
-import MetaInfoForm from '~/components/MetaInfoForm/MetaInfoForm';
+import MetaInfoForm from '~/components/RichTextEditor/components/MetaInfoForm/MetaInfoForm';
 import ToolTip from '~/components/ToolTip/ToolTip';
 import Icon from '~/components/Icon/Icon';
 import TableEditor from '~/components/TableEditor/TableEditor';

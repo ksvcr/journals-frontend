@@ -19,10 +19,9 @@ class ImageSlider extends Component {
   handleImageClick = ({ currentTarget }) => {
     const { data } = this.props;
     const { index } = currentTarget.dataset;
-    const activeItem = data.images[parseInt(index, 10)];
     this.setState({
       modal: true,
-      activeItem
+      activeItem: index
     });
   };
 
@@ -35,7 +34,7 @@ class ImageSlider extends Component {
 
   renderItems = () => {
     const { data } = this.props;
-    return data.images.map((item, index) => (
+    return data.map((item, index) => (
       <div className="image-slider__item" key={ index }
            data-index={ index } onClick={ this.handleImageClick }>
         <div className="image-slider__box">
@@ -75,7 +74,8 @@ class ImageSlider extends Component {
   render() {
     const { data, t } = this.props;
     const { modal, activeItem } = this.state;
-    const slidesCount = data.images.length;
+    const slidesCount = data.length;
+    const activeData = data[activeItem];
 
     return (
       <div className="image-slider">
@@ -90,7 +90,7 @@ class ImageSlider extends Component {
         <Modal isOpen={ modal }
                onRequestClose={ this.handleClose }
                className="modal_without-padding">
-          { activeItem && <ImageMedia data={ activeItem }/> }
+          { activeData && <ImageMedia data={ activeData }/> }
         </Modal>
       </div>
     );

@@ -1,9 +1,15 @@
 import UICommand from '../UICommand';
 import { Fragment } from 'prosemirror-model';
+import { TextSelection } from 'prosemirror-state';
+import { isInTable } from 'prosemirror-tables';
 
 class ImageListCommand extends UICommand {
   isEnabled = (state) => {
-    return true;
+    const { selection } = state;
+    if (selection instanceof TextSelection && !isInTable(state)) {
+      return selection.from === selection.to;
+    }
+    return false;
   };
 
   execute = (
@@ -11,12 +17,17 @@ class ImageListCommand extends UICommand {
     dispatch,
     view
   ) => {
-    let { tr, schema } = state;
-    const { selection } = tr;
-    if (!selection) {
+    let { tr, schema, selection } = state;
+    const { nodes } = schema;
+
+    tr = tr.setSelection(selection);
+    const paragraph = nodes['paragraph'];
+
+    if (!paragraph) {
       return tr;
     }
-    const { from, to } = selection;
+
+    const { from, to } = tr.selection;
     if (from !== to) {
       return tr;
     }

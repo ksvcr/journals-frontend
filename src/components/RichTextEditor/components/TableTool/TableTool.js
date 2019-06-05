@@ -29,6 +29,9 @@ class TableTool extends Component {
 
   render() {
     const { showForm } = this.state;
+    const { editorState, editorView } = this.props;
+    const disabled = !command.isEnabled(editorState, editorView);
+
     return (
       <ToolTip
         className="tooltip"
@@ -41,7 +44,8 @@ class TableTool extends Component {
           <TableCreateForm onSubmit={ this.handleBlockAdd } />
         }
       >
-        <EditorButton onClick={ this.handleFormToggle } icon="table" />
+        <EditorButton disabled={ disabled }
+                      onClick={ this.handleFormToggle } icon="table" />
       </ToolTip>
     );
   }

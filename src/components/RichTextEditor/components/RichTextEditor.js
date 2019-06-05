@@ -2,35 +2,39 @@ import React, { PureComponent } from 'react';
 import nanoid from 'nanoid';
 
 import createEmptyEditorState from '../utils/createEmptyEditorState';
+import convertFromJSON from '../utils/convertFromJSON';
 
-import Editor from './Editor';
+import Editor from './Editor/Editor';
 import EditorToolbar from './EditorToolbar/EditorToolbar';
+import ContentCounter from './ContentCounter/ContentCounter';
 
-import './styles.scss';
+import './rich-text-editor.scss';
+import 'prosemirror-view/style/prosemirror.css';
+import 'prosemirror-gapcursor/style/gapcursor.css';
 
 const EMPTY_EDITOR_STATE = createEmptyEditorState();
 
 class RichTextEditor extends PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this._id = nanoid();
+    const { editorStateJson } = props;
+    const editorState = editorStateJson ? convertFromJSON(editorStateJson) : EMPTY_EDITOR_STATE;
 
     this.state = {
-      contentHeight: NaN,
-      contentOverflowHidden: false,
+      editorState,
       editorView: null,
     };
   }
 
   _dispatchTransaction = (tr) => {
-    const { onChange, editorState, readOnly } = this.props;
-    if (readOnly === true) {
-      return;
-    }
+    const { onChange } = this.props;
+    const { editorState } = this.state;
+    const nextState = editorState.apply(tr);
+    this.setState({ editorState: nextState });
 
     if (onChange) {
-      const nextState = (editorState || EMPTY_EDITOR_STATE).apply(tr);
-      onChange(nextState);
+      onChange(nextState.doc.toJSON());
     }
   };
 
@@ -43,13 +47,10 @@ class RichTextEditor extends PureComponent {
   };
 
   render() {
-    const { editorView } = this.state;
-    let { editorState } = this.props;
-
-    editorState = editorState || EMPTY_EDITOR_STATE;
+    const { editorState, editorView } = this.state;
 
     return (
-      <div className="content-editor">
+      <div className="rich-text-editor">
         <EditorToolbar editorState={ editorState }
                        editorView={ editorView }
                        dispatchTransaction={ this._dispatchTransaction } />
@@ -58,6 +59,7 @@ class RichTextEditor extends PureComponent {
                 dispatchTransaction={ this._dispatchTransaction }
                 onReady={ this._onReady }
                 editorState={ editorState } />
+        <ContentCounter editorState={ editorState } />
       </div>
     );
   }

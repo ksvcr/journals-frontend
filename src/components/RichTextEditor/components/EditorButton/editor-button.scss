@@ -30,6 +30,10 @@
       fill: #fff;
     }
 
+    #{$root}:disabled & {
+      fill: #c4c7c8;
+    }
+
     &_bold {
       width: 10px;
       height: 11px;
@@ -74,10 +78,6 @@
     &_redo {
       width: 14px;
       height: 12px;
-
-      #{$root}:disabled & {
-        fill: #c4c7c8;
-      }
     }
 
     &_uppercase {

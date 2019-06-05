@@ -5,19 +5,42 @@ import { withNamespaces } from 'react-i18next';
 import TextField from '~/components/TextField/TextField';
 
 import './meta-info-form.scss';
+import Button from '~/components/Button/Button';
 
 class MetaInfoForm extends Component {
+  constructor(props) {
+    super(props);
+
+    const { data } = props;
+    this.state = {
+      data: {
+        title: '',
+        additional: '',
+        keywords: '',
+        ...data
+      }
+    };
+  }
+
   handleChange = (event) => {
-    const { id, data, onChange } = this.props;
     const { name, value } = event.target;
-    onChange(id, {
-      ...data,
-      [name]: value
-    });
+    this.setState(({ data }) => ({
+      data: {
+        ...data,
+        [name]: value
+      }
+    }));
+  };
+
+  handleSubmit = () => {
+    const { id, onSubmit } = this.props;
+    const { data } = this.state;
+    onSubmit(id, data);
   };
 
   render() {
-    const { data, t } = this.props;
+    const { t } = this.props;
+    const { data } = this.state;
     const fieldClasses = classNames('text-field_small', { 'text-field_white': this.props.whiteFields });
     return (
       <div className="meta-info-form form">
@@ -41,6 +64,11 @@ class MetaInfoForm extends Component {
           </label>
           <TextField name="keywords" id="media-keywords" className={ fieldClasses } onChange={ this.handleChange }
                      value={ data['keywords'] || '' } placeholder={ t('enter_keywords') } />
+        </div>
+        <div className="form__field form__field_small">
+          <Button onClick={ this.handleSubmit } className="button_orange button_small">
+            { t('save') }
+          </Button>
         </div>
       </div>
     );

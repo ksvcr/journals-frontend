@@ -1,7 +1,15 @@
 import UICommand from '~/components/RichTextEditor/utils/UICommand';
-import { CellSelection, isInTable } from 'prosemirror-tables';
+import { isInTable } from 'prosemirror-tables';
 import { findTable } from 'prosemirror-utils';
+
 class TableEditMetaCommand extends UICommand {
+  getMeta = (state) => {
+    const { selection } = state;
+    const table = findTable(selection);
+    const attrs = table ? table.node.attrs : {};
+    return attrs;
+  };
+
   execute = (
     state,
     dispatch,
@@ -13,7 +21,7 @@ class TableEditMetaCommand extends UICommand {
 
     if (isInTable(state)) {
       const { pos } = findTable(selection);
-      endTr = tr.setNodeMarkup(pos, null, { title: 'jopa' });
+      endTr = tr.setNodeMarkup(pos, null, meta);
       endTr = tr.setSelection(selection);
     }
 
