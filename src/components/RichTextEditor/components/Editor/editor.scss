@@ -1,0 +1,77 @@
+.editor {
+  .ProseMirror {
+    outline: none;
+    user-zoom: fixed;
+    border-radius: 1px;
+    position: relative;
+    min-height: 150px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 500px;
+  }
+
+  a {
+    color: $link-color;
+  }
+
+  p:first-child,
+  h1:first-child,
+  h2:first-child,
+  h3:first-child,
+  h4:first-child,
+  h5:first-child,
+  h6:first-child {
+    margin-top: 10px;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: initial;
+    border-spacing: 0;
+    border: 1px solid #dcdcdc;
+    border-width: 0 thin thin 0;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  td,
+  th {
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+    border-width: thin 0 0 thin;
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 8px 18px;
+    position: relative;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #000;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .selectedCell:after {
+    background: rgba(239, 238, 234, 0.2);
+    content: '';
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+  }
+}
