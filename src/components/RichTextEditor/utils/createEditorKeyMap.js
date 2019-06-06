@@ -7,8 +7,7 @@ const {
   KEY_TAB,
   KEY_TOGGLE_BOLD,
   KEY_TOGGLE_ITALIC,
-  KEY_UNDO,
-  KEY_TOGGLE_HEADING_1
+  KEY_UNDO
 } = EditorKeyMap;
 
 const {
@@ -17,8 +16,7 @@ const {
   HISTORY_UNDO,
   TABLE_MOVE_TO_NEXT_CELL,
   TABLE_MOVE_TO_PREV_CELL,
-  STRONG,
-  H1
+  STRONG
 } = EditorCommands;
 
 function bindCommands(...commands) {
