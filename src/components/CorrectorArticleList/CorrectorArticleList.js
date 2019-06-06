@@ -18,23 +18,31 @@ import './corrector-article-list.scss';
 
 class CorrectorArticleList extends Component {
   getToolsMenuItems(data) {
-    const { t } = this.props;
-    return [
-      {
+    const { locked_by } = data;
+    const { t, userData } = this.props;
+    const isLocked = locked_by !== null && locked_by !== userData.id;
+    const items = [];
+
+    if (!isLocked) {
+      items.push({
         title: t('correct'),
         link: `/article/${data.id}/correct`
-      },
-      {
+      });
+
+      items.push({
         title: t('send_to_editor'),
         handler: id => this.handleProofreadingCommit(id, data)
-      },
-      {
-        title: t('view'),
-        type: 'preview',
-        icon: 'preview',
-        link: `/article/${data.id}`
-      }
-    ];
+      });
+    }
+
+    items.push({
+      title: t('view'),
+      type: 'preview',
+      icon: 'preview',
+      link: `/article/${data.id}`
+    });
+
+    return items;
   };
 
   handleProofreadingCommit = (id, data) => {
