@@ -10,17 +10,10 @@ const customTypeMap = {
   'image-list': imageListView,
   'heading': headingView,
   'table': ({ node }) => {
-    console.log(node);
     return <Table data={ node }/>;
   },
-  'table_row': (props) => {
-    console.log(props);
-    return null;
-  },
-  'table_cell': (props) => {
-    console.log(props);
-    return null;
-  }
+  'table_row': () => null,
+  'table_cell': () => null
 };
 
 export default customTypeMap;

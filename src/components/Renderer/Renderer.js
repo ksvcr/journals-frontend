@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next';
 import ProseMirrorDocument from 'react-prosemirror-document';
 
 import customTypeMap from './customTypeMap';
-import customMarkMap from '~/components/Renderer/customMarkMap';
+import customMarkMap from './customMarkMap';
 
 class Renderer extends Component {
   renderWarning() {
