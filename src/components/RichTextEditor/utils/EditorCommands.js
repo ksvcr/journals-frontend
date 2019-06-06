@@ -47,7 +47,9 @@ const {
   deleteColumn,
   deleteRow,
   deleteTable,
-  splitCell
+  splitCell,
+  goToNextCell,
+
 } = ProsemirrorTables;
 
 export const TABLE_INSERT_TABLE = new TableInsertCommand();
@@ -61,3 +63,5 @@ export const TABLE_DELETE_ROW = createCommand(deleteRow);
 export const TABLE_DELETE_TABLE = createCommand(deleteTable);
 export const TABLE_SPLIT_ROW = createCommand(splitCell);
 export const TABLE_EDIT_META = new TableEditMetaCommand();
+export const TABLE_MOVE_TO_NEXT_CELL = createCommand(goToNextCell(1));
+export const TABLE_MOVE_TO_PREV_CELL = createCommand(goToNextCell(-1));

@@ -23,14 +23,14 @@ class TableCreateForm extends Component {
               <label htmlFor="rows" className="form__label form__label_small">
                 { t('row_count') }
               </label>
-              <Field name="rows" id="rows" className="text-field_small"
+              <Field name="rows" id="rows" className="text-field_small" min={ 1 }
                      type="number" component={ TextField } placeholder={ t('enter_count') } />
             </div>
             <div className="form__col form__col_6">
               <label htmlFor="cols" className="form__label form__label_small">
                 { t('col_count') }
               </label>
-              <Field name="cols" id="cols" className="text-field_small" max={ 100 }
+              <Field name="cols" id="cols" className="text-field_small" min={ 1 } max={ 50 }
                      type="number" component={ TextField } placeholder={ t('enter_count') } />
             </div>
           </div>
