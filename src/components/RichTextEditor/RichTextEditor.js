@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import nanoid from 'nanoid';
 
-import createEmptyEditorState from '../utils/createEmptyEditorState';
-import convertFromJSON from '../utils/convertFromJSON';
+import createEmptyEditorState from '~/components/RichTextEditor/utils/createEmptyEditorState';
+import convertFromJSON from '~/components/RichTextEditor/utils/convertFromJSON';
 
-import Editor from './Editor/Editor';
-import EditorToolbar from './EditorToolbar/EditorToolbar';
-import ContentCounter from './ContentCounter/ContentCounter';
+import Editor from './components/Editor/Editor';
+import EditorToolbar from './components/EditorToolbar/EditorToolbar';
+import ContentCounter from './components/ContentCounter/ContentCounter';
 
 import './rich-text-editor.scss';
 import 'prosemirror-view/style/prosemirror.css';

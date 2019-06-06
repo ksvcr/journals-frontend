@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import RichTextEditor from '~/components/RichTextEditor'
+import RichTextEditor from '~/components/RichTextEditor/RichTextEditor'
 import Renderer from '~/components/Renderer/Renderer'
 
 class EditorExample extends Component {

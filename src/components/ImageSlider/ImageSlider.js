@@ -17,7 +17,6 @@ class ImageSlider extends Component {
   };
 
   handleImageClick = ({ currentTarget }) => {
-    const { data } = this.props;
     const { index } = currentTarget.dataset;
     this.setState({
       modal: true,

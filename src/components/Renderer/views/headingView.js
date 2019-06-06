@@ -1,5 +1,5 @@
 import React from 'react';
-import ProseMirrorDocument from 'react-prosemirror-document';
+import Renderer from '../Renderer';
 
 function headingView(props) {
   const { level } = props.node.attrs;
@@ -14,12 +14,7 @@ function headingView(props) {
 
   if (props.node.content && props.node.content.length > 0) {
     args = args.concat(props.node.content.map(function(node) {
-      const newProps = {
-        ...props,
-        document: node
-      };
-
-      return ProseMirrorDocument(newProps);
+      return <Renderer raw={ node } />;
     }));
   }
 

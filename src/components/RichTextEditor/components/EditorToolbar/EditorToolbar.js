@@ -16,7 +16,7 @@ import ExpandTool from '~/components/RichTextEditor/components/ExpandTool/Expand
 const {
   H1, H2, H3, H4,
   HISTORY_REDO, HISTORY_UNDO,
-  STRONG, EM, UNDERLINE, STRIKE,
+  STRONG, EM, UNDERLINE, STRIKE, CAPITALIZE, UPPERCASE,
   TEXT_ALIGN_CENTER, TEXT_ALIGN_JUSTIFY, TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT,
   LINK_REMOVE, IMAGE_LIST,
   TABLE_ADD_COLUMN_AFTER,
@@ -203,6 +203,20 @@ class EditorToolbar extends Component {
             />
 
             <Separator className="editor-toolbar__separator" />
+
+            <CommandButton
+              command={ CAPITALIZE }
+              icon="capitalize"
+              { ...this.defaultButtonProps }
+            />
+
+            <CommandButton
+              command={ UPPERCASE }
+              icon="uppercase"
+              { ...this.defaultButtonProps }
+            />
+
+            <div className="editor-toolbar__separator" />
 
             <TableTool { ...this.defaultButtonProps } />
 

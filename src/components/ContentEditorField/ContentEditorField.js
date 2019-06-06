@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RichTextEditor from '~/components/RichTextEditor';
+import RichTextEditor from '~/components/RichTextEditor/RichTextEditor';
 
 class ContentEditorField extends Component {
   render() {
