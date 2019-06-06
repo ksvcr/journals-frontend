@@ -7,11 +7,9 @@ import HighlightTool from '../HighlightTool/HighlightTool';
 import ColorTool from '../ColorTool/ColorTool';
 import TableTool from '../TableTool/TableTool';
 import TableEditMetaTool from '../TableEditMetaTool/TableEditMetaTool';
-
+import ExpandTool from '../ExpandTool/ExpandTool';
 
 import './editor-toolbar.scss'
-import { Separator } from 'draft-js-static-toolbar-plugin';
-import ExpandTool from '~/components/RichTextEditor/components/ExpandTool/ExpandTool';
 
 const {
   H1, H2, H3, H4,
@@ -116,7 +114,7 @@ class EditorToolbar extends Component {
         <div className="editor-toolbar__row">
           <FontSizeTool { ...this.defaultButtonProps } />
 
-          <Separator className="editor-toolbar__separator" />
+          <div className="editor-toolbar__separator" />
 
           { this.renderHeadings() }
 
@@ -144,7 +142,7 @@ class EditorToolbar extends Component {
             { ...this.defaultButtonProps }
           />
 
-          <Separator className="editor-toolbar__separator" />
+          <div className="editor-toolbar__separator" />
 
           <CommandButton
             command={ TEXT_ALIGN_LEFT }
@@ -202,7 +200,7 @@ class EditorToolbar extends Component {
               { ...this.defaultButtonProps }
             />
 
-            <Separator className="editor-toolbar__separator" />
+            <div className="editor-toolbar__separator" />
 
             <CommandButton
               command={ CAPITALIZE }
