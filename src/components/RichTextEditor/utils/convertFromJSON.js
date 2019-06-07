@@ -20,7 +20,7 @@ export default function convertFromJSON(
     }
   }
 
-  if (!json || typeof json !== 'object') {
+  if (!json || typeof json !== 'object' || !json.type) {
     console.error('convertFromJSON: invalid object', json);
     return createEmptyEditorState(schema, plugins);
   }
