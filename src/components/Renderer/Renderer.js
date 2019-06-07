@@ -17,7 +17,7 @@ class Renderer extends Component {
       return this.renderWarning();
     }
 
-    return <ProseMirrorDocument document={ raw }
+    return <ProseMirrorDocument document={ raw } skipUnknownMarks={ true } skipUnknownTypes={ true }
                                 typeMap={ customTypeMap } markMap={ customMarkMap } />;
   }
 }
