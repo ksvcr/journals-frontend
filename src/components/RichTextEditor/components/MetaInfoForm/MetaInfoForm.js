@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { withNamespaces } from 'react-i18next';
 
 import TextField from '~/components/TextField/TextField';
+import Button from '~/components/Button/Button';
 
 import './meta-info-form.scss';
-import Button from '~/components/Button/Button';
 
 class MetaInfoForm extends Component {
   constructor(props) {
@@ -32,7 +32,8 @@ class MetaInfoForm extends Component {
     }));
   };
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     const { id, onSubmit } = this.props;
     const { data } = this.state;
     onSubmit(id, data);
@@ -43,7 +44,7 @@ class MetaInfoForm extends Component {
     const { data } = this.state;
     const fieldClasses = classNames('text-field_small', { 'text-field_white': this.props.whiteFields });
     return (
-      <div className="meta-info-form form">
+      <form className="meta-info-form form" onSubmit={ this.handleSubmit }>
         <div className="form__field form__field_small">
           <label htmlFor="media-name" className="form__label form__label_small">
             { t('title') }
@@ -66,11 +67,11 @@ class MetaInfoForm extends Component {
                      value={ data['keywords'] || '' } placeholder={ t('enter_keywords') } />
         </div>
         <div className="form__field form__field_small">
-          <Button onClick={ this.handleSubmit } className="button_orange button_small">
+          <Button type="submit" className="button_orange button_small">
             { t('save') }
           </Button>
         </div>
-      </div>
+      </form>
     );
   }
 }
