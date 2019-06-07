@@ -18,7 +18,8 @@ class LinkPrompt extends Component {
     this.setState({ value });
   };
 
-  handleConfirm = () => {
+  handleConfirm = (event) => {
+    event.preventDefault();
     const { onConfirm } = this.props;
     const { value } = this.state;
 
@@ -29,12 +30,12 @@ class LinkPrompt extends Component {
     const { value } = this.state;
     const { t } = this.props;
     return (
-      <div className="link-prompt">
+      <form className="link-prompt" onSubmit={ this.handleConfirm }>
         <TextField onChange={ this.handleChange } value={ value } className="link-prompt__input" />
-        <button className="link-prompt__button button button_small" type="button" onClick={ this.handleConfirm }>
+        <button className="link-prompt__button button button_small" type="submit">
           { t('save') }
         </button>
-      </div>
+      </form>
     );
   }
 }
