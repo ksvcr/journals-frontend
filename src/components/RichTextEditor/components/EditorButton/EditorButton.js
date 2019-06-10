@@ -23,6 +23,15 @@ import '../EditorButton/assets/unlink.svg';
 import '../EditorButton/assets/picture-small.svg';
 import '../EditorButton/assets/link.svg';
 import '../EditorButton/assets/table.svg';
+import '../EditorButton/assets/add-row-before.svg';
+import '../EditorButton/assets/add-row-after.svg';
+import '../EditorButton/assets/add-column-before.svg';
+import '../EditorButton/assets/add-column-after.svg';
+import '../EditorButton/assets/delete-row.svg';
+import '../EditorButton/assets/merge.svg';
+import '../EditorButton/assets/split.svg';
+import '../EditorButton/assets/delete-table.svg';
+import '../EditorButton/assets/edit-table.svg';
 
 const EditorButton = ({ icon, active, title, disabled, onClick }) => {
   const buttonClass = classNames('editor-button', { 'editor-button_active': active });

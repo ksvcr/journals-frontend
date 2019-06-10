@@ -1,0 +1,16 @@
+<svg viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect y="2" width="4" height="2" fill="#192A3E"/>
+<rect x="6" y="2" width="4" height="2" fill="#192A3E"/>
+<rect x="12" y="2" width="4" height="2" fill="#192A3E"/>
+<rect y="6" width="4" height="2" fill="#192A3E"/>
+<rect x="6" y="6" width="4" height="2" fill="#192A3E"/>
+<rect x="12" y="6" width="4" height="2" fill="#192A3E"/>
+<rect y="10" width="4" height="2" fill="#192A3E"/>
+<rect x="6" y="10" width="4" height="2" fill="#192A3E"/>
+<rect x="12" y="10" width="4" height="2" fill="#192A3E"/>
+<rect y="14" width="4" height="2" fill="#192A3E"/>
+<rect x="6" y="14" width="4" height="2" fill="#192A3E"/>
+<rect x="12" y="14" width="4" height="2" fill="#192A3E"/>
+<rect x="6.5" y="0.5" width="11" height="11" fill="#EFEEEA" stroke="#192A3E"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9 9H11L14 6L12 4L9 7V9ZM13 3L15 5L16 4L14 2L13 3Z" fill="#192A3E"/>
+</svg>

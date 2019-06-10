@@ -30,21 +30,40 @@ const {
 
 export const TABLE_COMMANDS_GROUP = [
   {
-    '< Col ': TABLE_ADD_COLUMN_BEFORE,
-    'Col >': TABLE_ADD_COLUMN_AFTER,
-    'X Col': TABLE_DELETE_COLUMN,
+    command: TABLE_ADD_ROW_BEFORE,
+    icon: 'add-row-before'
   },
   {
-    '< Row': TABLE_ADD_ROW_BEFORE,
-    'Row >': TABLE_ADD_ROW_AFTER,
-    'X Row': TABLE_DELETE_ROW,
+    command: TABLE_ADD_ROW_AFTER,
+    icon: 'add-row-after'
   },
   {
-    'Merge': TABLE_MERGE_CELLS,
-    'Split': TABLE_SPLIT_ROW,
+    command: TABLE_DELETE_ROW,
+    icon: 'delete-row'
   },
   {
-    'Delete': TABLE_DELETE_TABLE,
+    command: TABLE_ADD_COLUMN_BEFORE,
+    icon: 'add-column-before'
+  },
+  {
+    command: TABLE_ADD_COLUMN_AFTER,
+    icon: 'add-column-after'
+  },
+  {
+    command: TABLE_DELETE_COLUMN,
+    icon: 'delete-row'
+  },
+  {
+    command: TABLE_MERGE_CELLS,
+    icon: 'merge'
+  },
+  {
+    command: TABLE_SPLIT_ROW,
+    icon: 'split'
+  },
+  {
+    command: TABLE_DELETE_TABLE,
+    icon: 'delete-table'
   },
 ];
 
@@ -89,22 +108,14 @@ class EditorToolbar extends Component {
   };
 
   renderTableToolbar = () => {
-    const children = [];
-    TABLE_COMMANDS_GROUP.forEach(group => {
-      Object.keys(group).forEach(label => {
-        const command = group[label];
-        children.push(
-          <CommandButton
-            key={ label }
-            command={ command }
-            title={ label }
-            { ...this.defaultButtonProps }
-          />
-        );
-      });
-    });
-
-    return children;
+    return TABLE_COMMANDS_GROUP.map((item, index) => (
+      <CommandButton
+        key={ index }
+        command={ item.command }
+        icon={ item.icon }
+        { ...this.defaultButtonProps }
+      />
+    ))
   };
 
   render() {
