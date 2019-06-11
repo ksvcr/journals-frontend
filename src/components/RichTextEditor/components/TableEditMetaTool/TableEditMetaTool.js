@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import ToolTip from '~/components/ToolTip/ToolTip';
 import * as EditorCommands from '../../utils/EditorCommands';
 import EditorButton from '../EditorButton/EditorButton';
@@ -41,7 +42,7 @@ class TableEditMetaTool extends Component {
         }
       >
         <EditorButton disabled={ disabled }
-                      onClick={ this.handleFormToggle } title="Edit" />
+                      onClick={ this.handleFormToggle } icon="edit-table" />
       </ToolTip>
     );
   }

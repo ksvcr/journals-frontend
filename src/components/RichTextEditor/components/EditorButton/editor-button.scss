@@ -10,9 +10,13 @@
   outline: 0;
   transition: background .2s;
 
-  &:hover,
-  &:focus {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
     background: #e4e3dd;
+  }
+
+  &:disabled {
+    cursor: default;
   }
 
   &_active,
@@ -108,6 +112,52 @@
     &_table {
       width: 15px;
       height: 14px;
+    }
+
+
+    &_add-row-after,
+    &_add-row-before,
+    &_add-column-before,
+    &_add-column-after {
+      width: 16px;
+      height: 17px;
+    }
+
+    &_delete-row,
+    &_delete-column {
+      width: 18px;
+      height: 16px;
+    }
+
+    &_merge,
+    &_split {
+      width: 16px;
+      height: 15px;
+    }
+
+    &_delete-table {
+      width: 15px;
+      height: 15px;
+    }
+
+    &_edit-table {
+      width: 18px;
+      height: 16px;
+    }
+
+    &_add-row-before,
+    &_add-row-after,
+    &_delete-row,
+    &_add-column-before,
+    &_add-column-after,
+    &_delete-column,
+    &_merge,
+    &_split,
+    &_delete-table,
+    &_edit-table {
+      #{$root}:disabled & {
+        opacity: .2;
+      }
     }
   }
 }
