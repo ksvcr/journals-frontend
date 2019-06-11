@@ -28,6 +28,7 @@ import '../EditorButton/assets/add-row-after.svg';
 import '../EditorButton/assets/add-column-before.svg';
 import '../EditorButton/assets/add-column-after.svg';
 import '../EditorButton/assets/delete-row.svg';
+import '../EditorButton/assets/delete-column.svg';
 import '../EditorButton/assets/merge.svg';
 import '../EditorButton/assets/split.svg';
 import '../EditorButton/assets/delete-table.svg';

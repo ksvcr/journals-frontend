@@ -51,7 +51,7 @@ export const TABLE_COMMANDS_GROUP = [
   },
   {
     command: TABLE_DELETE_COLUMN,
-    icon: 'delete-row'
+    icon: 'delete-column'
   },
   {
     command: TABLE_MERGE_CELLS,
