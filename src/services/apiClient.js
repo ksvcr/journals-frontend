@@ -152,6 +152,9 @@ const apiClient = {
     const tail = printedId !== null ? `${printedId}/` : '';
     return fetchInstance.request(`/articles/${articleId}/printed/${tail}`);
   },
+  getArticleVersion: (articleId, version) => {
+    return fetchInstance.request(`/articles/${articleId}/versions/${version}`);
+  }
 };
 
 fetchInstance.instance.interceptors.response.use(null, error => {
