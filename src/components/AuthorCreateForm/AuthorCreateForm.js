@@ -72,7 +72,7 @@ class AuthorCreateForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_6">
               <label htmlFor="country" className="form__label">
-                { t('country') }
+                { t('country') } <ReqMark />
               </label>
               <Field name="country" id="country" validate={ [validate.required] }
                      format={ value => value && countriesData[value] ? { label: countriesData[value].name, value } : '' }
@@ -113,9 +113,9 @@ class AuthorCreateForm extends Component {
           <div className="form__row">
             <div className="form__col form__col_6">
               <label htmlFor="code_orcid" className="form__label">
-                E-mail
+                E-mail  <ReqMark />
               </label>
-              <Field name="email" id="email" className="text-field_white"
+              <Field name="email" id="email" className="text-field_white" validate={ [validate.required] }
                      component={ TextField } placeholder={ t('enter_email') } />
             </div>
             <div className="form__col form__col_6">
