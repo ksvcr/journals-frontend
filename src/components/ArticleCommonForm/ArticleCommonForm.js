@@ -72,7 +72,7 @@ class ArticleCommonForm extends Component {
 
   handleHasPrintedChange = () => {
     const { change, formName } = this.props;
-    change(formName, 'printed[0].use_address_from_profile', true);
+    change(formName, 'printed[0].use_address_from_profile', false);
     change(formName, 'printed[0].count', 1);
   };
 
