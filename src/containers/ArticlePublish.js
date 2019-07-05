@@ -39,8 +39,8 @@ class ArticlePublish extends Component {
   }
 
   componentDidUpdate() {
-    const { notFound, push, isEdit } = this.props;
-    if (isEdit && notFound) {
+    const { notFound, push, isEdit, isHtmlContent } = this.props;
+    if ((isEdit && notFound) || isHtmlContent) {
       push('/');
     }
   }
@@ -261,7 +261,8 @@ function mapStateToProps(state, props) {
     userId,
     userRole,
     siteId: isEdit && articleData ? articleData.site : sites.current,
-    notFound: articles.isFulfilled && !articles.data[articleId],
+    notFound: articles.isFulfilled && !articleData,
+    isHtmlContent: articleData && articleData.show_html_content,
     isFulfilled:
       (isFulfilledCommon && !isEdit) ||
       (isFulfilledCommon && articles.isFulfilled),
