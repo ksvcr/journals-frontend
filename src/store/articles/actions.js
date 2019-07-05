@@ -31,7 +31,7 @@ export function fetchArticle(id) {
 
 export function createArticle(siteId, data, cb) {
   return dispatch => {
-    let { content_blocks, sources, financing_sources, file_atachments, printed, ...articleData } = data;
+    let { sources, financing_sources, file_atachments, printed, ...articleData } = data;
 
     const payload = apiClient.createArticle(siteId, articleData).then(articleResponse => {
       const articleId = articleResponse.id;
@@ -48,12 +48,6 @@ export function createArticle(siteId, data, cb) {
           resourcePromises.push(
             apiClient.createFinancingSources(articleId, financing_sources)
           );
-        }
-
-        // Контент-блоки
-        if (content_blocks) {
-          content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
-          resourcePromises.push(apiClient.createBlocks(articleId, content_blocks));
         }
 
         // Список литературы
@@ -89,7 +83,7 @@ export function createArticle(siteId, data, cb) {
 
 export function editArticle(id, data) {
   return dispatch => {
-    let { content_blocks, financing_sources, sources, file_atachments, printed, ...articleData } = data;
+    let { financing_sources, sources, file_atachments, printed, ...articleData } = data;
 
     const payload = apiClient.lockArticle(id).then(() => {
       let editPromises = [apiClient.editArticle(id, articleData)];
@@ -99,12 +93,6 @@ export function editArticle(id, data) {
         editPromises.push(
           apiClient.editFinancingSources(id, financing_sources)
         );
-      }
-
-      // Контент-блоки
-      if (content_blocks) {
-        content_blocks = content_blocks.map((item, index) => ({ ...item, ordered: index }));
-        editPromises.push(apiClient.editBlocks(id, content_blocks));
       }
 
       // Список литературы

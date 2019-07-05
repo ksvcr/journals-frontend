@@ -1,5 +1,5 @@
 export function serializeArticleData(data = {}) {
-  const { authors = [], has_financing, has_printed, financing_sources, blocks, sources,
+  const { authors = [], has_financing, has_printed, financing_sources, content_blocks, sources,
           file_atachments, use_address_from_profile, printed, rubric_set, ...rest } = data;
 
   const serializedData = {
@@ -61,8 +61,8 @@ export function serializeArticleData(data = {}) {
     serializedData.collaborators = collaborators;
   }
 
-  if (blocks) {
-    serializedData.blocks = blocks.map((item, index) => ({
+  if (content_blocks) {
+    serializedData.content_blocks = content_blocks.map((item, index) => ({
       title: item.title,
       ordered: index,
       content: item.content
