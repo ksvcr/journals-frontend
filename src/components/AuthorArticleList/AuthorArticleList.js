@@ -24,7 +24,7 @@ class AuthorArticleList extends Component {
   };
 
   getToolsMenuItems(data) {
-    const { locked_by } = data;
+    const { locked_by, show_html_content } = data;
     const { t, userId } = this.props;
     const isLocked = locked_by !== null && locked_by !== userId;
 
@@ -32,7 +32,7 @@ class AuthorArticleList extends Component {
 
     const isAllowEdit = ~allowEditStatuses.indexOf(data.state_article);
 
-    if (!isLocked && isAllowEdit) {
+    if (!isLocked && isAllowEdit && !show_html_content) {
       items.push({
         title: t('edit'),
         link: `/article/${data.id}/edit/`

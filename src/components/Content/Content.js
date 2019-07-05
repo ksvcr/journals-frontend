@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withNamespaces } from 'react-i18next';
+import sanitizeHtml from 'sanitize-html';
 
 import Renderer from '~/components/Renderer/Renderer';
 import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
@@ -7,6 +8,11 @@ import ReviewsHistory from '~/components/ReviewsHistory/ReviewsHistory';
 import './content.scss';
 
 class Content extends Component {
+  get isHtmlContent() {
+    const { data } = this.props;
+    return data.show_html_content;
+  }
+
   renderBlocks = blocks => {
     return blocks.map((item, index) => (
       <div className="content__block" key={ index }>
@@ -58,11 +64,12 @@ class Content extends Component {
     });
   };
 
-  render() {
+  renderJsonContent = () => {
     const { t, data, author } = this.props;
     const { content_blocks = [], financing_sources = [] } = data;
     const recommendationId = data.state_article === 'DISAPPROVED' ? 3 : 1;
     const reviews = data.reviews ? data.reviews.filter(item => item.recommendation === recommendationId) : null;
+
     return (
       <div className="content">
         { data.text_to_description && (
@@ -129,6 +136,22 @@ class Content extends Component {
         </div>
       </div>
     );
+  };
+
+  renderHtmlContent = () => {
+    const { data } = this.props;
+    const sanitizeOptions = {
+      allowedTags: false,
+      allowedAttributes: false
+    };
+    const sanitize = sanitizeHtml(data.html_content, sanitizeOptions);
+
+    return <div className="content"
+                dangerouslySetInnerHTML={ { __html: sanitize } } />;
+  };
+
+  render() {
+    return this.isHtmlContent ? this.renderHtmlContent() : this.renderJsonContent();
   }
 }
 
