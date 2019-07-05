@@ -33,7 +33,10 @@ class ArticleFilesForm extends Component {
     });
   };
 
-  renderFileList = props => <ArticleFileList { ...props } />;
+  renderFileList = props => {
+    const { isProofreading } = this.props;
+    return <ArticleFileList download={ isProofreading } { ...props } />;
+  };
 
   render() {
     const { t, isProofreading } = this.props;
@@ -43,7 +46,7 @@ class ArticleFilesForm extends Component {
 
         { isProofreading ?
           <FieldArray name="file_atachments"
-                      component={ props => <ArticleFileList download { ...props } /> } /> :
+                      component={ this.renderFileList } /> :
           <React.Fragment>
             <p className="article-files-form__description">{ t('select_several_files') }</p>
             <Dropzone className="article-files-form__dropzone"

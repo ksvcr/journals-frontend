@@ -9,6 +9,7 @@ import ArticleTopTools from '~/components/ArticleTopTools/ArticleTopTools';
 import CancelLink from '~/components/CancelLink/CancelLink';
 
 import * as articlesActions from '~/store/articles/actions';
+import * as articleVersionsActions from '~/store/articleVersions/actions';
 import * as usersActions from '~/store/users/actions';
 
 class ArticlePreview extends Component {
@@ -29,11 +30,14 @@ class ArticlePreview extends Component {
   }
 
   handleRequest = () => {
-    const { fetchArticle, fetchUser, articleId, push } = this.props;
-    return fetchArticle(articleId).then((res) => {
-      const { author, reviews } = res.value;
+    const { fetchArticle, fetchArticleVersion, fetchUser, articleId, version, push } = this.props;
+    const isVersion = version !== undefined;
+    const articleRequest = isVersion ? fetchArticleVersion(articleId, version) : fetchArticle(articleId);
+    return articleRequest.then((res) => {
+      const data = res.value.data || res.value;
+      const { author, reviews } = data;
       let userIds = [author.user.id];
-      if (reviews.length > 0) {
+      if (reviews && reviews.length > 0) {
         reviews.forEach((item) => {
           if (userIds.indexOf(item.reviewer) < 0) {
             userIds.push(item.reviewer);
@@ -73,29 +77,33 @@ class ArticlePreview extends Component {
 function mapStateToProps(state, props) {
   const formValues = getFormValues('article-publish-new')(state);
   const { match } = props;
-  const { articles, users } = state;
-  let { articleId } = match.params;
+  const { articles, users, articleVersions } = state;
+  let { articleId, version } = match.params;
+  const isVersion = version !== undefined;
   let author;
   let articleData;
 
   if (articleId === 'new') {
     articleData = formValues;
   } else {
-    articleData = articles.data[articleId];
+    articleData = isVersion ? articleVersions.data[`${articleId}-${version}`] : articles.data[articleId];
     author = articleData && users.data[articleData.author.user];
   }
+
   return {
     articleId,
-    isRejected: articles.isRejected,
-    isFulfilled: articles.isFulfilled,
+    version,
     articleData,
     author,
+    isRejected: isVersion ? articleVersions.isRejected : articles.isRejected,
+    isFulfilled: isVersion ? articleVersions.isFulfilled : articles.isFulfilled
   };
 }
 
 const mapDispatchToProps = {
   push,
   fetchArticle: articlesActions.fetchArticle,
+  fetchArticleVersion: articleVersionsActions.fetchArticleVersion,
   fetchUser: usersActions.fetchUser
 };
 

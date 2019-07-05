@@ -40,7 +40,7 @@ export function serializeArticleData(data = {}) {
     if (author.roles) {
       serializedData.author.roles = Object.keys(author.roles)
         .filter(key => author.roles[key])
-        .map(role => role.split('-')[0]);
+        .map(role => role.split('-')[1]);
     }
   }
 
@@ -51,7 +51,7 @@ export function serializeArticleData(data = {}) {
       if(author.roles) {
         collaborator.roles = Object.keys(author.roles)
           .filter(key => author.roles[key])
-          .map(role => role.split('-')[0]);
+          .map(role => role.split('-')[1]);
       }
 
       return collaborator;
@@ -107,11 +107,13 @@ export function deserializeArticleData(data = {}) {
     deserializedData.authors = [
       {
         id: author.user.id,
-        roles: author.roles && author.roles.map(role => `role-${role}`)
+        roles: author.roles && author.roles.reduce((result, role) =>
+          ({ ...result, [`role-${role.id}`]: true }), {})
       },
       ...collaborators.map(item => ({
         id: item.user.id,
-        roles: item.roles && item.roles.map(role => `role-${role}`)
+        roles: item.roles && item.roles.reduce((result, role) =>
+          ({ ...result, [`role-${role.id}`]: true }), {})
       }))
     ];
   }

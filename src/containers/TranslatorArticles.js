@@ -29,7 +29,6 @@ class TranslatorArticles extends Component {
   get searchTargets() {
     const { t } = this.props;
 
-    console.log('this.props ==== ', this.props);
     return [
       {
         value: 'title',

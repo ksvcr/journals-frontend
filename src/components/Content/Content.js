@@ -62,7 +62,7 @@ class Content extends Component {
     const { t, data, author } = this.props;
     const { content_blocks = [], financing_sources = [] } = data;
     const recommendationId = data.state_article === 'DISAPPROVED' ? 3 : 1;
-    const reviews = data.reviews.filter(item => item.recommendation === recommendationId);
+    const reviews = data.reviews ? data.reviews.filter(item => item.recommendation === recommendationId) : null;
     return (
       <div className="content">
         { data.text_to_description && (

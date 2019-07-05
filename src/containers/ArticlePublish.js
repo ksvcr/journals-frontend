@@ -88,7 +88,8 @@ class ArticlePublish extends Component {
               const userPromises = userIds.map(id => fetchUser(id));
               return Promise.all([
                 ...userPromises,
-                fetchRubrics(articleData.site)
+                fetchRubrics(articleData.site),
+                fetchRoles(articleData.site)
               ]);
             }
           })
