@@ -37,11 +37,14 @@ class RedactorArticleList extends Component {
       });
     }
 
+    if (!data.show_html_content) {
+      tools.push({
+        title: t('edit'),
+        link: `/article/${data.id}/edit`
+      });
+    }
+
     tools.push({
-      title: t('edit'),
-      link: `/article/${data.id}/edit`
-    },
-    {
       title: t('view'),
       type: 'preview',
       icon: 'preview',

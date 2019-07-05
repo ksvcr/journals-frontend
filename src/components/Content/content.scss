@@ -48,7 +48,8 @@
     }
   }
 
-  ul {
+  ul,
+  ol {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -63,22 +64,66 @@
       padding-left: 33px;
 
       &:before {
-        counter-increment: myCounter;
-        content: counter(myCounter);
-        font-size: 14px;
-        top: 2px;
-        left: 0;
-        width: 20px;
-        height: 24px;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f7f7f7;
-        border: 1px solid #e7e7e7;
-        box-sizing: border-box;
-        border-radius: 4px;
+
       }
+    }
+  }
+
+  ul {
+    li:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      background-color: #e7e7e7;
+      border-radius: 50%;
+    }
+  }
+
+  ol {
+    li:before {
+      counter-increment: myCounter;
+      content: counter(myCounter);
+      font-size: 14px;
+      top: 2px;
+      left: 0;
+      width: 20px;
+      height: 24px;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f7f7f7;
+      border: 1px solid #e7e7e7;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+  }
+
+  table {
+    margin: 32px 0 22px;
+    border: 1px solid #dcdcdc;
+    background-color: #fff;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    font-weight: 600;
+    text-align: left;
+  }
+
+  td,
+  th {
+    border: 1px solid #dcdcdc;
+    padding: 30px 20px;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: #FEFDF6;
     }
   }
 

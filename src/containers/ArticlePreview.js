@@ -36,7 +36,7 @@ class ArticlePreview extends Component {
     return articleRequest.then((res) => {
       const data = res.value.data || res.value;
       const { author, reviews } = data;
-      let userIds = [author.user.id];
+      let userIds = author ? [author.user.id] : [];
       if (reviews && reviews.length > 0) {
         reviews.forEach((item) => {
           if (userIds.indexOf(item.reviewer) < 0) {
@@ -87,7 +87,8 @@ function mapStateToProps(state, props) {
     articleData = formValues;
   } else {
     articleData = isVersion ? articleVersions.data[`${articleId}-${version}`] : articles.data[articleId];
-    author = articleData && users.data[articleData.author.user];
+    const isHtmlContent = articleData && articleData.show_html_content;
+    author = articleData && !isHtmlContent && users.data[articleData.author.user];
   }
 
   return {
