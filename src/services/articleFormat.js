@@ -1,3 +1,6 @@
+import { findChildrenByType } from 'prosemirror-utils';
+import EditorSchema from '~/components/RichTextEditor/utils/EditorSchema.js';
+
 export function serializeArticleData(data = {}) {
   const { authors = [], has_financing, has_printed, financing_sources, content_blocks, sources,
           file_atachments, use_address_from_profile, printed, rubric_set, ...rest } = data;
@@ -67,6 +70,9 @@ export function serializeArticleData(data = {}) {
       ordered: index,
       content: item.content
     }));
+    
+    console.log(EditorSchema.nodes['image-list']);
+    console.log(findChildrenByType(content_blocks[0].content, EditorSchema.nodes['image-list'], false));
   }
 
   if (file_atachments) {

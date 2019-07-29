@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import nanoid from 'nanoid';
 import { withNamespaces } from 'react-i18next';
 
 import Icon from '~/components/Icon/Icon';
@@ -10,6 +9,7 @@ import ImageDropPlaceholder from '~/components/ImageDropPlaceholder/ImageDropPla
 
 import formatBytes from '~/utils/formatBytes';
 import fileToBase64 from '~/utils/fileToBase64';
+import apiClient from '~/services/apiClient';
 
 import './assets/edit.svg';
 import './assets/cancel.svg';
@@ -47,23 +47,33 @@ class ImageMediaEditor extends Component {
     });
 
     Promise.all(newImagesPromises).then(result => {
-      const newImages = result.map((base64, index) => {
+      const droppedImages = [];
+      const imagesMeta = [];
+
+      result.forEach((base64, index) => {
         const file = files[index];
-        return {
-          id: nanoid(),
-          name: file.name,
-          title: file.name,
+        droppedImages.push({
+          file: base64,
+          title: file.name
+        });
+
+        imagesMeta.push({
           size: file.size,
-          type: file.type,
-          preview: base64
-        };
+          name: file.name
+        });
       });
 
-      const newData = {
-        ...data,
-        images: [...data.images, ...newImages]
-      };
-      onChange(newData);
+      apiClient.saveArticlesImages(droppedImages).then(loadedImages => {
+        const newImages = loadedImages.map((item, index) => ({ ...item, ...imagesMeta[index] }));
+
+        const newData = {
+          ...data,
+          images: [...data.images, ...newImages]
+        };
+        onChange(newData);
+      }).catch(error => {
+        console.error(error);
+      });
     });
   };
 
@@ -114,7 +124,7 @@ class ImageMediaEditor extends Component {
               <div className="image-media-editor__view">
                 <img
                   className="image-media-editor__image"
-                  src={ item.preview }
+                  src={ item.file }
                   alt=""
                 />
                 <div className="image-media-editor__box">
@@ -127,9 +137,11 @@ class ImageMediaEditor extends Component {
         </div>
         <div className="image-media-editor__info">
           <div className="image-media-editor__title">{ item.title }</div>
-          <div className="image-media-editor__size">
-            { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
-          </div>
+          { item.size &&
+            <div className="image-media-editor__size">
+              { `${formatBytes(item.size, 0)}, ${item.name.split('.').pop()}` }
+            </div>
+          }
           <button type="button" data-id={ item.id } className="image-media-editor__remove-button"
                   onClick={ this.handleItemRemove }>
             <Icon name="cancel"  className="image-media-editor__remove-icon" />

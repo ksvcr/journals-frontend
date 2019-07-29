@@ -154,7 +154,9 @@ const apiClient = {
   },
   getArticleVersion: (articleId, version) => {
     return fetchInstance.request(`/articles/${articleId}/versions/${version}`);
-  }
+  },
+  saveArticlesImages: data =>
+    fetchInstance.request('articles/images/', { method: 'post', data })
 };
 
 fetchInstance.instance.interceptors.response.use(null, error => {
