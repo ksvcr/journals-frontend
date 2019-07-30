@@ -7,7 +7,8 @@ const ImageListView =  ({ node, meta }) => {
   const { attrs } = node;
 
   const images = attrs.images.map(image => {
-    const { doi } = find(meta.images, { id: image.id });
+    const imageMeta = find(meta.images, { id: image.id });
+    const doi = imageMeta ? imageMeta.doi: null;
     return { ...image, doi };
   });
 

@@ -24,4 +24,8 @@ class Renderer extends Component {
 
 Renderer = withNamespaces()(Renderer);
 
+Renderer.defaultProps = {
+  meta: {}
+};
+
 export default Renderer;
