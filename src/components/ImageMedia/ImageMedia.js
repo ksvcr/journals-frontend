@@ -12,7 +12,7 @@ class ImageMedia extends Component {
           <div className="image-media__box">
             <img className="image-media__image"
                  src={ data.file }
-                 alt="" />
+                 alt={ data.title } />
           </div>
           <div className="image-media__description">
             <div className="image-media__title">
