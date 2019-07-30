@@ -14,10 +14,14 @@ class Content extends Component {
   }
 
   renderBlocks = blocks => {
+    const { data } = this.props;
+    const meta = {
+      images: data.images
+    };
     return blocks.map((item, index) => (
       <div className="content__block" key={ index }>
         <h2 className="content__title">{ `${index + 1}. ${item.title}` }</h2>
-        <Renderer raw={ item.content } />
+        <Renderer raw={ item.content } meta={ meta } />
       </div>
     ));
   };

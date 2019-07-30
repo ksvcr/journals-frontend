@@ -1,5 +1,7 @@
 import { findChildrenByType } from 'prosemirror-utils';
-import EditorSchema from '~/components/RichTextEditor/utils/EditorSchema.js';
+
+import EditorSchema from '~/components/RichTextEditor/utils/EditorSchema';
+import convertFromJSON from '~/components/RichTextEditor/utils/convertFromJSON';
 
 export function serializeArticleData(data = {}) {
   const { authors = [], has_financing, has_printed, financing_sources, content_blocks, sources,
@@ -65,14 +67,28 @@ export function serializeArticleData(data = {}) {
   }
 
   if (content_blocks) {
-    serializedData.content_blocks = content_blocks.map((item, index) => ({
-      title: item.title,
-      ordered: index,
-      content: item.content
-    }));
-    
-    console.log(EditorSchema.nodes['image-list']);
-    console.log(findChildrenByType(content_blocks[0].content, EditorSchema.nodes['image-list'], false));
+    serializedData.content_blocks = [];
+    serializedData.images = [];
+
+    content_blocks.forEach((item, index) => {
+      serializedData.content_blocks.push({
+        title: item.title,
+        ordered: index,
+        content: item.content
+      });
+
+      // Привязка изображений к статье
+      if (item.content) {
+        const node = convertFromJSON(item.content);
+        const imageBlocks = findChildrenByType(node.doc, EditorSchema.nodes['image-list']);
+        imageBlocks.forEach(item => {
+          const { images } = item.node.attrs;
+          images.forEach(image => {
+            serializedData.images.push(image.id);
+          });
+        });
+      }
+    });
   }
 
   if (file_atachments) {
@@ -106,7 +122,7 @@ export function serializeArticleData(data = {}) {
 }
 
 export function deserializeArticleData(data = {}) {
-  const { author, collaborators, sources, ...rest } = data;
+  const { author, collaborators, sources, images, ...rest } = data;
   const deserializedData = rest;
 
   if (author && collaborators) {

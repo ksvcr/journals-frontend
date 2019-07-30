@@ -11,7 +11,7 @@ class ImageMedia extends Component {
         <div className="image-media__item">
           <div className="image-media__box">
             <img className="image-media__image"
-                 src={ data.preview }
+                 src={ data.file }
                  alt="" />
           </div>
           <div className="image-media__description">
@@ -22,9 +22,11 @@ class ImageMedia extends Component {
               { data.additional }
             </div>
             <div className="image-media__footer">
-              <div className="image-media__doi">
-                DOI: <a href="/" className="image-media__doi-link">https://doi.org/10.18454/IRJ.2016.44.041</a>
-              </div>
+              { data.doi &&
+                <div className="image-media__doi">
+                  DOI: <a href={ data.doi } className="image-media__doi-link">{ data.doi  }</a>
+                </div>
+              }
             </div>
           </div>
         </div>

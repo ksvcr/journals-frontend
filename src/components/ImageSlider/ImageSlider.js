@@ -38,7 +38,7 @@ class ImageSlider extends Component {
            data-index={ index } onClick={ this.handleImageClick }>
         <div className="image-slider__box">
           <div className="image-slider__image-wrapper">
-            <img className="image-slider__image" src={ item.preview } alt=""/>
+            <img className="image-slider__image" src={ item.file } alt={ item.title } />
           </div>
         </div>
       </div>

@@ -27,7 +27,8 @@ class ImageMediaEditor extends Component {
 
   handleFormOpen = (event) => {
     const { dataset } = event.currentTarget;
-    const { id } = dataset;
+    let { id } = dataset;
+    id = parseInt(id, 10);
 
     this.setState({
       showForm: id
@@ -91,7 +92,8 @@ class ImageMediaEditor extends Component {
 
   handleItemRemove = (event) => {
     const { data, onChange } = this.props;
-    const { id } = event.currentTarget.dataset;
+    let { id } = event.currentTarget.dataset;
+    id = parseInt(id, 10);
     const newData = {
       ...data,
       images: data.images.filter(item => item.id !== id)

@@ -12,13 +12,13 @@ class Renderer extends Component {
   }
 
   render() {
-    const { raw } = this.props;
+    const { raw, meta } = this.props;
     if (!raw) {
       return this.renderWarning();
     }
 
     return <ProseMirrorDocument document={ raw } skipUnknownMarks={ true } skipUnknownTypes={ true }
-                                typeMap={ customTypeMap } markMap={ customMarkMap } />;
+                                typeMap={ customTypeMap(meta) } markMap={ customMarkMap } />;
   }
 }
 

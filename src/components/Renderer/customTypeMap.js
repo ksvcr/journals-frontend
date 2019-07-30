@@ -5,15 +5,20 @@ import headingView from './views/headingView';
 import imageListView from './views/imageListView';
 import Table from '~/components/Table/Table';
 
-const customTypeMap = {
-  ...ProseMirrorDocument.typeMap,
-  'image-list': imageListView,
-  'heading': headingView,
-  'table': ({ node }) => {
-    return <Table data={ node }/>;
-  },
-  'table_row': () => null,
-  'table_cell': () => null
+const customTypeMap = meta => {
+  return {
+    ...ProseMirrorDocument.typeMap,
+    'image-list': (props) => {
+      const newProps = { ...props, meta };
+      return imageListView(newProps);
+    },
+    'heading': headingView,
+    'table': ({ node }) => {
+      return <Table data={ node }/>;
+    },
+    'table_row': () => null,
+    'table_cell': () => null
+  }
 };
 
 export default customTypeMap;
