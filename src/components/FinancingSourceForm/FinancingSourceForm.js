@@ -24,7 +24,7 @@ const FinancingSourceForm = ({ field }) => {
         <div className="form__col form__col_4">
           <div className="form__field">
             <label htmlFor={ `${field}.type` } className="form__label">Тип ID</label>
-            <Field className="text-field_white" name={ `${field}.type` } id={ `${field}.type` }
+            <Field className="text-field_white" name={ `${field}.type_id` } id={ `${field}.type` }
                    component={ props => <Select options={ getFinancingIds() } { ...props } className="select_white" /> } />
           </div>
         </div>
@@ -33,7 +33,7 @@ const FinancingSourceForm = ({ field }) => {
             <label htmlFor={ `${field}.financing_id` } className="form__label">
               ID организации <ReqMark />
             </label>
-            <Field className="text-field_white" name={ `${field}.financing_id` } id={ `${field}.financing_id` }
+            <Field className="text-field_white" name={ `${field}.organization_id` } id={ `${field}.financing_id` }
                    component={ TextField } placeholder="Введите ID" validate={ [validate.required] } />
           </div>
         </div>

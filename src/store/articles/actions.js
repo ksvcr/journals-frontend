@@ -31,7 +31,7 @@ export function fetchArticle(id) {
 
 export function createArticle(siteId, data, cb) {
   return dispatch => {
-    let { sources, financing_sources, file_atachments, printed, ...articleData } = data;
+    let { file_atachments, printed, ...articleData } = data;
 
     const payload = apiClient.createArticle(siteId, articleData).then(articleResponse => {
       const articleId = articleResponse.id;
@@ -42,20 +42,6 @@ export function createArticle(siteId, data, cb) {
 
       return apiClient.lockArticle(articleId).then(() => {
         const resourcePromises = [];
-
-        // Источники финансирования
-        if (financing_sources) {
-          resourcePromises.push(
-            apiClient.createFinancingSources(articleId, financing_sources)
-          );
-        }
-
-        // Список литературы
-        if (sources) {
-          resourcePromises.push(
-            apiClient.createSources(articleId, sources)
-          );
-        }
 
         // Вложения
         if (file_atachments) {
@@ -83,22 +69,10 @@ export function createArticle(siteId, data, cb) {
 
 export function editArticle(id, data) {
   return dispatch => {
-    let { financing_sources, sources, file_atachments, printed, ...articleData } = data;
+    let { file_atachments, printed, ...articleData } = data;
 
     const payload = apiClient.lockArticle(id).then(() => {
       let editPromises = [apiClient.editArticle(id, articleData)];
-
-      // Источники финансирования
-      if (financing_sources) {
-        editPromises.push(
-          apiClient.editFinancingSources(id, financing_sources)
-        );
-      }
-
-      // Список литературы
-      if (sources) {
-        editPromises.push(apiClient.editSources(id, sources));
-      }
 
       // Вложения
       if (file_atachments) {
