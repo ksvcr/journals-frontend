@@ -23,10 +23,6 @@ export function serializeArticleData(data = {}) {
     serializedData.financing_sources = financing_sources.filter(item => {
       return item.organization && item.grant_name && item.financing_id && item.grant_number;
     });
-
-    if (!serializedData.financing_sources.length) {
-      delete serializedData.financing_sources;
-    }
   }
 
   if (has_printed) {
