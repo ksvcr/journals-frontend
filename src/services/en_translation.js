@@ -376,7 +376,8 @@ const en_translation = {
   create_table: 'Create table',
   enter_count: 'Enter count',
   row_count: 'Row count',
-  col_count: 'Col count'
+  col_count: 'Col count',
+  free_entry: 'Free entry'
 };
 
 export default en_translation;

@@ -376,7 +376,8 @@ const ru_translation = {
   create_table: 'Создать таблицу',
   enter_count: 'Введите кол-во',
   row_count: 'Строк',
-  col_count: 'Столбцов'
+  col_count: 'Столбцов',
+  free_entry: 'Свободный ввод'
 };
 
 export default ru_translation;
