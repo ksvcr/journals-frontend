@@ -30,10 +30,10 @@ const FinancingSourceForm = ({ field }) => {
         </div>
         <div className="form__col form__col_4">
           <div className="form__field">
-            <label htmlFor={ `${field}.financing_id` } className="form__label">
+            <label htmlFor={ `${field}.organization_id` } className="form__label">
               ID организации <ReqMark />
             </label>
-            <Field className="text-field_white" name={ `${field}.organization_id` } id={ `${field}.financing_id` }
+            <Field className="text-field_white" name={ `${field}.organization_id` } id={ `${field}.organization_id` }
                    component={ TextField } placeholder="Введите ID" validate={ [validate.required] } />
           </div>
         </div>
