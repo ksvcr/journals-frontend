@@ -27,6 +27,7 @@ import { deserializeArticleData } from '~/services/articleFormat';
 import { getUserData } from '~/store/user/selector';
 
 const FORM_NAME_BASE = 'article-publish';
+const isDev = process.env.NODE_ENV === 'development';
 
 class ArticleForm extends Component {
   get formProps() {
@@ -87,7 +88,9 @@ class ArticleForm extends Component {
   }
 
   componentDidMount() {
-    this.initAutoSave();
+    if (!isDev) {
+      this.initAutoSave();
+    }
   }
 
   componentWillUnmount() {
