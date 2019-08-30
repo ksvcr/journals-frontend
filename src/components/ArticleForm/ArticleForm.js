@@ -87,8 +87,7 @@ class ArticleForm extends Component {
   }
 
   componentDidMount() {
-    // TODO: Вернуть автосейв после доработки апи (Задачи JOURNALS 480-482)
-    // this.initAutoSave();
+    this.initAutoSave();
   }
 
   componentWillUnmount() {
