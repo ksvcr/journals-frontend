@@ -92,20 +92,6 @@ class ArticleSourcesForm extends Component {
                         component={ this.renderSourceList } />
           </div>
         }
-
-        { !isProofreading &&
-          <React.Fragment>
-            <hr className="article-sources-form__divider" />
-            <div className="form__field">
-              <Field name="publicationAllowed" validate={ [validate.required] } component={ Checkbox }>
-                { t('publication_allowed') }
-              </Field>
-              <div className="article-sources-form__allowed-description">
-                { t('article_send_agreement') }
-              </div>
-            </div>
-          </React.Fragment>
-        }
       </div>
     );
   }
