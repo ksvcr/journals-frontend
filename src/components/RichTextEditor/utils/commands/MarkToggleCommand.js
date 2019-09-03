@@ -1,5 +1,7 @@
 import { toggleMark } from 'prosemirror-commands';
 import { TextSelection } from 'prosemirror-state';
+import { hasParentNode } from 'prosemirror-utils';
+
 
 import findNodesWithSameMark from '../findNodesWithSameMark';
 import UICommand from '../UICommand';
@@ -42,6 +44,12 @@ class MarkToggleCommand extends UICommand {
         // An atomic node (e.g. Image) is selected.
         return false;
       }
+    }
+
+    const hasCodeBlock = hasParentNode(node => node.type === state.schema.nodes['code_block'])(selection);
+
+    if (hasCodeBlock) {
+      return false;
     }
 
     // TODO: Replace `toggleMark` with transform that does not change scroll

@@ -7,6 +7,7 @@ import UppercaseMarkSpec from './markSpecs/UppercaseMarkSpec';
 import TextColorMarkSpec from './markSpecs/TextColorMarkSpec';
 import TextHighlightMarkSpec from './markSpecs/TextHighlightMarkSpec';
 import FontSizeMarkSpec from './markSpecs/FontSizeMarkSpec';
+import CodeMarkSpec from './markSpecs/CodeMarkSpec';
 
 const customMarks = {
   'underline': TextUnderlineMarkSpec,
@@ -15,7 +16,8 @@ const customMarks = {
   'uppercase': UppercaseMarkSpec,
   'mark-text-color': TextColorMarkSpec,
   'mark-text-hightlight': TextHighlightMarkSpec,
-  'mark-font-size': FontSizeMarkSpec
+  'mark-font-size': FontSizeMarkSpec,
+  'code': CodeMarkSpec
 };
 
 const editorMarks = schema.spec.marks.append(customMarks);

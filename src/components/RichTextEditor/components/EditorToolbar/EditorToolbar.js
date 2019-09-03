@@ -12,7 +12,7 @@ import ExpandTool from '../ExpandTool/ExpandTool';
 import './editor-toolbar.scss'
 
 const {
-  H1, H2, H3, H4,
+  H1, H2, H3, H4, CODE,
   HISTORY_REDO, HISTORY_UNDO,
   STRONG, EM, UNDERLINE, STRIKE, CAPITALIZE, UPPERCASE,
   TEXT_ALIGN_CENTER, TEXT_ALIGN_JUSTIFY, TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT,
@@ -150,6 +150,12 @@ class EditorToolbar extends Component {
           <CommandButton
             command={ STRIKE }
             icon="strikethrough"
+            { ...this.defaultButtonProps }
+          />
+
+          <CommandButton
+            command={ CODE }
+            title="<>"
             { ...this.defaultButtonProps }
           />
 

@@ -5,6 +5,7 @@ import ParagraphNodeSpec from './nodeSpecs/ParagraphNodeSpec';
 import HeadingNodeSpec from './nodeSpecs/HeadingNodeSpec';
 import ImageListSpec from './nodeSpecs/ImageListSpec';
 import TableNodesSpecs from './nodeSpecs/TableNodesSpecs';
+import CodeBlockNodeSpec from './nodeSpecs/CodeBlockNodeSpec';
 
 export const nodes = {
   doc: {
@@ -15,7 +16,8 @@ export const nodes = {
   text: {
     group: 'inline'
   },
-  'image-list': ImageListSpec
+  'image-list': ImageListSpec,
+  'code_block': CodeBlockNodeSpec
 };
 
 const schema = new Schema({

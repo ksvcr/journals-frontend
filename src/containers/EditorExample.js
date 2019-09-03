@@ -17,7 +17,9 @@ class EditorExample extends Component {
     return (
       <div>
         <RichTextEditor onChange={ this.handleChange } />
-        <Renderer raw={ jsonData } />
+        <div className="content">
+          <Renderer raw={ jsonData } />
+        </div>
       </div>
     );
   }

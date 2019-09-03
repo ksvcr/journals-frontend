@@ -15,7 +15,7 @@ function bindNodeView(NodeView) {
 }
 
 const DEFAULT_NODE_VIEWS = Object.freeze({
-  'image-list': ImageListNodeView,
+  'image-list': ImageListNodeView
 });
 
 class Editor extends Component {
