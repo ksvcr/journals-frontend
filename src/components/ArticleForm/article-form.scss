@@ -1,4 +1,4 @@
-.article-publish-form {
+.article-form {
   &__save-icon {
     width: 16px;
     height: 16px;
@@ -6,5 +6,19 @@
     display: inline-block;
     vertical-align: middle;
     margin-right: 12px;
+  }
+
+  &__divider {
+    border: none;
+    height: 2px;
+    background-color: #FF9900;
+    margin: 20px 0 25px;
+  }
+
+  &__allowed-description {
+    padding: 0 36px;
+    margin: 5px 0;
+    font-size: 12px;
+    opacity: .5;
   }
 }

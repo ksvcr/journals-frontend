@@ -51,7 +51,7 @@ class ArticleWizard extends Component {
 
   render() {
     const { stepIndex } = this.state;
-    const { t, steps, tools } = this.props;
+    const { t, steps, tools, common } = this.props;
 
     return (
       <div className="article-wizard">
@@ -62,6 +62,12 @@ class ArticleWizard extends Component {
           </TabList>
           { this.renderPanels() }
         </Tabs>
+
+        { common &&
+          <div className="article-wizard__common">
+            { common() }
+          </div>
+        }
 
         <div className="article-wizard__bottom">
           <button className="article-wizard__nav article-wizard__nav_prev" type="button"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, isInvalid, getFormValues } from 'redux-form';
+import { reduxForm, isInvalid, getFormValues, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import nanoid from 'nanoid';
 import { withNamespaces } from 'react-i18next';
@@ -12,19 +12,20 @@ import ArticleContentForm from '~/components/ArticleContentForm/ArticleContentFo
 import ArticleFilesForm from '~/components/ArticleFilesForm/ArticleFilesForm';
 import ArticleSourcesForm from '~/components/ArticleSourcesForm/ArticleSourcesForm';
 import FormError from '~/components/FormError/FormError';
-
+import Checkbox from '~/components/Checkbox/Checkbox';
 import Button from '~/components/Button/Button';
 import Icon from '~/components/Icon/Icon';
 
-import './article-form.scss';
-import './assets/save.svg';
-
 import { getRubricsArray } from '~/store/rubrics/selector';
 import { getLanguagesArray } from '~/store/languages/selector';
+import { getUserData } from '~/store/user/selector';
 
 import getFinancingIds from '~/services/getFinancingIds';
 import { deserializeArticleData } from '~/services/articleFormat';
-import { getUserData } from '~/store/user/selector';
+import * as validate from '~/utils/validate';
+
+import './article-form.scss';
+import './assets/save.svg';
 
 const FORM_NAME_BASE = 'article-publish';
 const isDev = process.env.NODE_ENV === 'development';
@@ -127,7 +128,7 @@ class ArticleForm extends Component {
       <React.Fragment>
         { (id === 'new' || isDraft) &&
           <Button onClick={ this.handleDraftSubmit }>
-            <Icon name="save" className="article-publish-form__save-icon" />
+            <Icon name="save" className="article-form__save-icon" />
             { t('save_as_draft') }
           </Button>
         }
@@ -139,12 +140,31 @@ class ArticleForm extends Component {
     );
   };
 
+  renderCommon = () => {
+    const { t } = this.props;
+    return (
+      <React.Fragment>
+        <hr className="article-form__divider" />
+        <div className="form__field">
+          <Field name="publicationAllowed" validate={ [validate.required] } component={ Checkbox }>
+            { t('publication_allowed') }
+          </Field>
+          <div className="article-form__allowed-description">
+            { t('article_send_agreement') }
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { articlesError, isRejected } = this.props;
     return (
-      <div className="article-publish-form">
-        <div className="article-publish-form__wizard">
-          <ArticleWizard steps={ this.wizardSteps } tools={ this.renderTools } />
+      <div className="article-form">
+        <div className="article-form__wizard">
+          <ArticleWizard steps={ this.wizardSteps }
+                         common={ this.renderCommon }
+                         tools={ this.renderTools } />
           { isRejected &&
             <FormError data={ articlesError }/>
           }
@@ -169,6 +189,8 @@ function mapStateToProps(state, props) {
   const isInvalidForm = isInvalid(formName)(state);
   const formValues = getFormValues(formName)(state);
   const { role:userRole } = getUserData(state);
+  const isCorrector = userRole === 'CORRECTOR';
+  const articleData = articles.data[id];
 
   return {
     id,
@@ -176,6 +198,7 @@ function mapStateToProps(state, props) {
     isInvalidForm,
     userRole,
     form: formName,
+    isProofreading: isCorrector && articleData.state_article === 'AWAIT_PROOFREADING',
     initialValues: getInitialValues(state, props),
     isRejected: articles.isRejected,
     articlesError: articles.error,
