@@ -17,6 +17,7 @@ import SourceElectronic from '~/components/SourceElectronic/SourceElectronic';
 import SourceLegislativeMaterial from '~/components/SourceLegislativeMaterial/SourceLegislativeMaterial';
 import SourceStandart from '~/components/SourceStandart/SourceStandart';
 import SourcePatent from '~/components/SourcePatent/SourcePatent';
+import FreeEntry from '~/components/FreeEntry/FreeEntry';
 
 import { getLanguagesArray } from '~/store/languages/selector';
 import { getRubricsArray } from '~/store/rubrics/selector';
@@ -121,6 +122,9 @@ class ArticleSourceCreateForm extends Component {
                              countriesOptions={ countriesOptions }
                              countriesData={ countriesData } />;
 
+      case 'FreeEntry':
+        return <FreeEntry />;
+
       default:
         return null;
     }
@@ -142,7 +146,8 @@ class ArticleSourceCreateForm extends Component {
                   <Field name="resourcetype" id="resourcetype" className="select_white" validate={ [validate.required] }
                          component={ props => <Select options={ getSourceTypes() } { ...props } /> } />
                 </div>
-                { resourceType === 'SourceThesis' ?
+
+                { resourceType === 'SourceThesis' &&
                   <div className="form__col form__col_6">
                     <label htmlFor="category" className="form__label">
                       { t('type_of_dissertation') }
@@ -150,7 +155,10 @@ class ArticleSourceCreateForm extends Component {
                     <div className="form__box form__box_radios">
                       { this.renderThesisCategories() }
                     </div>
-                  </div> :
+                  </div>
+                }
+
+                { resourceType !== 'SourceThesis' && resourceType !== 'FreeEntry' &&
                   <div className="form__col form__col_6">
                     <label htmlFor="source_language" className="form__label">
                       { t('original_language') }
@@ -166,31 +174,33 @@ class ArticleSourceCreateForm extends Component {
 
         { this.specialFields }
 
-        <div className="form__field">
-          <div className="form__row">
-            <div className="form__col form__col_4">
-              <label htmlFor="source_url" className="form__label">
-                { t('publication_url') }
-              </label>
-              <Field name="url" id="source_url" className="text-field_white" component={ TextField }
-                     placeholder={ t('enter_url') } validate={ [validate.url] } />
-            </div>
-            <div className="form__col form__col_4">
-              <label htmlFor="source_doi" className="form__label">
-                DOI
-              </label>
-              <Field name="doi" id="source_doi" className="text-field_white" component={ TextField }
-                     placeholder={ t('enter_doi') } />
-            </div>
-            <div className="form__col form__col_4">
-              <label htmlFor="source_position" className="form__label">
-                { t('number_in_list') }
-              </label>
-              <Field name="position" id="source_position" className="text-field_white" component={ TextField }
-                     placeholder={ t('enter_number') } />
+        { resourceType !== 'FreeEntry' &&
+          <div className="form__field">
+            <div className="form__row">
+              <div className="form__col form__col_4">
+                <label htmlFor="source_url" className="form__label">
+                  { t('publication_url') }
+                </label>
+                <Field name="url" id="source_url" className="text-field_white" component={ TextField }
+                       placeholder={ t('enter_url') } validate={ [validate.url] } />
+              </div>
+              <div className="form__col form__col_4">
+                <label htmlFor="source_doi" className="form__label">
+                  DOI
+                </label>
+                <Field name="doi" id="source_doi" className="text-field_white" component={ TextField }
+                       placeholder={ t('enter_doi') } />
+              </div>
+              <div className="form__col form__col_4">
+                <label htmlFor="source_position" className="form__label">
+                  { t('number_in_list') }
+                </label>
+                <Field name="position" id="source_position" className="text-field_white" component={ TextField }
+                       placeholder={ t('enter_number') } />
+              </div>
             </div>
           </div>
-        </div>
+        }
 
         <div className="form__field">
           <Button type="submit">

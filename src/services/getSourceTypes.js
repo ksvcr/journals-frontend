@@ -31,6 +31,10 @@ function getSourceTypes() {
     {
       title: 'Патент',
       value: 'SourcePatent'
+    },
+    {
+      title: 'Свободный ввод',
+      value: 'FreeEntry'
     }
   ];
 }

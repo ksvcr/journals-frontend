@@ -20,15 +20,6 @@ class ArticleSource extends Component {
       }
     }
 
-    function getName(author) {
-      if (typeof author === 'string') {
-        resultString += author;
-      } else {
-        const { lastname, initials } = author;
-        resultString += `${lastname} ${initials}, `;
-      }
-    }
-
     let params = parts
       .filter(key => data[key])
       .reduce((result, key) => {
@@ -46,6 +37,15 @@ class ArticleSource extends Component {
       }, '');
 
     return resultString + params;
+
+    function getName(author) {
+      if (typeof author === 'string') {
+        resultString += author;
+      } else {
+        const { lastname, initials } = author;
+        resultString += `${lastname} ${initials}, `;
+      }
+    }
   }
 
   handleRemove = () => {
@@ -59,7 +59,9 @@ class ArticleSource extends Component {
   };
 
   render() {
-    const { t, index, onRemove } = this.props;
+    const { t, index, data, onRemove } = this.props;
+    const isFreeEntry = data.resourcetype === 'FreeEntry';
+
     return (
       <div className="article-source">
         <div className="article-source__box">
@@ -67,11 +69,13 @@ class ArticleSource extends Component {
             { `${ t('source') } №${index + 1}` }
           </div>
           <div className="article-source__title">
-            { this.getTitle(['original_name', 'page_count'], 'ru') }
+            { isFreeEntry ? t('free_entry') : this.getTitle(['original_name', 'page_count'], 'ru') }
           </div>
-          <div className="article-source__text">
-            { this.getTitle(['second_name', 'page_count'], 'en') }
-          </div>
+          { isFreeEntry &&
+            <div className="article-source__text">
+              { this.getTitle(['second_name', 'page_count'], 'en') }
+            </div>
+          }
         </div>
         <div className="article-source__tools">
           <button className="article-source__tool"
