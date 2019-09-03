@@ -13,6 +13,8 @@ import ImageListCommand from './commands/ImageListCommand';
 import TableInsertCommand from './commands/TableInsertCommand';
 import TableMergeCellsCommand from './commands/TableMergeCellsCommand';
 import TableEditMetaCommand from './commands/TableEditMetaCommand';
+import CodeBlockCommand from './commands/CodeBlockCommand';
+
 import createCommand from '../utils/createCommand';
 
 export const H1 = new HeadingCommand(1);
@@ -38,6 +40,7 @@ export const TEXT_HIGHLIGHT = new TextHighlightCommand();
 export const LINK_SET_URL = new LinkSetURLCommand();
 export const LINK_REMOVE = new LinkRemoveCommand();
 export const IMAGE_LIST = new ImageListCommand();
+export const CODE = new CodeBlockCommand();
 
 const {
   addColumnAfter,
