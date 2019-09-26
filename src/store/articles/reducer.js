@@ -46,6 +46,12 @@ function articles(state = initialState, action) {
         ...action.meta
       };
 
+    case `${CREATE_ARTICLE}_PENDING`:
+      return {
+        ...state,
+        isPending: true
+      };
+
     case `${FETCH_ARTICLES}_REJECTED`:
     case `${FETCH_ARTICLE}_REJECTED`:
       return {
@@ -136,6 +142,7 @@ function articles(state = initialState, action) {
     case `${EDIT_ARTICLE}_PENDING`:
       return {
         ...state,
+        isPending: true,
         data: {
           ...state.data,
           [action.meta.articleId]: {

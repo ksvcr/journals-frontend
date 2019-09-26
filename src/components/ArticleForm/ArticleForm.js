@@ -4,6 +4,7 @@ import { reduxForm, isInvalid, getFormValues, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import nanoid from 'nanoid';
 import { withNamespaces } from 'react-i18next';
+import classNames from 'classnames';
 
 import ArticleWizard from '~/components/ArticleWizard/ArticleWizard';
 import ArticleCommonForm from '~/components/ArticleCommonForm/ArticleCommonForm';
@@ -122,18 +123,21 @@ class ArticleForm extends Component {
   };
 
   renderTools = () => {
-    const { id, articleData, handleSubmit, isInvalidForm, t } = this.props;
+    const { id, articleData, handleSubmit, isInvalidForm, isPending, t } = this.props;
     const isDraft = articleData && articleData.state_article === 'DRAFT';
+    const iconClasses = classNames('article-form__save-icon',
+      { 'article-form__save-icon_disabled': isPending });
     return (
       <React.Fragment>
         { (id === 'new' || isDraft) &&
-          <Button onClick={ this.handleDraftSubmit }>
-            <Icon name="save" className="article-form__save-icon" />
+          <Button onClick={ this.handleDraftSubmit } disabled={ isPending }>
+            <Icon name="save" className={ iconClasses } />
             { t('save_as_draft') }
           </Button>
         }
 
-        <Button className="button_orange" onClick={ handleSubmit(this.handleSubmit) } disabled={ isInvalidForm } >
+        <Button className="button_orange" onClick={ handleSubmit(this.handleSubmit) }
+                disabled={ isInvalidForm || isPending } >
           { id === 'new' || isDraft ? t('send_article') : t('save_article') }
         </Button>
       </React.Fragment>
@@ -197,6 +201,7 @@ function mapStateToProps(state, props) {
     formValues,
     isInvalidForm,
     userRole,
+    isPending: articles.isPending,
     form: formName,
     isProofreading: isCorrector && articleData.state_article === 'AWAIT_PROOFREADING',
     initialValues: getInitialValues(state, props),

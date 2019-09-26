@@ -7,8 +7,8 @@ import { withNamespaces } from 'react-i18next';
 
 import './searchable-select.scss';
 
-// onMouseMove, onMouseOver тормозят на больших списках
 const Option = ({ children, ...props }) => {
+  // onMouseMove, onMouseOver тормозят на больших списках
   const { onMouseMove, onMouseOver, ...rest } = props.innerProps;
   const newProps = Object.assign(props, { innerProps: rest });
   return (

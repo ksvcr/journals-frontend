@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 import AuthorArticleList from '~/components/AuthorArticleList/AuthorArticleList';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
@@ -35,7 +36,7 @@ class AuthorArticles extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { isPending, t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">{ t('my_articles') }</h1>
@@ -50,24 +51,24 @@ class AuthorArticles extends Component {
             </div>
             <div className="form__field">
               <label className="form__label">{ t('article_search') }</label>
-              <SearchPanel targets={ this.searchTargets }
-                           onChange={ this.handleRequest }
-              />
+              <SearchPanel targets={ this.searchTargets } onChange={ this.handleRequest } />
             </div>
           </div>
         </div>
-
-        <AuthorArticleList onUpdateRequest={ this.handleRequest } />
+        <LoaderWrapper isLoading={ isPending }>
+          <AuthorArticleList onUpdateRequest={ this.handleRequest } />
+        </LoaderWrapper>
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { sites } = state;
+  const { sites, articles } = state;
   const { id:userId } = getUserData(state);
   return {
     userId,
+    isPending: articles.isPending,
     siteId: sites.current,
     articlesParams: getArticlesParams(state)
   };

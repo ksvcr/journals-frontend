@@ -1,0 +1,35 @@
+.inline-loader {
+  &__dot {
+    width: .3em;
+    height: .3em;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #000;
+    animation: loadingDotAnimation 1s ease-in-out 160ms infinite;
+
+    & + & {
+      margin-left: .3em;
+    }
+
+    &:first-child {
+      animation-delay: 0ms;
+    }
+
+    &:last-child {
+      animation-delay: 320ms;
+    }
+  }
+}
+
+@keyframes loadingDotAnimation {
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+}

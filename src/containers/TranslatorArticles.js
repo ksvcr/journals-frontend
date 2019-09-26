@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 import TranslatorArticleList from '~/components/TranslatorArticleList/TranslatorArticleList';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
@@ -70,7 +71,7 @@ class TranslatorArticles extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { isPending, t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
@@ -95,15 +96,18 @@ class TranslatorArticles extends Component {
             </div>
           </div>
         </div>
-
-        <TranslatorArticleList onUpdateRequest={ this.handleRequest } />
+        <LoaderWrapper isLoading={ isPending }>
+          <TranslatorArticleList onUpdateRequest={ this.handleRequest } />
+        </LoaderWrapper>
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const { articles } = state;
   return {
+    isPending: articles.isPending,
     articlesParams: getArticlesParams(state)
   };
 }

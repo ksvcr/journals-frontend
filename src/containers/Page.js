@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Header from '~/components/Header/Header';
 import MainMenu from '~/components/MainMenu/MainMenu';
 import Footer from '~/components/Footer/Footer';
+import InlineLoader from '~/components/InlineLoader/InlineLoader';
 import ResetControlledButton from '~/components/ResetControlledButton/ResetControlledButton';
 
 import * as userActions from '~/store/user/actions';
@@ -54,7 +55,7 @@ class Page extends Component {
       <div className="page">
         <Header />
         <main className="page__main">
-          { isFulfilled &&
+          { isFulfilled ?
             <div className="page__holder">
               <aside className="page__sidebar">
                 <MainMenu />
@@ -66,6 +67,9 @@ class Page extends Component {
               <article className="page__content">
                 { this.props.children }
               </article>
+            </div> :
+            <div className="page__loader">
+              <InlineLoader />
             </div>
           }
         </main>

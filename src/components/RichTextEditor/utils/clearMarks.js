@@ -33,7 +33,7 @@ export default function clearMarks(tr, schema) {
   const tasks = [];
   doc.nodesBetween(from, to, (node, pos) => {
     if (node.marks && node.marks.length) {
-      node.marks.some(mark => {
+      node.marks.forEach(mark => {
         if (markTypesToRemove.has(mark.type)) {
           tasks.push({ node, pos, mark });
         }
