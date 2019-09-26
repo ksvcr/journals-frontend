@@ -10,6 +10,7 @@ import TagEditor from '~/components/TagEditor/TagEditor';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import Checkbox from '~/components/Checkbox/Checkbox';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import * as articlesActions from '~/store/articles/actions';
 import * as usersActions from '~/store/users/actions';
@@ -181,20 +182,24 @@ class RedactorReviewerList extends Component {
   };
 
   render() {
+    const { isPending } = this.props;
     return (
       <div className="redactor-reviewer-list">
         { this.renderSearchBox() }
-
-        <List { ...this.listProps } />
+        <LoaderWrapper isLoading={ isPending }>
+          <List { ...this.listProps } />
+        </LoaderWrapper>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const { users } = state;
   const { id:currentUserId } = getUserData(state);
   return {
     currentUserId,
+    isPending: users.isPending,
     usersArray: getUsersArray(state),
     usersParams: getUsersParams(state)
   };

@@ -7,6 +7,7 @@ import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
 import RedactorUsersList from '~/components/RedactorUsersList/RedactorUsersList';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import SiteSelect from '~/components/SiteSelect/SiteSelect';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import * as usersActions from '~/store/users/actions';
 import { getUsersParams } from '~/store/users/selector';
@@ -69,7 +70,7 @@ class RedactorUsers extends Component {
   };
 
   render() {
-    const { t, total, paginate } = this.props;
+    const { t, total, paginate, isPending } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">{ t('users') }</h1>
@@ -100,16 +101,17 @@ class RedactorUsers extends Component {
             </div>
           </div>
         </div>
+        <LoaderWrapper isLoading={ isPending }>
+          <RedactorUsersList onUpdateRequest={ this.handleRequest } />
 
-        <RedactorUsersList onUpdateRequest={ this.handleRequest } />
-
-        { total > 0 && (
-          <PaginateLine
-            onChange={ this.handlePaginateChange }
-            total={ total }
-            { ...paginate }
-          />
-        ) }
+          { total > 0 && (
+            <PaginateLine
+              onChange={ this.handlePaginateChange }
+              total={ total }
+              { ...paginate }
+            />
+          ) }
+        </LoaderWrapper>
       </React.Fragment>
     );
   }
@@ -121,6 +123,7 @@ function mapStateToProps(state) {
   return {
     usersParams: getUsersParams(state),
     siteId: sites.current,
+    isPending: users.isPending,
     total,
     paginate,
     sitesArray: getSitesArray(state)

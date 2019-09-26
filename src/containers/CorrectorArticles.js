@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 import CorrectorArticleList from '~/components/CorrectorArticleList/CorrectorArticleList';
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import * as articlesActions from '~/store/articles/actions';
 import { getArticlesParams } from '~/store/articles/selector';
@@ -69,7 +70,7 @@ class CorrectorArticles extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { isPending, t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
@@ -96,17 +97,19 @@ class CorrectorArticles extends Component {
             </div>
           </div>
         </div>
-
-        <CorrectorArticleList onUpdateRequest={ this.handleRequest } />
+        <LoaderWrapper isLoading={ isPending }>
+          <CorrectorArticleList onUpdateRequest={ this.handleRequest } />
+        </LoaderWrapper>
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { sites } = state;
+  const { sites, articles } = state;
   return {
     siteId: sites.current,
+    isPending: articles.isPending,
     articlesParams: getArticlesParams(state)
   };
 }

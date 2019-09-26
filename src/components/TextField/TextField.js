@@ -32,7 +32,7 @@ class TextField extends Component {
                    className="text-field__input" autoComplete="off" />
           }
           { icon &&
-            <Icon className={ iconClasses } name={ icon }/> }
+            <Icon className={ iconClasses } name={ icon } /> }
         </div>
         { hasError &&
           <div className="text-field__error">

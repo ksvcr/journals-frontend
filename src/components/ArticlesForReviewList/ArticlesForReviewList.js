@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import List from '~/components/List/List';
 import PaginateLine from '~/components/PaginateLine/PaginateLine';
 import StatusLabel from '~/components/StatusLabel/StatusLabel';
 import ToolsMenu from '~/components/ToolsMenu/ToolsMenu';
 import DeadlineLabel from '~/components/DeadlineLabel/DeadlineLabel';
-import { withNamespaces } from 'react-i18next';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 import { getArticlesArray } from '~/store/articles/selector';
 import * as articlesActions from '~/store/articles/actions';
@@ -127,17 +128,19 @@ class ArticlesForReviewList extends Component {
   }
 
   render() {
-    const { total, paginate } = this.props;
+    const { total, paginate, isPending } = this.props;
     return (
       <div className="articles-for-review-list">
-        <div className="articles-for-review-list__holder">
-          <List { ...this.listProps } />
-        </div>
+        <LoaderWrapper isLoading={ isPending }>
+          <div className="articles-for-review-list__holder">
+            <List { ...this.listProps } />
+          </div>
 
-        { total > 0 && (
-          <PaginateLine onChange={ this.handlePaginateChange }
-                        total={ total } { ...paginate } />
-        ) }
+          { total > 0 && (
+            <PaginateLine onChange={ this.handlePaginateChange }
+                          total={ total } { ...paginate } />
+          ) }
+        </LoaderWrapper>
       </div>
     );
   }
@@ -147,6 +150,7 @@ function mapStateToProps(state) {
   const { articles, reviewInvites } = state;
   const { total, paginate } = articles;
   return {
+    isPending: articles.isPending,
     articlesArray: getArticlesArray(state),
     reviewInvites: reviewInvites.data,
     reviewInvitesArticlesMap: reviewInvites.articleId || {},

@@ -12,6 +12,7 @@ import { getArticlesParams } from '~/store/articles/selector';
 
 import SearchPanel from '~/components/SearchPanel/SearchPanel';
 import SearchableSelect from '~/components/SearchableSelect/SearchableSelect';
+import LoaderWrapper from '~/components/LoaderWrapper/LoaderWrapper';
 
 class RedactorArticles extends Component {
   componentDidMount() {
@@ -74,7 +75,7 @@ class RedactorArticles extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { isPending, t } = this.props;
     return (
       <React.Fragment>
         <h1 className="page__title">
@@ -98,15 +99,19 @@ class RedactorArticles extends Component {
             </div>
           </div>
         </div>
-        <RedactorArticleList onUpdateRequest={ this.handleRequest } />
+        <LoaderWrapper isLoading={ isPending }>
+          <RedactorArticleList onUpdateRequest={ this.handleRequest } />
+        </LoaderWrapper>
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const { articles } = state;
   return {
-    articlesParams: getArticlesParams(state)
+    articlesParams: getArticlesParams(state),
+    isPending: articles.isPending
   };
 }
 

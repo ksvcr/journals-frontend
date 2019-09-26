@@ -1,0 +1,25 @@
+.loader-wrapper {
+  position: relative;
+
+  &_active &__holder {
+    opacity: .3;
+  }
+
+  &__box {
+    padding: 40px;
+    box-sizing: border-box;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__progress {
+    margin-top: -40px;
+  }
+}

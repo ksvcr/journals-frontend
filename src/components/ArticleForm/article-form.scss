@@ -6,6 +6,11 @@
     display: inline-block;
     vertical-align: middle;
     margin-right: 12px;
+    transition: fill 0.2s;
+
+    &_disabled {
+      fill: #a3a096;
+    }
   }
 
   &__divider {
