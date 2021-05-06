@@ -61,7 +61,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
     "resolve": "1.6.0",
-    "sanitize-html": "^1.20.1",
+    "sanitize-html": "^2.3.2",
     "sass-mq": "^5.0.0",
     "stable": "^0.1.8",
     "style-loader": "0.19.0",
