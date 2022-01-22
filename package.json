@@ -13,7 +13,7 @@
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "nanoid": "^1.3.1",
+    "nanoid": "^3.1.31",
     "normalize.css": "^8.0.0",
     "object-assign": "4.1.1",
     "promise": "8.0.1",
